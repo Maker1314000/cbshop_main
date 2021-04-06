@@ -26,7 +26,7 @@ Component({
     loading:false,
     errorSum:0,
     errorNum:3,
-	canIUseGetUserProfile: false
+	canIUseGetUserProfile: false // 判断是否为最新获取用户信息函数
   },
   attached() {
     this.get_logo_url();
@@ -88,23 +88,24 @@ Component({
         }
       })
     },
-	getUserProfile() {
-	  let that = this;
-	  wx.showLoading({ title: '正在登录中' });
-	  	wx.getUserProfile({
-	  	      desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-	  	      success: (res) => {
-				  Util.getCodeLogin((code)=>{
-					  let userInfo = res;
-					  userInfo.code = code.code;
-					  that.getWxUserInfo(userInfo);
-				  })
-	  	      },
-	  		  fail: (err) => {
-				  wx.hideLoading();
-	  		  }
-	  });
-	},	
+    // 获取用户信息
+  	getUserProfile() {
+  	  let that = this;
+  	  wx.showLoading({ title: '正在登录中' });
+  	  	wx.getUserProfile({
+  	  	      desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+  	  	      success: (res) => {
+  				  Util.getCodeLogin((code)=>{
+  					  let userInfo = res;
+  					  userInfo.code = code.code;
+  					  that.getWxUserInfo(userInfo);
+  				  })
+  	  	      },
+  	  		  fail: (err) => {
+  				  wx.hideLoading();
+  	  		  }
+  	  });
+  	},	
     //授权
     setUserInfo(userInfo,isLogin) {
       let that = this;
