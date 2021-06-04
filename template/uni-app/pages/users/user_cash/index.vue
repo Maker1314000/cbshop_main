@@ -277,7 +277,7 @@
 				if (value.money.length == 0) return this.$util.Tips({
 					title: '请填写提现金额'
 				});
-				if (value.money < that.minPrice) return this.$util.Tips({
+				if (Number(value.money) < Number(that.minPrice)) return this.$util.Tips({
 					title: '提现金额不能低于' + that.minPrice
 				});
 				extractCash(value).then(res => {
