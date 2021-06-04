@@ -145,6 +145,7 @@ class StoreProductRelationServices extends BaseServices
         $category = strtolower($category);
         $relationData = [];
         $relationProductIdS = $this->dao->getColumn(['uid' => $uid, 'type' => $relationType, 'category' => $category, 'product_id' => $productIdS], 'product_id');
+        $productIdS = array_unique($productIdS);
         foreach ($productIdS as $productId) {
             if (!in_array($productId, $relationProductIdS)) {
                 $relationData[] = ['uid' => $uid, 'product_id' => $productId, 'type' => $relationType, 'category' => $category];
