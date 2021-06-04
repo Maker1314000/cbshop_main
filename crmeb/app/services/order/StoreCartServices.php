@@ -351,7 +351,7 @@ class StoreCartServices extends BaseServices
                 $info['truePrice'] = $info['productInfo']['attrInfo']['price'] ?? $info['productInfo']['price'] ?? 0;
             }
             //拼团砍价秒杀不参与会员价
-            if (!$bargain_id || !$combination_id || !$seckill_id) {
+            if (!$bargain_id && !$combination_id && !$seckill_id) {
                 $info['truePrice'] = $productServices->setLevelPrice($info['productInfo']['attrInfo']['price'], $uid, true, 0, $info['productInfo']['attrInfo']['vip_price'] ?? 0, $info['productInfo']['is_vip'] ?? 0, true);
                 $info['vip_truePrice'] = (float)$productServices->setLevelPrice($info['productInfo']['attrInfo']['price'], $uid, false, 0, $info['productInfo']['attrInfo']['vip_price'] ?? 0, $info['productInfo']['is_vip'] ?? 0, true);
             } else {

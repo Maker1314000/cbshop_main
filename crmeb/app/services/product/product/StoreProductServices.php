@@ -1226,11 +1226,6 @@ class StoreProductServices extends BaseServices
     public function setLevelPrice($list, int $uid, bool $isSingle = false, $discount = 0)
     {
         if (is_object($list)) $list = count($list) ? $list->toArray() : [];
-        //会员功能是否开启 会员价是否展示
-        if (!sys_config('member_func_status') || !sys_config('member_price_status')) {
-            if (is_array($list)) return $list;
-            return $isSingle ? $list : 0;
-        }
         //已登录
         if ($uid) {
             /** @var SystemUserLevelServices $systemLevel */
