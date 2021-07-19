@@ -26,16 +26,20 @@ Component({
     loading:false,
     errorSum:0,
     errorNum:3,
-	canIUseGetUserProfile: false // 判断是否为最新获取用户信息函数
+    canIUseGetUserProfile: false, // 判断是否为最新获取用户信息函数
+    code:''
   },
   attached() {
     this.get_logo_url();
     this.setAuthStatus();
-	if (wx.getUserProfile) {
+	  if (wx.getUserProfile) {
 	      this.setData({
 	        canIUseGetUserProfile: true
 	      })
-	    }
+    }
+    Util.getCodeLogin((code)=>{
+      this.code = code.code;
+    })
   },
   methods: {
     close(){
@@ -73,8 +77,8 @@ Component({
           if (!Util.checkLogin()) return Promise.reject({ authSetting: true, msg: '用户token失效', userInfo: res.userInfo});
           that.triggerEvent('onLoadFun', app.globalData.userInfo);
         }else{
-          wx.showLoading({ title: '正在登录中' });
-          that.setUserInfo(res.userInfo,true);
+          // wx.showLoading({ title: '正在登录中' });
+          // that.setUserInfo(res.userInfo,true);
         }
       }).catch(res=>{
         if (res.authSetting === false) {
@@ -92,18 +96,16 @@ Component({
   	getUserProfile() {
   	  let that = this;
   	  wx.showLoading({ title: '正在登录中' });
-  	  	wx.getUserProfile({
-  	  	      desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-  	  	      success: (res) => {
-  				  Util.getCodeLogin((code)=>{
-  					  let userInfo = res;
-  					  userInfo.code = code.code;
-  					  that.getWxUserInfo(userInfo);
-  				  })
-  	  	      },
-  	  		  fail: (err) => {
-  				  wx.hideLoading();
-  	  		  }
+  	  wx.getUserProfile({
+  	  	desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+  	  	success: (res) => {
+  					let userInfo = res;
+  					userInfo.code = this.code;
+  					that.getWxUserInfo(userInfo);
+  	  	},
+  	  	fail: (err) => {
+  				wx.hideLoading();
+  	  	}
   	  });
   	},	
     //授权
