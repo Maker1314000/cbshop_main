@@ -70,15 +70,17 @@ Component({
       Util.chekWxLogin().then((res)=> {
         let pages = getCurrentPages();
         let currPage = pages[pages.length - 1];
-        if (currPage && currPage.data.iShidden != undefined) { 
+        if (currPage && currPage.data.iShidden != undefined) {
           currPage.setData({ iShidden:true});
         }
         if (res.isLogin) {
           if (!Util.checkLogin()) return Promise.reject({ authSetting: true, msg: '用户token失效', userInfo: res.userInfo});
           that.triggerEvent('onLoadFun', app.globalData.userInfo);
         }else{
-          // wx.showLoading({ title: '正在登录中' });
-          // that.setUserInfo(res.userInfo,true);
+          if (!that.data.canIUseGetUserProfile) {
+            wx.showLoading({ title: '正在登录中' });
+            that.setUserInfo(res.userInfo,true);
+          }
         }
       }).catch(res=>{
         if (res.authSetting === false) {
@@ -88,7 +90,9 @@ Component({
           that.setData({ iShidden: false });
         } else if (res.authSetting){
           //授权后登录token失效了
-          that.setUserInfo(res.userInfo);
+          if (!that.data.canIUseGetUserProfile) {
+            that.setUserInfo(res.userInfo);
+          }
         }
       })
     },
