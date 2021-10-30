@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `eb_article_category` (
     `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '状态',
     `sort` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '排序',
     `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '1删除0未删除',
-    `add_time` varchar(255) DEFAULT '' COMMENT '添加时间',
+    `add_time` varchar(255) NOT NULL DEFAULT '' COMMENT '添加时间',
     `hidden` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否隐藏',
     PRIMARY KEY (`id`) USING BTREE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章分类表';
