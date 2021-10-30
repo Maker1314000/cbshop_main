@@ -21,10 +21,10 @@ CREATE TABLE IF NOT EXISTS `eb_agent_level` (
 
 INSERT INTO `eb_agent_level` (`id`, `name`, `image`, `one_brokerage`, `two_brokerage`, `grade`, `status`, `is_del`, `add_time`) VALUES
 (1, '一级分销', 'https://demo43.wuht.net/uploads/attach/2021/09/20210924/6630436e9acd6d004a1c7e3a3312e680.png', 1, 1, 1, 1, 0, 1630310923),
-(2, '二级分销	', 'https://demo43.wuht.net/uploads/attach/2021/09/20210924/1ab7bf91034c38724f70f56dd94bd9d1.png', 2, 2, 2, 1, 0, 1630311000),
-(3, '三级分销	', 'https://demo43.wuht.net/uploads/attach/2021/09/20210924/3aebfbcc36550a67e6be6cab5cd713ad.png', 3, 3, 3, 1, 0, 1630311024),
-(4, '五级分销	', 'https://demo43.wuht.net/uploads/attach/2021/09/20210924/7a7f09b1c642638b2abbeae25ed11317.png', 4, 4, 5, 1, 0, 1630311052),
-(5, '四级分销	', 'https://demo43.wuht.net/uploads/attach/2021/09/20210924/f8f782c840781b7c328493db033279a9.png', 5, 5, 4, 1, 0, 1630311069);
+(2, '二级分销   ', 'https://demo43.wuht.net/uploads/attach/2021/09/20210924/1ab7bf91034c38724f70f56dd94bd9d1.png', 2, 2, 2, 1, 0, 1630311000),
+(3, '三级分销   ', 'https://demo43.wuht.net/uploads/attach/2021/09/20210924/3aebfbcc36550a67e6be6cab5cd713ad.png', 3, 3, 3, 1, 0, 1630311024),
+(4, '五级分销   ', 'https://demo43.wuht.net/uploads/attach/2021/09/20210924/7a7f09b1c642638b2abbeae25ed11317.png', 4, 4, 5, 1, 0, 1630311052),
+(5, '四级分销   ', 'https://demo43.wuht.net/uploads/attach/2021/09/20210924/f8f782c840781b7c328493db033279a9.png', 5, 5, 4, 1, 0, 1630311069);
 
 -- --------------------------------------------------------
 
@@ -1609,7 +1609,7 @@ CREATE TABLE IF NOT EXISTS `eb_store_cart` (
     KEY `uid_2` (`uid`,`is_del`) USING BTREE,
     KEY `uid_3` (`uid`,`is_new`) USING BTREE,
     KEY `type` (`type`) USING BTREE
-    ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='购物车表' ROW_FORMAT=COMPACT;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='购物车表' ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
 
@@ -6967,7 +6967,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (347, 'product_phone_buy_url', 'radio', '', 75, '1=>公众号\n2=>小程序', 0, '', 0, 0, '\"1\"', '商品手机购买跳转地址', '商品手机购买跳转地址（小程序|公众号）', 0, 1),
 (348, 'bast_number', 'text', 'number', 75, '', 0, 'required:true,digits:true,min:1', 100, 0, '0', '精品推荐个数', '首页配置精品推荐个数', 0, 1),
 (349, 'first_number', 'text', 'number', 75, '', 0, 'required:true,digits:true,min:1', 100, 0, '0', '首发新品个数', '首页配置首发新品个数', 0, 1),
-(350, 'customer_type', 'radio', 'input', 69, '1=>拨打电话\n2=>跳转链接', 1, '', 0, 0, '1', '客服类型', '客服类型', 0, 1),
+(350, 'customer_type', 'radio', 'radio', 69, '1=>拨打电话\n2=>跳转链接', 1, '', 0, 0, '1', '客服类型', '客服类型', 0, 1),
 (351, 'customer_url', 'text', 'input', 69, '', 0, '', 100, 0, '\"\"', '客服链接', '客服链接', 0, 1),
 (352, 'customer_phone', 'text', 'input', 69, '', 0, '', 100, 0, '\"\"', '客服电话', '客服电话', 0, 1),
 (353, 'wechat_app_appid', 'text', 'input', 77, '', 0, '', 100, 0, '\"\"', '公众平台开放应用APPID', '公众平台开放应用APPID', 0, 1),
