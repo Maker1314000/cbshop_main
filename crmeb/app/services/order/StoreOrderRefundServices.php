@@ -76,7 +76,7 @@ class StoreOrderRefundServices extends BaseServices
             }
         }
         $f[] = Form::input('order_id', '退款单号', $order->getData('order_id'))->disabled(true);
-        $f[] = Form::number('refund_price', '退款金额', (float)bcsub((string)$order->getData('pay_price'), (string)$order->getData('refund_price'), 2))->precision(2)->required('请输入退款金额');
+        $f[] = Form::number('refund_price', '退款金额', (float)bcsub((string)$order->getData('pay_price'), (string)$order->getData('refund_price'), 2))->min(0)->required('请输入退款金额');
         return create_form('退款处理', $f, $this->url('/order/refund/' . $id), 'PUT');
     }
 
@@ -492,8 +492,8 @@ class StoreOrderRefundServices extends BaseServices
                 /** @var StoreOrderSplitServices $storeOrderSplitServices */
                 $storeOrderSplitServices = app()->make(StoreOrderSplitServices::class);
                 //拆单
+                $status = $order['status'];
                 $order = $storeOrderSplitServices->split($order_id, $cart_ids, $order);
-                $status = 1;
             } elseif (in_array($order['pid'], [0, -1]) && $this->dao->count(['pid' => $order_id])) {
                 /** @var StoreOrderCartInfoServices $storeOrderCartInfoServices */
                 $storeOrderCartInfoServices = app()->make(StoreOrderCartInfoServices::class);
@@ -508,8 +508,8 @@ class StoreOrderRefundServices extends BaseServices
                 /** @var StoreOrderSplitServices $storeOrderSplitServices */
                 $storeOrderSplitServices = app()->make(StoreOrderSplitServices::class);
                 //拆单
+                $status = $order['status'];
                 $order = $storeOrderSplitServices->split($order_id, $cart_ids, $order);
-                $status = 1;
             }
 
             $data = [

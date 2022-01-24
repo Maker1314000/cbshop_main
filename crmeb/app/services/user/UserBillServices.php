@@ -1019,12 +1019,11 @@ class UserBillServices extends BaseServices
     {
         $where = [];
         $where['category'] = 'now_money';
-        $where['type'] = 'brokerage';
+        $where['type'] = ['brokerage', 'brokerage_user'];
         if ($time) {
             $where['time'] = $time;
         }
         $list = $this->dao->brokerageRankList($where, 0, 0);
-
         $position_tmp_one = array_column($list, 'uid');
         $position_tmp_two = array_column($list, 'brokerage_price', 'uid');
         if (!in_array($uid, $position_tmp_one)) {

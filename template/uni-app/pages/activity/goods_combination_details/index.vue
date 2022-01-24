@@ -480,7 +480,7 @@
 					try {
 						uni.setStorageSync('comGoodsId', options.id);
 					} catch (e) {}
-					// #endif 
+					// #endif
 					this.$Cache.set('login_back_url',
 						`/pages/activity/goods_combination_details/index?id=${options.id}`);
 					toLogin();
@@ -554,7 +554,7 @@
 			},
 			/**
 			 * 购物车手动填写
-			 * 
+			 *
 			 */
 			iptCartNum: function(e) {
 				this.$set(this.attribute.productSelect, 'cart_num', e);
@@ -691,7 +691,7 @@
 			// },
 			/**
 			 * 默认选中属性
-			 * 
+			 *
 			 */
 			DefaultSelect: function() {
 
@@ -803,7 +803,7 @@
 			},
 			/**
 			 * 购物车数量加和数量减
-			 * 
+			 *
 			 */
 			ChangeCartNum: function(changeValue) {
 				//changeValue:是否 加|减
@@ -867,7 +867,7 @@
 			},
 			/**
 			 * 属性变动赋值
-			 * 
+			 *
 			 */
 			ChangeAttr: function(res) {
 				this.$set(this, 'cart_num', 1);
@@ -957,7 +957,7 @@
 
 			/**
 			 * 分享打开
-			 * 
+			 *
 			 */
 			listenerActionSheet: function() {
 				if (this.isLogin == false) {
@@ -1022,7 +1022,7 @@
 			/**
 			 * 获取产品分销二维码
 			 * @param function successFn 下载完成回调
-			 * 
+			 *
 			 */
 			downloadFilePromotionCode: function(successFn) {
 				let that = this;
@@ -1245,11 +1245,9 @@
 			},
 			//滑动轮播图选择商品
 			changeSwitch(e) {
-				console.log(this.skuArr[e])
 			  let productSelect = this.skuArr[e];
 			  this.$set(this, "selectSku", productSelect);
 			  var skuList = productSelect.suk.split(",");
-				console.log(this.attribute.productAttr)
 			  this.$set(this.attribute.productAttr[0], "index", skuList[0]);
 			  if (skuList.length == 2) {
 			    this.$set(this.attribute.productAttr[0], "index", skuList[0]);
@@ -1581,7 +1579,7 @@
 	}
 
 	.product-con .footer .item .iconfont.icon-shoucang1 {
-		color: #f00;
+		color: var(--view-theme);
 	}
 
 	.product-con .footer .item .iconfont.icon-gouwuche1 {
@@ -1766,18 +1764,18 @@
 	  display: block;
 	  margin-right: 14rpx;
 	}
-	
+
 	.switchTxt {
 	  height: 60rpx;
 	  flex: 1;
 	  line-height: 60rpx;
 	  box-sizing: border-box;
 	  background: #eeeeee;
-	  padding-right: 0 24rpx 0;
+	  padding: 0 14rpx 0 14rpx;
 	  border-radius: 8rpx;
 	  text-align: center;
 	}
-	
+
 	.attribute {
 	  padding: 10rpx 30rpx;
 	  .line1 {
@@ -1792,7 +1790,7 @@
 	.flexs {
 	  display: flex;
 	}
-	
+
 	.attr-txt {
 	  display: flex;
 	  flex-wrap: nowrap;

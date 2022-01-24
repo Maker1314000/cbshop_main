@@ -199,9 +199,12 @@ class Qiniu extends BaseUpload
                 if ($type == 'all' || $type == $v) {
                     $height = 'thumb_' . $v . '_height';
                     $width = 'thumb_' . $v . '_width';
-                    if (isset($config[$height]) && isset($config[$width]) && $config[$height] && $config[$width]) {
-                        $key = 'filePath' . ucfirst($v);
+                    $key = 'filePath' . ucfirst($v);
+                    if (sys_config('image_thumbnail_status', 1) && isset($config[$height]) && isset($config[$width]) && $config[$height] && $config[$width]) {
                         $this->fileInfo->$key = $filePath . '?imageView2/2/w/' . $config[$width] . '/h/' . $config[$height];
+                        $this->fileInfo->$key = $this->water($this->fileInfo->$key);
+                        $data[$v] = $this->fileInfo->$key;
+                    } else {
                         $this->fileInfo->$key = $this->water($this->fileInfo->$key);
                         $data[$v] = $this->fileInfo->$key;
                     }

@@ -140,9 +140,7 @@
           <i-switch
             size="large"
             v-model="splitSwitch"
-            :disabled="
-              orderStatus === 8 || orderStatus === 11 || pay_type === 'offline'
-            "
+            :disabled="orderStatus === 8 || orderStatus === 11"
             @on-change="changeSplitStatus"
           >
             <span slot="open">开启</span>
@@ -246,7 +244,6 @@ export default {
           title: "商品信息",
           slot: "image",
           width: 200,
-          align: "center",
         },
         {
           title: "规格",

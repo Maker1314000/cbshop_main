@@ -13,7 +13,7 @@
 		</view>
 		<view class="pagebox" v-if="list.length>0">{{ Number(currentIndex) + 1 }} / {{ list.length }}</view>
 		<!-- #ifndef MP -->
-		<text class="iconfont icon-fenxiang share_btn" @click="shareFriend()"></text>
+		<!-- <text class="iconfont icon-fenxiang share_btn" @click="shareFriend()"></text> -->
 		<!-- #endif -->
 	</view>
 </template>
@@ -46,13 +46,12 @@
 		},
 		watch: {
 			list(val) {
-				// console.log('图片预览', val)
+
 			}
 		},
 		methods: {
 			// 左右切换
 			changeSwiper(e) {
-				console.log(e.target.current)
 				this.currentIndex = e.target.current;
 				this.$emit('changeSwitch',e.target.current)
 			},
@@ -66,6 +65,7 @@
 			},
 			shareFriend(){
 				this.$emit('shareFriend')
+				this.showBox = false;
 			}
 		}
 	}
@@ -109,7 +109,7 @@
 }
 .mask_sku{
 	color: #fff;
-	max-width: 80%;
+	max-width: 85%;
 	z-index: 300;
 	text-align: center;
 	display: flex;

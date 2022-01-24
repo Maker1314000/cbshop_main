@@ -1,6 +1,6 @@
 <template>
 	<view class="main">
-		<guide v-if="guidePages" :advList="advList"></guide>
+		<guide v-if="guidePages" :advData="advData"></guide>
 	</view>
 </template>
 
@@ -16,18 +16,16 @@
 		data() {
 			return {
 				guidePages: false,
-				advList: []
+				advData: []
 			}
 		},
 		onLoad() {
 			this.loadExecution()
-
 		},
 		methods: {
-			loadExecution: function() {
+			loadExecution() {
 				const tagDate = uni.getStorageSync('guideDate') || '',
 					nowDate = new Date().toLocaleDateString();
-				console.log(nowDate)
 				if (tagDate === nowDate) {
 					uni.switchTab({
 						url: '/pages/index/index'
@@ -35,18 +33,17 @@
 					return
 				}
 				getOpenAdv().then(res => {
-					console.log(nowDate)
 					if (!res.data.length) {
 						uni.switchTab({
 							url: '/pages/index/index'
 						});
-					} else {
-						this.advList = res.data
+					} else if (res.data.status && (res.data.value.length || res.data.video_link)) {
+						this.advData = res.data
 						uni.setStorageSync('guideDate', new Date().toLocaleDateString());
 						this.guidePages = true
 					}
-				}).catch(err=>{
-					
+				}).catch(err => {
+
 				})
 			}
 		}

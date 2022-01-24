@@ -451,9 +451,7 @@ class StoreSeckillServices extends BaseServices
 
         /** @var QrcodeServices $qrcodeService */
         $qrcodeService = app()->make(QrcodeServices::class);
-        $time = $request->param()['time'] ?? '';
-        $status = $request->param()['status'] ?? '';
-        $storeInfo['code_base'] = $qrcodeService->getWechatQrcodePath($id . '_product_seckill_detail_wap.jpg', '/pages/activity/goods_seckill_details/index?id=' . $id . '&time=' . $time . '&status=' . $status);
+        $storeInfo['code_base'] = $qrcodeService->getWechatQrcodePath($id . '_' . $uid . '_product_seckill_detail_wap.jpg', '/pages/activity/goods_seckill_details/index?id=' . $id . '&spread=' . $uid);
 
         /** @var StoreOrderServices $storeOrderServices */
         $storeOrderServices = app()->make(StoreOrderServices::class);
@@ -472,6 +470,37 @@ class StoreSeckillServices extends BaseServices
         } else {
             $storeInfo['percent'] = 100;
             $storeInfo['stock'] = 0;
+        }
+
+        //到期时间
+        /** @var SystemGroupDataServices $groupDataService */
+        $groupDataService = app()->make(SystemGroupDataServices::class);
+        $timeInfo = json_decode($groupDataService->value(['id' => $storeInfo['time_id']], 'value'), true);
+        $today = strtotime(date('Y-m-d'));
+        $activityEndHour = $timeInfo['time']['value'] + $timeInfo['continued']['value'];
+        $storeInfo['last_time'] = (int)bcadd((string)$today, (string)bcmul((string)$activityEndHour, '3600', 0));
+
+        //获取秒杀商品状态
+        if ($storeInfo['status'] == 1) {
+            /** @var SystemGroupDataServices $systemGroupDataService */
+            $systemGroupDataService = app()->make(SystemGroupDataServices::class);
+            $seckillTime = array_column($systemGroupDataService->getConfigNameValue('routine_seckill_time'), null, 'id');
+            $config = $seckillTime[$storeInfo['time_id']] ?? false;
+            if (!$config) {
+                throw new ValidateException('活动已结束');
+            }
+            $now_hour = date('H', time());
+            $start_hour = $config['time'];
+            $end_hour = (int)$start_hour + (int)$config['continued'];
+            if ($start_hour <= $now_hour && $end_hour > $now_hour) {
+                $storeInfo['status'] = 1;
+            } else if ($start_hour > $now_hour) {
+                $storeInfo['status'] = 2;
+            } else {
+                $storeInfo['status'] = 0;
+            }
+        } else {
+            $storeInfo['status'] == 0;
         }
 
         /** @var SystemGroupDataServices $groupDataService */

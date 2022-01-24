@@ -259,7 +259,7 @@
 				menus: {}, //导航
 				news: {}, //消息公告
 				activity: {}, //活动魔方
-				alive: {}, //直播
+				alive: {},
 				scrollBox: {}, //快速选择分类
 				titles: {}, //标题
 				goodList: {}, //商品列表(商品列表、首发新品、热门榜单、促销单品、精品推荐)
@@ -324,7 +324,7 @@
 					uni.setStorageSync('user_longitude', res.longitude);
 				})
 			} else {
-				// #endif	
+				// #endif
 				uni.getLocation({
 					type: 'wgs84',
 					success: function(res) {
@@ -335,7 +335,7 @@
 					}
 				});
 
-				// #ifdef H5	
+				// #ifdef H5
 			}
 			// #endif
 			this.diyData();
@@ -353,7 +353,7 @@
 				});
 			});
 			// #ifdef APP-PLUS
-			this.isTop = uni.getSystemInfoSync().statusBarHeight + 100
+			this.isTop = uni.getSystemInfoSync().statusBarHeight + 85
 			// #endif
 			// #ifdef MP
 			let info = uni.createSelectorQuery().select(".mp-header");
@@ -364,9 +364,11 @@
 			// #ifdef H5
 			this.isTop = 0
 			// #endif
-
 		},
-
+		onPullDownRefresh() {
+			this.diyData();
+			this.getIndexData();
+		},
 		// #ifdef MP
 		//发送给朋友
 		onShareAppMessage: function() {
@@ -407,10 +409,10 @@
 			closeModel() {
 				//退出app
 				uni.getSystemInfo({
-					success: function(res) { // 判断为安卓的手机 
-						if (res.platform == 'android') { // 安卓退出app      
+					success: function(res) { // 判断为安卓的手机
+						if (res.platform == 'android') { // 安卓退出app
 							plus.runtime.quit();
-						} else { // 判断为ios的手机，退出App      
+						} else { // 判断为ios的手机，退出App
 							plus.ios.import("UIApplication").sharedApplication().performSelector("exit");
 
 						}
@@ -562,13 +564,11 @@
 					that.coupon = data.coupon;
 					this.$Cache.set('TAB_BAR', data.tabBar.default.tabBarList)
 					setTimeout(() => {
-						// this.isNodes++;
-					}, 0);
-					setTimeout(() => {
 						this.showSkeleton = false
-					}, 2000)
-
-
+					}, 1500)
+					uni.stopPullDownRefresh({
+						success: (e) => {}
+					});
 				});
 			},
 			getIndexData() {
@@ -930,7 +930,7 @@
 
 			image {
 				width: 100%;
-				height: 344rpx;
+				// height: 344rpx;
 				border-radius: 10rpx 10rpx 0 0;
 			}
 
@@ -984,7 +984,7 @@
 		flex-direction: row;
 		margin: 0px;
 		background: #f5f5f5;
-		padding: 15rpx 0 10rpx 0;
+		padding: 15rpx 0 0rpx 0;
 		/* #ifdef MP || APP-PLUS*/
 		//top: 110rpx;
 		/* #endif */
