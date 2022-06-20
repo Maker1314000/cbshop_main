@@ -16,7 +16,7 @@ namespace app\services\order;
 use app\dao\order\StoreOrderOrderInvoiceDao;
 use app\services\activity\combination\StorePinkServices;
 use app\services\BaseServices;
-use think\exception\ValidateException;
+use crmeb\exceptions\ApiException;
 use app\services\user\UserInvoiceServices;
 
 
@@ -126,19 +126,19 @@ class StoreOrderOrderInvoiceServices extends BaseServices
         $userInvoiceServices = app()->make(UserInvoiceServices::class);
         $order = $storeOrderServices->getOne(['order_id|id' => $order_id, 'is_del' => 0]);
         if (!$order) {
-            throw new ValidateException('订单不存在');
+            throw new ApiException(412000);
         }
         //检测再带查询
         $invoice = $userInvoiceServices->checkInvoice($invoice_id, $uid);
 
         if ($this->dao->getOne(['order_id' => $order['id'], 'uid' => $uid])) {
-            throw new ValidateException('发票已申请，正在审核打印中');
+            throw new ApiException(412076);
         }
         if ($order['refund_status'] == 2) {
-            throw new ValidateException('订单已退款');
+            throw new ApiException(412053);
         }
         if ($order['refund_status'] == 1) {
-            throw new ValidateException('正在申请退款中');
+            throw new ApiException(412077);
         }
         unset($invoice['id'], $invoice['add_time']);
         $data = [];
@@ -147,7 +147,7 @@ class StoreOrderOrderInvoiceServices extends BaseServices
         $data['add_time'] = time();
         $data = array_merge($data, $invoice);
         if (!$re = $this->dao->save($data)) {
-            throw new ValidateException('申请失败，请稍后重试');
+            throw new ApiException(412078);
         }
         return ['id' => $re->id];
     }
@@ -156,7 +156,7 @@ class StoreOrderOrderInvoiceServices extends BaseServices
     {
         $orderInvoice = $this->dao->get($id);
         if(!$orderInvoice){
-            throw new ValidateException('数据不存在');
+            throw new ApiException(100026);
         }
         if($orderInvoice->is_invoice){
             return true;
@@ -165,7 +165,7 @@ class StoreOrderOrderInvoiceServices extends BaseServices
         $data['is_invoice'] = 1;
         $data['invoice_time'] = time();
         if(!$this->dao->update($id,$data,'id')){
-            throw new ValidateException('设置失败，请重试');
+            throw new ApiException(100015);
         }
         return true;
     }

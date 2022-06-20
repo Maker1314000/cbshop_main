@@ -17,7 +17,6 @@ use app\Request;
 use app\services\BaseServices;
 use app\services\system\SystemMenusServices;
 use crmeb\exceptions\AuthException;
-use crmeb\utils\ApiErrorCode;
 use think\facade\Cache;
 
 
@@ -127,7 +126,7 @@ class SystemRoleServices extends BaseServices
             if (trim(strtolower($item['api_url'])) === $rule && $method === trim(strtolower($item['methods'])))
                 return true;
         }))) {
-            throw new AuthException(ApiErrorCode::ERR_AUTH);
+            throw new AuthException(110000);
         }
     }
 

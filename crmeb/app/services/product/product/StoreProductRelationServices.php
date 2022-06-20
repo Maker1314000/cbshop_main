@@ -15,7 +15,7 @@ namespace app\services\product\product;
 use app\dao\product\product\StoreProductRelationDao;
 use app\services\BaseServices;
 use app\jobs\ProductLogJob;
-use think\exception\ValidateException;
+use crmeb\exceptions\ApiException;
 
 /**
  * Class StoreProductRelationService
@@ -107,7 +107,7 @@ class StoreProductRelationServices extends BaseServices
         }
         $data['add_time'] = time();
         if (!$this->dao->save($data)) {
-            throw new ValidateException('添加失败');
+            throw new ApiException(100006);
         }
         //收藏记录
         ProductLogJob::dispatch(['collect', ['uid' => $uid, 'product_id' => $productId]]);
@@ -133,7 +133,7 @@ class StoreProductRelationServices extends BaseServices
             ['type', '=', $relationType],
             ['category', '=', $category]
         ]);
-        if (!$storeProductRelation) throw new ValidateException('取消失败');
+        if (!$storeProductRelation) throw new ApiException(100020);
         return true;
     }
 
@@ -158,7 +158,7 @@ class StoreProductRelationServices extends BaseServices
         }
         if ($relationData) {
             if (!$this->dao->saveAll($relationData)) {
-                throw new ValidateException('添加失败');
+                throw new ApiException(100022);
             }
         }
         return true;

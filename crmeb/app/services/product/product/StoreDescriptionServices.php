@@ -15,6 +15,7 @@ namespace app\services\product\product;
 use app\dao\product\product\StoreDescriptionDao;
 use app\services\BaseServices;
 use crmeb\exceptions\AdminException;
+use crmeb\utils\AdminApiErrorCode;
 
 /**
  * Class StoreDescriptionService
@@ -60,7 +61,7 @@ class StoreDescriptionServices extends BaseServices
         } else {
             $res = $this->dao->save(['product_id' => $id, 'description' => $description, 'type' => $type]);
         }
-        if (!$res) throw new AdminException('商品详情保存失败！');
+        if (!$res) throw new AdminException(400560);
     }
 
 }

@@ -92,10 +92,10 @@ class StoreProductReplyServices extends BaseServices
         $data['pics'] = json_encode($data['pics']);
         unset($data['image']);
         if ($data['add_time'] > $time) {
-            throw new AdminException('评论时间应小于当前时间');
+            throw new AdminException(400567);
         }
         $res = $this->dao->save($data);
-        if (!$res) throw new AdminException('添加虚拟评论失败');
+        if (!$res) throw new AdminException(400568);
     }
 
     /**
@@ -105,12 +105,12 @@ class StoreProductReplyServices extends BaseServices
      */
     public function setReply(int $id, string $content)
     {
-        if ($content == '') throw new AdminException('请输入回复内容');
+        if ($content == '') throw new AdminException(400234);
         $save['merchant_reply_content'] = $content;
         $save['merchant_reply_time'] = time();
         $save['is_reply'] = 1;
         $res = $this->dao->update($id, $save);
-        if (!$res) throw new AdminException('回复失败，请稍后再试');
+        if (!$res) throw new AdminException(400569);
     }
 
     /**
@@ -120,7 +120,7 @@ class StoreProductReplyServices extends BaseServices
     public function del(int $id)
     {
         $res = $this->dao->update($id, ['is_del' => 1]);
-        if (!$res) throw new AdminException('删除失败');
+        if (!$res) throw new AdminException(100008);
     }
 
     /**

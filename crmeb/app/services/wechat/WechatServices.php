@@ -16,11 +16,11 @@ use app\services\BaseServices;
 use app\dao\wechat\WechatUserDao;
 use app\services\user\UserServices;
 use app\services\user\UserVisitServices;
+use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
 use crmeb\services\CacheService as Cache;
 use crmeb\services\WechatService as WechatAuthService;
 use crmeb\utils\Canvas;
-use think\exception\ValidateException;
 
 /**
  *
@@ -81,12 +81,12 @@ class WechatServices extends BaseServices
         try {
             $wechatInfo = WechatAuthService::oauth2Service()->oauth();
         } catch (\Exception $e) {
-            throw new ValidateException('授权失败' . $e->getMessage() . 'line' . $e->getLine());
+            throw new ApiException(411092);
         }
         if (!isset($wechatInfo['nickname'])) {
             $wechatInfo = WechatAuthService::oauth2Service()->getUserInfo($wechatInfo['openid'])->toArray();
             if (!isset($wechatInfo['nickname']))
-                throw new ValidateException('授权失败');
+                throw new ApiException(411092);
             if (isset($wechatInfo['tagid_list']))
                 $wechatInfo['tagid_list'] = implode(',', $wechatInfo['tagid_list']);
         } else {
@@ -116,7 +116,7 @@ class WechatServices extends BaseServices
             $visitServices->loginSaveVisit($user);
             return ['userInfo' => $user];
         } else
-            throw new ValidateException('登录失败');
+            throw new ApiException(410019);
     }
 
     /**
@@ -131,12 +131,12 @@ class WechatServices extends BaseServices
         try {
             $wechatInfo = WechatAuthService::oauth2Service()->oauth();
         } catch (\Exception $e) {
-            throw new ValidateException('授权失败' . $e->getMessage() . 'line' . $e->getLine());
+            throw new ApiException(411092);
         }
         if (!isset($wechatInfo['nickname'])) {
             $wechatInfo = WechatAuthService::oauth2Service()->getUserInfo($wechatInfo['openid'])->toArray();
             if (!isset($wechatInfo['nickname']))
-                throw new ValidateException('授权失败');
+                throw new ApiException(411092);
             if (isset($wechatInfo['tagid_list']))
                 $wechatInfo['tagid_list'] = implode(',', $wechatInfo['tagid_list']);
         } else {
@@ -173,7 +173,7 @@ class WechatServices extends BaseServices
             $token['userInfo'] = $user;
             return $token;
         } else
-            throw new ValidateException('登录失败');
+            throw new ApiException(410019);
     }
 
     /**
@@ -195,7 +195,7 @@ class WechatServices extends BaseServices
             $wechatQrcode = substr($wechatQrcode, $strlen);
         }
         if (!$wechatQrcode)
-            throw new ValidateException('请上传二维码');
+            throw new ApiException(410081);
         $canvas->setImageUrl($wechatQrcode)->setImageHeight(344)->setImageWidth(344)->setImageLeft(76)->setImageTop(76)->pushImageValue();
         $image = $canvas->setFileName($name)->setImageType($imageType)->setPath($path)->setBackgroundWidth(500)->setBackgroundHeight(720)->starDrawChart();
         return ['path' => $image ? $siteUrl . '/' . $image : ''];
@@ -234,7 +234,7 @@ class WechatServices extends BaseServices
                 $visitServices->loginSaveVisit($user);
                 return $token;
             } else
-                throw new ValidateException('登录失败');
+                throw new ApiException(410019);
         } else {
             //更新用户信息
             $wechatUserServices->wechatUpdata([$user['uid'], ['code' => $spread]]);
@@ -245,7 +245,7 @@ class WechatServices extends BaseServices
                 $visitServices->loginSaveVisit($user);
                 return $token;
             } else
-                throw new ValidateException('登录失败');
+                throw new ApiException(410019);
         }
     }
 
@@ -287,7 +287,7 @@ class WechatServices extends BaseServices
                 $token['userInfo'] = $user;
                 return $token;
             } else
-                throw new ValidateException('登录失败');
+                throw new ApiException(410019);
         }
     }
 
@@ -302,11 +302,11 @@ class WechatServices extends BaseServices
     public function silenceAuthBindingPhone($key, $phone)
     {
         if (!$key) {
-            throw new ValidateException('请刷新页面或者重新授权');
+            throw new ApiException(410037);
         }
         [$openid, $wechatInfo, $spreadId, $login_type, $userType] = $createData = CacheService::getTokenBucket($key);
         if (!$createData) {
-            throw new ValidateException('请刷新页面或者重新授权');
+            throw new ApiException(410037);
         }
         $wechatInfo['phone'] = $phone;
         /** @var WechatUserServices $wechatUser */
@@ -324,7 +324,7 @@ class WechatServices extends BaseServices
                 'expires_time' => $token['params']['exp'],
             ];
         } else
-            throw new ValidateException('登录失败');
+            throw new ApiException(410019);
     }
 
     /**
@@ -402,6 +402,6 @@ class WechatServices extends BaseServices
                 'isbind' => false
             ];
         } else
-            throw new ValidateException('登录失败');
+            throw new ApiException(410019);
     }
 }

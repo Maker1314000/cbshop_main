@@ -14,7 +14,7 @@ namespace app\services\message\sms;
 use app\services\BaseServices;
 use app\services\serve\ServeServices;
 use app\jobs\TaskJob;
-use think\exception\ValidateException;
+use crmeb\exceptions\ApiException;
 
 /**
  * 短信发送
@@ -38,7 +38,7 @@ class SmsSendServices extends BaseServices
             $services = app()->make(ServeServices::class);
             $res = $services->sms()->send($phone, $template, $data);
             if ($res === false) {
-                throw new ValidateException($services->getError());
+                throw new ApiException($services->getError());
             } else {
                 /** @var SmsRecordServices $recordServices */
                 $recordServices = app()->make(SmsRecordServices::class);

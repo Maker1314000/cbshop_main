@@ -74,18 +74,18 @@ class StoreServiceSpeechcraftCate extends AuthController
         ]);
 
         if (!$data['name']) {
-            return app('json')->fail('请输入分类名称');
+            return app('json')->fail(400100);
         }
 
         if ($this->services->count(['name' => $data['name'], 'type' => 1, 'owner_id' => 0])) {
-            return app('json')->fail('分类已存在');
+            return app('json')->fail(400101);
         }
 
         $data['add_time'] = time();
         $data['type'] = 1;
 
         $this->services->save($data);
-        return app('json')->success('添加成功');
+        return app('json')->success(100021);
     }
 
     /**
@@ -115,17 +115,17 @@ class StoreServiceSpeechcraftCate extends AuthController
             [['sort', 'd'], 0],
         ]);
         if (!$data['name']) {
-            return app('json')->fail('请输入分类名称');
+            return app('json')->fail(400100);
         }
 
         $cateInfo = $this->services->get($id);
         if (!$cateInfo) {
-            return app('json')->fail('修改的分类不存在');
+            return app('json')->fail(400103);
         }
         $cateInfo->name = $data['name'];
         $cateInfo->sort = $data['sort'];
         $cateInfo->save();
-        return app('json')->success('修改成功');
+        return app('json')->success(100001);
     }
 
     /**
@@ -135,12 +135,12 @@ class StoreServiceSpeechcraftCate extends AuthController
      */
     public function delete($id)
     {
-        if ($id == 0) return app('json')->fail('系统分类不能删除');
+        if ($id == 0) return app('json')->fail(400273);
         $cateInfo = $this->services->get($id);
         if (!$cateInfo) {
-            return app('json')->fail('删除的分类不存在');
+            return app('json')->fail(400103);
         }
         $cateInfo->delete();
-        return app('json')->success('删除成功');
+        return app('json')->success(100002);
     }
 }

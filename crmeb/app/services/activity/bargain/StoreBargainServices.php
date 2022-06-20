@@ -25,20 +25,20 @@ use app\services\product\sku\StoreProductAttrServices;
 use app\services\product\sku\StoreProductAttrValueServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use app\services\user\UserServices;
-use app\services\wechat\WechatServices;
 use crmeb\exceptions\AdminException;
+use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
 use crmeb\services\MiniProgramService;
 use crmeb\services\UploadService;
 use crmeb\services\UtilService;
+use crmeb\utils\ErrorCode;
 use Guzzle\Http\EntityBody;
-use think\exception\ValidateException;
 
 /**
  *
  * Class StoreBargainServices
  * @package app\services\activity
- * @method get(int $id, array $field) 获取一条数据
+ * @method get(int $id, ?array $field) 获取一条数据
  * @method getBargainIdsArray(array $ids, array $field)
  * @method sum(array $where, string $field)
  * @method update(int $id, array $data)
@@ -62,7 +62,7 @@ class StoreBargainServices extends BaseServices
     /**
      * 判断砍价商品是否开启
      * @param int $bargainId
-     * @return int|string
+     * @return int
      */
     public function validBargain($bargainId = 0)
     {
@@ -80,6 +80,9 @@ class StoreBargainServices extends BaseServices
      * 获取后台列表
      * @param array $where
      * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function getStoreBargainList(array $where)
     {
@@ -135,14 +138,13 @@ class StoreBargainServices extends BaseServices
         $data['price'] = $detail[0]['price'];
         $data['min_price'] = $detail[0]['min_price'];
         $data['logistics'] = implode(',', $data['logistics']);
-
-        if ($detail[0]['min_price'] < 0 || $detail[0]['price'] <= 0 || $detail[0]['min_price'] === '' || $detail[0]['price'] === '') throw new ValidateException('金额不能小于0');
-        if ($detail[0]['min_price'] >= $detail[0]['price']) throw new ValidateException('砍价最低价不能大于或等于起始金额');
-        if ($detail[0]['quota'] > $detail[0]['stock']) throw new ValidateException('限量不能超过商品库存');
+        if ($detail[0]['min_price'] < 0 || $detail[0]['price'] <= 0 || $detail[0]['min_price'] === '' || $detail[0]['price'] === '') throw new AdminException(400095);
+        if ($detail[0]['min_price'] >= $detail[0]['price']) throw new AdminException(400511);
+        if ($detail[0]['quota'] > $detail[0]['stock']) throw new AdminException(400090);
 
         //按照能砍掉的金额计算最大设置人数，并判断填写的砍价人数是否大于最大设置人数
         $bNum = bcmul(bcsub((string)$data['price'], (string)$data['min_price'], 2), '100');
-        if ($data['people_num'] > $bNum) throw new ValidateException('砍价人数不能大于' . $bNum . '人');
+        if ($data['people_num'] > $bNum) throw new AdminException(400512, ['num' => $bNum]);
 
         unset($data['section_time'], $data['description'], $data['attrs'], $data['items'], $detail[0]['min_price'], $detail[0]['_index'], $detail[0]['_rowKey']);
         /** @var StoreDescriptionServices $storeDescriptionServices */
@@ -157,24 +159,24 @@ class StoreBargainServices extends BaseServices
                 $storeDescriptionServices->saveDescription((int)$id, $description, 2);
                 $skuList = $storeProductServices->validateProductAttr($items, $detail, (int)$id, 2);
                 $valueGroup = $storeProductAttrServices->saveProductAttr($skuList, (int)$id, 2);
-                if (!$res) throw new AdminException('修改失败');
+                if (!$res) throw new AdminException(100007);
             } else {
                 if (!$storeProductServices->getOne(['is_show' => 1, 'is_del' => 0, 'id' => $data['product_id']])) {
-                    throw new AdminException('原商品已下架或移入回收站');
+                    throw new AdminException(400091);
                 }
                 $data['add_time'] = time();
                 $res = $this->dao->save($data);
                 $storeDescriptionServices->saveDescription((int)$res->id, $description, 2);
                 $skuList = $storeProductServices->validateProductAttr($items, $detail, (int)$res->id, 2);
                 $valueGroup = $storeProductAttrServices->saveProductAttr($skuList, (int)$res->id, 2);
-                if (!$res) throw new AdminException('添加失败');
+                if (!$res) throw new AdminException(100022);
             }
             $res = true;
             foreach ($valueGroup->toArray() as $item) {
                 $res = $res && CacheService::setStock($item['unique'], (int)$item['quota_show'], 2);
             }
             if (!$res) {
-                throw new AdminException('占用库存失败');
+                throw new AdminException(400092);
             }
         });
     }
@@ -445,8 +447,8 @@ class StoreBargainServices extends BaseServices
 
         //获取砍价商品信息
         $bargain = $this->dao->getOne(['id' => $id], '*', ['description']);
-        if (!$bargain) throw new ValidateException('砍价商品不存在');
-        if ($bargain['stop_time'] < time()) throw new ValidateException('砍价已结束');
+        if (!$bargain) throw new ApiException(413012);
+        if ($bargain['stop_time'] < time()) throw new ApiException(413005);
         list($productAttr, $productValue) = $storeProductAttrServices->getProductAttrDetail($id, $request->uid(), 0, 2, $bargain['product_id']);
         foreach ($productValue as $v) {
             $bargain['attr'] = $v;
@@ -518,29 +520,26 @@ class StoreBargainServices extends BaseServices
         $bargainUserServices = app()->make(StoreBargainUserServices::class);
         $bargainUserInfo = $bargainUserServices->getOne(['uid' => $uid, 'bargain_id' => $bargainId, 'status' => 1, 'is_del' => 0]);
         if (!$bargainUserInfo)
-            throw new ValidateException('砍价失败');
+            throw new ApiException(413013);
         $bargainUserTableId = $bargainUserInfo['id'];
         if ($bargainUserInfo['bargain_price_min'] < bcsub((string)$bargainUserInfo['bargain_price'], (string)$bargainUserInfo['price'], 2)) {
-            throw new ValidateException('砍价未成功');
+            throw new ApiException(413014);
         }
         if ($bargainUserInfo['status'] == 3)
-            throw new ValidateException('砍价已支付');
-
-        /** @var StoreBargainServices $bargainService */
-        $bargainService = app()->make(StoreBargainServices::class);
+            throw new ApiException(413015);
         /** @var StoreProductAttrValueServices $attrValueServices */
         $attrValueServices = app()->make(StoreProductAttrValueServices::class);
         $res = $attrValueServices->getOne(['product_id' => $bargainId, 'type' => 2]);
-        if (!$bargainService->validBargain($bargainId) || !$res) {
-            throw new ValidateException('该商品已下架或删除');
+        if (!$this->validBargain($bargainId) || !$res) {
+            throw new ApiException(413001);
         }
-        $StoreBargainInfo = $bargainService->get($bargainId);
+        $StoreBargainInfo = $this->dao->get($bargainId);
         if (1 > $res['quota']) {
-            throw new ValidateException('该商品库存不足');
+            throw new ApiException(413002);
         }
         $product_stock = $attrValueServices->value(['product_id' => $StoreBargainInfo['product_id'], 'suk' => $res['suk'], 'type' => 0], 'stock');
         if ($product_stock < 1) {
-            throw new ValidateException('该商品库存不足');
+            throw new ApiException(413002);
         }
         //修改砍价状态
         $this->setBargainUserStatus($bargainId, $uid, $bargainUserTableId);
@@ -582,7 +581,7 @@ class StoreBargainServices extends BaseServices
      */
     public function setBargain(int $uid, int $bargainId)
     {
-        if (!$bargainId) throw new ValidateException('参数错误');
+        if (!$bargainId) throw new ApiException(100101);
         $bargainInfo = $this->dao->getOne([
             ['is_del', '=', 0],
             ['status', '=', 1],
@@ -590,18 +589,18 @@ class StoreBargainServices extends BaseServices
             ['stop_time', '>', time()],
             ['id', '=', $bargainId],
         ]);
-        if (!$bargainInfo) throw new ValidateException('砍价已结束');
+        if (!$bargainInfo) throw new ApiException(413005);
         $bargainInfo = $bargainInfo->toArray();
         /** @var StoreBargainUserServices $bargainUserService */
         $bargainUserService = app()->make(StoreBargainUserServices::class);
         $count = $bargainUserService->count(['bargain_id' => $bargainId, 'uid' => $uid, 'is_del' => 0, 'status' => 1]);
         if ($count === false) {
-            throw new ValidateException('参数错误');
+            throw new ApiException(100101);
         } else {
             /** @var StoreBargainUserHelpServices $bargainUserHelpService */
             $bargainUserHelpService = app()->make(StoreBargainUserHelpServices::class);
             $count = $bargainUserService->count(['uid' => $uid, 'bargain_id' => $bargainId, 'is_del' => 0]);
-            if ($count >= $bargainInfo['num']) throw new ValidateException('您不能再发起此件商品砍价');
+            if ($count >= $bargainInfo['num']) throw new ApiException(413006);
             return $this->transaction(function () use ($bargainUserService, $bargainUserHelpService, $bargainId, $uid, $bargainInfo) {
                 $bargainUserInfo = $bargainUserService->setBargain($bargainId, $uid, $bargainInfo);
                 $price = $bargainUserHelpService->setBargainRecord($uid, $bargainUserInfo->toArray(), $bargainInfo);
@@ -622,7 +621,7 @@ class StoreBargainServices extends BaseServices
      */
     public function setHelpBargain(int $uid, int $bargainId, int $bargainUserUid)
     {
-        if (!$bargainId || !$bargainUserUid) throw new ValidateException('参数错误');
+        if (!$bargainId || !$bargainUserUid) throw new ApiException(100100);
         $bargainInfo = $this->dao->getOne([
             ['is_del', '=', 0],
             ['status', '=', 1],
@@ -630,17 +629,17 @@ class StoreBargainServices extends BaseServices
             ['stop_time', '>', time()],
             ['id', '=', $bargainId],
         ]);
-        if (!$bargainInfo) throw new ValidateException('砍价已结束');
+        if (!$bargainInfo) throw new ApiException(413005);
         $bargainInfo = $bargainInfo->toArray();
         /** @var StoreBargainUserHelpServices $userHelpService */
         $userHelpService = app()->make(StoreBargainUserHelpServices::class);
         /** @var StoreBargainUserServices $bargainUserService */
         $bargainUserService = app()->make(StoreBargainUserServices::class);
         $bargainUserTableId = $bargainUserService->getBargainUserTableId($bargainId, $bargainUserUid);
-        if (!$bargainUserTableId) throw new ValidateException('该分享未开启砍价');
+        if (!$bargainUserTableId) throw new ApiException(413007);
         $bargainUserInfo = $bargainUserService->get($bargainUserTableId)->toArray();
         $count = $userHelpService->isBargainUserHelpCount($bargainId, $bargainUserTableId, $uid);
-        if (!$count) throw new ValidateException('您已经帮砍过此砍价');
+        if (!$count) throw new ApiException(413008);
         $price = $userHelpService->setBargainRecord($uid, $bargainUserInfo, $bargainInfo);
         if ($price) {
             if (!$bargainUserService->getSurplusPrice($bargainUserTableId, 1)) {
@@ -731,13 +730,13 @@ class StoreBargainServices extends BaseServices
     {
         $storeBargainInfo = $this->dao->get($bargainId, ['title', 'image', 'price']);
         if (!$storeBargainInfo) {
-            throw new ValidateException('砍价信息没有查到');
+            throw new ApiException(413009);
         }
         /** @var StoreBargainUserServices $services */
         $services = app()->make(StoreBargainUserServices::class);
         $bargainUser = $services->get(['bargain_id' => $bargainId, 'uid' => $user['uid']], ['price', 'bargain_price_min']);
         if (!$bargainUser) {
-            throw new ValidateException('用户砍价信息未查到');
+            throw new ApiException(413010);
         }
         try {
             $siteUrl = sys_config('site_url');
@@ -757,7 +756,7 @@ class StoreBargainServices extends BaseServices
                     $codeUrl = set_http_type($siteUrl . '/pages/activity/goods_bargain_details/index?id=' . $bargainId . '&bargain=' . $user['uid'] . '&spread=' . $user['uid'], 1);//二维码链接
                     $imageInfo = UtilService::getQRCodePath($codeUrl, $name);
                     if (is_string($imageInfo)) {
-                        throw new ValidateException('二维码生成失败');
+                        throw new ApiException(411881);
                     }
                     $systemAttachmentServices->save([
                         'name' => $imageInfo['name'],
@@ -777,7 +776,7 @@ class StoreBargainServices extends BaseServices
                 if ($imageInfo['image_type'] == 1) $data['url'] = $siteUrl . $url;
                 $posterImage = UtilService::setShareMarketingPoster($data, 'wap/activity/bargain/poster');
                 if (!is_array($posterImage)) {
-                    throw new ValidateException('海报生成失败');
+                    throw new ApiException(411886);
                 }
                 $systemAttachmentServices->save([
                     'name' => $posterImage['name'],
@@ -806,19 +805,19 @@ class StoreBargainServices extends BaseServices
                         $valueData .= '&spread=' . $user['uid'];
                     }
                     $res = MiniProgramService::qrcodeService()->appCodeUnlimit($valueData, 'pages/activity/goods_bargain_details/index', 280);
-                    if (!$res) throw new ValidateException('二维码生成失败');
+                    if (!$res) throw new ApiException(ErrorCode::ERR_QR_CODE_GEN_FAILED);
                     $uploadType = (int)sys_config('upload_type', 1);
                     $upload = UploadService::init();
                     $res = (string)EntityBody::factory($res);
                     $res = $upload->to('routine/activity/bargain/code')->validate()->setAuthThumb(false)->stream($res, $name);
                     if ($res === false) {
-                        throw new ValidateException($upload->getError());
+                        throw new ApiException($upload->getError());
                     }
                     $imageInfo = $upload->getUploadInfo();
                     $imageInfo['image_type'] = $uploadType;
                     if ($imageInfo['image_type'] == 1) $remoteImage = UtilService::remoteImage($siteUrl . $imageInfo['dir']);
                     else $remoteImage = UtilService::remoteImage($imageInfo['dir']);
-                    if (!$remoteImage['status']) throw new ValidateException($remoteImage['msg']);
+                    if (!$remoteImage['status']) throw new ApiException(411881);
                     $systemAttachmentServices->save([
                         'name' => $imageInfo['name'],
                         'att_dir' => $imageInfo['dir'],
@@ -837,7 +836,7 @@ class StoreBargainServices extends BaseServices
                 if ($imageInfo['image_type'] == 1)
                     $data['url'] = $siteUrl . $url;
                 $posterImage = UtilService::setShareMarketingPoster($data, 'routine/activity/bargain/poster');
-                if (!is_array($posterImage)) throw new ValidateException('海报生成失败');
+                if (!is_array($posterImage)) throw new ApiException(411886);
                 $systemAttachmentServices->save([
                     'name' => $posterImage['name'],
                     'att_dir' => $posterImage['dir'],
@@ -871,13 +870,13 @@ class StoreBargainServices extends BaseServices
     {
         $storeBargainInfo = $this->dao->get($bargainId, ['title', 'image', 'price']);
         if (!$storeBargainInfo) {
-            throw new ValidateException('砍价信息没有查到');
+            throw new ApiException(413009);
         }
         /** @var StoreBargainUserServices $services */
         $services = app()->make(StoreBargainUserServices::class);
         $bargainUser = $services->get(['bargain_id' => $bargainId, 'uid' => $user['uid']], ['price', 'bargain_price_min']);
         if (!$bargainUser) {
-            throw new ValidateException('用户砍价信息未查到');
+            throw new ApiException(413010);
         }
         $data['url'] = '';
         $data['title'] = $storeBargainInfo['title'];
@@ -903,19 +902,19 @@ class StoreBargainServices extends BaseServices
                         $valueData .= '&spread=' . $user['uid'];
                     }
                     $res = MiniProgramService::qrcodeService()->appCodeUnlimit($valueData, 'pages/activity/goods_bargain_details/index', 280);
-                    if (!$res) throw new ValidateException('二维码生成失败');
+                    if (!$res) throw new ApiException(411881);
                     $uploadType = (int)sys_config('upload_type', 1);
                     $upload = UploadService::init();
                     $res = (string)EntityBody::factory($res);
                     $res = $upload->to('routine/activity/bargain/code')->validate()->setAuthThumb(false)->stream($res, $name);
                     if ($res === false) {
-                        throw new ValidateException($upload->getError());
+                        throw new ApiException($upload->getError());
                     }
                     $imageInfo = $upload->getUploadInfo();
                     $imageInfo['image_type'] = $uploadType;
                     if ($imageInfo['image_type'] == 1) $remoteImage = UtilService::remoteImage($siteUrl . $imageInfo['dir']);
                     else $remoteImage = UtilService::remoteImage($imageInfo['dir']);
-                    if (!$remoteImage['status']) throw new ValidateException($remoteImage['msg']);
+                    if (!$remoteImage['status']) throw new ApiException($remoteImage['msg']);
                     $systemAttachmentServices->save([
                         'name' => $imageInfo['name'],
                         'att_dir' => $imageInfo['dir'],
@@ -955,24 +954,24 @@ class StoreBargainServices extends BaseServices
     public function checkBargainStock(int $uid, int $bargainId, int $cartNum = 1, string $unique = '')
     {
         if (!$this->validBargain($bargainId)) {
-            throw new ValidateException('该商品已下架或删除');
+            throw new ApiException(413001);
         }
         /** @var StoreProductAttrValueServices $attrValueServices */
         $attrValueServices = app()->make(StoreProductAttrValueServices::class);
         $attrInfo = $attrValueServices->getOne(['product_id' => $bargainId, 'type' => 2]);
         if (!$attrInfo || $attrInfo['product_id'] != $bargainId) {
-            throw new ValidateException('请选择有效的商品属性');
+            throw new ApiException(413011);
         }
         $productInfo = $this->dao->get($bargainId, ['*', 'title as store_name']);
         /** @var StoreBargainUserServices $bargainUserService */
         $bargainUserService = app()->make(StoreBargainUserServices::class);
         $bargainUserInfo = $bargainUserService->getOne(['uid' => $uid, 'bargain_id' => $bargainId, 'status' => 1, 'is_del' => 0]);
         if ($bargainUserInfo['bargain_price_min'] < bcsub((string)$bargainUserInfo['bargain_price'], (string)$bargainUserInfo['price'], 2)) {
-            throw new ValidateException('砍价未成功');
+            throw new ApiException(413103);
         }
         $unique = $attrInfo['unique'];
         if ($cartNum > $attrInfo['quota']) {
-            throw new ValidateException('该商品库存不足' . $cartNum);
+            throw new ApiException(413002);
         }
         return [$attrInfo, $unique, $productInfo, $bargainUserInfo];
     }

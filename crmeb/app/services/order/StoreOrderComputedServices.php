@@ -18,7 +18,7 @@ use app\services\product\product\StoreCategoryServices;
 use app\services\user\member\MemberCardServices;
 use app\services\user\UserBillServices;
 use app\services\user\UserServices;
-use think\exception\ValidateException;
+use crmeb\exceptions\ApiException;
 use app\services\user\UserAddressServices;
 use app\services\activity\coupon\StoreCouponUserServices;
 use app\services\shipping\ShippingTemplatesFreeServices;
@@ -84,7 +84,7 @@ class StoreOrderComputedServices extends BaseServices
         if ($offlinePayStatus == 2) unset($systemPayType['offline']);
         if (strtolower($payType) != 'pc' && strtolower($payType) != 'friend') {
             if (!array_key_exists($payType, $systemPayType)) {
-                throw new ValidateException('选择支付方式有误');
+                throw new ApiException(412068);
             }
         }
         if (!$userInfo) {
@@ -92,7 +92,7 @@ class StoreOrderComputedServices extends BaseServices
             $userServices = app()->make(UserServices::class);
             $userInfo = $userServices->getUserInfo($uid);
             if (!$userInfo) {
-                throw new ValidateException('用户不存在!');
+                throw new ApiException(410032);
             }
         }
         $cartInfo = $cartGroup['cartInfo'];
@@ -158,7 +158,7 @@ class StoreOrderComputedServices extends BaseServices
             $couponServices = app()->make(StoreCouponUserServices::class);
             $couponInfo = $couponServices->getOne([['id', '=', $couponId], ['uid', '=', $uid], ['is_fail', '=', 0], ['status', '=', 0], ['start_time', '<', time()], ['end_time', '>', time()]], '*', ['issue']);
             if (!$couponInfo) {
-                throw new ValidateException('选择的优惠劵无效!');
+                throw new ApiException(412069);
             }
             $type = $couponInfo['applicable_type'] ?? 0;
             $flag = false;
@@ -199,7 +199,7 @@ class StoreOrderComputedServices extends BaseServices
                 $flag = true;
             }
             if (!$flag) {
-                throw new ValidateException('不满足优惠劵的使用条件!');
+                throw new ApiException(412070);
             }
             $payPrice = (float)bcsub((string)$payPrice, (string)$couponInfo['coupon_price'], 2);
             if ($isCreate) {
@@ -210,7 +210,7 @@ class StoreOrderComputedServices extends BaseServices
             $couponPrice = 0;
         }
         if (!$res1) {
-            throw new ValidateException('使用优惠劵失败!');
+            throw new ApiException(412071);
         }
         return [$payPrice, $couponPrice];
     }

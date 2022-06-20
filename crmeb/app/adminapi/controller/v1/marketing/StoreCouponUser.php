@@ -55,20 +55,20 @@ class StoreCouponUser extends AuthController
             ['id', 0],
             ['uid', '']
         ]);
-        if (!$data['id']) return app('json')->fail('数据不存在!');
+        if (!$data['id']) return app('json')->fail(100100);
         /** @var StoreCouponIssueServices $issueService */
         $issueService = app()->make(StoreCouponIssueServices::class);
         $coupon = $issueService->get($data['id']);
         if (!$coupon) {
-            return app('json')->fail('数据不存在!');
+            return app('json')->fail(100026);
         } else {
             $coupon = $coupon->toArray();
         }
         $user = explode(',', $data['uid']);
         if (!$issueService->setCoupon($coupon, $user))
-            return app('json')->fail('发放失败,请稍候再试!');
+            return app('json')->fail(100031);
         else
-            return app('json')->success('发放成功!');
+            return app('json')->success(100030);
 
     }
 }

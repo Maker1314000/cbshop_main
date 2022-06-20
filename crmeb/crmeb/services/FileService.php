@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 namespace crmeb\services;
 
-use think\exception\ValidateException;
+use crmeb\exceptions\AdminException;
 
 /**
  * 文件操作类
@@ -942,7 +942,7 @@ class FileService
     {
         if (!$filePath) return false;
         $pathInfo = pathinfo($filePath, PATHINFO_EXTENSION);
-        if (!$pathInfo || $pathInfo != "xlsx") throw new ValidateException('必须上传xlsx格式文件');
+        if (!$pathInfo || $pathInfo != "xlsx") throw new AdminException(400728);
         //加载读取模型
         $readModel = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($suffix);
         // 创建读操作
@@ -954,7 +954,7 @@ class FileService
             $highestRow = $sheet->getHighestRow();
             $lines = $highestRow - 1;
             if ($lines <= 0) {
-                throw new ValidateException('数据不能为空');
+                throw new AdminException(400729);
             }
             // 用于存储表格数据
             $data = [];
@@ -970,7 +970,7 @@ class FileService
             }
             return $data;
         } catch (\Exception $e) {
-            throw new ValidateException($e->getMessage());
+            throw new AdminException($e->getMessage());
         }
     }
 

@@ -21,7 +21,6 @@ use crmeb\services\UploadService;
 use crmeb\services\UtilService;
 use crmeb\services\WechatService;
 use Guzzle\Http\EntityBody;
-use think\exception\ValidateException;
 
 /**
  *
@@ -62,7 +61,7 @@ class QrcodeServices extends BaseServices
             $this->createTemporaryQrcode($id, $type, $res['id']);
             $res = $this->getTemporaryQrcode($type, $id);
         }
-        if (!$res['ticket']) throw new AdminException('临时二维码获取错误');
+        if (!$res['ticket']) throw new AdminException(400552);
         return $res;
     }
 
@@ -108,7 +107,7 @@ class QrcodeServices extends BaseServices
             $this->createForeverQrcode($id, $type);
             $res = $this->getForeverQrcode($type, $id);
         }
-        if (!$res['ticket']) throw new AdminException('永久二维码获取错误');
+        if (!$res['ticket']) throw new AdminException(400553);
         return $res;
     }
 
@@ -246,6 +245,7 @@ class QrcodeServices extends BaseServices
             if (!$imageInfo) {
                 $res = MiniProgramService::qrcodeService()->appCodeUnlimit($data, $page, 280);
                 if (!$res) return false;
+                if ($res->getSize() < 100) return 'unpublished';
                 $uploadType = (int)sys_config('upload_type', 1);
                 $upload = UploadService::init();
                 $res = (string)EntityBody::factory($res);
@@ -318,7 +318,7 @@ class QrcodeServices extends BaseServices
         $data['url_time'] = '';
         $data['qrcode_url'] = $qrCodeLink;
         if (!$re = $this->dao->save($data)) {
-            throw new ValidateException('生成失败');
+            throw new AdminException(400237);
         }
         return $re;
     }
@@ -333,10 +333,10 @@ class QrcodeServices extends BaseServices
     {
         if (!$id) return false;
         if (!$this->dao->get((int)$id)) {
-            throw new ValidateException('数据不存在');
+            throw new AdminException(100026);
         }
         if (!$re = $this->dao->update($id, $data, 'id')) {
-            throw new ValidateException('修改数据失败');
+            throw new AdminException(100007);
         }
         return $re;
     }
@@ -351,5 +351,4 @@ class QrcodeServices extends BaseServices
     {
         return !!$this->dao->getCount(['third_id' => $thirdId, 'third_type' => $thirdType]);
     }
-
 }

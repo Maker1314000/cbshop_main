@@ -48,15 +48,16 @@ class LiveGoodsServices extends BaseServices
 
     public function create(array $product_ids)
     {
+        if (!$product_ids) throw new AdminException(100100);
         /** @var StoreProductServices $product */
         $productServices = app()->make(StoreProductServices::class);
         $products = $productServices->getColumn([['id', 'IN', $product_ids], ['is_del', '=', 0], ['is_show', '=', 1]], 'id,image,store_name,price,price as cost_price,stock', 'id');
         if (count($product_ids) != count($products)) {
-            throw new AdminException('已选商品中包括已下架或移入回收站商品');
+            throw new AdminException(400091);
         }
         $checkGoods = $this->dao->getCount([['product_id', 'IN', $product_ids], ['is_del', '=', 0], ['audit_status', '<>', 3]]);
         if ($checkGoods > 0) {
-            throw new AdminException('其中有商品已经添加');
+            throw new AdminException(100022);
         }
         return array_merge($products);
     }
@@ -71,6 +72,7 @@ class LiveGoodsServices extends BaseServices
      */
     public function add(array $goods_info)
     {
+        if (!$goods_info) throw new AdminException(100100);
         $product_ids = array_column($goods_info, 'id');
         $this->create($product_ids);
         $miniUpload = MiniProgramService::materialTemporaryService();
@@ -105,7 +107,7 @@ class LiveGoodsServices extends BaseServices
             $dataAll[] = $data;
         }
         if (!$goods = $this->dao->saveAll($dataAll)) {
-            throw new AdminException('添加商品失败');
+            throw new AdminException(100022);
         }
         return true;
     }
@@ -129,7 +131,7 @@ class LiveGoodsServices extends BaseServices
                 $data['audit_id'] = $res['auditId'];
                 $data['audit_status'] = 1;
                 if (!$this->dao->update($good['id'], $data, 'id')) {
-                    throw new AdminException('同步失败');
+                    throw new AdminException(100039);
                 }
             }
         }
@@ -139,7 +141,7 @@ class LiveGoodsServices extends BaseServices
     public function wxCreate($goods)
     {
         if ($goods['goods_id'])
-            throw new AdminException('商品已创建');
+            throw new AdminException(400427);
 
         $goods = $goods->toArray();
         $path = root_path() . 'public' . app()->make(DownloadImageService::class)->thumb(true)->downloadImage($goods['cover_img'])['path'];
@@ -154,10 +156,10 @@ class LiveGoodsServices extends BaseServices
     {
         $goods = $this->dao->get(['id' => $id, 'audit_status' => 2]);
         if (!$goods) {
-            throw new AdminException('审核中或审核失败不允许此操作');
+            throw new AdminException(400428);
         }
         $this->dao->update($id, ['is_show' => $is_show]);
-        return $is_show == 1 ? '显示成功' : '隐藏成功';
+        return true;
     }
 
     /**
@@ -172,13 +174,13 @@ class LiveGoodsServices extends BaseServices
     {
         $goods = $this->dao->get($id);
         if (!$goods) {
-            throw new AdminException('数据不存在');
+            throw new AdminException(100026);
         }
         if ($goods['audit_status'] != 0) {
-            throw new AdminException('在审核中或已经审核通过');
+            throw new AdminException(400429);
         }
         if (!$this->dao->update($id, ['audit_status' => 1])) {
-            throw new AdminException('修改审核状态失败');
+            throw new AdminException(100007);
         }
         return MiniProgramService::auditGoods((int)$goods['good_id']);
     }
@@ -195,16 +197,16 @@ class LiveGoodsServices extends BaseServices
     {
         $goods = $this->dao->get($id);
         if (!$goods) {
-            throw new AdminException('数据不存在');
+            throw new AdminException(100026);
         }
         if ($goods['audit_status'] == 0) {
             return true;
         }
         if ($goods['audit_status'] != 1) {
-            throw new AdminException('审核通过或失败');
+            throw new AdminException(400430);
         }
         if (!$this->dao->update($id, ['audit_status' => 0])) {
-            throw new AdminException('修改审核状态失败');
+            throw new AdminException(100007);
         }
         return MiniProgramService::resetauditGoods((int)$goods['good_id'], $goods['audit_id']);
     }
@@ -222,10 +224,10 @@ class LiveGoodsServices extends BaseServices
         $goods = $this->dao->get(['id' => $id, 'is_del' => 0]);
         if ($goods) {
             if (in_array($goods['audit_status'], [0, 1])) {
-                throw new AdminException('商品审核中，无法删除');
+                throw new AdminException(400431);
             }
             if (!$this->dao->update($id, ['is_del' => 1])) {
-                throw new AdminException('删除失败');
+                throw new AdminException(100008);
             }
             if (MiniProgramService::deleteGoods((int)$goods->goods_id)) {
                 /** @var LiveRoomGoodsServices $liveRoomGoods */

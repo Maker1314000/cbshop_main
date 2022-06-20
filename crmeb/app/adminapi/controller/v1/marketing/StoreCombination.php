@@ -114,31 +114,31 @@ class StoreCombination extends AuthController
         if ($data['section_time']) {
             [$start_time, $end_time] = $data['section_time'];
             if (strtotime($end_time) < time()) {
-                return app('json')->fail('活动结束时间不能小于当前时间');
+                return app('json')->fail(400507);
             }
         }
         $bragain = [];
         if ($id) {
             $bragain = $this->services->get((int)$id);
             if (!$bragain) {
-                return app('json')->fail('数据不存在');
+                return app('json')->fail(100026);
             }
         }
         //限制编辑
         if ($data['copy'] == 0 && $bragain) {
             if ($bragain['stop_time'] < time()) {
-                return app('json')->fail('活动已结束,请重新添加或复制');
+                return app('json')->fail(400508);
             }
         }
         if($data['num'] < $data['once_num']){
-            return app('json')->fail('限制单次购买数量不能大于总购买数量');
+            return app('json')->fail(400500);
         }
         if ($data['copy'] == 1) {
             $id = 0;
             unset($data['copy']);
         }
         $this->services->saveData($id, $data);
-        return app('json')->success('保存成功');
+        return app('json')->success(100000);
     }
 
     /**
@@ -150,7 +150,7 @@ class StoreCombination extends AuthController
     public function delete($id)
     {
         $this->services->update($id, ['is_del' => 1]);
-        return app('json')->success('删除成功!');
+        return app('json')->success(100002);
     }
 
     /**
@@ -162,7 +162,7 @@ class StoreCombination extends AuthController
     public function set_status($id, $status)
     {
         $this->services->update($id, ['is_show' => $status]);
-        return app('json')->success($status == 0 ? '关闭成功' : '开启成功');
+        return app('json')->success($status == 0 ? 100014 : 100015);
     }
 
     /**拼团列表

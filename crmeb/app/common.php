@@ -10,7 +10,6 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
-
 use think\exception\ValidateException;
 use crmeb\services\FormBuilder as Form;
 use crmeb\services\UploadService;
@@ -34,10 +33,12 @@ if (!function_exists('object2array')) {
 
     /**
      * 对象转数组
-     * @return mixed
+     * @param $object
+     * @return array|mixed
      */
     function object2array($object)
     {
+        $array = [];
         if (is_object($object)) {
             foreach ($object as $key => $value) {
                 $array[$key] = $value;
@@ -52,12 +53,10 @@ if (!function_exists('object2array')) {
 if (!function_exists('exception')) {
     /**
      * 抛出异常处理
-     *
-     * @param string $msg 异常消息
-     * @param integer $code 异常代码 默认为0
-     * @param string $exception 异常类
-     *
-     * @throws Exception
+     * @param $msg
+     * @param int $code
+     * @param string $exception
+     * @throws \think\Exception
      */
     function exception($msg, $code = 0, $exception = '')
     {
@@ -80,10 +79,10 @@ if (!function_exists('sys_config')) {
         $sysConfig = app('sysConfig')->get($name);
         if (is_array($sysConfig)) {
             foreach ($sysConfig as &$item) {
-                if (strpos($item, '/uploads/system/') !== false) $item = set_file_url($item);
+                if (strpos($item, '/uploads/system/') !== false || strpos($item, '/statics/system_images/') !== false) $item = set_file_url($item);
             }
         } else {
-            if (strpos($sysConfig, '/uploads/system/') !== false) $sysConfig = set_file_url($sysConfig);
+            if (strpos($sysConfig, '/uploads/system/') !== false || strpos($sysConfig, '/statics/system_images/') !== false) $sysConfig = set_file_url($sysConfig);
         }
         $config = is_array($sysConfig) ? $sysConfig : trim($sysConfig);
         if ($config === '' || $config === false) {
@@ -904,4 +903,3 @@ if (!function_exists('get_thumb_water')) {
         return is_string($list) ? ($data['image'] ?? '') : $data;
     }
 }
-

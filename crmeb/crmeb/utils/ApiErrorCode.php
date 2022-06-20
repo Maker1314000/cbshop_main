@@ -18,21 +18,6 @@ namespace crmeb\utils;
  */
 class ApiErrorCode
 {
-
-    const SUCCESS = [200, 'SUCCESS'];
-    const ERROR = [400, 'ERROR'];
-
-    const ERR_LOGIN_INVALID = [410000, 'Landing overdue'];
-    const ERR_AUTH = [400011, 'You do not have permission to access for the time being'];
-    const ERR_RULE = [400012, 'Interface is not authorized, you cannot access'];
-    const ERR_ADMINID_VOID = [400013, 'Failed to get administrator ID'];
-    //保存token失败
-    const ERR_SAVE_TOKEN = [400, 'Failed to save token'];
-    //登陆状态不正确
-    const ERR_LOGIN_STATUS = [410002, 'The login status is incorrect. Please login again.'];
-    //请登陆
-    const ERR_LOGIN = [410000, 'Please login'];
-
     //公众号访问错误请求码
     const ERROR_WECHAT_MESSAGE = [
         45008 => 'graphic message limit exceeded',
@@ -117,6 +102,4 @@ class ApiErrorCode
         40003 => 'Illegal OpenID, developers confirm whether OpenID has been concerned about the official account number, or whether it is OpenID of other official account.',
         40001 => 'Get access_ Appsecret error in token, or access_ Token is not valid. Developers are asked to compare the correctness of AppSecret with the official account, or to see if the interface is being invoked for the appropriate public number.'
     ];
-
-
 }

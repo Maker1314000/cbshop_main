@@ -11,7 +11,7 @@
 
 return [
     //默认支付模式
-    'default' => 'yunxin',
+    'default' => 'aliyun',
     //单个手机每日发送上限
     'maxPhoneCount' => 10,
     //验证码每分钟发送上线
@@ -78,32 +78,31 @@ return [
         ],
         //阿里云
         'aliyun' => [
+            //短信模板id
             'template_id' => [
+                //验证码自定义时效
+                'VERIFICATION_CODE_TIME' => 0,
                 //验证码
-                'VERIFICATION_CODE' => '',
+                'VERIFICATION_CODE' => 0,
                 //支付成功
-                'PAY_SUCCESS_CODE' => '',
+                'PAY_SUCCESS_CODE' => 0,
                 //发货提醒
-                'DELIVER_GOODS_CODE' => '',
+                'DELIVER_GOODS_CODE' => 0,
                 //确认收货提醒
-                'TAKE_DELIVERY_CODE' => '',
+                'TAKE_DELIVERY_CODE' => 0,
                 //管理员下单提醒
-                'ADMIN_PLACE_ORDER_CODE' => '',
+                'ADMIN_PLACE_ORDER_CODE' => 0,
                 //管理员退货提醒
-                'ADMIN_RETURN_GOODS_CODE' => '',
+                'ADMIN_RETURN_GOODS_CODE' => 0,
                 //管理员支付成功提醒
-                'ADMIN_PAY_SUCCESS_CODE' => '',
+                'ADMIN_PAY_SUCCESS_CODE' => 0,
                 //管理员确认收货
-                'ADMIN_TAKE_DELIVERY_CODE' => '',
+                'ADMIN_TAKE_DELIVERY_CODE' => 0,
                 //改价提醒
-                'PRICE_REVISION_CODE' => '',
+                'PRICE_REVISION_CODE' => 0,
                 //订单未支付
-                'ORDER_PAY_FALSE' => '',
+                'ORDER_PAY_FALSE' => 0,
             ],
-            'sign_name' => '',
-            'access_key_id' => '',
-            'access_key_secret' => '',
-            'region_id' => ''
         ]
     ]
 ];

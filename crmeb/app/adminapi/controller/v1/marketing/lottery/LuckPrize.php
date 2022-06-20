@@ -51,12 +51,12 @@ class LuckPrize extends AuthController
             ['num', 1]
         ]);
         if (!$id) {
-            return app('json')->fail('缺少参数id');
+            return app('json')->fail(100100);
         }
         if (!$data['lottery_id']) {
-            return app('json')->fail('缺少抽奖活动id');
+            return app('json')->fail(100100);
         }
-        return app('json')->success($this->services->edit((int)$id, $data) ? '编辑成功' : '编辑失败');
+        return app('json')->success($this->services->edit((int)$id, $data) ? 100001 : 100007);
     }
 
 }

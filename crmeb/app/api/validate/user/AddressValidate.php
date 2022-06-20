@@ -32,13 +32,13 @@ class AddressValidate extends Validate
     ];
 
     protected $message = [
-        'real_name.require' => '名称必须填写',
-        'real_name.max' => '名称最多不能超过25个字符',
-        'phone.require' => '手机号必须填写',
-        'phone.regex' => '手机号格式错误',
-        'province.require' => '省必须填写',
-        'city.require' => '市名称必须填写',
-        'district.require' => '区/县名称必须填写',
-        'detail.require' => '详细地址必须填写',
+        'real_name.require' => 411655,
+        'real_name.max' => 411656,
+        'phone.require' => 411657,
+        'phone.regex' => 411658,
+        'province.require' => 411659,
+        'city.require' => 411660,
+        'district.require' => 411661,
+        'detail.require' => 411662,
     ];
 }

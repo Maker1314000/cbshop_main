@@ -42,9 +42,9 @@ class UserBalance extends AuthController
         [$mark] = $this->request->postMore([
             ['mark', '']
         ], true);
-        if (!$id) return app('json')->fail('参数错误');
-        if ($mark === '') return app('json')->fail('备注不能为空');
+        if (!$id) return app('json')->fail(100100);
+        if ($mark === '') return app('json')->fail(400106);
         $this->services->recordRemark($id, $mark);
-        return app('json')->success('备注成功');
+        return app('json')->success(100024);
     }
 }

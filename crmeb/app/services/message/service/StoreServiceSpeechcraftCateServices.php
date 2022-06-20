@@ -14,8 +14,8 @@ namespace app\services\message\service;
 
 use app\dao\other\CategoryDao;
 use app\services\other\CategoryServices;
+use crmeb\exceptions\AdminException;
 use crmeb\services\FormBuilder;
-use think\exception\ValidateException;
 
 /**
  * Class StoreServiceSpeechcraftCateServices
@@ -61,7 +61,7 @@ class StoreServiceSpeechcraftCateServices extends CategoryServices
     {
         $cateInfo = $this->dao->get($id);
         if (!$cateInfo) {
-            throw new ValidateException('分类没有查询到');
+            throw new AdminException(400103);
         }
         return create_form('修改分类', $this->serviceSpeechcraftCateForm($cateInfo->toArray()), $this->url('/app/wechat/speechcraftcate/' . $id), 'PUT');
     }

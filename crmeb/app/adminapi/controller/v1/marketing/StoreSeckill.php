@@ -89,34 +89,8 @@ class StoreSeckill extends AuthController
             ['virtual_type', 0],
         ]);
         $this->validate($data, \app\adminapi\validate\marketing\StoreSeckillValidate::class, 'save');
-        if ($data['section_time']) {
-            [$start_time, $end_time] = $data['section_time'];
-            if (strtotime($end_time) + 86400 < time()) {
-                return app('json')->fail('活动结束时间不能小于当前时间');
-            }
-        }
-        $seckill = [];
-        if ($id) {
-            $seckill = $this->services->get((int)$id);
-            if (!$seckill) {
-                return app('json')->fail('数据不存在');
-            }
-        }
-        //限制编辑
-        if ($data['copy'] == 0 && $seckill) {
-            if ($seckill['stop_time'] + 86400 < time()) {
-                return app('json')->fail('活动已结束,请重新添加或复制');
-            }
-        }
-        if ($data['num'] < $data['once_num']) {
-            return app('json')->fail('限制单次购买数量不能大于总购买数量');
-        }
-        if ($data['copy'] == 1) {
-            $id = 0;
-            unset($data['copy']);
-        }
         $this->services->saveData($id, $data);
-        return app('json')->success('保存成功');
+        return app('json')->success(100000);
     }
 
     /**
@@ -127,7 +101,7 @@ class StoreSeckill extends AuthController
      */
     public function delete($id)
     {
-        if (!$id) return app('json')->fail('缺少参数');
+        if (!$id) return app('json')->fail(100100);
         $this->services->update($id, ['is_del' => 1]);
         /** @var StoreProductAttrValueServices $storeProductAttrValueServices */
         $storeProductAttrValueServices = app()->make(StoreProductAttrValueServices::class);
@@ -138,7 +112,7 @@ class StoreSeckill extends AuthController
             $cache = app()->make(CacheService::class);
             $cache->del($name);
         }
-        return app('json')->success('删除成功!');
+        return app('json')->success(100002);
     }
 
     /**
@@ -150,7 +124,7 @@ class StoreSeckill extends AuthController
     public function set_status($id, $status)
     {
         $this->services->update($id, ['status' => $status]);
-        return app('json')->success($status == 0 ? '关闭成功' : '开启成功');
+        return app('json')->success(100014);
     }
 
     /**

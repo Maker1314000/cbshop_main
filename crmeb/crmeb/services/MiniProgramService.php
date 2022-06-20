@@ -15,7 +15,6 @@ use crmeb\exceptions\AdminException;
 use app\services\pay\PayNotifyServices;
 use EasyWeChat\Foundation\Application;
 use EasyWeChat\Payment\Order;
-use think\exception\ValidateException;
 use think\facade\Route as Url;
 use crmeb\utils\Hook;
 use think\facade\Cache;
@@ -143,7 +142,7 @@ class MiniProgramService
         try {
             return self::miniprogram()->sns->getSessionKey($code);
         } catch (\Throwable $e) {
-            throw new ValidateException($e->getMessage());
+            throw new AdminException($e->getMessage());
         }
     }
 
@@ -248,10 +247,10 @@ class MiniProgramService
             if (isset($res['errcode']) && $res['errcode'] == 0 && isset($res['priTmplId'])) {
                 return $res['priTmplId'];
             } else {
-                throw new ValidateException($res['errmsg']);
+                throw new AdminException($res['errmsg']);
             }
         } catch (\Throwable $e) {
-            throw new ValidateException($e);
+            throw new AdminException($e);
         }
     }
 
@@ -267,10 +266,10 @@ class MiniProgramService
             if (isset($res['errcode']) && $res['errcode'] == 0 && isset($res['data'])) {
                 return $res['data'];
             } else {
-                throw new ValidateException($res['errmsg']);
+                throw new AdminException($res['errmsg']);
             }
         } catch (\Throwable $e) {
-            throw new ValidateException($e);
+            throw new AdminException($e);
         }
     }
 
@@ -404,8 +403,8 @@ class MiniProgramService
      */
     public static function payOrderRefund($orderNo, array $opt)
     {
-        if (!isset($opt['pay_price'])) throw new AdminException('缺少pay_price');
-        if (sys_config('pay_weixin_client_key') == '' || sys_config('pay_weixin_client_cert') == '') throw new AdminException('请配置支付证书');
+        if (!isset($opt['pay_price'])) throw new AdminException(400730);
+        if (sys_config('pay_weixin_client_key') == '' || sys_config('pay_weixin_client_cert') == '') throw new AdminException(400739);
         $totalFee = floatval(bcmul($opt['pay_price'], 100, 0));
         $refundFee = isset($opt['refund_price']) ? floatval(bcmul($opt['refund_price'], 100, 0)) : null;
         $refundReason = $opt['desc'] ?? '';
@@ -418,8 +417,8 @@ class MiniProgramService
         $refundAccount = $opt['refund_account'] ?? 'REFUND_SOURCE_UNSETTLED_FUNDS';
         try {
             $res = (self::refund($orderNo, $refundNo, $totalFee, $refundFee, $opUserId, $refundReason, $type, $refundAccount));
-            if ($res->return_code == 'FAIL') throw new AdminException('退款失败:' . $res->return_msg);
-            if (isset($res->err_code)) throw new AdminException('退款失败:' . $res->err_code_des);
+            if ($res->return_code == 'FAIL') throw new AdminException(400731, ['msg' => $res->return_msg]);
+            if (isset($res->err_code)) throw new AdminException(400731, ['msg' => $res->err_code_des]);
         } catch (\Exception $e) {
             throw new AdminException($e->getMessage());
         }
@@ -495,10 +494,10 @@ class MiniProgramService
             if (isset($res['errcode']) && $res['errcode'] == 0 && isset($res['live_replay'])) {
                 return $res['live_replay'];
             } else {
-                throw new ValidateException($res['errmsg']);
+                throw new AdminException($res['errmsg']);
             }
         } catch (\Throwable $e) {
-            throw new ValidateException(self::getValidMessgae($e));
+            throw new AdminException(self::getValidMessgae($e));
         }
     }
 
@@ -515,10 +514,10 @@ class MiniProgramService
                 unset($res['errcode']);
                 return $res;
             } else {
-                throw new ValidateException($res['errmsg']);
+                throw new AdminException($res['errmsg']);
             }
         } catch (\Throwable $e) {
-            throw new ValidateException(self::getValidMessgae($e));
+            throw new AdminException(self::getValidMessgae($e));
         }
     }
 
@@ -535,10 +534,10 @@ class MiniProgramService
             if (isset($res['errcode']) && $res['errcode'] == 0) {
                 return true;
             } else {
-                throw new ValidateException($res['errmsg']);
+                throw new AdminException($res['errmsg']);
             }
         } catch (\Throwable $e) {
-            throw new ValidateException(self::getValidMessgae($e));
+            throw new AdminException(self::getValidMessgae($e));
         }
     }
 
@@ -556,10 +555,10 @@ class MiniProgramService
             if (isset($res['errcode']) && $res['errcode'] == 0 && isset($res['goods'])) {
                 return $res['goods'];
             } else {
-                throw new ValidateException($res['errmsg']);
+                throw new AdminException($res['errmsg']);
             }
         } catch (\Throwable $e) {
-            throw new ValidateException(self::getValidMessgae($e));
+            throw new AdminException(self::getValidMessgae($e));
         }
     }
 
@@ -575,10 +574,10 @@ class MiniProgramService
             if (isset($res['errcode']) && $res['errcode'] == 0 && isset($res['goods'])) {
                 return $res['goods'];
             } else {
-                throw new ValidateException($res['errmsg']);
+                throw new AdminException($res['errmsg']);
             }
         } catch (\Throwable $e) {
-            throw new ValidateException(self::getValidMessgae($e));
+            throw new AdminException(self::getValidMessgae($e));
         }
     }
 
@@ -600,10 +599,10 @@ class MiniProgramService
                 unset($res['errcode']);
                 return $res;
             } else {
-                throw new ValidateException($res['errmsg']);
+                throw new AdminException($res['errmsg']);
             }
         } catch (\Throwable $e) {
-            throw new ValidateException(self::getValidMessgae($e));
+            throw new AdminException(self::getValidMessgae($e));
         }
     }
 
@@ -620,10 +619,10 @@ class MiniProgramService
             if (isset($res['errcode']) && $res['errcode'] == 0) {
                 return true;
             } else {
-                throw new ValidateException($res['errmsg']);
+                throw new AdminException($res['errmsg']);
             }
         } catch (\Throwable $e) {
-            throw new ValidateException(self::getValidMessgae($e));
+            throw new AdminException(self::getValidMessgae($e));
         }
     }
 
@@ -639,10 +638,10 @@ class MiniProgramService
             if (isset($res['errcode']) && $res['errcode'] == 0 && isset($res['auditId'])) {
                 return $res['auditId'];
             } else {
-                throw new ValidateException($res['errmsg']);
+                throw new AdminException($res['errmsg']);
             }
         } catch (\Throwable $e) {
-            throw new ValidateException(self::getValidMessgae($e));
+            throw new AdminException(self::getValidMessgae($e));
         }
     }
 
@@ -658,10 +657,10 @@ class MiniProgramService
             if (isset($res['errcode']) && $res['errcode'] == 0) {
                 return true;
             } else {
-                throw new ValidateException($res['errmsg']);
+                throw new AdminException($res['errmsg']);
             }
         } catch (\Throwable $e) {
-            throw new ValidateException(self::getValidMessgae($e));
+            throw new AdminException(self::getValidMessgae($e));
         }
     }
 
@@ -683,10 +682,10 @@ class MiniProgramService
             if (isset($res['errcode']) && $res['errcode'] == 0) {
                 return true;
             } else {
-                throw new ValidateException($res['errmsg']);
+                throw new AdminException($res['errmsg']);
             }
         } catch (\Throwable $e) {
-            throw new ValidateException(self::getValidMessgae($e));
+            throw new AdminException(self::getValidMessgae($e));
         }
     }
 
@@ -708,10 +707,10 @@ class MiniProgramService
             if (isset($res['errcode']) && $res['errcode'] == 0 && isset($res['list'])) {
                 return $res['list'];
             } else {
-                throw new ValidateException($res['errmsg']);
+                throw new AdminException($res['errmsg']);
             }
         } catch (\Throwable $e) {
-            throw new ValidateException(self::getValidMessgae($e));
+            throw new AdminException(self::getValidMessgae($e));
         }
     }
 

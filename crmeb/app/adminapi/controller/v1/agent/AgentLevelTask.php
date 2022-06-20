@@ -35,8 +35,10 @@ class AgentLevelTask extends AuthController
 
     /**
      * 显示资源列表
-     *
-     * @return \think\Response
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function index()
     {
@@ -46,7 +48,7 @@ class AgentLevelTask extends AuthController
             ['keyword', '']
         ]);
         if (!$where['id']) {
-            return app('json')->fail('缺少参数ID');
+            return app('json')->fail(100100);
         }
         $where['level_id'] = $where['id'];
         unset($where['id']);
@@ -54,24 +56,26 @@ class AgentLevelTask extends AuthController
     }
 
     /**
-     * 显示创建资源表单页.
-     *
-     * @return \think\Response
+     * 显示创建资源表单页
+     * @return mixed
+     * @throws \FormBuilder\Exception\FormBuilderException
      */
     public function create()
     {
         [$level_id] = $this->request->postMore([
             ['level_id', 0]], true);
         if (!$level_id) {
-            return app('json')->fail('缺少等级ID');
+            return app('json')->fail(100100);
         }
         return app('json')->success($this->services->createForm((int)$level_id));
     }
 
     /**
      * 保存新建的资源
-     *
-     * @return \think\Response
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function save()
     {
@@ -83,32 +87,30 @@ class AgentLevelTask extends AuthController
             ['desc', 0],
             ['sort', 0],
             ['status', 0]]);
-        if (!$data['level_id']) return app('json')->fail('缺少等级ID');
-        if (!$data['name']) return app('json')->fail('请输入任务名称');
-        if (!$data['type']) return app('json')->fail('请选择任务类型');
-        if (!$data['number']) return app('json')->fail('请输入限定数量');
+        if (!$data['level_id']) return app('json')->fail(100100);
+        if (!$data['name']) return app('json')->fail(400207);
+        if (!$data['type']) return app('json')->fail(400208);
+        if (!$data['number']) return app('json')->fail(400209);
         $this->services->checkTypeTask(0, $data);
         $data['add_time'] = time();
         $this->services->save($data);
-        return app('json')->success('添加等级成功!');
+        return app('json')->success(400210);
     }
 
     /**
      * 显示指定的资源
-     *
-     * @param int $id
-     * @return \think\Response
+     * @param $id
      */
     public function read($id)
     {
-        //
+
     }
 
     /**
-     * 显示编辑资源表单页.
-     *
-     * @param int $id
-     * @return \think\Response
+     * 显示编辑资源表单页
+     * @param $id
+     * @return mixed
+     * @throws \FormBuilder\Exception\FormBuilderException
      */
     public function edit($id)
     {
@@ -117,9 +119,11 @@ class AgentLevelTask extends AuthController
 
     /**
      * 保存更新的资源
-     *
-     * @param int $id
-     * @return \think\Response
+     * @param $id
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function update($id)
     {
@@ -130,10 +134,10 @@ class AgentLevelTask extends AuthController
             ['desc', 0],
             ['sort', 0],
             ['status', 0]]);
-        if (!$data['name']) return app('json')->fail('请输入等级名称');
-        if (!$data['type']) return app('json')->fail('请选择任务类型');
-        if (!$data['number']) return app('json')->fail('请输入限定数量');
-        if (!$levelTaskInfo = $this->services->getLevelTaskInfo((int)$id)) return app('json')->fail('编辑的任务不存在!');
+        if (!$data['name']) return app('json')->fail(400207);
+        if (!$data['type']) return app('json')->fail(400208);
+        if (!$data['number']) return app('json')->fail(400209);
+        if (!$levelTaskInfo = $this->services->getLevelTaskInfo((int)$id)) return app('json')->fail(400211);
         $this->services->checkTypeTask((int)$id, $data);
         $levelTaskInfo->name = $data['name'];
         $levelTaskInfo->type = $data['type'];
@@ -142,7 +146,7 @@ class AgentLevelTask extends AuthController
         $levelTaskInfo->sort = $data['sort'];
         $levelTaskInfo->status = $data['status'];
         $levelTaskInfo->save();
-        return app('json')->success('修改成功!');
+        return app('json')->success(100001);
     }
 
     /**
@@ -155,14 +159,14 @@ class AgentLevelTask extends AuthController
      */
     public function delete($id)
     {
-        if (!$id) return app('json')->fail('参数错误，请重新打开');
+        if (!$id) return app('json')->fail(100100);
         $levelTaskInfo = $this->services->getLevelTaskInfo((int)$id);
         if ($levelTaskInfo) {
             $res = $this->services->update($id, ['is_del' => 1]);
             if (!$res)
-                return app('json')->fail('删除失败,请稍候再试!');
+                return app('json')->fail(100008);
         }
-        return app('json')->success('删除成功!');
+        return app('json')->success(100002);
     }
 
     /**
@@ -173,9 +177,9 @@ class AgentLevelTask extends AuthController
      */
     public function set_status($id = 0, $status = '')
     {
-        if ($status == '' || $id == 0) return app('json')->fail('参数错误');
+        if ($status == '' || $id == 0) return app('json')->fail(100100);
         $this->services->update($id, ['status' => $status]);
-        return app('json')->success($status == 0 ? '隐藏成功' : '显示成功');
+        return app('json')->success(100014);
     }
 
 }

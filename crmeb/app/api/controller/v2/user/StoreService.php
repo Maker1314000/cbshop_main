@@ -51,6 +51,6 @@ class StoreService
             [['toUid', 'd'], 0],
         ], true);
         $uid = $request->uid();
-        return app('json')->successful($services->getRecord($uid, $uidTo, $limit, $toUid));
+        return app('json')->success($services->getRecord($uid, $uidTo, $limit, $toUid));
     }
 }

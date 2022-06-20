@@ -49,7 +49,7 @@ class LuckLottery extends AuthController
     public function detail($id)
     {
         if (!$id) {
-            return app('json')->fail('缺少参数id');
+            return app('json')->fail(100100);
         }
         return app('json')->success($this->services->getlotteryInfo((int)$id));
     }
@@ -57,7 +57,7 @@ class LuckLottery extends AuthController
     public function factorInfo($factor)
     {
         if (!$factor) {
-            return app('json')->fail('缺少参数');
+            return app('json')->fail(100100);
         }
         return app('json')->success($this->services->getlotteryFactorInfo((int)$factor));
     }
@@ -86,25 +86,25 @@ class LuckLottery extends AuthController
             ['prize', []]
         ]);
         if (!$data['name']) {
-            return app('json')->fail('请添加抽奖活动名称');
+            return app('json')->fail(400501);
         }
         if ($data['is_content'] && !$data['content']) {
-            return app('json')->fail('请添加抽奖描述等文案');
+            return app('json')->fail(400502);
         }
         [$start, $end] = $data['period'];
         unset($data['period']);
         $data['start_time'] = $start ? strtotime($start) : 0;
         $data['end_time'] = $end ? strtotime($end) : 0;
         if ($data['start_time'] && $data['end_time'] && $data['end_time'] <= $data['start_time']) {
-            return app('json')->fail('活动结束时间必须大于开始时间');
+            return app('json')->fail(400503);
         }
         if (!$data['prize']) {
-            return app('json')->fail('请添加奖品');
+            return app('json')->fail(400504);
         }
         if (in_array($data['factor'], [1, 2]) && !$data['factor_num']) {
-            return app('json')->fail('请填写消耗' . ($data['factor'] == '1' ? '积分' : '余额') . '数量');
+            return app('json')->fail(400505);
         }
-        return app('json')->success($this->services->add($data) ? '添加成功' : '添加失败');
+        return app('json')->success($this->services->add($data) ? 100000 : 100006);
     }
 
     public function edit($id)
@@ -131,28 +131,28 @@ class LuckLottery extends AuthController
             ['prize', []]
         ]);
         if (!$id) {
-            return app('json')->fail('缺少参数id');
+            return app('json')->fail(100100);
         }
         if (!$data['name']) {
-            return app('json')->fail('请添加抽奖活动名称');
+            return app('json')->fail(400501);
         }
         [$start, $end] = $data['period'];
         unset($data['period']);
         $data['start_time'] = $start ? strtotime($start) : 0;
         $data['end_time'] = $end ? strtotime($end) : 0;
         if ($data['start_time'] && $data['end_time'] && $data['end_time'] <= $data['start_time']) {
-            return app('json')->fail('活动结束时间必须大于开始时间');
+            return app('json')->fail(400503);
         }
         if ($data['is_content'] && !$data['content']) {
-            return app('json')->fail('请添加抽奖描述等文案');
+            return app('json')->fail(400502);
         }
         if (!$data['prize']) {
-            return app('json')->fail('请添加奖品');
+            return app('json')->fail(400504);
         }
         if (in_array($data['factor'], [1, 2]) && !$data['factor_num']) {
-            return app('json')->fail('请填写消耗' . ($data['factor'] == '1' ? '积分' : '余额') . '数量');
+            return app('json')->fail(400505);
         }
-        return app('json')->success($this->services->edit((int)$id, $data) ? '编辑成功' : '编辑失败');
+        return app('json')->success($this->services->edit((int)$id, $data) ? 100001 : 100007);
     }
 
     /**
@@ -165,9 +165,9 @@ class LuckLottery extends AuthController
         list($id) = $this->request->getMore([
             ['id', 0],
         ], true);
-        if (!$id) return app('json')->fail('数据不存在');
+        if (!$id) return app('json')->fail(100026);
         $this->services->delLottery((int)$id);
-        return app('json')->success('刪除成功！');
+        return app('json')->success(100002);
     }
 
     /**
@@ -176,7 +176,8 @@ class LuckLottery extends AuthController
      */
     public function setStatus($id = '', $status = '')
     {
-        if ($status == '' || $id == '') return app('json')->fail('缺少参数');
-        return app('json')->success($this->services->setStatus((int)$id, (int)$status) ? '上架成功' : '下架成功');
+        if ($status == '' || $id == '') return app('json')->fail(100100);
+        $this->services->setStatus((int)$id, (int)$status);
+        return app('json')->success(100014);
     }
 }

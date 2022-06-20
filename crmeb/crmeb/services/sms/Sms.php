@@ -25,6 +25,10 @@ use think\facade\Config;
  */
 class Sms extends BaseManager
 {
+    /**
+     * @var array|string[]
+     */
+    protected array $type = ['yunxin', 'aliyun'];
 
     /**
      * 空间名
@@ -38,7 +42,8 @@ class Sms extends BaseManager
      */
     protected function getDefaultDriver()
     {
-        return Config::get('sms.default', 'yunxin');
+        return $this->type[(int)sys_config('sms_type', 0)];
+//        return Config::get('sms.default', 'yunxin');
     }
 
 
@@ -55,11 +60,11 @@ class Sms extends BaseManager
         $this->getConfigFile();
 
         if (!$this->config) {
-            $this->config = Config::get($this->configFile . '.stores.' . $this->name, []);
+            $this->config = Config::get($this->configFile . '.stores.' . $this->getDefaultDriver(), []);
         }
 
         $handleAccessToken = new AccessTokenServeService($this->config['account'] ?? '', $this->config['secret'] ?? '');
-        $handle = Container::getInstance()->invokeClass($class, [$this->name, $handleAccessToken, $this->configFile]);
+        $handle = Container::getInstance()->invokeClass($class, [$this->getDefaultDriver(), $handleAccessToken, $this->configFile]);
         $this->config = [];
         return $handle;
     }

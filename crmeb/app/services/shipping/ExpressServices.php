@@ -114,7 +114,7 @@ class ExpressServices extends BaseServices
     {
         $express = $this->dao->get($id);
         if (!$express) {
-            throw new AdminException('查询数据失败,无法修改');
+            throw new AdminException(100026);
         }
         return create_form('编辑物流公司', $this->createExpressForm($express->toArray()), $this->url('/freight/express/' . $id), 'PUT');
     }

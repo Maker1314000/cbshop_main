@@ -12,7 +12,7 @@
 namespace crmeb\services\sms\storage;
 
 use crmeb\basic\BaseSmss;
-use think\exception\ValidateException;
+use crmeb\exceptions\AdminException;
 use think\facade\Config;
 
 
@@ -221,7 +221,7 @@ class Yunxin extends BaseSmss
     public function send(string $phone, string $templateId, array $data = [])
     {
         if (!$phone) {
-            throw new ValidateException('手机号不能为空');
+            throw new AdminException(400719);
         }
         $param = [
             'phone' => $phone,
@@ -229,7 +229,7 @@ class Yunxin extends BaseSmss
         ];
         $param['temp_id'] = $this->getTemplateCode($templateId);
         if (is_null($param['temp_id'])) {
-            throw new ValidateException('模版ID不存在');
+            throw new AdminException(400720);
         }
         $param['param'] = json_encode($data);
         return $this->accessToken->httpRequest(self::SMS_SEND, $param);

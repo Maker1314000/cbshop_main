@@ -124,7 +124,7 @@ class Common extends AuthController
                         ]);
                     }
                 } catch (\Throwable $e) {
-                    return app('json')->fail('授权成功，写入数据库失败，请检查数据库链接配置');
+                    return app('json')->fail(400330);
                 }
                 return app('json')->success(['status' => 1, 'authCode' => $authCode, 'day' => 0]);
             default:
@@ -148,20 +148,20 @@ class Common extends AuthController
             ['captcha', ''],
         ]);
         if (!$data['company_name']) {
-            return app('json')->fail('请填写公司名称');
+            return app('json')->fail(400331);
         }
         if (!$data['domain_name']) {
-            return app('json')->fail('请填写授权域名');
+            return app('json')->fail(400332);
         }
 
         if (!$data['phone']) {
-            return app('json')->fail('请填写手机号码');
+            return app('json')->fail(400333);
         }
         if (!$data['order_id']) {
-            return app('json')->fail('请填写订单id');
+            return app('json')->fail(400334);
         }
         if (!$data['captcha']) {
-            return app('json')->fail('请填写验证码');
+            return app('json')->fail(400137);
         }
         $datas = explode('.', $data['domain_name']);
         $n = count($datas);
@@ -175,7 +175,7 @@ class Common extends AuthController
         }
         $data['domain_name'] = $domain_name;
         $services->authApply($data);
-        return app('json')->success("申请授权成功!");
+        return app('json')->success(400335);
 
     }
 

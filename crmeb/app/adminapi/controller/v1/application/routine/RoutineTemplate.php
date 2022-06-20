@@ -44,8 +44,11 @@ class RoutineTemplate extends AuthController
 
     /**
      * 显示资源列表
-     *
-     * @return \think\Response
+     * @return mixed
+     * @throws \Throwable
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function index()
     {
@@ -77,9 +80,9 @@ class RoutineTemplate extends AuthController
     }
 
     /**
-     * 显示创建资源表单页.
-     *
-     * @return \think\Response
+     * 显示创建资源表单页
+     * @return mixed
+     * @throws \FormBuilder\Exception\FormBuilderException
      */
     public function create()
     {
@@ -94,9 +97,8 @@ class RoutineTemplate extends AuthController
 
     /**
      * 保存新建的资源
-     *
      * @param Request $request
-     * @return \think\Response
+     * @return mixed
      */
     public function save(Request $request)
     {
@@ -107,20 +109,18 @@ class RoutineTemplate extends AuthController
             'content',
             ['status', 0]
         ]);
-        if ($data['tempkey'] == '') return app('json')->fail('请输入模板编号');
-        if ($data['tempkey'] != '' && $this->services->getOne(['tempkey' => $data['tempkey']]))
-            return app('json')->fail('请输入模板编号已存在,请重新输入');
-        if ($data['tempid'] == '') return app('json')->fail('请输入模板ID');
-        if ($data['name'] == '') return app('json')->fail('请输入模板名');
-        if ($data['content'] == '') return app('json')->fail('请输入回复内容');
+        if ($data['tempkey'] == '') return app('json')->fail(400230);
+        if ($this->services->getOne(['tempkey' => $data['tempkey']])) return app('json')->fail(400231);
+        if ($data['tempid'] == '') return app('json')->fail(400232);
+        if ($data['name'] == '') return app('json')->fail(400233);
+        if ($data['content'] == '') return app('json')->fail(400234);
         $data['add_time'] = time();
         $this->services->save($data);
-        return app('json')->success('添加模板消息成功!');
+        return app('json')->success(400235);
     }
 
     /**
      * 显示指定的资源
-     *
      * @param int $id
      * @return \think\Response
      */
@@ -130,16 +130,16 @@ class RoutineTemplate extends AuthController
     }
 
     /**
-     * 显示编辑资源表单页.
-     *
-     * @param int $id
-     * @return \think\Response
+     * 显示编辑资源表单页
+     * @param $id
+     * @return mixed
+     * @throws \FormBuilder\Exception\FormBuilderException
      */
     public function edit($id)
     {
-        if (!$id) return app('json')->fail('数据不存在');
+        if (!$id) return app('json')->fail(100100);
         $product = $this->services->get($id);
-        if (!$product) return app('json')->fail('数据不存在!');
+        if (!$product) return app('json')->fail(100026);
         $f = array();
         $f[] = Form::input('tempkey', '模板编号', $product->getData('tempkey'))->disabled(1);
         $f[] = Form::input('name', '模板名', $product->getData('name'))->disabled(1);
@@ -150,7 +150,6 @@ class RoutineTemplate extends AuthController
 
     /**
      * 保存更新的资源
-     *
      * @param Request $request
      * @param int $id
      * @return \think\Response
@@ -161,27 +160,26 @@ class RoutineTemplate extends AuthController
             'tempid',
             ['status', 0]
         ]);
-        if ($data['tempid'] == '') return app('json')->fail('请输入模板ID');
-        if (!$id) return app('json')->fail('数据不存在');
+        if ($data['tempid'] == '') return app('json')->fail(100100);
+        if (!$id) return app('json')->fail(100026);
         $product = $this->services->get($id);
-        if (!$product) return app('json')->fail('数据不存在!');
+        if (!$product) return app('json')->fail(100026);
         $this->services->update($id, $data, 'id');
-        return app('json')->success('修改成功!');
+        return app('json')->success(100001);
     }
 
     /**
      * 删除指定资源
-     *
      * @param int $id
      * @return \think\Response
      */
     public function delete($id)
     {
-        if (!$id) return app('json')->fail('数据不存在!');
+        if (!$id) return app('json')->fail(100100);
         if (!$this->services->delete($id))
-            return app('json')->fail('删除失败,请稍候再试!');
+            return app('json')->fail(100008);
         else
-            return app('json')->success('删除成功!');
+            return app('json')->success(100002);
     }
 
     /**
@@ -192,9 +190,9 @@ class RoutineTemplate extends AuthController
      */
     public function set_status($id, $status)
     {
-        if ($status == '' || $id == 0) return app('json')->fail('参数错误');
+        if ($status == '' || $id == 0) return app('json')->fail(100100);
         $this->services->update($id, ['status' => $status], 'id');
-        return app('json')->success($status == 0 ? '关闭成功' : '开启成功');
+        return app('json')->success(100014);
     }
 
     /**
@@ -207,7 +205,7 @@ class RoutineTemplate extends AuthController
     public function syncSubscribe()
     {
         if (!sys_config('routine_appId') || !sys_config('routine_appsecret')) {
-            throw new AdminException('请先配置小程序appid、appSecret等参数');
+            throw new AdminException(400236);
         }
         $all = $this->services->getTemplateList(['status' => 1, 'type' => 0]);
         $errData = [];
@@ -290,7 +288,7 @@ class RoutineTemplate extends AuthController
             ['name', ''],
             ['is_live', 0]
         ], true);
-        if (sys_config('routine_appId', '') == '') throw new AdminException('请先配置小程序appId');
+        if (sys_config('routine_appId', '') == '') throw new AdminException(400236);
         try {
             @unlink(public_path() . 'statics/download/routine.zip');
             //拷贝源文件
@@ -367,6 +365,14 @@ class RoutineTemplate extends AuthController
         @file_put_contents($newFileUrl, $string); // 写入配置文件
     }
 
+    /**
+     * 获取小程序码
+     * @return string
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
     public function getDownloadInfo()
     {
         $data['routine_name'] = sys_config('routine_name', '');
@@ -387,7 +393,7 @@ class RoutineTemplate extends AuthController
                 } else {
                     $res = false;
                 }
-                if (!$res) throw new ValidateException('二维码生成失败');
+                if (!$res) throw new ValidateException(400237);
                 $upload = UploadService::init(1);
                 if ($upload->to('routine/code')->setAuthThumb(false)->stream((string)$res['res'], $name) === false) {
                     return $upload->getError();

@@ -74,12 +74,12 @@ class ArticleCategory extends AuthController
             ['status', 0]
         ]);
         if (!$data['title']) {
-            return app('json')->fail('请填写分类名称');
+            return app('json')->fail(400100);
         }
         $data['add_time'] = time();
         $this->service->save($data);
         CacheService::delete('ARTICLE_CATEGORY');
-        return app('json')->success('添加分类成功!');
+        return app('json')->success(100021);
     }
 
     /**
@@ -111,7 +111,7 @@ class ArticleCategory extends AuthController
         ]);
         $this->service->update($data);
         CacheService::delete('ARTICLE_CATEGORY');
-        return app('json')->success('修改成功!');
+        return app('json')->success(100001);
     }
 
     /**
@@ -123,7 +123,7 @@ class ArticleCategory extends AuthController
     {
         $this->service->del($id);
         CacheService::delete('ARTICLE_CATEGORY');
-        return app('json')->success('删除成功!');
+        return app('json')->success(100002);
     }
 
     /**
@@ -135,10 +135,10 @@ class ArticleCategory extends AuthController
      */
     public function set_status($id, $status)
     {
-        if ($status == '' || $id == 0) return app('json')->fail('参数错误');
+        if ($status == '' || $id == 0) return app('json')->fail(100100);
         $this->service->setStatus($id, $status);
         CacheService::delete('ARTICLE_CATEGORY');
-        return app('json')->success($status == 0 ? '隐藏成功' : '显示成功');
+        return app('json')->success(100014);
     }
 
     /**

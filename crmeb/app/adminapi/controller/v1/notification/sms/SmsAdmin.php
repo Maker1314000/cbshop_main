@@ -40,11 +40,11 @@ class SmsAdmin extends AuthController
     public function captcha()
     {
         if (!request()->isPost()) {
-            return app('json')->fail('发送失败');
+            return app('json')->fail(100031);
         }
         $phone = request()->param('phone');
         if (!trim($phone)) {
-            return app('json')->fail('请填写手机号');
+            return app('json')->fail(400132);
         }
         return app('json')->success($this->services->captcha($phone));
     }
@@ -63,13 +63,13 @@ class SmsAdmin extends AuthController
             ['sign', ''],
         ], true);
         $signLen = mb_strlen(trim($sign));
-        if (!strlen(trim($account))) return app('json')->fail('请填写账号');
-        if (!strlen(trim($password))) return app('json')->fail('请填写密码');
-        if (!$signLen) return app('json')->fail('请填写短信签名');
-        if ($signLen > 8) return app('json')->fail('短信签名最长为8位');
-        if (!strlen(trim($code))) return app('json')->fail('请填写验证码');
-        if (!strlen(trim($url))) return app('json')->fail('请填写域名');
+        if (!strlen(trim($account))) return app('json')->fail(400133);
+        if (!strlen(trim($password))) return app('json')->fail(400134);
+        if (!$signLen) return app('json')->fail(400135);
+        if ($signLen > 8) return app('json')->fail(400136);
+        if (!strlen(trim($code))) return app('json')->fail(400137);
+        if (!strlen(trim($url))) return app('json')->fail(400138);
         $status = $this->services->register($account, $password, $url, $phone, $code, $sign);
-        return app('json')->success('短信平台：' . $status['msg']);
+        return app('json')->success($status['msg']);
     }
 }

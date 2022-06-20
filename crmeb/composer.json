@@ -62,7 +62,14 @@
         "post-autoload-dump": [
             "@php think service:discover",
             "@php think vendor:publish"
-        ]
+        ],
+        "post-install-cmd": [
+            "@fix-sql-model"
+        ],
+        "post-update-cmd": [
+            "@fix-sql-model"
+        ],
+        "fix-sql-model": "@php -r \"file_put_contents('vendor/topthink/think-orm/src/db/PDOConnection.php', str_replace('return \\$this->links[\\$linkNum];', 'if (!empty(\\$config[\\'dsn\\']) && strpos(\\$config[\\'dsn\\'], \\'mysql\\') > -1) {\n                \\$this->links[\\$linkNum]->prepare(\\\"set session sql_mode=\\'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION\\'\\\")->execute();\n            }\n\n            return \\$this->links[\\$linkNum];', file_get_contents('vendor/topthink/think-orm/src/db/PDOConnection.php')));\""
     },
     "repositories": {
         "packagist": {

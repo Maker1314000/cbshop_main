@@ -64,7 +64,7 @@ class UploadService
             case 1:
                 break;
             default:
-                throw new UploadException('您已关闭上传功能');
+                throw new UploadException(400733);
                 break;
         }
 

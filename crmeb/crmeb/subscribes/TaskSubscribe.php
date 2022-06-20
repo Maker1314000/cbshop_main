@@ -123,5 +123,9 @@ class TaskSubscribe
         /** @var StoreProductServices $product */
         $product = app()->make(StoreProductServices::class);
         $product->downAdvance();
+        //自动好评
+        /** @var StoreOrderServices $orderServices */
+        $orderServices = app()->make(StoreOrderServices::class);
+        $orderServices->autoComment();
     }
 }

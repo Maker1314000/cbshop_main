@@ -25,9 +25,9 @@ class StoreServiceFeedbackValidate extends Validate
     ];
 
     protected $message = [
-        'phone.require' => '请输入手机号',
-        'phone.regex' => '手机号格式错误',
-        'content.require' => '请填写反馈内容',
-        'rela_name.require' => '请填写真实姓名',
+        'phone.require' => 411657,
+        'phone.regex' => 411658,
+        'content.require' => 411663,
+        'rela_name.require' => 411655,
     ];
 }

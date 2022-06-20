@@ -12,7 +12,7 @@
 namespace crmeb\services;
 
 
-use think\exception\ValidateException;
+use crmeb\exceptions\AdminException;
 use think\Image;
 
 class DownloadImageService
@@ -62,7 +62,7 @@ class DownloadImageService
             //TODO 获取要下载的文件名称
             $downloadImageInfo = $this->getImageExtname($url);
             $name = $downloadImageInfo['file_name'];
-            if (!$name) throw new ValidateException('上传图片不存在');
+            if (!$name) throw new AdminException(400725);
         }
         if (strstr($url, 'http://') === false && strstr($url, 'https://') === false) {
             $url = 'http:' . $url;
@@ -81,9 +81,9 @@ class DownloadImageService
             $content = ob_get_contents();
             ob_end_clean();
             $size = strlen(trim($content));
-            if (!$content || $size <= 2) throw new ValidateException('图片流获取失败');
+            if (!$content || $size <= 2) throw new AdminException(400726);
             if ($upload->to($to_path)->down($content, $name) === false) {
-                throw new ValidateException('图片下载失败');
+                throw new AdminException(400727);
             }
             $imageInfo = $upload->getDownloadInfo();
             $path = $imageInfo['dir'];

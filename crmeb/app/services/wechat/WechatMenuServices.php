@@ -65,11 +65,11 @@ class WechatMenuServices extends BaseServices
                 $msgData = json_decode($msgData, true);
                 $errcode = $msgData['errcode'] ?? 0;
                 if ($errcode == 40164) {
-                    throw new AdminException('您得ip不再白名单中,请前往腾讯微信公众平台添加ip白名单');
+                    throw new AdminException(400704);
                 }
             }
             if (strstr($e->getMessage(), 'invalid weapp appid')) {
-                throw new AdminException('您填写得appid无效,请检查');
+                throw new AdminException(400705);
             }
             throw new AdminException(WechatService::getMessage($e->getMessage()));
         }

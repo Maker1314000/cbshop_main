@@ -14,12 +14,14 @@ use app\services\order\StoreOrderInvoiceServices;
 use app\services\order\StoreOrderServices;
 use app\services\order\StoreOrderStatusServices;
 use app\services\product\product\StoreProductCouponServices;
+use app\services\product\sku\StoreProductAttrValueServices;
 use app\services\product\sku\StoreProductVirtualServices;
 use app\services\message\MessageSystemServices;
 use app\services\statistic\CapitalFlowServices;
 use app\services\user\UserServices;
 use crmeb\exceptions\AdminException;
 use crmeb\interfaces\ListenerInterface;
+use think\facade\Log;
 
 class OrderPaySuccess implements ListenerInterface
 {
@@ -57,11 +59,19 @@ class OrderPaySuccess implements ListenerInterface
         /** @var StoreOrderCartInfoServices $services */
         $services = app()->make(StoreOrderCartInfoServices::class);
         $orderInfo['cart_info'] = $services->getOrderCartInfo((int)$orderInfo['id']);
-
+        $activityStatus = $orderInfo['combination_id'] || $orderInfo['seckill_id'] || $orderInfo['bargain_id'];
         if ($orderInfo['virtual_type'] == 1) {
             /** @var StoreOrderServices $orderService */
             $orderService = app()->make(StoreOrderServices::class);
-            $disk_info = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['attrInfo']['disk_info'];
+            if ($activityStatus) {
+                $sku = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['attrInfo']['suk'];
+                $product_id = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['product_id'];
+                /** @var StoreProductAttrValueServices $attrValue */
+                $attrValue = app()->make(StoreProductAttrValueServices::class);
+                $disk_info = $attrValue->value(['product_id' => $product_id, 'suk' => $sku, 'type' => 0, 'is_virtual' => 1], 'disk_info');
+            } else {
+                $disk_info = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['attrInfo']['disk_info'];
+            }
             if ($disk_info != '') {
                 $orderService->update(['id' => $orderInfo['id']], ['status' => 1, 'delivery_type' => 'fictitious', 'virtual_info' => $disk_info, 'remark' => '密钥自动发放：' . $disk_info]);
                 $this->SystemSend($orderInfo['uid'], [
@@ -70,7 +80,15 @@ class OrderPaySuccess implements ListenerInterface
                     'content' => '您购买的密钥商品已支付成功，支付金额' . $orderInfo['pay_price'] . '元，订单号：' . $orderInfo['order_id'] . '，密钥：' . $disk_info . '，感谢您的光临！'
                 ]);
             } else {
-                $unique = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['attrInfo']['unique'];
+                if ($activityStatus) {
+                    $sku = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['attrInfo']['suk'];
+                    $product_id = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['product_id'];
+                    /** @var StoreProductAttrValueServices $attrValue */
+                    $attrValue = app()->make(StoreProductAttrValueServices::class);
+                    $unique = $attrValue->value(['product_id' => $product_id, 'suk' => $sku, 'type' => 0, 'is_virtual' => 1], 'unique');
+                } else {
+                    $unique = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['attrInfo']['unique'];
+                }
                 /** @var StoreProductVirtualServices $virtualService */
                 $virtualService = app()->make(StoreProductVirtualServices::class);
                 $virtual = $virtualService->get(['attr_unique' => $unique, 'uid' => 0]);
@@ -91,7 +109,15 @@ class OrderPaySuccess implements ListenerInterface
                 'change_time' => time()
             ]);
         } elseif ($orderInfo['virtual_type'] == 2) {
-            $coupon_id = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['attrInfo']['coupon_id'];
+            if ($activityStatus) {
+                $sku = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['attrInfo']['suk'];
+                $product_id = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['product_id'];
+                /** @var StoreProductAttrValueServices $attrValue */
+                $attrValue = app()->make(StoreProductAttrValueServices::class);
+                $coupon_id = $attrValue->value(['product_id' => $product_id, 'suk' => $sku, 'type' => 0, 'is_virtual' => 1], 'coupon_id');
+            } else {
+                $coupon_id = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['attrInfo']['coupon_id'];
+            }
             /** @var StoreCouponIssueServices $issueService */
             $issueService = app()->make(StoreCouponIssueServices::class);
             $coupon = $issueService->get($coupon_id);

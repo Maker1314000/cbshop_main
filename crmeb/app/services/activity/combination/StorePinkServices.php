@@ -19,12 +19,12 @@ use app\services\order\StoreOrderRefundServices;
 use app\services\order\StoreOrderServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use app\services\user\UserServices;
+use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
 use crmeb\services\MiniProgramService;
 use crmeb\services\UploadService;
 use crmeb\services\UtilService;
 use Guzzle\Http\EntityBody;
-use think\exception\ValidateException;
 
 /**
  *
@@ -37,7 +37,7 @@ use think\exception\ValidateException;
  * @method getPinkUserOne(int $id) 拼团
  * @method getCount(array $where) 获取某些条件总数
  * @method value(array $where, string $field)
- * @method getColumn(array $where, string $field, string $key)
+ * @method getColumn(array $where, string $field, ?string $key)
  * @method update(array $where, array $data)
  */
 class StorePinkServices extends BaseServices
@@ -511,7 +511,7 @@ class StorePinkServices extends BaseServices
             ['status', '=', 1],
             ['stop_time', '>', time()],
         ]);
-        if (!$pinkT) throw new ValidateException('未查到拼团信息，无法取消');
+        if (!$pinkT) throw new ApiException(413020);
         list($pinkAll, $pinkT, $count, $idAll, $uidAll) = $this->getPinkMemberAndPinkK($pinkT);
         if (count($pinkAll)) {
             $count = $pinkT['people'] - ($this->dao->count(['k_id' => $pink_id, 'is_refund' => 0]) + 1);
@@ -521,7 +521,7 @@ class StorePinkServices extends BaseServices
             } else {
                 //拼团完成
                 $this->PinkComplete($uidAll, $idAll, $uid, $pinkT);
-                throw new ValidateException('拼团已完成，无法取消');
+                throw new ApiException(413022);
             }
         }
         /** @var StoreOrderServices $orderService */
@@ -588,19 +588,19 @@ class StorePinkServices extends BaseServices
                         $valueData .= '&pid=' . $user['uid'];
                     }
                     $res = MiniProgramService::qrcodeService()->appCodeUnlimit($valueData, 'pages/activity/goods_combination_status/index', 280);
-                    if (!$res) throw new ValidateException('二维码生成失败');
+                    if (!$res) throw new ApiException(411881);
                     $uploadType = (int)sys_config('upload_type', 1);
                     $upload = UploadService::init();
                     $res = (string)EntityBody::factory($res);
                     $res = $upload->to('routine/activity/pink/code')->validate()->setAuthThumb(false)->stream($res, $name);
                     if ($res === false) {
-                        throw new ValidateException($upload->getError());
+                        throw new ApiException($upload->getError());
                     }
                     $imageInfo = $upload->getUploadInfo();
                     $imageInfo['image_type'] = $uploadType;
                     if ($imageInfo['image_type'] == 1) $remoteImage = UtilService::remoteImage($siteUrl . $imageInfo['dir']);
                     else $remoteImage = UtilService::remoteImage($imageInfo['dir']);
-                    if (!$remoteImage['status']) throw new ValidateException($remoteImage['msg']);
+                    if (!$remoteImage['status']) throw new ApiException($remoteImage['msg']);
                     $systemAttachmentServices->save([
                         'name' => $imageInfo['name'],
                         'att_dir' => $imageInfo['dir'],
@@ -619,7 +619,7 @@ class StorePinkServices extends BaseServices
                 if ($imageInfo['image_type'] == 1)
                     $data['url'] = $siteUrl . $url;
                 $posterImage = UtilService::setShareMarketingPoster($data, 'routine/activity/pink/poster');
-                if (!is_array($posterImage)) throw new ValidateException('海报生成失败');
+                if (!is_array($posterImage)) throw new ApiException(411886);
                 $systemAttachmentServices->save([
                     'name' => $posterImage['name'],
                     'att_dir' => $posterImage['dir'],
@@ -643,7 +643,7 @@ class StorePinkServices extends BaseServices
                     $codeUrl = set_http_type($siteUrl . '/pages/activity/goods_combination_status/index?id=' . $pinkId . '&spread=' . $user['uid'], 1);//二维码链接
                     $imageInfo = UtilService::getQRCodePath($codeUrl, $name);
                     if (is_string($imageInfo)) {
-                        throw new ValidateException('二维码生成失败');
+                        throw new ApiException(411881);
                     }
                     $systemAttachmentServices->save([
                         'name' => $imageInfo['name'],
@@ -662,7 +662,7 @@ class StorePinkServices extends BaseServices
                 $data['url'] = $url;
                 if ($imageInfo['image_type'] == 1) $data['url'] = $siteUrl . $url;
                 $posterImage = UtilService::setShareMarketingPoster($data, 'wap/activity/pink/poster');
-                if (!is_array($posterImage)) throw new ValidateException('海报生成失败');
+                if (!is_array($posterImage)) throw new ApiException(411886);
                 $systemAttachmentServices->save([
                     'name' => $posterImage['name'],
                     'att_dir' => $posterImage['dir'],
@@ -679,9 +679,9 @@ class StorePinkServices extends BaseServices
                 $wapPosterImage = set_http_type($posterImage['dir'], 1);//公众号推广海报
                 return $wapPosterImage;
             }
-            throw new ValidateException('参数错误');
+            throw new ApiException(100100);
         } catch (\Exception $e) {
-            throw new ValidateException($e->getMessage());
+            throw new ApiException($e->getMessage());
         }
     }
 
@@ -852,18 +852,18 @@ class StorePinkServices extends BaseServices
                         $valueData .= '&pid=' . $user['uid'];
                     }
                     $res = MiniProgramService::qrcodeService()->appCodeUnlimit($valueData, 'pages/activity/goods_combination_status/index', 280);
-                    if (!$res) throw new ValidateException('二维码生成失败');
+                    if (!$res) throw new ApiException(411881);
                     $uploadType = (int)sys_config('upload_type', 1);
                     $upload = UploadService::init();
                     $res = $upload->to('routine/activity/pink/code')->validate()->setAuthThumb(false)->stream($res, $name);
                     if ($res === false) {
-                        throw new ValidateException($upload->getError());
+                        throw new ApiException($upload->getError());
                     }
                     $imageInfo = $upload->getUploadInfo();
                     $imageInfo['image_type'] = $uploadType;
                     if ($imageInfo['image_type'] == 1) $remoteImage = UtilService::remoteImage($siteUrl . $imageInfo['dir']);
                     else $remoteImage = UtilService::remoteImage($imageInfo['dir']);
-                    if (!$remoteImage['status']) throw new ValidateException($remoteImage['msg']);
+                    if (!$remoteImage['status']) throw new ApiException($remoteImage['msg']);
                     $systemAttachmentServices->save([
                         'name' => $imageInfo['name'],
                         'att_dir' => $imageInfo['dir'],

@@ -58,7 +58,6 @@ class Express extends AuthController
 
     /**
      * 保存新建的资源
-     *
      * @return \think\Response
      */
     public function save()
@@ -68,9 +67,9 @@ class Express extends AuthController
             'code',
             ['sort', 0],
             ['is_show', 0]]);
-        if (!$data['name']) return app('json')->fail('请输入公司名称');
+        if (!$data['name']) return app('json')->fail(400400);
         $this->services->save($data);
-        return app('json')->success('添加公司成功!');
+        return app('json')->success(400401);
     }
 
     /**
@@ -86,7 +85,6 @@ class Express extends AuthController
 
     /**
      * 显示编辑资源表单页.
-     *
      * @param int $id
      * @return \think\Response
      */
@@ -97,7 +95,6 @@ class Express extends AuthController
 
     /**
      * 保存更新的资源
-     *
      * @param int $id
      * @return \think\Response
      */
@@ -109,15 +106,15 @@ class Express extends AuthController
             ['net_name', ''],
             ['sort', 0],
             ['is_show', 0]]);
-        if (!$expressInfo = $this->services->get($id)) return app('json')->fail('编辑的记录不存在!');
+        if (!$expressInfo = $this->services->get($id)) return app('json')->fail(100026);
         if ($expressInfo['partner_id'] == 1 && !$data['account']) {
-            return app('json')->fail('请输入月结账号');
+            return app('json')->fail(400402);
         }
         if ($expressInfo['partner_key'] == 1 && !$data['key']) {
-            return app('json')->fail('请输入月结密码');
+            return app('json')->fail(400403);
         }
         if ($expressInfo['net'] == 1 && !$data['net_name']) {
-            return app('json')->fail('请输入取件网点');
+            return app('json')->fail(400404);
         }
         $expressInfo->account = $data['account'];
         $expressInfo->key = $data['key'];
@@ -126,7 +123,7 @@ class Express extends AuthController
         $expressInfo->is_show = $data['is_show'];
         $expressInfo->status = 1;
         $expressInfo->save();
-        return app('json')->success('修改成功!');
+        return app('json')->success(100001);
     }
 
     /**
@@ -137,12 +134,12 @@ class Express extends AuthController
      */
     public function delete($id)
     {
-        if (!$id) return app('json')->fail('参数错误，请重新打开');
+        if (!$id) return app('json')->fail(100100);
         $res = $this->services->delete($id);
         if (!$res)
-            return app('json')->fail('删除失败,请稍候再试!');
+            return app('json')->fail(100008);
         else
-            return app('json')->success('删除成功!');
+            return app('json')->success(100002);
     }
 
     /**
@@ -153,9 +150,9 @@ class Express extends AuthController
      */
     public function set_status($id = 0, $status = '')
     {
-        if ($status == '' || $id == 0) return app('json')->fail('参数错误');
+        if ($status == '' || $id == 0) return app('json')->fail(100100);
         $this->services->update($id, ['is_show' => $status]);
-        return app('json')->success($status == 0 ? '隐藏成功' : '显示成功');
+        return app('json')->success(100014);
     }
 
     /**
@@ -165,6 +162,6 @@ class Express extends AuthController
     public function syncExpress()
     {
         $this->services->syncExpress();
-        return app('json')->success('同步成功');
+        return app('json')->success(100039);
     }
 }

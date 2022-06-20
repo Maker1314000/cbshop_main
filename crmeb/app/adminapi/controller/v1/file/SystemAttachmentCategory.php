@@ -66,10 +66,10 @@ class SystemAttachmentCategory extends AuthController
             ['name', '']
         ]);
         if (!$data['name']) {
-            return app('json')->fail('请输入分类名称');
+            return app('json')->fail(400100);
         }
         $this->service->save($data);
-        return app('json')->success('添加成功');
+        return app('json')->success(100021);
     }
 
     /**
@@ -85,10 +85,8 @@ class SystemAttachmentCategory extends AuthController
 
     /**
      * 保存更新的资源
-     *
-     * @param \think\Request $request
-     * @param int $id
-     * @return \think\Response
+     * @param $id
+     * @return mixed
      */
     public function update($id)
     {
@@ -97,24 +95,23 @@ class SystemAttachmentCategory extends AuthController
             ['name', '']
         ]);
         if (!$data['name']) {
-            return app('json')->fail('请输入分类名称');
+            return app('json')->fail(400100);
         }
         $info = $this->service->get($id);
         $count = $this->service->count(['pid' => $id]);
-        if ($count && $info['pid'] != $data['pid']) return app('json')->fail('该分类有下级分类，无法修改上级');
+        if ($count && $info['pid'] != $data['pid']) return app('json')->fail(400105);
         $this->service->update($id, $data);
-        return app('json')->success('分类编辑成功!');
+        return app('json')->success(100001);
     }
 
     /**
      * 删除指定资源
-     *
      * @param int $id
      * @return \think\Response
      */
     public function delete($id)
     {
         $this->service->del($id);
-        return app('json')->success('删除成功!');
+        return app('json')->success(100002);
     }
 }

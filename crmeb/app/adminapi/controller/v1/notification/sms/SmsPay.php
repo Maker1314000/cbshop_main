@@ -10,7 +10,6 @@
 // +----------------------------------------------------------------------
 namespace app\adminapi\controller\v1\notification\sms;
 
-use crmeb\exceptions\AdminException;
 use app\adminapi\controller\AuthController;
 use crmeb\services\{sms\Sms};
 
@@ -35,7 +34,7 @@ class SmsPay extends AuthController
             'site_url' => sys_config('site_url')
         ]);
         if (!$this->smsHandle->isLogin()) {
-            throw new AdminException('请先填写短息配置');
+            return app('json')->fail(400141);
         }
     }
 

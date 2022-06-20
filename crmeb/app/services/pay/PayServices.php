@@ -12,10 +12,10 @@ declare (strict_types=1);
 
 namespace app\services\pay;
 
+use crmeb\exceptions\ApiException;
 use crmeb\services\AliPayService;
 use crmeb\services\MiniProgramService;
 use crmeb\services\WechatService;
-use think\exception\ValidateException;
 
 /**
  * 支付统一入口
@@ -95,10 +95,10 @@ class PayServices
                 case 'store':
                     return WechatService::nativePay($openid, $orderId, $price, $successAction, $body);
                 default:
-                    throw new ValidateException('支付方式不存在');
+                    throw new ApiException(412104);
             }
         } catch (\Exception $e) {
-            throw new ValidateException($e->getMessage());
+            throw new ApiException($e->getMessage());
         }
     }
 }

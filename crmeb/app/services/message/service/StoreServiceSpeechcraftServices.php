@@ -14,8 +14,8 @@ namespace app\services\message\service;
 
 use app\dao\service\StoreServiceSpeechcraftDao;
 use app\services\BaseServices;
+use crmeb\exceptions\AdminException;
 use crmeb\services\FormBuilder;
-use think\exception\ValidateException;
 use think\Model;
 
 /**
@@ -76,7 +76,7 @@ class StoreServiceSpeechcraftServices extends BaseServices
     {
         $info = $this->dao->get($id);
         if (!$info) {
-            throw new ValidateException('您修改的话术内容不存在');
+            throw new AdminException(400461);
         }
         return create_form('编辑话术', $this->speechcraftForm($info->toArray()), $this->url('/app/wechat/speechcraft/' . $id), 'PUT');
     }

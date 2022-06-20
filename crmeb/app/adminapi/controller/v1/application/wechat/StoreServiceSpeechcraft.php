@@ -37,8 +37,11 @@ class StoreServiceSpeechcraft extends AuthController
 
     /**
      * 显示资源列表
-     *
-     * @return \think\Response
+     * @param Request $request
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function index(Request $request)
     {
@@ -52,9 +55,8 @@ class StoreServiceSpeechcraft extends AuthController
     }
 
     /**
-     * 显示创建资源表单页.
-     *
-     * @return \think\Response
+     * 显示创建资源表单页
+     * @return mixed
      */
     public function create()
     {
@@ -63,7 +65,6 @@ class StoreServiceSpeechcraft extends AuthController
 
     /**
      * 保存新建的资源
-     *
      * @param Request $request
      * @return \think\Response
      */
@@ -80,18 +81,17 @@ class StoreServiceSpeechcraft extends AuthController
         $data['add_time'] = time();
         $data['kefu_id'] = 0;
         if ($this->services->count(['message' => $data['message']])) {
-            return app('json')->fail('话术不能重复添加');
+            return app('json')->fail(400269);
         }
         if ($this->services->save($data)) {
-            return app('json')->success('创建话术成功');
+            return app('json')->success(400270);
         } else {
-            return app('json')->fail('创建话术失败');
+            return app('json')->fail(400271);
         }
     }
 
     /**
      * 显示指定的资源
-     *
      * @param int $id
      * @return \think\Response
      */
@@ -99,16 +99,19 @@ class StoreServiceSpeechcraft extends AuthController
     {
         $info = $this->services->get($id);
         if (!$info) {
-            return app('json')->fail('获取失败');
+            return app('json')->fail(100026);
         }
         return app('json')->success($info);
     }
 
     /**
-     * 显示编辑资源表单页.
-     *
-     * @param int $id
-     * @return \think\Response
+     * 显示编辑资源表单页
+     * @param $id
+     * @return mixed
+     * @throws \FormBuilder\Exception\FormBuilderException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function edit($id)
     {
@@ -117,7 +120,6 @@ class StoreServiceSpeechcraft extends AuthController
 
     /**
      * 保存更新的资源
-     *
      * @param Request $request
      * @param int $id
      * @return \think\Response
@@ -134,31 +136,30 @@ class StoreServiceSpeechcraft extends AuthController
         $this->validate($data, StoreServiceSpeechcraftValidata::class);
         $message = $this->services->get(['message' => $data['message']]);
         if ($message && $message['id'] != $id) {
-            return app('json')->fail('话术不能重复添加');
+            return app('json')->fail(400269);
         }
         if ($this->services->update($id, $data)) {
-            return app('json')->success('修改成功');
+            return app('json')->success(100001);
         } else {
-            return app('json')->fail('修改失败');
+            return app('json')->fail(100007);
         }
 
     }
 
     /**
      * 删除指定资源
-     *
      * @param int $id
      * @return \think\Response
      */
     public function delete($id)
     {
         if (!$id || !($info = $this->services->get($id))) {
-            return app('json')->fail('删除的话术不存在！');
+            return app('json')->fail(400272);
         }
         if ($info->delete()) {
-            return app('json')->success('删除成功');
+            return app('json')->success(100002);
         } else {
-            return app('json')->fail('删除失败');
+            return app('json')->fail(100008);
         }
     }
 }

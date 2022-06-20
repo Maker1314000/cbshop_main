@@ -50,9 +50,9 @@ class SmsConfig extends AuthController
         $this->validate(['sms_account' => $account, 'sms_token' => $token], \app\adminapi\validate\notification\SmsConfigValidate::class);
 
         if ($this->services->login($account, $token)) {
-            return app('json')->success('登录成功');
+            return app('json')->success(400139);
         } else {
-            return app('json')->fail('账号或密码错误');
+            return app('json')->fail(400140);
         }
     }
 
@@ -105,9 +105,9 @@ class SmsConfig extends AuthController
         if ($res) {
             $this->services->updateSmsConfig('', '');
             CacheService::clear();
-            return app('json')->success('退出成功');
+            return app('json')->success(100042);
         } else {
-            return app('json')->fail('退出失败');
+            return app('json')->fail(100043);
         }
     }
 

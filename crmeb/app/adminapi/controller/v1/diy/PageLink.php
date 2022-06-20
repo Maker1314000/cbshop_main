@@ -53,10 +53,10 @@ class PageLink extends AuthController
      */
     public function getLinks($cate_id, PageCategoryServices $pageCategoryServices)
     {
-        if (!$cate_id) return app('json')->fail('缺少参数');
+        if (!$cate_id) return app('json')->fail(100100);
         $category = $pageCategoryServices->get((int)$cate_id);
         if (!$category) {
-            return app('json')->fail('页面分类不存在');
+            return app('json')->fail(400103);
         }
         switch ($category['type']) {
             case 'special':
@@ -88,17 +88,17 @@ class PageLink extends AuthController
             ['name', ''],
             ['url', '']
         ]);
-        if (!$cate_id || !$data['name'] || !$data['url']) return app('json')->fail('缺少参数');
+        if (!$cate_id || !$data['name'] || !$data['url']) return app('json')->fail(100100);
         $category = $pageCategoryServices->get((int)$cate_id);
         if (!$category) {
-            return app('json')->fail('页面分类不存在');
+            return app('json')->fail(400103);
         }
         $data['cate_id'] = $cate_id;
         $data['add_time'] = time();
         if (!$this->services->save($data)) {
-            return app('json')->fail('添加失败');
+            return app('json')->fail(100022);
         }
-        return app('json')->success('添加成功');
+        return app('json')->success(100021);
     }
 
     /**
@@ -108,9 +108,9 @@ class PageLink extends AuthController
      */
     public function del($id)
     {
-        if (!$id) return app('json')->fail('参数错误');
+        if (!$id) return app('json')->fail(100100);
         $this->services->del($id);
-        return app('json')->success('删除成功!');
+        return app('json')->success(100002);
     }
 
 }

@@ -18,8 +18,8 @@ use app\services\user\member\MemberCardServices;
 use app\services\user\UserBillServices;
 use app\services\user\UserBrokerageServices;
 use app\services\user\UserServices;
+use crmeb\exceptions\ApiException;
 use crmeb\utils\Str;
-use think\exception\ValidateException;
 use think\facade\Log;
 
 /**
@@ -50,17 +50,17 @@ class StoreOrderTakeServices extends BaseServices
     {
         $order = $this->dao->getUserOrderDetail($uni, $uid);
         if (!$order) {
-            throw new ValidateException('订单不存在!');
+            throw new ApiException(412000);
         }
         /** @var StoreOrderServices $orderServices */
         $orderServices = app()->make(StoreOrderServices::class);
         $order = $orderServices->tidyOrder($order);
         if ($order['_status']['_type'] != 2) {
-            throw new ValidateException('订单状态错误!');
+            throw new ApiException(412093);
         }
         //存在拆分发货 需要分开收货
         if ($this->dao->count(['pid' => $order['id']])) {
-            throw new ValidateException('拆分发货，请去订单详情中包裹确认收货');
+            throw new ApiException(412093);
         }
         $order->status = 2;
         /** @var StoreOrderStatusServices $statusService */
@@ -73,7 +73,7 @@ class StoreOrderTakeServices extends BaseServices
             ]);
         $res = $res && $this->storeProductOrderUserTakeDelivery($order);
         if (!$res) {
-            throw new ValidateException('收货失败');
+            throw new ApiException(412032);
         }
         return $order;
     }
@@ -104,7 +104,7 @@ class StoreOrderTakeServices extends BaseServices
             //事业部
             $res4 = $this->divisionBrokerage($order, $userInfo);
             if (!($res1 && $res2 && $res3 && $res4)) {
-                throw new ValidateException('收货失败!');
+                throw new ApiException(412032);
             }
             return true;
         }, $isTran);
@@ -543,7 +543,7 @@ class StoreOrderTakeServices extends BaseServices
                         ]);
                     $res = $res && $this->storeProductOrderUserTakeDelivery($order, false);
                     if (!$res) {
-                        throw new ValidateException('订单号' . $order['order_id'] . '自动收货失败');
+                        Log::error('订单号' . $order['order_id'] . '自动收货失败');
                     }
                 });
             } catch (\Throwable $e) {

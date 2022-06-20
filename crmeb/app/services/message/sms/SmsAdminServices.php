@@ -67,7 +67,7 @@ class SmsAdminServices extends BaseServices
         $sms = app()->make(Sms::class, ['yunxin']);
         $status = $sms->register($account, md5(trim($password)), $url, $phone, $code, $sign);
         if ($status['status'] == 400) {
-            throw new AdminException('短信平台：' . $status['msg']);
+            throw new AdminException(400462, ['msg' => $status['msg']]);
         }
         $this->updateSmsConfig($account, $password);
         CacheService::clear();
@@ -85,7 +85,7 @@ class SmsAdminServices extends BaseServices
         $sms = app()->make(Sms::class, ['yunxin']);
         $res = json_decode(HttpService::getRequest($sms->getSmsUrl(), compact('phone')), true);
         if (!isset($res['status']) && $res['status'] !== 200) {
-            throw new AdminException($res['data']['message'] ?? $res['msg']);
+            throw new AdminException(400462, ['msg' => $res['data']['message'] ?? $res['msg']]);
         }
         return $res['data']['message'] ?? $res['msg'];
     }

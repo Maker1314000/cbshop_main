@@ -31,7 +31,7 @@ class Json
         return $this;
     }
 
-    public function make(int $status, string $msg, ?array $data = null): Response
+    public function make(int $status, string $msg, ?array $data = null, ?array $replace = []): Response
     {
         $request = app()->request;
         $res = compact('status', 'msg');
@@ -39,42 +39,50 @@ class Json
         if (!is_null($data))
             $res['data'] = $data;
 
-        if ($res['msg'] && !is_numeric($res['msg'])) {
-            if (!$range = $request->get('lang')) {
+        if (is_numeric($res['msg'])) {
+            if (!$range = $request->header('lang')) {
                 $range = $request->cookie(Config::get('lang.cookie_var'));
             }
             $langData = array_values(Config::get('lang.accept_language', []));
             if (!in_array($range, $langData)) {
                 $range = 'zh-cn';
             }
-            $res['msg'] = Lang::get($res['msg'], [], $range);
+
+            /** @var Lang $lang */
+            $lang = app()->make(Lang::class, Config::get('lang'));
+
+            $res['msg'] = $lang::get($msg, [], $range);
+
+            if (count($replace)) {
+                $vars = array_keys($replace);
+                foreach ($vars as &$v) {
+                    $v = "{:{$v}}";
+                }
+                $res['msg'] = str_replace($vars, $replace, $res['msg']);
+            }
         }
+
         return Response::create($res, 'json', $this->code);
     }
 
-    public function success($msg = 'ok', ?array $data = null): Response
+    public function success($msg = 'success', ?array $data = null, ?array $replace = []): Response
     {
         if (is_array($msg)) {
             $data = $msg;
-            $msg = 'ok';
+            $msg = 'success';
         }
 
-        return $this->make(200, $msg, $data);
+        return $this->make(200, $msg, $data, $replace);
     }
 
-    public function successful(...$args): Response
-    {
-        return app('json')->success(...$args);
-    }
-
-    public function fail($msg = 'fail', ?array $data = null): Response
+    public function fail($msg = 'fail', ?array $data = null, ?array $replace = []): Response
     {
         if (is_array($msg)) {
             $data = $msg;
-            $msg = 'ok';
+            $msg = 'fail';
         }
 
-        return $this->make(400, $msg, $data);
+        return $this->make(400, $msg, $data, $replace);
     }
 
     public function status($status, $msg, $result = [])
@@ -82,7 +90,7 @@ class Json
         $status = strtoupper($status);
         if (is_array($msg)) {
             $result = $msg;
-            $msg = 'ok';
+            $msg = 'success';
         }
         return app('json')->success($msg, compact('status', 'result'));
     }

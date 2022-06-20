@@ -11,9 +11,9 @@
 namespace crmeb\services\upload\storage;
 
 use crmeb\basic\BaseUpload;
+use crmeb\exceptions\AdminException;
 use crmeb\exceptions\UploadException;
 use Qcloud\Cos\Client;
-use think\exception\ValidateException;
 use QCloud\COSSTS\Sts;
 
 /**
@@ -106,7 +106,7 @@ class Cos extends BaseUpload
     protected function app()
     {
         if (!$this->accessKey || !$this->secretKey) {
-            throw new UploadException('Please configure accessKey and secretKey');
+            throw new UploadException(400721);
         }
         $this->handle = new Client(['region' => $this->storageRegion, 'credentials' => [
             'secretId' => $this->accessKey, 'secretKey' => $this->secretKey
@@ -136,7 +136,7 @@ class Cos extends BaseUpload
                         $file . '.fileMime' => 'Upload fileMine error'
                     ];
                     validate([$file => $this->validate], $error)->check([$file => $fileHandle]);
-                } catch (ValidateException $e) {
+                } catch (\Exception $e) {
                     return $this->setError($e->getMessage());
                 }
             }
@@ -241,13 +241,13 @@ class Cos extends BaseUpload
             switch ($waterConfig['watermark_type']) {
                 case 1://图片
                     if (!$waterConfig['watermark_image']) {
-                        throw new ValidateException('请先配置水印图片');
+                        throw new AdminException(400722);
                     }
                     $waterPath = $filePath .= '/1/image/' . base64_encode($waterConfig['watermark_image']) . '/gravity/' . ($this->position[$waterConfig['watermark_position']] ?? 'northwest') . '/blogo/1/dx/' . $waterConfig['watermark_x'] . '/dy/' . $waterConfig['watermark_y'];
                     break;
                 case 2://文字
                     if (!$waterConfig['watermark_text']) {
-                        throw new ValidateException('请先配置水印文字');
+                        throw new AdminException(400723);
                     }
                     $waterPath = $filePath .= '/2/text/' . base64_encode($waterConfig['watermark_text']) . '/font/' . base64_encode($waterConfig['watermark_text_font']) . '/fill/' . base64_encode($waterConfig['watermark_text_color']) . '/fontsize/' . $waterConfig['watermark_text_size'] . '/gravity/' . ($this->position[$waterConfig['watermark_position']] ?? 'northwest') . '/dx/' . $waterConfig['watermark_x'] . '/dy/' . $waterConfig['watermark_y'];
                     break;

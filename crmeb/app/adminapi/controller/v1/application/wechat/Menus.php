@@ -51,8 +51,8 @@ class Menus extends AuthController
     public function save()
     {
         $buttons = request()->post('button/a', []);
-        if (!count($buttons)) return app('json')->fail('请添加至少一个按钮');
+        if (!count($buttons)) return app('json')->fail(400238);
         $this->services->saveMenu($buttons);
-        return app('json')->success('修改成功!');
+        return app('json')->success(100001);
     }
 }

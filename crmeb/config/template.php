@@ -55,25 +55,7 @@ return [
                 //提醒付款通知
                 'ORDER_PAY_FALSE' => 'OPENTM413741318',
                 //服务进度提醒
-                'ADMIN_NOTICE' => 'OPENTM408237350',
-
-
-//                //订单生成通知
-//                'ORDER_CREATE' => 'OPENTM205213550',
-//                //退款进度通知
-//                'ORDER_REFUND' => 'OPENTM410119152',
-//                //拼团失败通知
-//                'SEND_ORDER_PINK_FIAL' => 'OPENTM401113750',
-//                //充值退款通知
-//                'RECHARGE_ORDER_REFUND_STATUS' => '',
-//                //退款申请未通过通知
-//                'SEND_ORDER_REFUND_NO_STATUS' => '',
-//                //取消拼团提醒
-//                'SEND_ORDER_PINK_CLONE' => '',
-//                //参团成功提醒
-//                'CAN_PINK_SUCCESS' => '',
-//                //客服通知提醒
-//                'SERVICE_NOTICE' => 'OPENTM204431262',
+//                'ADMIN_NOTICE' => 'OPENTM408237350',
             ],
         ],
         //订阅消息
@@ -105,20 +87,6 @@ return [
                 'PINK_STATUS' => 3353,
                 //提现成功通知
                 'USER_EXTRACT' => 1470,
-
-
-
-
-
-
-//                //订单取消
-//                'ORDER_CLONE' => 1134,
-//                //核销成功通知
-//                'ORDER_WRITE_OFF' => 3116,
-//                //新订单提醒
-//                'ORDER_NEW' => 1476,
-//                //申请退款通知 管理员提醒
-//                'ORDER_REFUND_STATUS' => 1468,
             ],
         ],
     ]

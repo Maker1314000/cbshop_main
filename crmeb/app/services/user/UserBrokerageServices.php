@@ -13,7 +13,7 @@ namespace app\services\user;
 
 use app\dao\user\UserBrokerageDao;
 use app\services\BaseServices;
-use think\exception\ValidateException;
+use crmeb\exceptions\ApiException;
 
 /**
  * 用户佣金
@@ -305,7 +305,7 @@ class UserBrokerageServices extends BaseServices
         /** @var UserServices $userServices */
         $userServices = app()->make(UserServices::class);
         if (!$userServices->getUserInfo($uid)) {
-            throw new ValidateException('数据不存在');
+            throw new ApiException(100026);
         }
         /** @var UserExtractServices $userExtract */
         $userExtract = app()->make(UserExtractServices::class);
@@ -384,7 +384,7 @@ class UserBrokerageServices extends BaseServices
         /** @var UserServices $userService */
         $userService = app()->make(UserServices::class);
         if (!$userService->getUserInfo($uid)) {
-            throw new ValidateException('数据不存在');
+            throw new ApiException(100026);
         }
         return [
             'rank' => $this->brokerageRankList($type),

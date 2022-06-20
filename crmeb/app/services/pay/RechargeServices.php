@@ -15,7 +15,7 @@ namespace app\services\pay;
 
 use app\services\user\UserRechargeServices;
 use app\services\wechat\WechatUserServices;
-use think\exception\ValidateException;
+use crmeb\exceptions\ApiException;
 
 /**
  *
@@ -41,10 +41,10 @@ class RechargeServices
         $rechargeServices = app()->make(UserRechargeServices::class);
         $recharge = $rechargeServices->getRecharge($recharge_id);
         if (!$recharge) {
-            throw new ValidateException('订单失效或者不存在');
+            throw new ApiException(412000);
         }
         if ($recharge['paid'] == 1) {
-            throw new ValidateException('订单已支付');
+            throw new ApiException(412001);
         }
         $userType = '';
         switch ($recharge['recharge_type']) {
@@ -57,14 +57,14 @@ class RechargeServices
                 break;
         }
         if (!$userType) {
-            throw new ValidateException('不支持该类型方式');
+            throw new ApiException(412105);
         }
         /** @var WechatUserServices $wechatUser */
         $wechatUser = app()->make(WechatUserServices::class);
         $openid = $wechatUser->uidToOpenid((int)$recharge['uid'], $userType);
         if ($recharge['recharge_type'] != 'weixinh5' && !request()->isApp()) {
             if (!$openid) {
-                throw new ValidateException('获取用户openid失败,无法支付');
+                throw new ApiException(412102);
             }
         }else{
             $openid = '';

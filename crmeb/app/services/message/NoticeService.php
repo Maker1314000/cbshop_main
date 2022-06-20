@@ -16,8 +16,8 @@ use app\jobs\notice\EnterpriseWechatJob;
 use app\jobs\notice\PrintJob;
 use app\services\BaseServices;
 use app\services\order\StoreOrderCartInfoServices;
+use crmeb\exceptions\AdminException;
 use crmeb\services\CacheService;
-use think\exception\ValidateException;
 
 
 class NoticeService extends BaseServices
@@ -94,7 +94,7 @@ class NoticeService extends BaseServices
         $cartServices = app()->make(StoreOrderCartInfoServices::class);
         $product = $cartServices->getCartInfoPrintProduct($order['cart_id']);
         if (!$product) {
-            throw new ValidateException('订单商品获取失败,无法打印!');
+            throw new AdminException(400463);
         }
         $configdata = [
             'clientId' => sys_config('printing_client_id', ''),
@@ -104,10 +104,10 @@ class NoticeService extends BaseServices
         ];
         $switch = (bool)sys_config('pay_success_printing_switch');
         if (!$switch) {
-            throw new ValidateException('小票打印未开启!');
+            throw new AdminException(400464);
         }
         if (!$configdata['clientId'] || !$configdata['apiKey'] || !$configdata['partner'] || !$configdata['terminal']) {
-            throw new ValidateException('请先配置小票打印开发者');
+            throw new AdminException(400465);
         }
         PrintJob::dispatch('doJob', ['yi_lian_yun', $configdata, $order, $product]);
     }

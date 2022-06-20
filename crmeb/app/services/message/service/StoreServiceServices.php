@@ -15,9 +15,9 @@ use app\dao\service\StoreServiceDao;
 use app\services\BaseServices;
 use app\services\user\UserServices;
 use crmeb\exceptions\AdminException;
+use crmeb\exceptions\ApiException;
 use crmeb\services\FormBuilder;
 use crmeb\traits\ServicesTrait;
-use think\exception\ValidateException;
 
 /**
  * 客服
@@ -132,7 +132,7 @@ class StoreServiceServices extends BaseServices
     {
         $serviceInfo = $this->dao->get($id);
         if (!$serviceInfo) {
-            throw new AdminException('数据不存在!');
+            throw new AdminException(100026);
         }
         return create_form('编辑客服', $this->createServiceForm($serviceInfo->toArray()), $this->url('/app/wechat/kefu/' . $id), 'PUT');
     }
@@ -187,11 +187,11 @@ class StoreServiceServices extends BaseServices
         if (!$toUid) {
             $serviceInfoList = $this->getServiceList(['status' => 1, 'online' => 1]);
             if (!count($serviceInfoList)) {
-                throw new ValidateException('暂无客服人员在线，请稍后联系');
+                throw new ApiException(411500);
             }
             $uids = array_column($serviceInfoList['list'], 'uid');
             if (!$uids) {
-                throw new ValidateException('暂无客服人员在线，请稍后联系');
+                throw new ApiException(411500);
             }
             /** @var StoreServiceRecordServices $recordServices */
             $recordServices = app()->make(StoreServiceRecordServices::class);
@@ -205,7 +205,7 @@ class StoreServiceServices extends BaseServices
                 $toUid = $uids[array_rand($uids)] ?? 0;
             }
             if (!$toUid) {
-                throw new ValidateException('暂无客服人员在线，请稍后联系');
+                throw new ApiException(411500);
             }
         }
         $userInfo = $this->dao->get(['uid' => $toUid], ['nickname', 'avatar']);

@@ -57,7 +57,7 @@ class OrderCreateAfterJob extends BaseJobs
                 if ($spread_uid) {
                     $orderData['spread_uid'] = $spread_uid;
                 }
-                if ($spread_uid > 0) {
+                if ($spread_uid > 0 && sys_config('brokerage_level') == 2) {
                     $spread_two_uid = $userServices->getSpreadUid($spread_uid, [], false);
                     if ($spread_two_uid) {
                         $orderData['spread_two_uid'] = $spread_two_uid;

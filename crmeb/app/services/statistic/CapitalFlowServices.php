@@ -138,7 +138,7 @@ class CapitalFlowServices extends BaseServices
         if ($res) {
             return true;
         } else {
-            throw new AdminException('备注失败');
+            throw new AdminException(100025);
         }
     }
 

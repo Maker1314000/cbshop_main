@@ -13,15 +13,12 @@ declare (strict_types=1);
 namespace app\services\product\product;
 
 use app\services\BaseServices;
-use app\services\product\sku\StoreProductAttrServices;
-use app\services\product\sku\StoreProductAttrValueServices;
 use app\services\serve\ServeServices;
 use app\services\system\attachment\SystemAttachmentCategoryServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\CopyProductService;
 use crmeb\services\UploadService;
-use think\facade\Log;
 
 /**
  *
@@ -71,7 +68,7 @@ class CopyTaobaoServices extends BaseServices
                 break;
             case 2://99API
                 $apikey = sys_config('copy_product_apikey');
-                if (!$apikey) throw new AdminException('请先配置接口密钥');
+                if (!$apikey) throw new AdminException(400554);
                 if ((!$type || !$id) && $url) {
                     $url_arr = parse_url($url);
                     if (isset($url_arr['host'])) {
@@ -219,12 +216,12 @@ class CopyTaobaoServices extends BaseServices
         //生成附件目录
         try {
             if (make_path('attach', 3, true) === '')
-                throw new AdminException('无法创建文件夹，请检查您的上传目录权限：' . app()->getRootPath() . 'public' . DS . 'uploads' . DS . 'attach' . DS);
+                throw new AdminException(400555);
         } catch (\Exception $e) {
-            throw new AdminException($e->getMessage() . '或无法创建文件夹，请检查您的上传目录权限：' . app()->getRootPath() . 'public' . DS . 'uploads' . DS . 'attach' . DS);
+            throw new AdminException(400555);
         }
         $description = $storeDescriptionServices->getDescription(['product_id ' => $id, 'type' => 0]);
-        if (!$description) throw new AdminException('商品参数错误！');
+        if (!$description) throw new AdminException(400556);
         //替换并下载详情里面的图片默认下载全部图片
         $description = preg_replace('#<style>.*?</style>#is', '', $description);
         $description = $this->uploadImage([], $description, 1, $AttachmentCategory['id']);
@@ -322,7 +319,7 @@ class CopyTaobaoServices extends BaseServices
                 return $html;
                 break;
             default:
-                throw new AdminException('上传方式错误');
+                throw new AdminException(400557);
                 break;
         }
         return $uploadImage;
@@ -350,7 +347,7 @@ class CopyTaobaoServices extends BaseServices
             $ext = $this->getImageExtname($name)['ext_name'];
         }
         if (in_array($ext, ['php', 'js', 'html'])) {
-            throw new AdminException('格式错误');
+            throw new AdminException(400558);
         }
         //TODO 获取远程文件所采用的方法
         if ($type) {
@@ -378,7 +375,7 @@ class CopyTaobaoServices extends BaseServices
             }
         }
         $size = strlen(trim($content));
-        if (!$content || $size <= 2) throw new AdminException('图片流获取失败');
+        if (!$content || $size <= 2) throw new AdminException(400559);
         $date_dir = date('Y') . '/' . date('m') . '/' . date('d');
         $upload_type = sys_config('upload_type', 1);
         $upload = UploadService::init($upload_type);
@@ -444,7 +441,7 @@ class CopyTaobaoServices extends BaseServices
 
         //生成附件目录
         if (make_path('attach', 3, true) === '') {
-            throw new AdminException('无法创建文件夹，请检查您的上传目录权限：' . app()->getRootPath() . 'public' . DS . 'uploads' . DS . 'attach' . DS);
+            throw new AdminException(400555);
         }
 
         //上传图片

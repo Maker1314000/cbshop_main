@@ -92,20 +92,20 @@ class StoreBargain extends AuthController
         if ($data['section_time']) {
             [$start_time, $end_time] = $data['section_time'];
             if (strtotime($end_time) < time()) {
-                return app('json')->fail('活动结束时间不能小于当前时间');
+                return app('json')->fail(400507);
             }
         }
         $bragain = [];
         if ($id) {
             $bragain = $this->services->get((int)$id);
             if (!$bragain) {
-                return app('json')->fail('数据不存在');
+                return app('json')->fail(100026);
             }
         }
         //限制编辑
         if ($data['copy'] == 0 && $bragain) {
             if ($bragain['stop_time'] < time()) {
-                return app('json')->fail('活动已结束,请重新添加或复制');
+                return app('json')->fail(400508);
             }
         }
         if ($data['copy'] == 1) {
@@ -113,7 +113,7 @@ class StoreBargain extends AuthController
             unset($data['copy']);
         }
         $this->services->saveData($id, $data);
-        return app('json')->success('保存成功');
+        return app('json')->success(100000);
     }
 
     /**
@@ -140,7 +140,7 @@ class StoreBargain extends AuthController
         /** @var StoreBargainUserServices $bargainUserService */
         $bargainUserService = app()->make(StoreBargainUserServices::class);
         $bargainUserService->userBargainStatusFail($id, true);
-        return app('json')->success('删除成功!');
+        return app('json')->success(100002);
     }
 
     /**
@@ -155,7 +155,7 @@ class StoreBargain extends AuthController
         $bargainUserService = app()->make(StoreBargainUserServices::class);
         $bargainUserService->userBargainStatusFail($id, false);
         $this->services->update($id, ['status' => $status]);
-        return app('json')->success($status == 0 ? '关闭成功' : '开启成功');
+        return app('json')->success($status == 0 ? 100001 : 100007);
     }
 
     /**

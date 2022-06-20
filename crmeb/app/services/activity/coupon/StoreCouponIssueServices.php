@@ -21,8 +21,8 @@ use app\services\user\member\MemberCardServices;
 use app\services\user\member\MemberRightServices;
 use app\services\user\UserServices;
 use crmeb\exceptions\AdminException;
+use crmeb\exceptions\ApiException;
 use crmeb\services\FormBuilder;
-use think\exception\ValidateException;
 
 /**
  *
@@ -87,6 +87,18 @@ class StoreCouponIssueServices extends BaseServices
      */
     public function saveCoupon($data)
     {
+        if ($data['start_time'] && $data['start_use_time']) {
+            if ($data['start_use_time'] < $data['start_time']) {
+                throw new AdminException(400513);
+            }
+        }
+
+        if ($data['end_time'] && $data['end_use_time']) {
+            if ($data['end_use_time'] < $data['end_time']) {
+                throw new AdminException(400514);
+            }
+        }
+
         $data['start_use_time'] = strtotime((string)$data['start_use_time']);
         $data['end_use_time'] = strtotime((string)$data['end_use_time']);
         $data['start_time'] = strtotime((string)$data['start_time']);
@@ -109,7 +121,7 @@ class StoreCouponIssueServices extends BaseServices
             $storeCouponProductService = app()->make(StoreCouponProductServices::class);
             $storeCouponProductService->saveAll($couponData);
         }
-        if (!$res) throw new AdminException('添加优惠券失败!');
+        if (!$res) throw new AdminException(100022);
         return true;
     }
 
@@ -123,7 +135,7 @@ class StoreCouponIssueServices extends BaseServices
     public function createForm(int $id)
     {
         $issueInfo = $this->dao->get($id);
-        if (-1 == $issueInfo['status'] || 1 == $issueInfo['is_del']) return app('json')->fail('状态错误,无法修改');
+        if (-1 == $issueInfo['status'] || 1 == $issueInfo['is_del']) throw new AdminException(100007);
         $f = [FormBuilder::radio('status', '是否开启', $issueInfo['status'])->options([['label' => '开启', 'value' => 1], ['label' => '关闭', 'value' => 0]])];
         return create_form('状态修改', $f, $this->url('/marketing/coupon/released/status/' . $id), 'PUT');
     }
@@ -137,7 +149,7 @@ class StoreCouponIssueServices extends BaseServices
     {
         $coupon = $this->dao->get($id);
         if (!$coupon) {
-            throw new ValidateException('优惠券不存在');
+            throw new AdminException(400515);
         }
         if ($coupon['receive_type'] != 4) {
             /** @var StoreCouponIssueUserServices $storeCouponIssueUserService */
@@ -242,12 +254,12 @@ class StoreCouponIssueServices extends BaseServices
                 /** @var StoreCouponUserServices $storeCouponUser */
                 $storeCouponUser = app()->make(StoreCouponUserServices::class);
                 if (!$storeCouponUser->saveAll($couponData)) {
-                    throw new AdminException('发劵失败');
+                    throw new AdminException(100030);
                 }
             }
             if ($issueUserData) {
                 if (!$issueUser->saveAll($issueUserData)) {
-                    throw new AdminException('发劵失败');
+                    throw new AdminException(100031);
                 }
             }
         }
@@ -321,19 +333,19 @@ class StoreCouponIssueServices extends BaseServices
     {
         $issueCouponInfo = $this->dao->getInfo((int)$id);
         $uid = $user->uid;
-        if (!$issueCouponInfo) throw new ValidateException('领取的优惠劵已领完或已过期!');
+        if (!$issueCouponInfo) throw new ApiException(400516);
         /** @var MemberRightServices $memberRightService */
         $memberRightService = app()->make(MemberRightServices::class);
         if ($issueCouponInfo->receive_type == 4 && (!$user->is_money_level || !$memberRightService->getMemberRightStatus("coupon"))) {
-            if (!$user->is_money_level) throw new ValidateException('您不是付费会员!');
-            if (!$memberRightService->getMemberRightStatus("coupon")) throw new ValidateException('暂时无法领取!');
+            if (!$user->is_money_level) throw new ApiException(400097);
+            if (!$memberRightService->getMemberRightStatus("coupon")) throw new ApiException(400098);
         }
         /** @var StoreCouponIssueUserServices $issueUserService */
         $issueUserService = app()->make(StoreCouponIssueUserServices::class);
         /** @var StoreCouponUserServices $couponUserService */
         $couponUserService = app()->make(StoreCouponUserServices::class);
-        if ($issueUserService->getOne(['uid' => $uid, 'issue_coupon_id' => $id])) throw new ValidateException('已领取过该优惠劵!');
-        if ($issueCouponInfo->remain_count <= 0 && !$issueCouponInfo->is_permanent) throw new ValidateException('抱歉优惠券已经领取完了！');
+        if ($issueUserService->getOne(['uid' => $uid, 'issue_coupon_id' => $id])) throw new ApiException(400517);
+        if ($issueCouponInfo->remain_count <= 0 && !$issueCouponInfo->is_permanent) throw new ApiException(400518);
         $this->transaction(function () use ($issueUserService, $uid, $id, $couponUserService, $issueCouponInfo) {
             $issueUserService->save(['uid' => $uid, 'issue_coupon_id' => $id, 'add_time' => time()]);
             $couponUserService->addUserCoupon($uid, $issueCouponInfo, "get");
@@ -387,7 +399,7 @@ class StoreCouponIssueServices extends BaseServices
         /** @var UserServices $userServices */
         $userServices = app()->make(UserServices::class);
         if (!$userServices->getUserInfo($uid)) {
-            throw new ValidateException('数据不存在');
+            throw new ApiException(100100);
         }
         /** @var StoreCouponUserServices $storeConponUser */
         $storeConponUser = app()->make(StoreCouponUserServices::class);
@@ -434,14 +446,14 @@ class StoreCouponIssueServices extends BaseServices
         }
         if (!empty($data)) {
             if (!$storeCouponUser->saveAll($data)) {
-                throw new AdminException('发劵失败');
+                throw new AdminException(100030);
             }
             if (!$storeCouponIssueUser->saveAll($issueData)) {
-                throw new AdminException('发劵失败');
+                throw new AdminException(100031);
             }
             return true;
         } else {
-            throw new AdminException('选择用户已拥有该优惠券，请勿重复发放');
+            throw new AdminException(400519);
         }
     }
 
@@ -467,13 +479,14 @@ class StoreCouponIssueServices extends BaseServices
         return $coupServices->getUsableCouponList($uid, $cartGroup);
     }
 
-    /**获取单个优惠券类型
+    /**
+     * 获取单个优惠券类型
      * @param array $where
      * @return mixed
      */
     public function getOne(array $where)
     {
-        if (!$where) throw new AdminException('参数缺失!');
+        if (!$where) throw new AdminException(100100);
         return $this->dao->getOne($where);
 
     }

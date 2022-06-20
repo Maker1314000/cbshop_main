@@ -343,7 +343,6 @@ class Notice implements ListenerInterface
                     //申请退款给客服发消息
                     case 'send_order_apply_refund':
                         $order = $data['order'];
-
                         //站内信
                         $SystemMsg->kefuSystemSend(['order_id' => $order['order_id']]);
                         //短信

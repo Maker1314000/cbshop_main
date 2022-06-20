@@ -16,6 +16,7 @@ use app\services\wechat\WechatMessageServices;
 use app\services\wechat\WechatReplyServices;
 use crmeb\exceptions\AdminException;
 use app\services\pay\PayNotifyServices;
+use crmeb\exceptions\ApiException;
 use crmeb\utils\ApiErrorCode;
 use crmeb\services\easywechat\Application;
 use EasyWeChat\Message\Article;
@@ -28,8 +29,6 @@ use EasyWeChat\Message\Voice;
 use EasyWeChat\Payment\Order;
 use EasyWeChat\Server\Guard;
 use Symfony\Component\HttpFoundation\Request;
-use think\exception\ValidateException;
-use think\facade\Log;
 use think\Response;
 use crmeb\utils\Hook;
 use think\facade\Cache;
@@ -324,10 +323,10 @@ class WechatService
     {
         $options = self::options();
         if (!isset($options['payment']['cert_path'])) {
-            throw new ValidateException('企业微信支付到零钱需要支付证书，检测到您没有上传！');
+            throw new ApiException(410088);
         }
         if (!$options['payment']['cert_path']) {
-            throw new ValidateException('企业微信支付到零钱需要支付证书，检测到您没有上传！');
+            throw new ApiException(410088);
         }
         $merchantPayData = [
             'partner_trade_no' => $orderId, //随机字符串作为订单号，跟红包和支付一个概念。
@@ -341,7 +340,7 @@ class WechatService
         if ($result->return_code == 'SUCCESS' && $result->result_code != 'FAIL') {
             return true;
         } else {
-            throw new ValidateException(($result->return_msg ?? '支付失败') . ':' . ($result->err_code_des ?? '发起企业支付到零钱失败'));
+            throw new ApiException(410089);
         }
     }
 
@@ -487,7 +486,7 @@ class WechatService
 
     public static function payOrderRefund($orderNo, array $opt)
     {
-        if (!isset($opt['pay_price'])) throw new AdminException('缺少pay_price');
+        if (!isset($opt['pay_price'])) throw new AdminException(400730);
         $totalFee = floatval(bcmul($opt['pay_price'], 100, 0));
         $refundFee = isset($opt['refund_price']) ? floatval(bcmul($opt['refund_price'], 100, 0)) : null;
         $refundReason = $opt['desc'] ?? '';
@@ -500,8 +499,8 @@ class WechatService
         $refundAccount = $opt['refund_account'] ?? 'REFUND_SOURCE_UNSETTLED_FUNDS';
         try {
             $res = (self::refund($orderNo, $refundNo, $totalFee, $refundFee, $opUserId, $refundReason, $type, $refundAccount));
-            if ($res->return_code == 'FAIL') throw new AdminException('退款失败:' . $res->return_msg);
-            if (isset($res->err_code)) throw new AdminException('退款失败:' . $res->err_code_des);
+            if ($res->return_code == 'FAIL') throw new AdminException(400731, ['msg' => $res->return_msg]);
+            if (isset($res->err_code)) throw new AdminException(400731, ['msg' => $res->err_code_des]);
         } catch (\Exception $e) {
             throw new AdminException($e->getMessage());
         }
@@ -686,13 +685,13 @@ class WechatService
                 if (isset($res['user_info_list'])) {
                     $userInfo = $res['user_info_list'];
                 } else {
-                    throw new ValidateException($res['errmsg'] ?? '获取微信粉丝信息失败');
+                    throw new AdminException(400732);
                 }
             } else {
                 $userInfo = $userService->get($openid);
             }
         } catch (\Throwable $e) {
-            throw new ValidateException(self::getMessage($e->getMessage()));
+            throw new AdminException(self::getMessage($e->getMessage()));
         }
         return $userInfo;
     }
@@ -713,7 +712,7 @@ class WechatService
             $list['next_openid'] = $res['next_openid'] ?? null;
             return $list;
         } catch (\Exception $e) {
-            throw new ValidateException(self::getMessage($e->getMessage()));
+            throw new AdminException(self::getMessage($e->getMessage()));
         }
         return $list;
     }
@@ -730,7 +729,7 @@ class WechatService
             $message = json_decode($message, true) ?: [];
             $errcode = $message['errcode'] ?? false;
             if ($errcode) {
-                $message = ApiErrorCode::ERROR_WECHAT_MESSAGE[$errcode];
+                $message = $errcode;
             }
         }
         return $message;
@@ -753,7 +752,7 @@ class WechatService
         try {
             return self::application()->notice->addTemplate($template_id_short);
         } catch (\Exception $e) {
-            throw new ValidateException(self::getMessage($e->getMessage()));
+            throw new AdminException(self::getMessage($e->getMessage()));
         }
     }
 
@@ -766,7 +765,7 @@ class WechatService
         try {
             return self::application()->notice->getPrivateTemplates();
         } catch (\Exception $e) {
-            throw new ValidateException(self::getMessage($e->getMessage()));
+            throw new AdminException(self::getMessage($e->getMessage()));
         }
     }
 
@@ -778,7 +777,7 @@ class WechatService
         try {
             return self::application()->notice->deletePrivateTemplate($template_id);
         } catch (\Exception $e) {
-            throw new ValidateException(self::getMessage($e->getMessage()));
+            throw new AdminException(self::getMessage($e->getMessage()));
         }
 
     }

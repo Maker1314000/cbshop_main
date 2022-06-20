@@ -14,6 +14,7 @@ namespace app\api\controller\v2\store;
 
 use app\services\order\StoreCartServices;
 use app\Request;
+use crmeb\utils\ErrorCode;
 
 class StoreCartController
 {
@@ -38,7 +39,7 @@ class StoreCartController
             ['product_id', 0]
         ], true);
         $this->services->resetCart($id, $request->uid(), $product_id, $unique, $num);
-        return app('json')->successful('修改成功');
+        return app('json')->success(ErrorCode::MODIFY_SUCCESS);
     }
 
     /**
@@ -51,7 +52,7 @@ class StoreCartController
         $uid = (int)$request->uid();
         $data = $this->services->getCartList(['uid' => $uid, 'is_del' => 0, 'is_new' => 0, 'is_pay' => 0, 'combination_id' => 0, 'seckill_id' => 0, 'bargain_id' => 0], 0, 0, ['productInfo', 'attrInfo']);
         [$data, $valid, $invalid] = $this->services->handleCartList($uid, $data);
-        return app('json')->successful($data);
+        return app('json')->success($data);
     }
 
     /**
@@ -72,9 +73,9 @@ class StoreCartController
         ], true);
         /** @var StoreCartServices $cartService */
         $cartService = app()->make(StoreCartServices::class);
-        if (!$product_id || !is_numeric($product_id)) return app('json')->fail('参数错误');
+        if (!$product_id || !is_numeric($product_id)) return app('json')->fail(ErrorCode::ERR_PARAM_MISS);
         $res = $cartService->setCartNum($request->uid(), $product_id, $num, $unique, $type);
-        if ($res) return app('json')->successful('修改成功');
-        return app('json')->fail('修改失败');
+        if ($res) return app('json')->success(ErrorCode::MODIFY_SUCCESS);
+        return app('json')->fail(ErrorCode::MODIFY_FAILED);
     }
 }

@@ -71,16 +71,11 @@ class LiveAnchor extends AuthController
             ['phone', ''],
             ['cover_img', '']
         ]);
-        if (!$data['name'] = trim($data['name'])) return app('json')->fail('名称不能为空！');
-        if (!$data['wechat'] = trim($data['wechat'])) return app('json')->fail('微信号不能为空！');
-        if (!$data['phone'] = trim($data['phone'])) return app('json')->fail('手机号不能为空！');
-        if (!check_phone($data['phone'])) return app('json')->fail('请输入正确手机号');
-        if (!$data['cover_img'] = trim($data['cover_img'])) return app('json')->fail('请选择主播图像');
+        $this->validate($data, \app\adminapi\validate\marketing\LiveAnchorValidate::class, 'save');
         $res = $this->services->save((int)$data['id'], $data);
         if ($res === true) {
-            return app('json')->success('保存成功', ['auth' => false]);
+            return app('json')->success(100000, ['auth' => false]);
         }
-        return app('json')->success('请先去小程序认证主播', $res);
     }
 
     /**
@@ -93,9 +88,9 @@ class LiveAnchor extends AuthController
         list($id) = $this->request->getMore([
             ['id', 0],
         ], true);
-        if (!$id) return app('json')->fail('数据不存在');
+        if (!$id) return app('json')->fail(100100);
         $this->services->delAnchor((int)$id);
-        return app('json')->success('刪除成功！');
+        return app('json')->success(100002);
     }
 
     /**
@@ -105,8 +100,9 @@ class LiveAnchor extends AuthController
      */
     public function setShow($id = '', $is_show = '')
     {
-        if ($is_show == '' || $id == '') return app('json')->fail('缺少参数');
-        return app('json')->success($this->services->setShow((int)$id, (int)$is_show));
+        if ($is_show == '' || $id == '') return app('json')->fail(100100);
+        $this->services->setShow((int)$id, (int)$is_show);
+        return app('json')->success(100014);
     }
 
     /**
@@ -116,6 +112,6 @@ class LiveAnchor extends AuthController
     public function syncAnchor()
     {
         $this->services->syncAnchor();
-        return app('json')->success('同步成功');
+        return app('json')->success(100038);
     }
 }

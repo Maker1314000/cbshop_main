@@ -14,6 +14,7 @@ use app\Request;
 use app\services\user\member\MemberCardServices;
 use app\services\user\UserServices;
 use app\services\user\UserSignServices;
+use crmeb\utils\ApiErrorCode;
 
 /**
  * 用户签到
@@ -33,13 +34,14 @@ class UserSignController
         $this->services = $services;
     }
 
-
     /**
      * 签到 配置
+     * @param Request $request
+     * @param UserServices $userServices
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
      */
     public function sign_config(Request $request, UserServices $userServices)
     {
@@ -58,15 +60,16 @@ class UserSignController
                 }
             }
         }
-        return app('json')->successful($signConfig);
+        return app('json')->success($signConfig);
     }
 
     /**
      * 签到 列表
      * @param Request $request
-     * @param $page
-     * @param $limit
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function sign_list(Request $request)
     {
@@ -74,23 +77,26 @@ class UserSignController
             ['page', 0],
             ['limit', 0]
         ], true);
-        if (!$limit) return app('json')->successful([]);
+        if (!$limit) return app('json')->success([]);
         $uid = (int)$request->uid();
-        return app('json')->successful($this->services->getUserSignList($uid));
+        return app('json')->success($this->services->getUserSignList($uid));
     }
 
     /**
      * 签到
      * @param Request $request
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function sign_integral(Request $request)
     {
         $uid = (int)$request->uid();
         if ($integral = $this->services->sign($uid)) {
-            return app('json')->successful('签到获得' . floatval($integral) . '积分', ['integral' => $integral]);
+            return app('json')->success(411083, ['integral' => $integral], ['integral' => $integral]);
         }
-        return app('json')->fail('签到失败');
+        return app('json')->fail(411084);
     }
 
     /**
@@ -111,14 +117,13 @@ class UserSignController
 
     /**
      * 签到列表（年月）
-     *
      * @param Request $request
      * @return mixed
      */
     public function sign_month(Request $request)
     {
         $uid = (int)$request->uid();
-        return app('json')->successful($this->services->getSignMonthList($uid));
+        return app('json')->success($this->services->getSignMonthList($uid));
     }
 
 }

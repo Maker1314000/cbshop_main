@@ -14,9 +14,9 @@ namespace app\services\message\service;
 
 use app\dao\service\StoreServiceFeedbackDao;
 use app\services\BaseServices;
+use crmeb\exceptions\AdminException;
 use crmeb\services\FormBuilder;
 use crmeb\traits\ServicesTrait;
-use think\exception\ValidateException;
 
 /**
  * 客服反馈
@@ -66,7 +66,7 @@ class StoreServiceFeedbackServices extends BaseServices
     {
         $feedInfo = $this->dao->get($id);
         if (!$feedInfo) {
-            throw new ValidateException('反馈内容没有查到');
+            throw new AdminException(400460);
         }
         $feedInfo = $feedInfo->toArray();
         $field = [

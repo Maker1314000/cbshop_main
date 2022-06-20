@@ -57,8 +57,9 @@ class LuckLotteryRecord extends AuthController
             ['mark', ''],
         ]);
         if (!$id) {
-            return app('json')->fail('缺少ID');
+            return app('json')->fail(100100);
         }
-        return app('json')->success($this->services->setDeliver((int)$id, $data) ? '处理成功' : '处理失败');
+        $this->services->setDeliver((int)$id, $data);
+        return app('json')->success($this->services->setDeliver((int)$id, $data) ? 100014 : 100015);
     }
 }

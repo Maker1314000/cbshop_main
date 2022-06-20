@@ -45,8 +45,8 @@ class LiveRoom extends AuthController
     public function detail($id)
     {
         if (!$id)
-            return app('json')->fail('数据不存在');
-        return app('json')->success('ok', $this->services->get((int)$id)->toArray());
+            return app('json')->fail(100100);
+        return app('json')->success($this->services->get((int)$id)->toArray());
     }
 
     public function add()
@@ -67,15 +67,9 @@ class LiveRoom extends AuthController
             ['replay_status', 1],
             ['sort', 0]
         ]);
-        if (!$data['name']) return app('json')->fail('请输入名称');
-        if (!$data['cover_img']) return app('json')->fail('请选择背景图');
-        if (!$data['share_img']) return app('json')->fail('请选择分享图');
-        if (!$data['anchor_wechat']) return app('json')->fail('请选择主播');
-        if (!$data['start_time'] || count($data['start_time']) != 2) return app('json')->fail('请选择直播开始、结束时间');
-        if (!$data['phone'] || !check_phone($data['phone'])) return app('json')->fail('请输入正确手机号');
-        [$data['start_time'], $data['end_time']] = $data['start_time'];
+        $this->validate($data, \app\adminapi\validate\marketing\LiveRoomValidate::class, 'save');
         $this->services->add($data);
-        return app('json')->success('添加成功');
+        return app('json')->success(100000);
     }
 
     public function addGoods()
@@ -84,10 +78,8 @@ class LiveRoom extends AuthController
             ['room_id', 0],
             ['goods_ids', []]
         ], true);
-        if (!$room_id) return app('json')->fail('请选择直播间');
-        if (!$goods_ids) return app('json')->fail('请选择商品');
         $this->services->exportGoods((int)$room_id, $goods_ids);
-        return app('json')->success('添加商品成功');
+        return app('json')->success(100000);
     }
 
     public function apply($id)
@@ -96,34 +88,27 @@ class LiveRoom extends AuthController
             ['status', ''],
             ['msg', '']
         ], true);
-        if (!$id)
-            return app('json')->fail('数据不存在');
-        $status = $status == 1 ? 1 : -1;
-        if ($status == -1 && !$msg)
-            return app('json')->fail('请输入理由');
+
         $this->services->apply((int)$id, $status, $msg);
-        return app('json')->success('操作成功');
+        return app('json')->success(100014);
     }
 
     public function setShow($id, $is_show)
     {
-        if (!$id)
-            return app('json')->fail('数据不存在');
-        return app('json')->success($this->services->isShow((int)$id, $is_show));
+        $this->services->isShow((int)$id, $is_show);
+        return app('json')->success(100014);
     }
 
     public function delete($id)
     {
-        if (!$id)
-            return app('json')->fail('数据不存在');
         $this->services->delete($id);
-        return app('json')->success('删除成功');
+        return app('json')->success(100002);
     }
 
     public function syncRoom()
     {
         $this->services->syncRoomStatus();
-        return app('json')->success('同步成功');
+        return app('json')->success(100038);
     }
 
 }

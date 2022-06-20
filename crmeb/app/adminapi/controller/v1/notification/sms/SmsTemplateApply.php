@@ -82,12 +82,12 @@ class SmsTemplateApply extends AuthController
             ['type', 0]
         ]);
         if (!strlen(trim($data['title']))) {
-            return app('json')->fail('请输入模板名称');
+            return app('json')->fail(400142);
         }
         if (!strlen(trim($data['content']))) {
-            return app('json')->fail('请输入模板内容');
+            return app('json')->fail(400143);
         }
         $this->services->sms()->apply($data['title'], $data['content'], $data['type']);
-        return app('json')->success('申请成功');
+        return app('json')->success(100027);
     }
 }

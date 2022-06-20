@@ -49,14 +49,13 @@ class UserRecharge extends AuthController
 
     /**
      * 删除指定资源
-     *
      * @param int $id
      * @return \think\Response
      */
     public function delete($id)
     {
-        if (!$id) return app('json')->fail('缺少参数');
-        return app('json')->success($this->services->delRecharge((int)$id) ? '删除成功' : '删除失败');
+        if (!$id) return app('json')->fail(100100);
+        return app('json')->success($this->services->delRecharge((int)$id) ? 100002 : 100008);
     }
 
     /**
@@ -73,26 +72,28 @@ class UserRecharge extends AuthController
         return app('json')->success($this->services->user_recharge($where));
     }
 
-    /**退款表单
+    /**
+     * 退款表单
      * @param $id
      * @return mixed|void
      */
     public function refund_edit($id)
     {
-        if (!$id) return app('json')->fail('数据不存在');
+        if (!$id) return app('json')->fail(100026);
         return app('json')->success($this->services->refund_edit((int)$id));
     }
 
     /**
      * 退款操作
      * @param $id
+     * @return mixed
      */
     public function refund_update($id)
     {
         $data = $this->request->postMore([
             'refund_price',
         ]);
-        if (!$id) return app('json')->fail('数据不存在');
-        return app('json')->success($this->services->refund_update((int)$id, $data['refund_price']) ? '退款成功' : '退款失败');
+        if (!$id) return app('json')->fail(100026);
+        return app('json')->success($this->services->refund_update((int)$id, $data['refund_price']) ? 100036 : 100037);
     }
 }

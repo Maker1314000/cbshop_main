@@ -27,8 +27,8 @@ use app\services\product\sku\StoreProductAttrServices;
 use app\services\product\sku\StoreProductAttrValueServices;
 use crmeb\exceptions\AdminException;
 use app\jobs\ProductLogJob;
+use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
-use think\exception\ValidateException;
 
 /**
  *
@@ -83,7 +83,7 @@ class StoreCombinationServices extends BaseServices
         $items = $data['items'];
         $data['start_time'] = strtotime($data['section_time'][0]);
         $data['stop_time'] = strtotime($data['section_time'][1]);
-        if ($data['stop_time'] < strtotime(date('Y-m-d', time()))) throw new AdminException('结束时间不能小于今天');
+        if ($data['stop_time'] < strtotime(date('Y-m-d', time()))) throw new AdminException(400096);
         $data['image'] = $data['images'][0];
         $data['images'] = json_encode($data['images']);
         $data['price'] = min(array_column($detail, 'price'));
@@ -98,7 +98,7 @@ class StoreCombinationServices extends BaseServices
         /** @var StoreProductServices $storeProductServices */
         $storeProductServices = app()->make(StoreProductServices::class);
         if ($data['quota'] > $storeProductServices->value(['id' => $data['product_id']], 'stock')) {
-            throw new ValidateException('限量不能超过商品库存');
+            throw new AdminException(400090);
         }
         $this->transaction(function () use ($id, $data, $description, $detail, $items, $storeDescriptionServices, $storeProductAttrServices, $storeProductServices) {
             if ($id) {
@@ -106,24 +106,24 @@ class StoreCombinationServices extends BaseServices
                 $storeDescriptionServices->saveDescription((int)$id, $description, 3);
                 $skuList = $storeProductServices->validateProductAttr($items, $detail, (int)$id, 3);
                 $valueGroup = $storeProductAttrServices->saveProductAttr($skuList, (int)$id, 3);
-                if (!$res) throw new AdminException('修改失败');
+                if (!$res) throw new AdminException(100007);
             } else {
                 if (!$storeProductServices->getOne(['is_show' => 1, 'is_del' => 0, 'id' => $data['product_id']])) {
-                    throw new AdminException('原商品已下架或移入回收站');
+                    throw new AdminException(400091);
                 }
                 $data['add_time'] = time();
                 $res = $this->dao->save($data);
                 $storeDescriptionServices->saveDescription((int)$res->id, $description, 3);
                 $skuList = $storeProductServices->validateProductAttr($items, $detail, (int)$res->id, 3);
                 $valueGroup = $storeProductAttrServices->saveProductAttr($skuList, (int)$res->id, 3);
-                if (!$res) throw new AdminException('添加失败');
+                if (!$res) throw new AdminException(100022);
             }
             $res = true;
             foreach ($valueGroup->toArray() as $item) {
                 $res = $res && CacheService::setStock($item['unique'], (int)$item['quota_show'], 3);
             }
             if (!$res) {
-                throw new AdminException('占用库存失败');
+                throw new AdminException(400092);
             }
         });
     }
@@ -170,10 +170,10 @@ class StoreCombinationServices extends BaseServices
     {
         $info = $this->dao->get($id);
         if (!$info) {
-            throw new ValidateException('查看的商品不存在!');
+            throw new ApiException(413000);
         }
         if ($info->is_del) {
-            throw new ValidateException('您查看的团团商品已被删除!');
+            throw new ApiException(413017);
         }
         if ($info['start_time'])
             $start_time = date('Y-m-d H:i:s', $info['start_time']);
@@ -369,7 +369,7 @@ class StoreCombinationServices extends BaseServices
         $uid = (int)$request->uid();
         $storeInfo = $this->dao->getOne(['id' => $id], '*', ['description', 'total']);
         if (!$storeInfo) {
-            throw new ValidateException('商品不存在');
+            throw new ApiException(413017);
         } else {
             $storeInfo = $storeInfo->toArray();
         }
@@ -517,16 +517,16 @@ class StoreCombinationServices extends BaseServices
         $userBool = 0;//判断当前用户是否在团内  0未在 1在
         $pinkBool = 0;//判断拼团是否成功  0未在 1在
         $user = $request->user();
-        if (!$id) throw new ValidateException('参数错误');
+        if (!$id) throw new ApiException(100100);
         $pink = $pinkService->getPinkUserOne($id);
-        if (!$pink) throw new ValidateException('参数错误');
+        if (!$pink) throw new ApiException(100100);
         $pink = $pink->toArray();
         if (isset($pink['is_refund']) && $pink['is_refund']) {
             if ($pink['is_refund'] != $pink['id']) {
                 $id = $pink['is_refund'];
                 return $this->getPinkInfo($request, $id);
             } else {
-                throw new ValidateException('订单已退款');
+                throw new ApiException(412053);
             }
         }
         list($pinkAll, $pinkT, $count, $idAll, $uidAll) = $pinkService->getPinkMemberAndPinkK($pink);
@@ -552,7 +552,7 @@ class StoreCombinationServices extends BaseServices
         if ($pinkT['uid'] == $user['uid']) $userBool = 1;
         $combinationOne = $this->getCombinationOne($pink['cid']);
         if (!$combinationOne) {
-            throw new ValidateException('拼团不存在或已下架,请手动申请退款!');
+            throw new ApiException(413018);
         }
 
         $data['userInfo']['uid'] = $user['uid'];
@@ -588,50 +588,6 @@ class StoreCombinationServices extends BaseServices
      * @param int $combinationId
      * @param int $cartNum
      * @param string $unique
-     * @return string
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
-     */
-    public function checkoutProductStock(int $uid, int $combinationId, int $cartNum = 1, string $unique = '')
-    {
-        /** @var StoreProductAttrValueServices $attrValueServices */
-        $attrValueServices = app()->make(StoreProductAttrValueServices::class);
-        if ($unique == '') {
-            $unique = $attrValueServices->value(['product_id' => $combinationId, 'type' => 3], 'unique');
-        }
-        /** @var StoreCombinationServices $combinationService */
-        $combinationService = app()->make(StoreCombinationServices::class);
-        $StoreCombinationInfo = $combinationService->getCombinationOne($combinationId);
-        if (!$StoreCombinationInfo) {
-            throw new ValidateException('该商品已下架或删除');
-        }
-        /** @var StoreOrderServices $orderServices */
-        $orderServices = app()->make(StoreOrderServices::class);
-        $userBuyCount = $orderServices->getBuyCount($uid, 'combination_id', $combinationId);
-        if ($StoreCombinationInfo['once_num'] < $cartNum) {
-            throw new ValidateException('每个订单限购' . $StoreCombinationInfo['once_num'] . '件');
-        }
-        if ($StoreCombinationInfo['num'] < ($userBuyCount + $cartNum)) {
-            throw new ValidateException('每人总共限购' . $StoreCombinationInfo['num'] . '件');
-        }
-        $res = $attrValueServices->getOne(['product_id' => $combinationId, 'unique' => $unique, 'type' => 3]);
-        if ($cartNum > $res['quota']) {
-            throw new ValidateException('该商品库存不足' . $cartNum);
-        }
-        $product_stock = $attrValueServices->value(['product_id' => $StoreCombinationInfo['product_id'], 'suk' => $res['suk'], 'type' => 0], 'stock');
-        if ($product_stock < $cartNum) {
-            throw new ValidateException('该商品库存不足' . $cartNum);
-        }
-        return $unique;
-    }
-
-    /**
-     * 验证拼团下单库存限量
-     * @param int $uid
-     * @param int $combinationId
-     * @param int $cartNum
-     * @param string $unique
      * @return array
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
@@ -646,24 +602,24 @@ class StoreCombinationServices extends BaseServices
         }
         $attrInfo = $attrValueServices->getOne(['product_id' => $combinationId, 'unique' => $unique, 'type' => 3]);
         if (!$attrInfo || $attrInfo['product_id'] != $combinationId) {
-            throw new ValidateException('请选择有效的商品属性');
+            throw new ApiException(413011);
         }
         $StoreCombinationInfo = $productInfo = $this->getCombinationOne($combinationId, '*,title as store_name');
         if (!$StoreCombinationInfo) {
-            throw new ValidateException('该商品已下架或删除');
+            throw new ApiException(413001);
         }
         /** @var StoreOrderServices $orderServices */
         $orderServices = app()->make(StoreOrderServices::class);
         $userBuyCount = $orderServices->getBuyCount($uid, 'combination_id', $combinationId);
         if ($StoreCombinationInfo['once_num'] < $cartNum) {
-            throw new ValidateException('每个订单限购' . $StoreCombinationInfo['once_num'] . '件');
+            throw new ApiException(413019, ['num' => $StoreCombinationInfo['once_num']]);
         }
         if ($StoreCombinationInfo['num'] < ($userBuyCount + $cartNum)) {
-            throw new ValidateException('每人总共限购' . $StoreCombinationInfo['num'] . '件');
+            throw new ApiException(413004, ['num' => $StoreCombinationInfo['num']]);
         }
 
         if ($cartNum > $attrInfo['quota']) {
-            throw new ValidateException('该商品库存不足' . $cartNum);
+            throw new ApiException(413002);
         }
         return [$attrInfo, $unique, $productInfo];
     }

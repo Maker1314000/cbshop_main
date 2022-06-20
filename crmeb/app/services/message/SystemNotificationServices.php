@@ -49,7 +49,7 @@ class SystemNotificationServices extends BaseServices
     {
         return $this->dao->getOne($where);
     }
-    
+
 
     /**
      * 后台获取列表
@@ -149,7 +149,7 @@ class SystemNotificationServices extends BaseServices
         $id = $data['id'];
         $info = $this->dao->get($id);
         if (!$info) {
-            throw new AdminException('数据不存在');
+            throw new AdminException(100026);
         }
         /** @var TemplateMessageServices $TemplateMessageServices */
         $TemplateMessageServices = app()->make(TemplateMessageServices::class);

@@ -17,7 +17,6 @@ use app\services\system\attachment\SystemAttachmentServices;
 use app\services\system\config\SystemConfigServices;
 use app\services\user\UserBillServices;
 use app\services\user\UserBrokerageServices;
-use app\services\user\UserExtractServices;
 use app\services\user\UserMoneyServices;
 use crmeb\services\MiniProgramService;
 use crmeb\services\UploadService;
@@ -30,7 +29,7 @@ use crmeb\services\UtilService;
  */
 class UserBillController
 {
-    protected $services = NUll;
+    protected $services;
 
     /**
      * UserBillController constructor.
@@ -49,7 +48,7 @@ class UserBillController
     public function commission(Request $request)
     {
         $uid = (int)$request->uid();
-        return app('json')->successful($this->services->commission($uid));
+        return app('json')->success($this->services->commission($uid));
     }
 
     /**
@@ -66,7 +65,7 @@ class UserBillController
             ['type', 'brokerage'],
         ]);
         $uid = (int)$request->uid();
-        return app('json')->successful($this->services->spread_order($uid, $orderInfo));
+        return app('json')->success($this->services->spread_order($uid, $orderInfo));
     }
 
     /**
@@ -94,7 +93,7 @@ class UserBillController
                 $data = $brokerageService->getBrokerageList($uid, $type);
                 break;
         }
-        return app('json')->successful($data);
+        return app('json')->success($data);
     }
 
     /**
@@ -106,7 +105,7 @@ class UserBillController
     public function spread_count(Request $request, $type)
     {
         $uid = (int)$request->uid();
-        return app('json')->successful(['count' => $this->services->spread_count($uid, $type)]);
+        return app('json')->success(['count' => $this->services->spread_count($uid, $type)]);
     }
 
 
@@ -126,7 +125,7 @@ class UserBillController
         $systemConfigServices = app()->make(SystemConfigServices::class);
         $spreadBanner = $systemConfigServices->getSpreadBanner() ?? [];
         $bannerCount = count($spreadBanner);
-        if (!$bannerCount) return app('json')->fail('暂无海报');
+        if (!$bannerCount) return app('json')->fail(411880);
         $routineSpreadBanner = [];
         foreach ($spreadBanner as $item) {
             $routineSpreadBanner[] = ['pic' => $item];
@@ -163,7 +162,7 @@ class UserBillController
                             $item['wap_poster'] = set_http_type($item['att_dir'], 1);
                     }
                 }
-                return app('json')->successful($SpreadBanner);
+                return app('json')->success($SpreadBanner);
             }
         }
         try {
@@ -187,7 +186,7 @@ class UserBillController
                     } else {
                         $res = false;
                     }
-                    if (!$res) return app('json')->fail('二维码生成失败');
+                    if (!$res) return app('json')->fail(411881);
                     $uploadType = (int)sys_config('upload_type', 1);
                     $upload = UploadService::init();
                     $uploadRes = $upload->to('routine/spread/code')->validate()->setAuthThumb(false)->stream($res['res'], $name);
@@ -206,8 +205,8 @@ class UserBillController
                     'Bold' => 'statics' . DS . 'font' . DS . 'Alibaba-PuHuiTi-Regular.otf',
                     'Normal' => 'statics' . DS . 'font' . DS . 'Alibaba-PuHuiTi-Regular.otf',
                 ];
-                if (!file_exists($filelink['Bold'])) return app('json')->fail('缺少字体文件Bold');
-                if (!file_exists($filelink['Normal'])) return app('json')->fail('缺少字体文件Normal');
+                if (!file_exists($filelink['Bold'])) return app('json')->fail(411882);
+                if (!file_exists($filelink['Normal'])) return app('json')->fail(411883);
                 foreach ($routineSpreadBanner as $key => &$item) {
                     $posterInfo = '海报生成失败:(';
                     $config = array(
@@ -269,7 +268,7 @@ class UserBillController
                 if (!$imageInfo) {
                     $codeUrl = set_http_type($siteUrl . '?spread=' . $user['uid'], $request->isSsl() ? 0 : 1);//二维码链接
                     $imageInfo = UtilService::getQRCodePath($codeUrl, $name);
-                    if (is_string($imageInfo)) return app('json')->fail('二维码生成失败', ['error' => $imageInfo]);
+                    if (is_string($imageInfo)) return app('json')->fail(411881, ['error' => $imageInfo]);
                     $systemAttachment->attachmentAdd($imageInfo['name'], $imageInfo['size'], $imageInfo['type'], $imageInfo['dir'], $imageInfo['thumb_path'], 1, $imageInfo['image_type'], $imageInfo['time'], 2);
                     $urlCode = $imageInfo['dir'];
                 } else $urlCode = $imageInfo['att_dir'];
@@ -279,8 +278,8 @@ class UserBillController
                     'Bold' => 'statics' . DS . 'font' . DS . 'Alibaba-PuHuiTi-Regular.otf',
                     'Normal' => 'statics' . DS . 'font' . DS . 'Alibaba-PuHuiTi-Regular.otf',
                 ];
-                if (!file_exists($filelink['Bold'])) return app('json')->fail('缺少字体文件Bold');
-                if (!file_exists($filelink['Normal'])) return app('json')->fail('缺少字体文件Normal');
+                if (!file_exists($filelink['Bold'])) return app('json')->fail(411882);
+                if (!file_exists($filelink['Normal'])) return app('json')->fail(411883);
                 foreach ($routineSpreadBanner as $key => &$item) {
                     $posterInfo = '海报生成失败:(';
                     $config = array(
@@ -330,10 +329,10 @@ class UserBillController
                     }
                 }
             }
-            if ($resRoutine && $resWap) return app('json')->successful($routineSpreadBanner);
-            else return app('json')->fail('生成图片失败');
+            if ($resRoutine && $resWap) return app('json')->success($routineSpreadBanner);
+            else return app('json')->fail(411884);
         } catch (\Exception $e) {
-            return app('json')->fail('生成图片时，系统错误', ['line' => $e->getLine(), 'message' => $e->getMessage(), 'file' => $e->getFile()]);
+            return app('json')->fail(411885, ['line' => $e->getLine(), 'message' => $e->getMessage(), 'file' => $e->getFile()]);
         }
     }
 
@@ -362,7 +361,7 @@ class UserBillController
         $siteUrl = sys_config('site_url');
         /** @var QrcodeServices $qrCode */
         $qrCode = app()->make(QrcodeServices::class);
-        if (!$imageInfo && !$qrCode->qrCOdeExist($user['uid'], 'spread')) {
+        if (!$imageInfo) {
             $resForever = $qrCode->qrCodeForever($user['uid'], 'spread', '', '');
             $resCode = MiniProgramService::qrcodeService()->appCodeUnlimit($resForever->id, '', 280);
             if ($resCode) {
@@ -370,7 +369,7 @@ class UserBillController
             } else {
                 $res = false;
             }
-            if (!$res) return app('json')->fail('二维码生成失败');
+            if (!$res) return app('json')->fail(411881);
             $uploadType = (int)sys_config('upload_type', 1);
             $upload = UploadService::init();
             $uploadRes = $upload->to('routine/spread/code')->validate()->setAuthThumb(false)->stream($res['res'], $name);
@@ -414,21 +413,21 @@ class UserBillController
      * 积分记录
      * @param Request $request
      * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
      */
     public function integral_list(Request $request)
     {
         $uid = (int)$request->uid();
         $data = $this->services->getIntegralList($uid);
-        return app('json')->successful($data['list'] ?? []);
+        return app('json')->success($data['list'] ?? []);
     }
 
     /**
      * 佣金排行
      * @param Request $request
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function brokerage_rank(Request $request)
     {
@@ -449,6 +448,6 @@ class UserBillController
     public function divisionOrder(Request $request)
     {
         $uid = (int)$request->uid();
-        return app('json')->successful($this->services->divisionOrder($uid));
+        return app('json')->success($this->services->divisionOrder($uid));
     }
 }

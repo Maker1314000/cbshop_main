@@ -26,6 +26,9 @@ class Division extends AuthController
     /**
      * 事业部列表
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function divisionList()
     {
@@ -61,6 +64,7 @@ class Division extends AuthController
      * 添加编辑事业部
      * @param $uid
      * @return mixed
+     * @throws \FormBuilder\Exception\FormBuilderException
      */
     public function divisionCreate($uid)
     {
@@ -86,13 +90,14 @@ class Division extends AuthController
             ['roles', []]
         ]);
         $this->services->divisionSave($data);
-        return app('json')->success('保存成功');
+        return app('json')->success(100000);
     }
 
     /**
      * 添加编辑代理商
      * @param $uid
      * @return mixed
+     * @throws \FormBuilder\Exception\FormBuilderException
      */
     public function divisionAgentCreate($uid)
     {
@@ -114,10 +119,10 @@ class Division extends AuthController
             ['edit', 0],
         ]);
         $userInfo = $userServices->get((int)$data['uid']);
-        if (!$userInfo) throw new AdminException('参数错误，找不到用户');
+        if (!$userInfo) throw new AdminException(100100);
         $data['division_id'] = $this->adminInfo['division_id'];
         $this->services->divisionAgentSave($data);
-        return app('json')->success('保存成功');
+        return app('json')->success(100000);
     }
 
     /**
@@ -129,7 +134,7 @@ class Division extends AuthController
     public function setDivisionStatus($status, $uid)
     {
         $this->services->setDivisionStatus($status, $uid);
-        return app('json')->success($status ? '开启成功' : '关闭成功');
+        return app('json')->success(100014);
     }
 
     /**
@@ -141,7 +146,7 @@ class Division extends AuthController
     public function delDivision($type, $uid)
     {
         $this->services->delDivision($type, $uid);
-        return app('json')->success('删除成功');
+        return app('json')->success(100002);
     }
 
     /**
@@ -203,7 +208,7 @@ class Division extends AuthController
         /** @var DivisionAgentApplyServices $applyServices */
         $applyServices = app()->make(DivisionAgentApplyServices::class);
         $data = $applyServices->applyAgentSave($data);
-        return app('json')->success('处理成功');
+        return app('json')->success(100014);
     }
 
     /**
@@ -216,7 +221,7 @@ class Division extends AuthController
         /** @var DivisionAgentApplyServices $applyServices */
         $applyServices = app()->make(DivisionAgentApplyServices::class);
         $applyServices->delApply($id);
-        return app('json')->success('删除成功');
+        return app('json')->success(100002);
     }
 
     /**
@@ -250,6 +255,6 @@ class Division extends AuthController
         $data['title'] = '代理商规则';
         $data['status'] = 1;
         $res = $agreementServices->saveAgreement($data, $data['id']);
-        return app('json')->success('保存成功');
+        return app('json')->success(100000);
     }
 }

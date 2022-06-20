@@ -64,7 +64,7 @@ class StoreServiceFeedback extends AuthController
     public function edit($id)
     {
         if (!$id) {
-            return app('json')->fail('缺少参数');
+            return app('json')->fail(100100);
         }
         return app('json')->success($this->services->editForm((int)$id));
     }
@@ -81,14 +81,14 @@ class StoreServiceFeedback extends AuthController
             ['status', 0],
         ]);
         if (!$id || !($feedInfo = $this->services->get($id))) {
-            return app('json')->fail('反馈内容不存在');
+            return app('json')->fail(400268);
         }
         $feedInfo->make = $data['make'];
         if ($data['status']) {
             $feedInfo->status = $data['status'];
         }
         $feedInfo->save();
-        return app('json')->success('修改成功');
+        return app('json')->success(100001);
     }
 
     /**
@@ -100,12 +100,12 @@ class StoreServiceFeedback extends AuthController
     public function delete($id)
     {
         if (!$id) {
-            return app('json')->fail('缺少参数');
+            return app('json')->fail(100100);
         }
         if ($this->services->delete($id)) {
-            return app('json')->success('删除成功');
+            return app('json')->success(100002);
         } else {
-            return app('json')->fail('删除失败');
+            return app('json')->fail(100008);
         }
     }
 }

@@ -88,7 +88,7 @@ class Finance extends AuthController
      */
     public function get_extract_list($id = '')
     {
-        if ($id == '') return app('json')->fail('缺少参数');
+        if ($id == '') return app('json')->fail(100100);
         $where = $this->request->getMore([
             ['start_time', ''],
             ['end_time', ''],

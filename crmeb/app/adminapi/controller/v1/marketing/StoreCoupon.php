@@ -91,7 +91,7 @@ class StoreCoupon extends AuthController
         }
         $data['add_time'] = time();
         $this->services->save($data);
-        return app('json')->success('添加优惠券成功!');
+        return app('json')->success(400509);
     }
 
     /**
@@ -103,7 +103,7 @@ class StoreCoupon extends AuthController
     {
         $data['is_del'] = 1;
         $this->services->update($id, $data);
-        return app('json')->success('删除成功!');
+        return app('json')->success(100002);
     }
 
     /**
@@ -114,7 +114,7 @@ class StoreCoupon extends AuthController
     public function status($id)
     {
         $this->services->invalid($id);
-        return app('json')->success('修改成功!');
+        return app('json')->success(100001);
     }
 
     /**
@@ -148,6 +148,6 @@ class StoreCoupon extends AuthController
             ['is_type', 0]
         ], true);
         $this->services->upIssue($id, $_id, $coupon_title, $rangeTime, $count, $status, $is_permanent, $full_reduction, $is_give_subscribe, $is_full_give, $is_type);
-        return app('json')->success('发布优惠劵成功!');
+        return app('json')->success(400510);
     }
 }
