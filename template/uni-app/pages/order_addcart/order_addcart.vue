@@ -2,12 +2,12 @@
 	<view :style="colorStyle">
 		<view class='shoppingCart copy-data' v-if="canShow">
 			<view class='labelNav acea-row row-around row-middle'>
-				<view class='item'><text class='iconfont icon-xuanzhong'></text>100%正品保证</view>
-				<view class='item'><text class='iconfont icon-xuanzhong'></text>所有商品精挑细选</view>
-				<view class='item'><text class='iconfont icon-xuanzhong'></text>售后无忧</view>
+				<view class='item'><text class='iconfont icon-xuanzhong'></text>{{$t(`genuine_guarantee`)}}</view>
+				<view class='item'><text class='iconfont icon-xuanzhong'></text>{{$t(`carefully_selected`)}}</view>
+				<view class='item'><text class='iconfont icon-xuanzhong'></text>{{$t(`noworries_after_sale`)}}</view>
 			</view>
 			<view class='nav acea-row row-between-wrapper'>
-				<view>购物数量 <text class='num font-num'>{{cartCount}}</text></view>
+				<view>{{$t(`number_of_purchases`)}} <text class='num font-num'>{{cartCount}}</text></view>
 				<view v-if="cartList.valid.length > 0 || cartList.invalid.length > 0"
 					class='administrate acea-row row-center-wrapper' @click='manage'>{{ footerswitch ? '管理' : '取消'}}
 				</view>
@@ -38,12 +38,12 @@
 											{{item.productInfo.store_name}}
 										</view>
 										<view class='infor line1' v-if="item.productInfo.attrInfo">
-											属性：{{item.productInfo.attrInfo.suk}}</view>
+											{{$t(`attributes`)}}：{{item.productInfo.attrInfo.suk}}</view>
 										<view class='money' v-if="item.attrStatus">￥{{item.truePrice}}</view>
 										<view class="reElection acea-row row-between-wrapper" v-else>
-											<view class="title">请重新选择商品规格</view>
+											<view class="title">{{$t(`re_select_product_specification`)}}</view>
 											<view class="reBnt cart-color acea-row row-center-wrapper"
-												@click.stop="reElection(item)">重选</view>
+												@click.stop="reElection(item)">{{$t(`re_election`)}}</view>
 										</view>
 									</view>
 									<view class='carnum acea-row row-center-wrapper' v-if="item.attrStatus">
@@ -65,13 +65,13 @@
 				<view class='invalidGoods' v-if="cartList.invalid.length > 0">
 					<view class='goodsNav acea-row row-between-wrapper'>
 						<view @click='goodsOpen'><text class='iconfont'
-								:class='goodsHidden==true?"icon-xiangxia":"icon-xiangshang"'></text>失效商品</view>
-						<view class='del' @click='unsetCart'><text class='iconfont icon-shanchu1'></text>清空</view>
+								:class='goodsHidden==true?"icon-xiangxia":"icon-xiangshang"'></text>{{$t(`expired_goods`)}}</view>
+						<view class='del' @click='unsetCart'><text class='iconfont icon-shanchu1'></text>{{$t(`empty`)}}</view>
 					</view>
 					<view class='goodsList' :hidden='goodsHidden'>
 						<block v-for="(item,index) in cartList.invalid" :key='index'>
 							<view class='item acea-row row-between-wrapper'>
-								<view class='invalid'>失效</view>
+								<view class='invalid'>{{$t(`invalid`)}}</view>
 								<view class='pictrue'>
 									<image v-if="item.productInfo.attrInfo" :src='item.productInfo.attrInfo.image'>
 									</image>
@@ -80,10 +80,10 @@
 								<view class='text acea-row row-column-between'>
 									<view class='line1 name'>{{item.productInfo.store_name}}</view>
 									<view class='infor line1' v-if="item.productInfo.attrInfo">
-										属性：{{item.productInfo.attrInfo.suk}}</view>
+										{{$t(`attributes`)}}：{{item.productInfo.attrInfo.suk}}</view>
 									<view class='acea-row row-between-wrapper'>
 										<!-- <view>￥{{item.truePrice}}</view> -->
-										<view class='end'>该商品已失效</view>
+										<view class='end'>{{$t(`has_expired`)}}</view>
 									</view>
 								</view>
 							</view>
@@ -110,21 +110,21 @@
 				<view>
 					<checkbox-group @change="checkboxAllChange">
 						<checkbox value="all" :checked="!!isAllSelect" />
-						<text class='checkAll'>全选({{selectValue.length}})</text>
+						<text class='checkAll'>{{$t(`select_all`)}}({{selectValue.length}})</text>
 					</checkbox-group>
 				</view>
 				<view class='money acea-row row-middle' v-if="footerswitch==true">
 					<text class='font-color'>￥{{selectCountPrice}}</text>
 					<form @submit="subOrder">
-						<button class='placeOrder bg-color' formType="submit">立即下单</button>
+						<button class='placeOrder bg-color' formType="submit">{{$t(`order_now`)}}</button>
 					</form>
 				</view>
 				<view class='button acea-row row-middle' v-else>
 					<form @submit="subCollect">
-						<button class='bnt cart-color' formType="submit">收藏</button>
+						<button class='bnt cart-color' formType="submit">{{$t(`collect`)}}</button>
 					</form>
 					<form @submit="subDel">
-						<button class='bnt' formType="submit">删除</button>
+						<button class='bnt' formType="submit">{{$t(`delete`)}}</button>
 					</form>
 				</view>
 			</view>

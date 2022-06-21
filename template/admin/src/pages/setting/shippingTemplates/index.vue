@@ -28,9 +28,7 @@
         </Row>
         <Row type="flex">
           <Col v-bind="grid">
-            <Button type="primary" icon="md-add" @click="freight"
-              >添加运费模板</Button
-            >
+            <Button type="primary" icon="md-add" @click="freight">添加运费模板</Button>
           </Col>
         </Row>
       </Form>
@@ -72,12 +70,12 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { templatesApi } from "@/api/setting";
-import freightTemplate from "@/components/freightTemplate/index";
+import { mapState } from 'vuex';
+import { templatesApi } from '@/api/setting';
+import freightTemplate from '@/components/freightTemplate/index';
 
 export default {
-  name: "setting_templates",
+  name: 'setting_templates',
   components: { freightTemplate },
   data() {
     return {
@@ -91,44 +89,44 @@ export default {
       loading: false,
       columns1: [
         {
-          title: "ID",
-          key: "id",
+          title: 'ID',
+          key: 'id',
           width: 80,
         },
         {
-          title: "模板名称",
-          key: "name",
+          title: '模板名称',
+          key: 'name',
           minWidth: 100,
         },
         {
-          title: "计费方式",
-          key: "type",
+          title: '计费方式',
+          key: 'type',
           minWidth: 120,
         },
         {
-          title: "指定包邮",
-          key: "appoint",
+          title: '指定包邮',
+          key: 'appoint',
           minWidth: 120,
         },
         {
-          title: "排序",
-          key: "sort",
+          title: '排序',
+          key: 'sort',
           minWidth: 120,
         },
         {
-          title: "添加时间",
-          key: "add_time",
+          title: '添加时间',
+          key: 'add_time',
           minWidth: 120,
         },
         {
-          title: "操作",
-          slot: "action",
-          fixed: "right",
+          title: '操作',
+          slot: 'action',
+          fixed: 'right',
           minWidth: 120,
         },
       ],
       levelFrom: {
-        name: "",
+        name: '',
         page: 1,
         limit: 15,
       },
@@ -141,12 +139,12 @@ export default {
     this.getList();
   },
   computed: {
-    ...mapState("media", ["isMobile"]),
+    ...mapState('media', ['isMobile']),
     labelWidth() {
       return this.isMobile ? undefined : 75;
     },
     labelPosition() {
-      return this.isMobile ? "top" : "left";
+      return this.isMobile ? 'top' : 'left';
     },
   },
   methods: {
@@ -161,8 +159,8 @@ export default {
         title: tit,
         num: num,
         url: `setting/shipping_templates/del/${row.id}`,
-        method: "DELETE",
-        ids: "",
+        method: 'DELETE',
+        ids: '',
       };
       this.$modalSure(delfromData)
         .then((res) => {

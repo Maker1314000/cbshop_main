@@ -9,7 +9,7 @@
 			</navigator>
 			<navigator url="/pages/goods_search/index" class="search acea-row row-center-wrapper" hover-class="none">
 				<text class="iconfont icon-xiazai5"></text>
-				搜索商品
+				{{$t(`search_product`)}}
 			</navigator>
 		</view>
 		<view class="conter">

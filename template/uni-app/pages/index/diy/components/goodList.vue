@@ -14,7 +14,7 @@
 								v-if="item.activity && item.activity.type === '2'">砍价</span>
 							<span class="pictrue_log pictrue_log_class" :style="'background-color:'+labelColor"
 								v-if="item.activity && item.activity.type === '3'">拼团</span>
-							<image :src="item.image" mode="aspectFill"></image>
+							<image :src="item.image" mode="aspectFit"></image>
 						</view>
 						<view class="text-info"
 							style="display: flex; flex-direction: column; justify-content: space-between;">
@@ -49,7 +49,7 @@
 								v-if="item.activity && item.activity.type === '2'">砍价</span>
 							<span class="pictrue_log pictrue_log_class" :style="'background-color:'+labelColor"
 								v-if="item.activity && item.activity.type === '3'">拼团</span>
-							<image :src="item.image" mode="aspectFill"></image>
+							<image :src="item.image" mode="aspectFit">
 						</view>
 						<view class="text-info">
 							<view class="title line1" v-if="titleShow">{{ item.store_name }}</view>
@@ -81,7 +81,7 @@
 								v-if="item.activity && item.activity.type === '2'">砍价</span>
 							<span class="pictrue_log pictrue_log_class" :style="'background-color:'+labelColor"
 								v-if="item.activity && item.activity.type === '3'">拼团</span>
-							<image :src="item.image" mode="aspectFill"></image>
+							<image :src="item.image" mode="aspectFit"></image>
 						</view>
 						<view class="text-info"
 							style="display: flex; flex-direction: column; justify-content: space-between;">
@@ -118,7 +118,7 @@
 						<span class="pictrue_log_big pictrue_log_class" :style="'background-color:'+labelColor"
 							v-if="item.activity && item.activity.type === '3'">拼团</span>
 						<image :src="item.recommend_image" mode="aspectFill" v-if="item.recommend_image"></image>
-						<image :src="item.image" mode="aspectFill" v-else></image>
+						<image :src="item.image" mode="widthFix" v-else></image>
 					</view>
 					<view class="name line2"><span class="coupon"
 							:style="'border:1px solid '+labelColor+';color:'+labelColor"

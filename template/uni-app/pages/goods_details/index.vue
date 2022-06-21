@@ -54,7 +54,7 @@
 								<view class="money font-color skeleton-rect">
 									￥
 									<text class="num" v-text="storeInfo.price || 0"></text>
-									<text v-if="storeInfo.spec_type">起</text>
+									<text v-if="storeInfo.spec_type">{{$t(`onwards`)}}</text>
 									<text class="vip-money" v-if="
                       storeInfo.vip_price &&
                       storeInfo.vip_price > 0 &&
@@ -88,15 +88,15 @@
 							<view v-if="
                   !is_money_level && storeInfo.vip_price && storeInfo.is_vip
                 " class="svip acea-row row-between-wrapper">
-								<view class="">开通“超级会员”立省{{ diff }}元</view>
+								<view class="">{{$t(`svip_tip1`)}}{{ diff }}{{$t(`svip_tip2`)}}</view>
 								<navigator url="/pages/annex/vip_paid/index">
-									立即开通
+									{{$t(`register_now`)}}
 									<text class="iconfont icon-jiantou"></text>
 								</navigator>
 							</view>
 							<view class="presell_count" v-if="storeInfo.presale">
 								<view>
-									<view>预售活动时间：</view>
+									<view>{{$t(`pre_sale_hours`)}}：</view>
 									<view v-if="storeInfo.presale_start_time && storeInfo.presale_end_time"
 										class="presell_time">
 										<view class='iconfont icon-shijian1'></view>
@@ -105,7 +105,7 @@
 										{{storeInfo.presale_end_time}}
 									</view>
 								</view>
-								<view>预售结束后{{ storeInfo.presale_day }}天内发货</view>
+								<view>{{$t(`pre_sale_ends`)}} {{ storeInfo.presale_day }} {{$t(`days_ships_within`)}}</view>
 							</view>
 							<!-- <view class='coupon acea-row row-between-wrapper' v-if="storeInfo.give_integral > 0">
 									<view class='hide line1 acea-row'>
@@ -116,10 +116,10 @@
 							<view v-if="couponList.length" class="coupon acea-row row-between-wrapper skeleton-rect"
 								@click="couponTap" style="margin-top: 0rpx">
 								<view class="hide line1 acea-row">
-									优惠券：
+									{{$t(`coupon`)}}：
 									<template v-for="(item, index) in couponList">
 										<view v-if="index < 2" class="activity" :key="index">
-											满{{ item.use_min_price }}减{{ item.coupon_price }}</view>
+										{{$t(`full`)}} {{ item.use_min_price }} {{$t(`reduce`)}} {{ item.coupon_price }}</view>
 									</template>
 								</view>
 								<view class="iconfont icon-jiantou"></view>
@@ -138,7 +138,7 @@
                           : ''
                       ">
 											<text class="iconfonts iconfont icon-pintuan"></text>
-											<text class="activity_title">参与秒杀</text>
+											<text class="activity_title">{{$t(`join_time_sales`)}}</text>
 										</view>
 										<view :class="
                         index == 0
@@ -150,7 +150,7 @@
                           : ''
                       " v-if="item.type === '2'">
 											<text class="iconfonts iconfont icon-shenhezhong"></text>
-											<text class="activity_title">参与砍价</text>
+											<text class="activity_title">{{$t(`part_bargain`)}}</text>
 										</view>
 										<view :class="
                         index == 0
@@ -162,7 +162,7 @@
                           : ''
                       " v-if="item.type === '3'">
 											<text class="iconfonts iconfont icon-kanjia"></text>
-											<text class="activity_title">参与拼团</text>
+											<text class="activity_title">{{$t(`join_groupbuy`)}}</text>
 										</view>
 									</view>
 								</view>
@@ -185,17 +185,17 @@
 									<image :src="item.image" v-for="(item, index) in skuArr.slice(0, 4)" :key="index"
 										class="attrImg"></image>
 								</view>
-								<view class="switchTxt">共{{ skuArr.length }}种规格可选</view>
+								<view class="switchTxt">{{$t(`common`)}}{{ skuArr.length }}{{$t(``)}}</view>
 							</view>
 						</view>
 					</view>
 					<view class="userEvaluation skeleton-rect" id="past1" v-if="replyCount">
 						<view class="title acea-row row-between-wrapper">
-							<view>用户评价({{ replyCount }})</view>
+							<view>{{$t(`user_review`)}}({{ replyCount }})</view>
 							<navigator class="praise" hover-class="none"
 								:url="'/pages/users/goods_comment_list/index?product_id=' + id">
 								<text class="font-num">{{ replyChance }}%</text>
-								好评率
+								{{$t(`praise_rate`)}}
 								<text class="iconfont icon-jiantou"></text>
 							</navigator>
 						</view>
@@ -210,7 +210,7 @@
 							<view class="lingw acea-row row-center-wrapper">
 								<view class="lingn"></view>
 							</view>
-							<view class="titleTxt">优品推荐</view>
+							<view class="titleTxt">{{$t(`best_recommend`)}}</view>
 							<view class="lingw acea-row row-center-wrapper">
 								<view class="lingn"></view>
 							</view>
@@ -227,11 +227,11 @@
 											<view class="pictrue">
 												<image :src="val.image"></image>
 												<span class="pictrue_log pictrue_log_class"
-													v-if="val.activity && val.activity.type === '1'">秒杀</span>
+													v-if="val.activity && val.activity.type === '1'">{{$t(`seckill`)}}</span>
 												<span class="pictrue_log pictrue_log_class"
-													v-if="val.activity && val.activity.type === '2'">砍价</span>
+													v-if="val.activity && val.activity.type === '2'">{{$t(`haggle`)}}</span>
 												<span class="pictrue_log pictrue_log_class"
-													v-if="val.activity && val.activity.type === '3'">拼团</span>
+													v-if="val.activity && val.activity.type === '3'">{{$t(`group`)}}</span>
 											</view>
 											<view class="name line1">{{ val.store_name }}</view>
 											<view class="money font-color">¥{{ val.price }}</view>
@@ -243,7 +243,7 @@
 						</view>
 					</view>
 					<view class="product-intro" id="past3">
-						<view class="title">产品介绍</view>
+						<view class="title">{{$t(`product_desc`)}}</view>
 						<view class="conter">
 							<!-- #ifndef APP-PLUS -->
 							<parser :html="description" ref="article" :tag-style="tagStyle"></parser>
@@ -264,12 +264,12 @@
 
 				<navigator hover-class="none" class="item skeleton-rect" open-type="switchTab" url="/pages/index/index">
 					<view class="iconfont icon-shouye6"></view>
-					<view class="p_center">首页</view>
+					<view class="p_center">{{$t(`home`)}}</view>
 				</navigator>
 				<view @click="setCollect" class="item skeleton-rect">
 					<view class="iconfont icon-shoucang1" v-if="storeInfo.userCollect"></view>
 					<view class="iconfont icon-shoucang" v-else></view>
-					<view class="p_center">收藏</view>
+					<view class="p_center">{{$t(`collect`)}}</view>
 				</view>
 				<view class="animated item skeleton-rect" :class="animated == true ? 'bounceIn' : ''" @click="goCart">
 					<view class="iconfont icon-gouwuche1">
@@ -277,12 +277,12 @@
               CartCount || 0
             }}</text>
 					</view>
-					<view class="p_center skeleton-rect">购物车</view>
+					<view class="p_center skeleton-rect">{{$t(`cart`)}}</view>
 				</view>
 				<view v-if="a" class="presale">
 					<view class="acea-row">
 						<form class=" bnts bg-color-hui"><button class=" bnts bg-color-hui"
-								form-type="submit">暂无产品</button></form>
+								form-type="submit">{{$t(`no_products`)}}</button></form>
 					</view>
 				</view>
 				<view v-else>
@@ -292,26 +292,26 @@
 							<form v-if="storeInfo.cart_button" @submit="joinCart" class="joinCart bnts"
 								:class="!storeInfo.cart_button ? 'virbnt' : ''">
 								<button class="joinCart bnts" form-type="submit">
-									加入购物车
+									{{$t(`add_to_cart`)}}
 								</button>
 							</form>
 							<form class="buy bnts bg-color-hui">
 								<button class="buy bnts bg-color-hui" form-type="submit"
 									:class="!storeInfo.cart_button ? 'virbnt' : ''">
-									已售罄
+									{{$t(`sold_out`)}}
 								</button>
 							</form>
 						</view>
 						<view class="bnt acea-row skeleton-rect" v-else>
 							<form v-if="storeInfo.cart_button" @submit="joinCart" class="joinCart bnts">
 								<button class="joinCart bnts" form-type="submit">
-									加入购物车
+									{{$t(`add_to_cart`)}}
 								</button>
 							</form>
 							<form @submit="goBuy" class="buy bnts" :class="!storeInfo.cart_button ? 'virbnt' : ''">
 								<button class="buy bnts" :class="!storeInfo.cart_button ? 'virbnt' : ''"
 									form-type="submit">
-									立即购买
+									{{$t(`buy_now`)}}
 								</button>
 							</form>
 						</view>
@@ -325,10 +325,10 @@
 						<view class="acea-row"
 							v-else-if="attr.productSelect.quota <= 0 || attr.productSelect.quota < attr.productSelect.cart_num">
 							<form class=" bnts bg-color-hui"><button class=" bnts bg-color-hui"
-									form-type="submit">已售罄</button></form>
+									form-type="submit">{{$t(`sold_out`)}}</button></form>
 						</view>
 						<view class="bnts acea-row" v-else-if="presale_pay_status === 2">
-							<form @submit="goBuy" class="bnts"><button class="bnts" form-type="submit">立即购买</button>
+							<form @submit="goBuy" class="bnts"><button class="bnts" form-type="submit">{{$t(`buy_now`)}}</button>
 							</form>
 						</view>
 					</view>
@@ -363,35 +363,35 @@
 				<!-- #ifndef MP -->
 				<button class="item" hover-class="none" v-if="weixinStatus === true" @click="H5ShareBox = true">
 					<view class="iconfont icon-weixin3"></view>
-					<view class="">发送给朋友</view>
+					<view class="">{{$t(`send_friends`)}}</view>
 				</button>
 				<!-- #endif -->
 				<!-- #ifdef MP -->
 				<button class="item" open-type="share" hover-class="none" @click="goFriend">
 					<view class="iconfont icon-weixin3"></view>
-					<view class="">发送给朋友</view>
+					<view class="">{{$t(`send_friends`)}}</view>
 				</button>
 				<!-- #endif -->
 				<!-- #ifdef H5  -->
 				<div class="item copy-data" v-if="storeInfo.command_word != ''"
 					:data-clipboard-text="storeInfo.command_word">
 					<view class="iconfont icon-fuzhikouling"></view>
-					<text>复制口令</text>
+					<text>{{$t(`copy_pwd`)}}</text>
 				</div>
 				<!-- #endif -->
 				<!-- #ifdef APP-PLUS -->
 				<view class="item" @click="appShare('WXSceneSession')">
 					<view class="iconfont icon-weixin3"></view>
-					<view class="">微信好友</view>
+					<view class="">{{$t(`wechat_friends`)}}</view>
 				</view>
 				<view class="item" @click="appShare('WXSenceTimeline')">
 					<view class="iconfont icon-pengyouquan"></view>
-					<view class="">微信朋友圈</view>
+					<view class="">{{$t(`wechat_moments`)}}</view>
 				</view>
 				<!-- #endif -->
 				<button class="item" hover-class="none" @click="goPoster">
 					<view class="iconfont icon-haibao"></view>
-					<view class="">生成海报</view>
+					<view class="">{{$t(`generate_poster`)}}</view>
 				</button>
 			</view>
 			<view class="mask" v-if="posters" @click="listenerActionClose"></view>
@@ -404,10 +404,10 @@
 				</image>
 				<image :src="posterImage"></image>
 				<!-- #ifndef H5  -->
-				<view class="save-poster" @click="savePosterPath">保存到手机</view>
+				<view class="save-poster" @click="savePosterPath">{{$t(`save_photo`)}}</view>
 				<!-- #endif -->
 				<!-- #ifdef H5 -->
-				<view class="keep">长按图片可以保存到手机</view>
+				<view class="keep">{{$t(`save_photo_tip`)}}</view>
 				<!-- #endif -->
 			</view>
 			<view class="mask" v-if="posterImageStatus"></view>

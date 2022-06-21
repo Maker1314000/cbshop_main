@@ -45,7 +45,8 @@
 			globalData: false,
 			isIframe: false,
 			tabbarShow: true,
-			windowHeight: 0
+			windowHeight: 0,
+			locale: ''
 		},
 		mixins: [colors],
 		computed: mapGetters(['isLogin', 'cartNum']),

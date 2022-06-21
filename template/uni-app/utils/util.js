@@ -326,7 +326,7 @@ export default {
 				let picturex = 0.1571 //商品图左上点
 				let picturey = 0.2916
 				let picturebx = 0.6857 //商品图右下点
-				let pictureby = 0.3916
+				let pictureby = 0.4316
 				let msgx = 0.1036 //msg
 				let msgy = 0.2306
 				let codew = 0.25
@@ -614,7 +614,7 @@ export default {
 				})
 			}
 		})
-
+	
 		function uploadImg(filePath) {
 			uni.uploadFile({
 				url: HTTP_REQUEST_URL + '/api/' + uploadUrl,

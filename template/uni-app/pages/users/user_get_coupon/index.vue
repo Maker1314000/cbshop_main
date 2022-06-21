@@ -11,26 +11,26 @@
 				<view class="moneyCon acea-row row-center-wrapper">
 					<view class='money' :class='item.is_use ? "moneyGray" : "" '>
 						<view>￥<text class='num'>{{item.coupon_price}}</text></view>
-						<view class="pic-num" v-if="item.use_min_price > 0">满{{item.use_min_price}}元可用</view>
-						<view class="pic-num" v-else>无门槛券</view>
+						<view class="pic-num" v-if="item.use_min_price > 0">{{$t(`full`)}} {{item.use_min_price}} {{$t(`available`)}}</view>
+						<view class="pic-num" v-else>{{$t(`no_spend`)}}</view>
 					</view>
 				</view>
 				<view class="text">
 					<view class="condition">
 						<view class="name line2">
-							<view class="line-title" :class="item.is_use == true || item.is_use == 2 ? 'bg-color-huic' : ''" v-if="item.type === 0">通用劵</view>
-							<view class="line-title" :class="item.is_use == true || item.is_use == 2 ? 'bg-color-huic' : ''" v-else-if="item.type === 1">品类券</view>
-							<view class="line-title" :class="item.is_use == true || item.is_use == 2 ? 'bg-color-huic' : ''" v-else>商品券</view>
+							<view class="line-title" :class="item.is_use == true || item.is_use == 2 ? 'bg-color-huic' : ''" v-if="item.type === 0">{{$t(`universal_coupon`)}}</view>
+							<view class="line-title" :class="item.is_use == true || item.is_use == 2 ? 'bg-color-huic' : ''" v-else-if="item.type === 1">{{$t(`category_coupons`)}}</view>
+							<view class="line-title" :class="item.is_use == true || item.is_use == 2 ? 'bg-color-huic' : ''" v-else>{{$t(`commodity_voucher`)}}</view>
 							<image v-if="item.receive_type === 4" class="pic" src="/static/images/fvip.png"></image>
 							{{ item.title }}
 						</view>
 					</view>
 					<view class="data acea-row row-between-wrapper">
-						<view v-if="item.coupon_time">领取后{{item.coupon_time}}天内可用</view>
+						<view v-if="item.coupon_time">{{$t(`after_receiving`)}} {{item.coupon_time}} {{$t(`days_available`)}}</view>
 						<view v-else>{{ item.start_use_time ? item.start_use_time + '-' : '' }}{{ item.end_use_time }}</view>
-						<view class="bnt gray" v-if="item.is_use == true">已领取</view>
-						<view class="bnt gray" v-else-if="item.is_use == 2">已领完</view>
-						<view class="bnt bg-color" v-else @click="getCoupon(item.id, index)">立即领取</view>
+						<view class="bnt gray" v-if="item.is_use == true">{{$t(`received`)}}</view>
+						<view class="bnt gray" v-else-if="item.is_use == 2">{{$t(`finished`)}}</view>
+						<view class="bnt bg-color" v-else @click="getCoupon(item.id, index)">{{$t(`get_it_now`)}}</view>
 					</view>
 				</view>
 			</view>

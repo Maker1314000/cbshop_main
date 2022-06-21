@@ -7,7 +7,7 @@
 			</navigator>
 			<navigator url="/pages/goods_search/index" class="search acea-row row-middle" hover-class="none">
 				<text class="iconfont icon-sousuo5"></text>
-				搜索商品
+				{{$t(`search_product`)}}
 			</navigator>
 		</view>
 		<view class="conter">
@@ -1032,7 +1032,6 @@
 			padding-left: 30rpx;
 			box-sizing: border-box;
 			height: 100rpx;
-			bottom: 98rpx;
 
 			.cartIcon {
 				width: 124rpx;

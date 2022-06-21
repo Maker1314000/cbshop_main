@@ -1,15 +1,15 @@
 <template>
 	<view>
 		<view class="default" v-if="isIframe && !bargList.length">
-			<text>砍价模块，暂无数据</text>
+			<text>{{$t(`module_no_data`)}}</text>
 		</view>
 		<view class="combination index-wrapper" v-if="bargList.length&&isShow&&!isIframe">
 			<view class='title acea-row row-between-wrapper index-wrapper'>
 				<view class='text'>
-					<view class='name line1'>砍价活动</view>
-					<view class='line1'>呼朋唤友来砍价</view>
+					<view class='name line1'>{{$t(`haggling`)}}</view>
+					<view class='line1'>{{$t(`to_haggle`)}}</view>
 				</view>
-				<navigator class='more' url="/pages/activity/goods_combination/index" hover-class="none">更多<text class='iconfont icon-jiantou'></text></navigator>
+				<navigator class='more' url="/pages/activity/goods_combination/index" hover-class="none">{{$t(`to_haggle`)}}<text class='iconfont icon-jiantou'></text></navigator>
 			</view>
 			<view class="conter">
 				<scroll-view scroll-x="true" style="white-space: nowrap; vertical-align: middle;" show-scrollbar="false">
@@ -31,10 +31,10 @@
 		<view class="combination index-wrapper" v-if="bargList.length&&isIframe">
 			<view class='title acea-row row-between-wrapper index-wrapper'>
 				<view class='text'>
-					<view class='name line1'>砍价活动</view>
-					<view class='line1'>呼朋唤友来砍价</view>
+					<view class='name line1'>{{$t(`haggling`)}}</view>
+					<view class='line1'>{{$t(`to_haggle`)}}</view>
 				</view>
-				<navigator class='more'>更多<text class='iconfont icon-jiantou'></text></navigator>
+				<navigator class='more'>{{$t(`more`)}}<text class='iconfont icon-jiantou'></text></navigator>
 			</view>
 			<view class="conter">
 				<scroll-view scroll-x="true" style="white-space: nowrap; vertical-align: middle;" show-scrollbar="false">

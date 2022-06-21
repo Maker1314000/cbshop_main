@@ -90,7 +90,7 @@ export function getCustomer(url) {
 					success(res) {},
 					fail(err) {
 						uni.showToast({
-							title: '请先配置企业ID',
+							title: err.errMsg,
 							icon: 'none',
 							duration: 2000
 						});

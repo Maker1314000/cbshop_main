@@ -26,6 +26,27 @@ import skeleton from './components/skeleton/index.vue'
 
 Vue.component('skeleton', skeleton)
 Vue.component('pageLoading',pageLoading)
+
+
+
+import en from './locale/en.json'
+import zhHans from './locale/zh-Hans.json'
+
+
+let i18nConfig = {
+  locale: uni.getLocale(),// 获取已设置的语言
+  messages: {
+	en,
+	'zh-Hans': zhHans,
+  }
+}
+
+import VueI18n from 'vue-i18n'
+Vue.use(VueI18n)
+const i18n = new VueI18n(i18nConfig)
+
+
+
 // #ifdef H5
 
 
@@ -79,5 +100,6 @@ const app = new Vue({
     ...App,
 	store,
 	Cache,
+	i18n,
 })
 app.$mount();

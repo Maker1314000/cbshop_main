@@ -10,7 +10,7 @@
 					<view class='iconfont icon-tuandui'></view>
 				</view>
 			</view>
-			<view class='nav acea-row row-around'>
+			<view class='nav acea-row row-around' v-if="brokerage_level == 2">
 				<view :class="grade == 0 ? 'item on' : 'item'" @click='setType(0)'>一级({{total}})</view>
 				<view :class="grade == 1 ? 'item on' : 'item'" @click='setType(1)'>二级({{totalLevel}})</view>
 			</view>
@@ -116,7 +116,8 @@
 				status: false,
 				recordList: [],
 				isAuto: false, //没有授权的不会自动授权
-				isShowAuth: false //是否隐藏授权
+				isShowAuth: false ,//是否隐藏授权
+				brokerage_level: 0
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -200,6 +201,7 @@
 					that.status = limit > len;
 					that.page = page + 1;
 					that.$set(that, 'recordList', recordListNew);
+					that.brokerage_level = res.data.brokerage_level;
 				});
 			}
 		},

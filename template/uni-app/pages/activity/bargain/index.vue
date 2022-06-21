@@ -9,27 +9,27 @@
 						</div>
 						<div class="text acea-row row-column-around">
 							<div class="line1" style="width: 100%;">{{ item.title }}</div>
-							<count-down :justify-left="'justify-content:left'" :is-day="true" :tip-text="'倒计时 '"
-								:day-text="' 天 '" :hour-text="' 时 '" :minute-text="' 分 '" :second-text="' 秒'"
+							<count-down :justify-left="'justify-content:left'" :is-day="true" :tip-text="'倒计时'"
+								:day-text="'天'" :hour-text="'时'" :minute-text="'分'" :second-text="'秒'"
 								:datatime="item.datatime" v-if="item.status === 1"></count-down>
-							<div class="successTxt font-num" v-else-if="item.status === 3">砍价成功</div>
-							<div class="endTxt" v-else>活动已结束</div>
+							<div class="successTxt font-num" v-else-if="item.status === 3">{{$t(`success_bargain`)}}</div>
+							<div class="endTxt" v-else>{{$t(`message1`)}}</div>
 							<div class="money font-num">
-								已砍至<span class="symbol">￥</span><span class="num">{{ item.residue_price }}</span>
+								{{$t(`cut_to`)}}<span class="symbol">￥</span><span class="num">{{ item.residue_price }}</span>
 							</div>
 						</div>
 					</div>
 					<div class="bottom acea-row row-between-wrapper">
-						<div class="purple" v-if="item.status === 1">活动进行中</div>
-						<div class="success" v-else-if="item.status === 3">砍价成功</div>
-						<div class="end" v-else>活动已结束</div>
+						<div class="purple" v-if="item.status === 1">{{$t(`progress_event`)}}</div>
+						<div class="success" v-else-if="item.status === 3">{{$t(`success_bargain`)}}</div>
+						<div class="end" v-else>{{$t(`message1`)}}</div>
 						<div class="acea-row row-middle row-right">
 							<div class="bnt cancel" v-if="item.status === 1"
 								@click="getBargainUserCancel(item.bargain_id)">
-								取消活动
+								{{$t(`cancel_event`)}}
 							</div>
 							<div class="bnt bg-color-red" v-if="item.status === 1" @click="goDetail(item.bargain_id)">
-								继续砍价
+								{{$t(`con_bargain`)}}
 							</div>
 							<!-- <div class="bnt bg-color-red" v-else @click="goList">重开一个</div> -->
 						</div>

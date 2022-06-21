@@ -3,29 +3,29 @@
 		<view class='productList'>
 			<view class='search bg-color acea-row row-between-wrapper'>
 				<view class='input acea-row row-between-wrapper'><text class='iconfont icon-sousuo'></text>
-					<input placeholder='搜索商品名称' placeholder-class='placeholder' confirm-type='search' name="search"
+					<input :placeholder='$t(`message3`)' placeholder-class='placeholder' confirm-type='search' name="search"
 						:value='where.keyword' @confirm="searchSubmit"></input>
 				</view>
 				<view class='iconfont' :class='is_switch==true?"icon-pailie":"icon-tupianpailie"' @click='Changswitch'>
 				</view>
 			</view>
 			<view class='nav acea-row row-middle'>
-				<view class='item line1' :class='title ? "font-num":""' @click='set_where(1)'>{{title ? title:'默认'}}
+				<view class='item line1' :class='title ? "font-num":""' @click='set_where(1)'>{{title ? title: $t(`default`)}}
 				</view>
 				<view class='item' @click='set_where(2)'>
-					价格
+					{{$t(`price`)}}
 					<image v-if="price==1" src='../../static/images/up.png'></image>
 					<image v-else-if="price==2" src='../../static/images/down.png'></image>
 					<image v-else src='../../static/images/horn.png'></image>
 				</view>
 				<view class='item' @click='set_where(3)'>
-					销量
+					{{$t(`sales`)}}
 					<image v-if="stock==1" src='../../static/images/up.png'></image>
 					<image v-else-if="stock==2" src='../../static/images/down.png'></image>
 					<image v-else src='../../static/images/horn.png'></image>
 				</view>
 				<!-- down -->
-				<view class='item' :class='nows ? "font-color":""' @click='set_where(4)'>新品</view>
+				<view class='item' :class='nows ? "font-color":""' @click='set_where(4)'>{{$t(`new_product`)}}</view>
 			</view>
 			<view class='list acea-row row-between-wrapper' :class='is_switch==true?"":"on"'>
 				<view class='item' :class='is_switch==true?"":"on"' hover-class='none'
@@ -33,11 +33,11 @@
 					<view class='pictrue' :class='is_switch==true?"":"on"'>
 						<image :src='item.image' :class='is_switch==true?"":"on"'></image>
 						<span class="pictrue_log_class" :class="is_switch === true ? 'pictrue_log_big' : 'pictrue_log'"
-							v-if="item.activity && item.activity.type === '1'">秒杀</span>
+							v-if="item.activity && item.activity.type === '1'">{{$t(`seckill`)}}</span>
 						<span class="pictrue_log_class" :class="is_switch === true ? 'pictrue_log_big' : 'pictrue_log'"
-							v-if="item.activity && item.activity.type === '2'">砍价</span>
+							v-if="item.activity && item.activity.type === '2'">{{$t(`haggle`)}}</span>
 						<span class="pictrue_log_class" :class="is_switch === true ? 'pictrue_log_big' : 'pictrue_log'"
-							v-if="item.activity && item.activity.type === '3'">拼团</span>
+							v-if="item.activity && item.activity.type === '3'">{{$t(`group`)}}</span>
 					</view>
 					<view class='text' :class='is_switch==true?"":"on"'>
 						<view class='name line1'>{{item.store_name}}</view>
@@ -47,7 +47,7 @@
 							<view class='vip-money' v-if="item.vip_price && item.vip_price > 0">￥{{item.vip_price}}
 								<image src='../../static/images/vip.png'></image>
 							</view>
-							<view>已售{{item.sales}}{{item.unit_name || '件'}}</view>
+							<view>{{$t(`sold`)}} {{item.sales}}{{item.unit_name || '件'}}</view>
 						</view>
 					</view>
 				</view>

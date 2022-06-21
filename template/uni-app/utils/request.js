@@ -52,10 +52,10 @@ function baseRequest(url, method, data, {
 					reslove(res.data, res);
 				else if (res.data.status == 200)
 					reslove(res.data, res);
-				else if ([410000, 410001, 410002].indexOf(res.data.status) !== -1) {
+				else if ([110002, 110003, 110004].indexOf(res.data.status) !== -1) {
 					toLogin();
 					reject(res.data);
-				} else if (res.data.status == 410010) {
+				} else if (res.data.status == 100103) {
 					uni.showModal({
 						title: '提示',
 						content: res.data.msg,

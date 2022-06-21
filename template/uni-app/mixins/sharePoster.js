@@ -144,14 +144,14 @@ export const sharePoster = {
 			});
 		},
 		//替换安全域名
-		setDomain: function(url) {
+		setDomain(url) {
 			url = url ? url.toString() : "";
 			//本地调试打开,生产请注销
 			if (url.indexOf("https://") > -1) return url;
 			else return url.replace("http://", "https://");
 		},
 		//获取海报产品图
-		downloadFilestoreImage: function() {
+		downloadFilestoreImage() {
 			let that = this;
 			uni.downloadFile({
 				url: that.setDomain(that.storeInfo.image),
@@ -172,7 +172,7 @@ export const sharePoster = {
 		 * @param function successFn 下载完成回调
 		 *
 		 */
-		downloadFilePromotionCode: function(successFn) {
+		downloadFilePromotionCode(successFn) {
 			let that = this;
 			// #ifdef MP
 			getProductCode(that.id)
@@ -194,6 +194,9 @@ export const sharePoster = {
 				.catch((err) => {
 					that.$set(that, "isDown", false);
 					that.$set(that, "PromotionCode", "");
+					return that.$util.Tips({
+						title: err,
+					});
 				});
 			// #endif
 			// #ifdef APP-PLUS

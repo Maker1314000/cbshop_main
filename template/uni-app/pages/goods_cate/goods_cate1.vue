@@ -6,7 +6,7 @@
 		<view class='header acea-row row-center-wrapper'>
 			<view class='acea-row row-between-wrapper input'>
 				<text class='iconfont icon-sousuo'></text>
-				<input type='text' placeholder='点击搜索商品信息' @confirm="searchSubmitValue" confirm-type='search'
+				<input type='text' :placeholder="$t('search_product')" @confirm="searchSubmitValue" confirm-type='search'
 					name="search" placeholder-class='placeholder'></input>
 			</view>
 		</view>

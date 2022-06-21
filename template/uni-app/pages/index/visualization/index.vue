@@ -6,9 +6,9 @@
 		<!-- #ifdef H5 -->
 		<view class="followMe" v-if="$wechat.isWeixin()">
 			<view class="follow acea-row row-between-wrapper" v-if="followHid && followUrl && !subscribe">
-				<view>点击“立即关注”即可关注公众号</view>
+				<view>{{$t(`follow_public_account`)}}</view>
 				<view class="acea-row row-middle">
-					<view class="bnt" @click="followTap">立即关注</view>
+					<view class="bnt" @click="followTap">{{$t(`follow_now`)}}</view>
 					<span class="iconfont icon-guanbi" @click="closeFollow"></span>
 				</view>
 			</view>
@@ -21,7 +21,7 @@
 		<!-- #ifdef MP -->
 		<view class="indexTip" :style="'top:' + (navH + 50) + 'px'" :hidden="iShidden">
 			<view class="tip acea-row row-between-wrapper">
-				<view class="text">点击“<image src="/static/images/spot.png"></image>”添加到我的小程序， 微信首页下拉即可访问商城。</view>
+				<view class="text">{{$t(`click`)}}“<image src="/static/images/spot.png"></image>”{{$t(`add_applet`)}}</view>
 				<view class="iconfont icon-guanbi1" @click="closeTip"></view>
 			</view>
 		</view>

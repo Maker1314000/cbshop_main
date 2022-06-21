@@ -13,7 +13,7 @@
 					<span class="pictrue_log pictrue_log_class" :style="'background-color:'+labelColor" v-if="item.activity && item.activity.type === '1'">秒杀</span>
 					<span class="pictrue_log pictrue_log_class" :style="'background-color:'+labelColor" v-if="item.activity && item.activity.type === '2'">砍价</span>
 					<span class="pictrue_log pictrue_log_class" :style="'background-color:'+labelColor" v-if="item.activity && item.activity.type === '3'">拼团</span>
-					<image :src="item.image" mode="aspectFill"></image>
+					<image :src="item.image" mode="aspectFit"></image>
 				</view>
 				<view class="text-info">
 					<view class="title line1" v-if="titleShow">{{item.store_name}}</view>

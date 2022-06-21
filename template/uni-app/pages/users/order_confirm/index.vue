@@ -1,13 +1,13 @@
 <template>
 	<view :style="colorStyle">
 		<view class='order-submission'>
-			<view class="allAddress" :style="store_self_mention ? '':'padding-top:10rpx'" v-if="!virtual_type">
+			<view class="allAddress" :style="store_self_mention && is_shipping ? '':'padding-top:10rpx'" v-if="!virtual_type">
 
 				<view class="nav acea-row">
 					<view class="item font-num" :class="shippingType == 0 ? 'on' : 'on2'" @tap="addressType(0)"
-						v-if='store_self_mention'></view>
+						v-if='store_self_mention && is_shipping'></view>
 					<view class="item font-num" :class="shippingType == 1 ? 'on' : 'on2'" @tap="addressType(1)"
-						v-if='store_self_mention'></view>
+						v-if='store_self_mention && is_shipping'></view>
 				</view>
 				<view class='address acea-row row-between-wrapper' @tap='onAddress' v-if='shippingType == 0'>
 					<view class='addressCon' v-if="addressInfo.real_name">
@@ -16,12 +16,12 @@
 						</view>
 						<view class="line1">
 							<text class='default font-num'
-								v-if="addressInfo.is_default">[默认]</text>{{addressInfo.province}}{{addressInfo.city}}{{addressInfo.district}}{{addressInfo.detail}}
+								v-if="addressInfo.is_default">[{{$t(`default`)}}]</text>{{addressInfo.province}}{{addressInfo.city}}{{addressInfo.district}}{{addressInfo.detail}}
 						</view>
 						<!-- <view class='setaddress'>设置收货地址</view> -->
 					</view>
 					<view class='addressCon' v-else>
-						<view class='setaddress'>设置收货地址</view>
+						<view class='setaddress'>{{$t(`set_address`)}}</view>
 					</view>
 					<view class='iconfont icon-jiantou'></view>
 				</view>
@@ -36,7 +36,7 @@
 						<view class='iconfont icon-jiantou'></view>
 					</block>
 					<block v-else>
-						<view>暂无门店信息</view>
+						<view>{{$t(`no_store_msg`)}}</view>
 					</block>
 				</view>
 				<view class='line'>
@@ -47,16 +47,16 @@
 			<view class='wrapper'>
 				<view class='item acea-row row-between-wrapper' @tap='couponTap'
 					v-if="!pinkId && !BargainId && !combinationId && !seckillId&& !noCoupon && !discountId && !advanceId">
-					<view>优惠券</view>
+					<view>{{$t(`coupon`)}}</view>
 					<view class='discount'>{{couponTitle}}
 						<text class='iconfont icon-jiantou'></text>
 					</view>
 				</view>
 				<view class='item acea-row row-between-wrapper'
 					v-if="!pinkId && !BargainId && !combinationId && !seckillId && !advanceId">
-					<view>积分抵扣</view>
+					<view>{{$t(`points_deduction`)}}</view>
 					<view class='discount acea-row row-middle'>
-						<view> {{useIntegral ? "剩余积分":"当前积分"}}
+						<view> {{useIntegral ? "$t(`remaining_points`)":"$t(`cur_points`)"}}
 							<text class='num font-color'>{{integral || 0}}</text>
 						</view>
 						<checkbox-group @change="ChangeIntegral">
@@ -65,7 +65,7 @@
 					</view>
 				</view>
 				<view v-if="invoice_func || special_invoice" class='item acea-row row-between-wrapper' @tap="goInvoice">
-					<view>开具发票</view>
+					<view>{{$t(`invoice`)}}</view>
 					<view class='discount'>
 						{{invTitle}}
 						<text class='iconfont icon-jiantou'></text>
@@ -82,16 +82,16 @@
 				</view> -->
 				<view v-if="shippingType == 1">
 					<view class="item acea-row row-between-wrapper">
-						<view>联系人</view>
+						<view>{{$t(`contact_name`)}}</view>
 						<view class="discount">
-							<input style="text-align: right;" v-model="contacts" type="text" placeholder="请填写您的联系姓名"
+							<input style="text-align: right;" v-model="contacts" type="text" :placeholder="$t(`message5`)"
 								placeholder-class="placeholder"></input>
 						</view>
 					</view>
 					<view class="item acea-row row-between-wrapper">
-						<view>联系电话</view>
+						<view>{{$t(`contact_no`)}}</view>
 						<view class="discount">
-							<input style="text-align: right;" v-model="contactsTel" type="text" placeholder="请填写您的联系电话"
+							<input style="text-align: right;" v-model="contactsTel" type="text" :placeholder="$t(`message6`)"
 								placeholder-class="placeholder"></input>
 						</view>
 					</view>
@@ -101,9 +101,9 @@
 		      <view class='discount'>{{system_store.name}}</view>
 		    </view> -->
 				<view class='item' v-if="textareaStatus">
-					<view>备注信息</view>
+					<view>{{$t(`remarks`)}}</view>
 					<!-- <view class="placeholder-textarea"> -->
-					<textarea placeholder-class='placeholder' placeholder="请添加备注（150字以内）" v-if="!coupon.coupon"
+					<textarea placeholder-class='placeholder' :placeholder="$t(`message7`)" v-if="!coupon.coupon"
 						@input='bindHideKeyboard' :value="mark" :maxlength="150" name="mark">
 						</textarea>
 					<!-- 	<view class="placeholder" @click="clickTextArea" v-show="!mark">
@@ -140,15 +140,15 @@
 					</view>
 					<!-- text -->
 					<view v-if="item.label=='text'" class="confirm">
-						<input type="text" :placeholder="'请填写'+item.title" v-model="item.value" />
+						<input type="text" :placeholder="'$t(`fill_out`)'+item.title" v-model="item.value" />
 					</view>
 					<!-- number -->
 					<view v-if="item.label=='number'" class="confirm">
-						<input type="number" :placeholder="'请填写'+item.title" v-model="item.value" />
+						<input type="number" :placeholder="'$t(`fill_out`)'+item.title" v-model="item.value" />
 					</view>
 					<!-- email -->
 					<view v-if="item.label=='email'" class="confirm">
-						<input type="text" :placeholder="'请填写'+item.title" v-model="item.value" />
+						<input type="text" :placeholder="'$t(`fill_out`)'+item.title" v-model="item.value" />
 					</view>
 					<!-- data -->
 					<view v-if="item.label=='data'" class="uni-list">
@@ -177,11 +177,11 @@
 					</view>
 					<!-- id -->
 					<view v-if="item.label=='id'" class="confirm">
-						<input type="idcard" :placeholder="'请填写'+item.title" v-model="item.value" />
+						<input type="idcard" :placeholder="'$t(`fill_out`)'+item.title" v-model="item.value" />
 					</view>
 					<!-- phone -->
 					<view v-if="item.label=='phone'" class="confirm">
-						<input type="tel" :placeholder="'请填写'+item.title" v-model="item.value" />
+						<input type="tel" :placeholder="'$t(`fill_out`)'+item.title" v-model="item.value" />
 					</view>
 					<!-- img -->
 					<view v-if="item.label=='img'" class="confirmImg">
@@ -193,7 +193,7 @@
 							<view class='pictrue acea-row row-center-wrapper row-column bor'
 								@click='uploadpic(index,item)' v-if="item.value.length < 8">
 								<text class='iconfont icon-icon25201'></text>
-								<view>上传图片</view>
+								<view>{{$t(`upload_image`)}}</view>
 							</view>
 						</view>
 					</view>
@@ -201,31 +201,31 @@
 			</view>
 			<view class='moneyList'>
 				<view class='item acea-row row-between-wrapper'>
-					<view>商品总价：</view>
+					<view>{{$t(`total_price`)}}：</view>
 					<view class='money'>
 						￥{{(parseFloat(priceGroup.totalPrice)+parseFloat(priceGroup.vipPrice)).toFixed(2)}}</view>
 				</view>
 				<view class='item acea-row row-between-wrapper' v-if="priceGroup.storePostage > 0">
-					<view>配送运费：</view>
+					<view>{{$t(`shipping_fee`)}}：</view>
 					<view class='money'>
 						￥{{(parseFloat(priceGroup.storePostage)+parseFloat(priceGroup.storePostageDiscount)).toFixed(2)}}
 					</view>
 				</view>
 				<view class='item acea-row row-between-wrapper'
 					v-if="priceGroup.vipPrice > 0 && userInfo.vip && !pinkId && !BargainId && !combinationId && !seckillId && !discountId">
-					<view>会员商品优惠：</view>
+					<view>{{$t(`vip_dis1`)}}：</view>
 					<view class='money'>-￥{{parseFloat(priceGroup.vipPrice).toFixed(2)}}</view>
 				</view>
 				<view class='item acea-row row-between-wrapper' v-if="priceGroup.storePostageDiscount > 0">
-					<view>会员运费优惠：</view>
+					<view>{{$t(`vip_dis2`)}}：</view>
 					<view class='money'>-￥{{parseFloat(priceGroup.storePostageDiscount).toFixed(2)}}</view>
 				</view>
 				<view class='item acea-row row-between-wrapper' v-if="coupon_price > 0">
-					<view>优惠券抵扣：</view>
+					<view>{{$t(`coupon_deduction`)}}：</view>
 					<view class='money'>-￥{{parseFloat(coupon_price).toFixed(2)}}</view>
 				</view>
 				<view class='item acea-row row-between-wrapper' v-if="integral_price > 0">
-					<view>积分抵扣：</view>
+					<view>{{$t(`points_deduction`)}}：</view>
 					<view class='money'>-￥{{parseFloat(integral_price).toFixed(2)}}</view>
 				</view>
 				<!-- <view class='item acea-row row-between-wrapper' v-if="priceGroup.storePostage > 0">
@@ -239,12 +239,12 @@
 			</view>
 			<view style='height:120rpx;'></view>
 			<view class='footer acea-row row-between-wrapper'>
-				<view>合计:
+				<view>{{$t(`total`)}}:
 					<text class='font-color'>￥{{totalPrice || 0}}</text>
 				</view>
 				<view class='settlement' style='z-index:100' @tap.stop="goPay"
-					v-if="(valid_count>0&&!discount_id) || (valid_count==cartInfo.length&&discount_id)">立即结算</view>
-				<view class='settlement bg-color-hui' style='z-index:100' v-else>立即结算</view>
+					v-if="(valid_count>0&&!discount_id) || (valid_count==cartInfo.length&&discount_id)">{{$t(`settle_now`)}}</view>
+				<view class='settlement bg-color-hui' style='z-index:100' v-else>{{$t(`settle_now`)}}</view>
 			</view>
 		</view>
 		<view class="alipaysubmit" v-html="formContent"></view>
@@ -271,7 +271,8 @@
 		orderConfirm,
 		getCouponsOrderPrice,
 		orderCreate,
-		postOrderComputed
+		postOrderComputed,
+		checkShipping
 	} from '@/api/order.js';
 	import {
 		getAddressDefault,
@@ -439,7 +440,8 @@
 				pay_close: false,
 				noCoupon: 0,
 				valid_count: 0,
-				discount_id: 0
+				discount_id: 0,
+				is_shipping: true
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -490,11 +492,12 @@
 			this.textareaStatus = true;
 			// #endif
 			if (this.isLogin && this.toPay == false) {
-				this.getaddressInfo();
-				this.getConfirm();
-				this.$nextTick(function() {
-					this.$refs.addressWindow.getAddressList();
-				})
+				this.checkShipping();
+				// this.getaddressInfo();
+				// this.getConfirm();
+				// this.$nextTick(function() {
+				// 	this.$refs.addressWindow.getAddressList();
+				// })
 			} else {
 				toLogin();
 			}
@@ -513,6 +516,39 @@
 			})
 		},
 		methods: {
+			checkShipping() {
+				let that = this;
+				checkShipping(that.cartId, that.news).then(res => {
+					if (res.data.type == 0) {
+						that.is_shipping = true;
+						that.shippingType = 0;
+						this.getaddressInfo();
+						this.getConfirm();
+						this.$nextTick(function() {
+							this.$refs.addressWindow.getAddressList();
+						})
+					} else {
+						if (res.data.type == 1) {
+							that.is_shipping = false;
+							that.shippingType = 0;
+							this.getaddressInfo();
+							this.getConfirm();
+							this.$nextTick(function() {
+								this.$refs.addressWindow.getAddressList();
+							})
+						} else if (res.data.type == 2) {
+							that.is_shipping = false;
+							that.shippingType = 1;
+							this.getConfirm();
+						}
+					}
+				}).catch(err => {
+					uni.showToast({
+						title: err,
+						icon: 'none'
+					});
+				});
+			},
 			// 不开发票
 			invCancel() {
 				this.invChecked = '';
@@ -778,7 +814,6 @@
 					mask: true
 				});
 				orderConfirm(that.cartId, that.news, that.addressId, that.shippingType + 1).then(res => {
-					console.log("confirm:", res.data.custom_form)
 					that.$set(that, 'userInfo', res.data.userInfo);
 					that.$set(that, 'confirm', res.data.custom_form || []);
 					this.confirm.map(e => {
@@ -937,8 +972,6 @@
 			payment(data) {
 				let that = this;
 				orderCreate(that.orderKey, data).then(res => {
-					console.log(data)
-					console.log(res)
 					let status = res.data.status,
 						orderId = res.data.result.orderId,
 						jsConfig = res.data.result.jsConfig,
@@ -961,8 +994,6 @@
 							break;
 						case 'SUCCESS':
 							uni.hideLoading();
-							console.log(data.payType, (that.BargainId || that.combinationId || that.pinkId || that
-								.seckillId || that.discountId))
 							if ((that.BargainId || that.combinationId || that.pinkId || that.seckillId || that
 									.discountId) && data.payType != 'friend')
 								return that.$util.Tips({
@@ -1187,7 +1218,6 @@
 				this.$refs.textarea.focus()
 			},
 			SubOrder(e) {
-				console.log('ahahaahah')
 				let that = this,
 					data = {};
 
@@ -1310,7 +1340,6 @@
 				// #endif
 			},
 			bindDateChange: function(e, index) {
-				console.log(e, index)
 				this.confirm[index].value = e.target.value
 			},
 			bindTimeChange: function(e, index) {
