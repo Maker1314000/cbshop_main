@@ -526,6 +526,6 @@ class DivisionServices extends BaseServices
                 }
             }
         }
-        return [$storeBrokerageOne, $storeBrokerageTwo, $staffPercent, $agentPercent, $divisionPercent];
+        return [max($storeBrokerageOne, 0), max($storeBrokerageTwo, 0),  max($staffPercent, 0), max($agentPercent, 0), max($divisionPercent, 0)];
     }
 }
