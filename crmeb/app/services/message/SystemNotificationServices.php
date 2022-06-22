@@ -24,6 +24,7 @@ use crmeb\exceptions\AdminException;
  * 消息管理类
  * Class SystemNotificationServices
  * @package app\services\system
+ * @method value($where, $value) 条件获取某个字段的值
  */
 class SystemNotificationServices extends BaseServices
 {
