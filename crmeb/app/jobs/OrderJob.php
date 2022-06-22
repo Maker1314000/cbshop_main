@@ -261,7 +261,7 @@ class OrderJob extends BaseJobs
         $order_id = $order['order_id'];
         /** @var SmsSendServices $smsServices */
         $smsServices = app()->make(SmsSendServices::class);
-        $smsServices->send($switch, $order['user_phone'], compact('order_id', 'pay_price'), 'PAY_SUCCESS_CODE');
+        $smsServices->send($switch, $order['user_phone'], compact('order_id', 'pay_price'), 'order_pay_success');
     }
 
     /**计算节约金额

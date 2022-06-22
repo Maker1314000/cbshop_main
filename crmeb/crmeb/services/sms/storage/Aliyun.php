@@ -22,15 +22,15 @@ use think\facade\Config;
  */
 class Aliyun extends BaseSmss
 {
-    protected string $apiUrl = 'https://dysmsapi.aliyuncs.com/';
+    protected $apiUrl = 'https://dysmsapi.aliyuncs.com/';
 
-    protected array $header = ['x-sdk-client' => 'php/2.0.0'];
+    protected $header = ['x-sdk-client' => 'php/2.0.0'];
 
-    protected string $AccessKeySecret = '';
+    protected $AccessKeySecret = '';
 
-    protected array $templates = [];
+    protected $templates = [];
 
-    protected array $param = [
+    protected $param = [
         'AccessKeyId' => '',
         'Action' => 'SendSms',
         'Format' => 'JSON',

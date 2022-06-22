@@ -54,12 +54,13 @@ class NoticeSmsService extends NoticeService
      * @param string|null $color 文字颜色
      * @return bool|mixed
      */
-    public function sendSms($phone, array $data, string $template)
+    public function sendSms($phone, array $data, string $mark)
     {
         try {
             $this->isopend = $this->notceinfo['is_sms'] === 1;
+            $mark = $this->notceinfo['mark'];
             if ($this->isopend) {
-                SmsJob::dispatch('doJob', [$phone, $data, $template]);
+                SmsJob::dispatch('doJob', [$phone, $data, $mark]);
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());

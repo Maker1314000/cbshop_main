@@ -74,31 +74,14 @@ class Yunxin extends BaseSmss
      */
     protected $sign = '';
 
-    /**
-     * 模板id
-     * @var array
-     */
-    protected $templateIds = [];
-
     /** 初始化
      * @param array $config
      */
     protected function initialize(array $config = [])
     {
         parent::initialize($config);
-        $this->templateIds = Config::get($this->configFile . '.stores.' . $this->name . '.template_id', []);
-
     }
 
-    /**
-     * 提取模板code
-     * @param string $templateId
-     * @return null
-     */
-    protected function getTemplateCode(string $templateId)
-    {
-        return $this->templateIds[$templateId] ?? null;
-    }
 
     /**
      * 设置签名
@@ -227,7 +210,7 @@ class Yunxin extends BaseSmss
             'phone' => $phone,
             'host' =>  request()->host()
         ];
-        $param['temp_id'] = $this->getTemplateCode($templateId);
+        $param['temp_id'] = $templateId;
         if (is_null($param['temp_id'])) {
             throw new AdminException(400720);
         }

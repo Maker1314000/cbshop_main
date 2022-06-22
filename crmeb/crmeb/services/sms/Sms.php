@@ -28,7 +28,7 @@ class Sms extends BaseManager
     /**
      * @var array|string[]
      */
-    protected array $type = ['yunxin', 'aliyun'];
+    protected $type = ['yunxin', 'aliyun'];
 
     /**
      * 空间名

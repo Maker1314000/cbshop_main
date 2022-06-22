@@ -12,9 +12,14 @@
 namespace app\services\message\sms;
 
 use app\services\BaseServices;
+use app\services\message\notice\SystemMsgService;
+use app\services\message\NoticeService;
+use app\services\message\SystemNotificationServices;
 use app\services\serve\ServeServices;
 use app\jobs\TaskJob;
 use crmeb\exceptions\ApiException;
+use app\model\system\SystemNotification;
+use crmeb\services\CacheService;
 
 /**
  * 短信发送
@@ -31,12 +36,19 @@ class SmsSendServices extends BaseServices
      * @param string $template
      * @return bool
      */
-    public function send(bool $switch, $phone, array $data, string $template)
+    public function send(bool $switch, $phone, array $data, string $mark)
     {
         if ($switch && $phone) {
             /** @var ServeServices $services */
             $services = app()->make(ServeServices::class);
-            $res = $services->sms()->send($phone, $template, $data);
+            //获取短信ID
+            $templateId = CacheService::get('NOTCE_SMS_' . $mark);
+            if (!$templateId) {
+                $templateId = SystemNotification::where('mark',$mark)->value('sms_id');
+                $templateId = $templateId ? $templateId : null;
+                CacheService::set('NOTCE_SMS_' . $mark, $templateId);
+            }
+            $res = $services->sms()->send($phone, $templateId, $data);
             if ($res === false) {
                 throw new ApiException($services->getError());
             } else {
