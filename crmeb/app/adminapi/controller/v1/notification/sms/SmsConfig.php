@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\adminapi\controller\v1\notification\sms;
 
-use app\services\message\sms\SmsAdminServices;
+use app\services\message\yihaotong\SmsAdminServices;
 use app\services\serve\ServeServices;
 use crmeb\services\CacheService;
 use app\adminapi\controller\AuthController;

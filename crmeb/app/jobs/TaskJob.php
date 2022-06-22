@@ -11,7 +11,7 @@
 
 namespace app\jobs;
 
-use app\services\message\sms\SmsRecordServices;
+use app\services\message\yihaotong\SmsRecordServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use crmeb\basic\BaseJobs;
 use crmeb\traits\QueueTrait;

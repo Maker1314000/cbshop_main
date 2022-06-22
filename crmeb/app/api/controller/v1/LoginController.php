@@ -13,9 +13,8 @@ namespace app\api\controller\v1;
 
 
 use app\Request;
+use app\services\message\notice\NoticeSmsService;
 use app\services\wechat\WechatServices;
-use crmeb\utils\ApiErrorCode;
-use crmeb\utils\ErrorCode;
 use think\facade\Cache;
 use app\jobs\TaskJob;
 use think\facade\Config;
@@ -23,7 +22,6 @@ use crmeb\services\CacheService;
 use app\services\user\LoginServices;
 use think\exception\ValidateException;
 use app\api\validate\user\RegisterValidates;
-use app\services\message\sms\SmsSendServices;
 
 /**微信小程序授权类
  * Class AuthController
@@ -121,7 +119,7 @@ class LoginController
      * @param Request $request
      * @return mixed
      */
-    public function verify(Request $request, SmsSendServices $services)
+    public function verify(Request $request, NoticeSmsService $services)
     {
         [$phone, $type, $key, $code] = $request->postMore([['phone', 0], ['type', ''], ['key', ''], ['code', '']], true);
 

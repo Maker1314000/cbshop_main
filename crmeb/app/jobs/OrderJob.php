@@ -15,8 +15,8 @@ use app\services\activity\bargain\StoreBargainServices;
 use app\services\activity\combination\StoreCombinationServices;
 use app\services\activity\seckill\StoreSeckillServices;
 use app\services\activity\coupon\StoreCouponUserServices;
+use app\services\message\notice\NoticeSmsService;
 use app\services\message\service\StoreServiceServices;
-use app\services\message\sms\SmsSendServices;
 use app\services\order\StoreOrderCartInfoServices;
 use app\services\order\StoreOrderEconomizeServices;
 use app\services\order\StoreOrderServices;
@@ -190,8 +190,8 @@ class OrderJob extends BaseJobs
             $bargainServices = app()->make(StoreBargainServices::class);
             /** @var StoreOrderCartInfoServices $cartInfoServices */
             $cartInfoServices = app()->make(StoreOrderCartInfoServices::class);
-            /** @var SmsSendServices $smsServices */
-            $smsServices = app()->make(SmsSendServices::class);
+            /** @var NoticeSmsService $smsServices */
+            $smsServices = app()->make(NoticeSmsService::class);
             $switch = (bool)sys_config('admin_pay_success_switch');
             foreach ($serviceOrderNotice as $key => $item) {
                 $admin_name = $item['nickname'];
@@ -259,8 +259,8 @@ class OrderJob extends BaseJobs
         //模板变量
         $pay_price = $order['pay_price'];
         $order_id = $order['order_id'];
-        /** @var SmsSendServices $smsServices */
-        $smsServices = app()->make(SmsSendServices::class);
+        /** @var NoticeSmsService $smsServices */
+        $smsServices = app()->make(NoticeSmsService::class);
         $smsServices->send($switch, $order['user_phone'], compact('order_id', 'pay_price'), 'order_pay_success');
     }
 

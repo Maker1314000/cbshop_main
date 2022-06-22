@@ -9,12 +9,10 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace app\services\message\sms;
+namespace app\services\message;
 
 use app\services\BaseServices;
-use app\services\message\notice\SystemMsgService;
-use app\services\message\NoticeService;
-use app\services\message\SystemNotificationServices;
+use app\services\message\yihaotong\SmsRecordServices;
 use app\services\serve\ServeServices;
 use app\jobs\TaskJob;
 use crmeb\exceptions\ApiException;
