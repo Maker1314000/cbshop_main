@@ -16,6 +16,7 @@ use app\jobs\TaskJob;
 use app\model\system\SystemNotification;
 use app\services\message\NoticeService;
 use app\services\kefu\service\StoreServiceServices;
+use app\services\message\SystemNotificationServices;
 use app\services\yihaotong\SmsRecordServices;
 use app\services\serve\ServeServices;
 use crmeb\exceptions\ApiException;
@@ -79,7 +80,7 @@ class NoticeSmsService extends NoticeService
      * @param bool $switch
      * @param $phone
      * @param array $data
-     * @param string $template
+     * @param string $mark
      * @return bool
      */
     public function send(bool $switch, $phone, array $data, string $mark)
@@ -88,11 +89,12 @@ class NoticeSmsService extends NoticeService
             /** @var ServeServices $services */
             $services = app()->make(ServeServices::class);
             //获取短信ID
-            $templateId = CacheService::get('NOTCE_SMS_' . $mark);
+            $templateId = CacheService::get('NOTICE_SMS_' . $mark);
             if (!$templateId) {
-                $templateId = SystemNotification::where('mark',$mark)->value('sms_id');
-                $templateId = $templateId ?? 0;
-                CacheService::set('NOTCE_SMS_' . $mark, $templateId);
+                /** @var SystemNotificationServices $notifyServices */
+                $notifyServices = app()->make(SystemNotificationServices::class);
+                $templateId = $notifyServices->value(['mark' => $mark], 'sms_id') ?? 0;
+                CacheService::set('NOTICE_SMS_' . $mark, $templateId);
             }
             $res = $services->sms()->send($phone, $templateId, $data);
             if ($res === false) {
@@ -115,6 +117,7 @@ class NoticeSmsService extends NoticeService
             return false;
         }
     }
+
     /**
      * 退款发送管理员消息任务
      * @param $order
