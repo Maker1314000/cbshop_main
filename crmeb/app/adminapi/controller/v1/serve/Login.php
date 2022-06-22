@@ -17,7 +17,7 @@ use app\adminapi\validate\serve\ServeValidata;
 use app\Request;
 use app\services\yihaotong\SmsAdminServices;
 use crmeb\services\CacheService;
-use app\services\yihaotong\ServeServices;
+use app\services\serve\ServeServices;
 use think\facade\App;
 
 /**

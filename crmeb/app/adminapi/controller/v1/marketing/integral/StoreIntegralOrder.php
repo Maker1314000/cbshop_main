@@ -12,7 +12,7 @@ namespace app\adminapi\controller\v1\marketing\integral;
 
 
 use app\adminapi\controller\AuthController;
-use app\services\yihaotong\ServeServices;
+use app\services\serve\ServeServices;
 use app\services\activity\integral\{
     StoreIntegralOrderServices,
     StoreIntegralOrderStatusServices

@@ -14,7 +14,7 @@ namespace app\services\shipping;
 
 use app\dao\shipping\ExpressDao;
 use app\services\BaseServices;
-use app\services\yihaotong\ServeServices;
+use app\services\serve\ServeServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\CacheService;
 use crmeb\services\ExpressService;

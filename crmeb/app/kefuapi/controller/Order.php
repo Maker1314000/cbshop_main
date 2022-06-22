@@ -17,7 +17,7 @@ use app\services\order\StoreOrderWriteOffServices;
 use think\facade\App;
 use app\services\order\DeliveryServiceServices;
 use app\services\product\product\StoreProductServices;
-use app\services\yihaotong\ServeServices;
+use app\services\serve\ServeServices;
 use app\services\shipping\ExpressServices;
 use app\services\user\UserServices;
 use app\services\order\StoreOrderServices;

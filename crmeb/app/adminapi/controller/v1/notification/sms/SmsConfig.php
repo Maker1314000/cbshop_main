@@ -11,7 +11,7 @@
 namespace app\adminapi\controller\v1\notification\sms;
 
 use app\services\yihaotong\SmsAdminServices;
-use app\services\yihaotong\ServeServices;
+use app\services\serve\ServeServices;
 use crmeb\services\CacheService;
 use app\adminapi\controller\AuthController;
 use think\facade\App;

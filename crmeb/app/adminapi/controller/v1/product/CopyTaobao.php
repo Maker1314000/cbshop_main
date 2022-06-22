@@ -12,7 +12,7 @@ namespace app\adminapi\controller\v1\product;
 
 use app\adminapi\controller\AuthController;
 use app\services\product\product\CopyTaobaoServices;
-use app\services\yihaotong\ServeServices;
+use app\services\serve\ServeServices;
 use think\facade\App;
 
 

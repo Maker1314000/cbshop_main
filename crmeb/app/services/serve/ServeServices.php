@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace app\services\yihaotong;
+namespace app\services\serve;
 
 
 use app\services\BaseServices;

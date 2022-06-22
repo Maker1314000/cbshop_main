@@ -14,7 +14,7 @@ namespace app\adminapi\controller\v1\serve;
 
 use app\adminapi\controller\AuthController;
 use app\adminapi\validate\serve\ServeValidata;
-use app\services\yihaotong\ServeServices;
+use app\services\serve\ServeServices;
 use think\facade\App;
 
 /**
