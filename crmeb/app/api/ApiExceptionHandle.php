@@ -86,9 +86,9 @@ class ApiExceptionHandle extends Handle
         // 添加自定义异常处理机制
         if ($e instanceof DbException) {
             return app('json')->fail(100102, $massageData);
-        } elseif ($e instanceof AuthException || $e instanceof ValidateException) {
+        } elseif ($e instanceof ValidateException) {
             return app('json')->fail($e->getMessage(), $massageData);
-        } elseif ($e instanceof AdminException || $e instanceof ApiException) {
+        } elseif ($e instanceof AuthException || $e instanceof AdminException || $e instanceof ApiException) {
             return app('json')->make($e->getCode() ?: 400, $e->getMessage(), $massageData);
         } else {
             return app('json')->fail('很抱歉!系统开小差了', Env::get('app_debug', false) ? [
