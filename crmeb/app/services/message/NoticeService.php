@@ -68,22 +68,6 @@ class NoticeService extends BaseServices
     }
 
     /**
-     * @param array $notceinfo
-     * @param $data
-     * @param string $msgtype
-     */
-    //企业微信群机器人
-    public function EnterpriseWechatSend($data)
-    {
-        if ($this->notceinfo['is_ent_wechat'] == 1 && $this->notceinfo['url'] !== '') {
-            $url = $this->notceinfo['url'];
-            $ent_wechat_text = $this->notceinfo['ent_wechat_text'];
-            EnterpriseWechatJob::dispatchDo('doJob', [$data, $url, $ent_wechat_text]);
-
-        }
-    }
-
-    /**
      * 打印订单
      * @param $order
      * @param array $cartId

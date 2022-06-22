@@ -16,7 +16,7 @@ use think\facade\App;
 use app\services\kefu\KefuServices;
 use app\services\other\CategoryServices;
 use app\kefuapi\validate\SpeechcraftValidate;
-use app\services\message\service\StoreServiceSpeechcraftServices;
+use app\services\kefu\service\StoreServiceSpeechcraftServices;
 
 /**
  * Class Service

@@ -14,7 +14,7 @@ namespace app\services\order;
 
 use app\dao\order\DeliveryServiceDao;
 use app\services\BaseServices;
-use app\services\message\service\StoreServiceLogServices;
+use app\services\kefu\service\StoreServiceLogServices;
 use app\services\user\UserServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\FormBuilder;

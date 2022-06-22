@@ -21,7 +21,7 @@ use think\facade\App;
 use app\services\kefu\UserServices;
 use app\services\user\UserLabelCateServices;
 use app\services\user\UserLabelRelationServices;
-use app\services\message\service\StoreServiceRecordServices;
+use app\services\kefu\service\StoreServiceRecordServices;
 use think\facade\Config;
 use think\facade\Cache;
 

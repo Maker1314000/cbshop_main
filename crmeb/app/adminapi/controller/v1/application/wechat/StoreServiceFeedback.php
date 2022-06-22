@@ -13,7 +13,7 @@ namespace app\adminapi\controller\v1\application\wechat;
 
 
 use app\adminapi\controller\AuthController;
-use app\services\message\service\StoreServiceFeedbackServices;
+use app\services\kefu\service\StoreServiceFeedbackServices;
 use think\facade\App;
 
 /**

@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace app\services\message\service;
+namespace app\services\kefu\service;
 
 
 use app\dao\service\StoreServiceFeedbackDao;
@@ -21,7 +21,7 @@ use crmeb\traits\ServicesTrait;
 /**
  * 客服反馈
  * Class StoreServiceFeedbackServices
- * @package app\services\message\service
+ * @package app\services\kefu\service
  */
 class StoreServiceFeedbackServices extends BaseServices
 {

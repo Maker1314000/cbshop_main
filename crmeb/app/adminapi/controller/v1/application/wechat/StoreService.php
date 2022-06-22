@@ -12,8 +12,8 @@ namespace app\adminapi\controller\v1\application\wechat;
 
 use app\adminapi\controller\AuthController;
 use app\services\kefu\LoginServices;
-use app\services\message\service\StoreServiceLogServices;
-use app\services\message\service\StoreServiceServices;
+use app\services\kefu\service\StoreServiceLogServices;
+use app\services\kefu\service\StoreServiceServices;
 use app\services\user\UserServices;
 use app\services\user\UserWechatuserServices;
 use crmeb\exceptions\AdminException;

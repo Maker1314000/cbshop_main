@@ -8,7 +8,7 @@
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-namespace app\services\message\service;
+namespace app\services\kefu\service;
 
 
 use app\dao\service\StoreServiceDao;
@@ -22,7 +22,7 @@ use crmeb\traits\ServicesTrait;
 /**
  * 客服
  * Class StoreServiceServices
- * @package app\services\message\service
+ * @package app\services\kefu\service
  * @method getStoreServiceOrderNotice() 获取接受通知的客服
  */
 class StoreServiceServices extends BaseServices

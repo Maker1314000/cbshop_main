@@ -11,7 +11,7 @@
 namespace app\adminapi\controller\v1\notification\sms;
 
 use app\adminapi\controller\AuthController;
-use app\services\message\yihaotong\SmsAdminServices;
+use app\services\yihaotong\SmsAdminServices;
 use think\facade\App;
 
 /**

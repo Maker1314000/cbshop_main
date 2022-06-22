@@ -13,7 +13,7 @@ namespace app\services\message\notice;
 
 use app\jobs\TemplateJob;
 use app\services\message\NoticeService;
-use app\services\message\service\StoreServiceServices;
+use app\services\kefu\service\StoreServiceServices;
 use app\services\wechat\WechatUserServices;
 use think\facade\Log;
 

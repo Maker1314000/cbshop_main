@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace app\services\message\service;
+namespace app\services\kefu\service;
 
 
 use app\dao\service\StoreServiceSpeechcraftDao;
@@ -21,7 +21,7 @@ use think\Model;
 /**
  * 话术
  * Class StoreServiceSpeechcraftServices
- * @package app\services\message\service
+ * @package app\services\kefu\service
  * @method array|Model|null get($id, ?array $field = [], ?array $with = []) 获取一条数据
  * @method update($id, array $data, ?string $key = null) 更新数据
  */

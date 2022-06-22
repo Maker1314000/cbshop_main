@@ -21,7 +21,7 @@ use think\facade\Cache;
 use crmeb\exceptions\AdminException;
 
 /**
- * 消息管理
+ * 消息管理类
  * Class SystemNotificationServices
  * @package app\services\system
  */

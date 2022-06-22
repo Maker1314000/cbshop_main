@@ -14,7 +14,7 @@ namespace app\services\user;
 
 use app\dao\user\UserDao;
 use app\services\BaseServices;
-use app\services\message\yihaotong\SmsRecordServices;
+use app\services\yihaotong\SmsRecordServices;
 use app\services\message\notice\NoticeSmsService;
 use app\services\wechat\WechatUserServices;
 use crmeb\exceptions\ApiException;

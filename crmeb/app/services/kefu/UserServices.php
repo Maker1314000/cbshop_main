@@ -19,7 +19,7 @@ use crmeb\traits\ServicesTrait;
 use app\services\user\UserLabelServices;
 use app\services\system\SystemUserLevelServices;
 use app\services\user\UserLabelRelationServices;
-use app\services\message\service\StoreServiceRecordServices;
+use app\services\kefu\service\StoreServiceRecordServices;
 
 /**
  * Class UserServices

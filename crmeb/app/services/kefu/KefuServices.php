@@ -14,14 +14,14 @@ namespace app\services\kefu;
 
 use app\services\BaseServices;
 use app\dao\service\StoreServiceDao;
-use app\services\message\service\StoreServiceAuxiliaryServices;
-use app\services\message\service\StoreServiceServices;
+use app\services\kefu\service\StoreServiceAuxiliaryServices;
+use app\services\kefu\service\StoreServiceServices;
 use app\services\user\UserServices;
 use app\services\wechat\WechatUserServices;
 use crmeb\exceptions\ApiException;
 use crmeb\services\workerman\ChannelService;
-use app\services\message\service\StoreServiceLogServices;
-use app\services\message\service\StoreServiceRecordServices;
+use app\services\kefu\service\StoreServiceLogServices;
+use app\services\kefu\service\StoreServiceRecordServices;
 use think\facade\Log;
 
 /**

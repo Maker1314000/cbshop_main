@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace app\services\message\service;
+namespace app\services\kefu\service;
 
 
 use app\dao\service\StoreServiceRecordDao;
@@ -20,7 +20,7 @@ use think\Model;
 
 /**
  * Class StoreServiceRecordServices
- * @package app\services\message\service
+ * @package app\services\kefu\service
  * @method array|Model|null getLatelyMsgUid(array $where, string $key) 查询最近和用户聊天的uid用户
  */
 class StoreServiceRecordServices extends BaseServices

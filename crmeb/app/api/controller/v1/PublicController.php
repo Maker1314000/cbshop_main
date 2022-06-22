@@ -13,7 +13,7 @@ namespace app\api\controller\v1;
 
 use app\services\activity\combination\StorePinkServices;
 use app\services\diy\DiyServices;
-use app\services\message\service\StoreServiceServices;
+use app\services\kefu\service\StoreServiceServices;
 use app\services\order\DeliveryServiceServices;
 use app\services\other\AgreementServices;
 use app\services\other\CacheServices;

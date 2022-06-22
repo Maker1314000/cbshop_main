@@ -16,7 +16,7 @@ use app\services\activity\combination\StoreCombinationServices;
 use app\services\activity\seckill\StoreSeckillServices;
 use app\services\activity\coupon\StoreCouponUserServices;
 use app\services\message\notice\NoticeSmsService;
-use app\services\message\service\StoreServiceServices;
+use app\services\kefu\service\StoreServiceServices;
 use app\services\order\StoreOrderCartInfoServices;
 use app\services\order\StoreOrderEconomizeServices;
 use app\services\order\StoreOrderServices;

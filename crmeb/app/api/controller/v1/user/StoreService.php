@@ -12,10 +12,10 @@ namespace app\api\controller\v1\user;
 
 use app\api\validate\user\StoreServiceFeedbackValidate;
 use app\Request;
-use app\services\message\service\StoreServiceFeedbackServices;
-use app\services\message\service\StoreServiceLogServices;
-use app\services\message\service\StoreServiceRecordServices;
-use app\services\message\service\StoreServiceServices;
+use app\services\kefu\service\StoreServiceFeedbackServices;
+use app\services\kefu\service\StoreServiceLogServices;
+use app\services\kefu\service\StoreServiceRecordServices;
+use app\services\kefu\service\StoreServiceServices;
 use app\services\other\CacheServices;
 use crmeb\services\CacheService;
 

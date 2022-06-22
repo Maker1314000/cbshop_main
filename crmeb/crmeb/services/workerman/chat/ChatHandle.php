@@ -12,9 +12,9 @@
 namespace crmeb\services\workerman\chat;
 
 use app\services\kefu\LoginServices;
-use app\services\message\service\StoreServiceLogServices;
-use app\services\message\service\StoreServiceRecordServices;
-use app\services\message\service\StoreServiceServices;
+use app\services\kefu\service\StoreServiceLogServices;
+use app\services\kefu\service\StoreServiceRecordServices;
+use app\services\kefu\service\StoreServiceServices;
 use app\services\order\StoreOrderServices;
 use app\services\product\product\StoreProductServices;
 use app\services\user\UserServices;

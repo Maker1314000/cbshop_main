@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace app\services\message\service;
+namespace app\services\kefu\service;
 
 
 use app\dao\service\StoreServiceAuxiliaryDao;
@@ -17,7 +17,7 @@ use app\services\BaseServices;
 
 /**
  * Class StoreServiceAuxiliaryServices
- * @package app\services\message\service
+ * @package app\services\kefu\service
  */
 class StoreServiceAuxiliaryServices extends BaseServices
 {

@@ -16,7 +16,7 @@ use app\dao\system\MessageSystemDao;
 use app\services\BaseServices;
 use crmeb\exceptions\ApiException;
 /**
- *
+ * 站内信services类
  * Class MessageSystemServices
  * @package app\services\system
  * @method save(array $data) 保存数据

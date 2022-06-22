@@ -14,7 +14,7 @@ namespace app\adminapi\controller\v1\application\wechat;
 use app\Request;
 use think\facade\App;
 use app\adminapi\controller\AuthController;
-use app\services\message\service\StoreServiceSpeechcraftServices;
+use app\services\kefu\service\StoreServiceSpeechcraftServices;
 use app\adminapi\validate\service\StoreServiceSpeechcraftValidata;
 
 /**

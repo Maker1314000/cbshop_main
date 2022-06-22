@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace app\services\message\service;
+namespace app\services\kefu\service;
 
 
 use app\dao\service\StoreServiceLogDao;
@@ -20,7 +20,7 @@ use app\services\product\product\StoreProductServices;
 /**
  * 客服聊天记录
  * Class StoreServiceLogServices
- * @package app\services\message\service
+ * @package app\services\kefu\service
  * @method whereByCount(array $where) 根据条件获取条数
  * @method getServiceList(array $where, int $page, int $limit, array $field = ['*']) 获取聊天记录并分页
  * @method saveAll(array $data) 插入数据

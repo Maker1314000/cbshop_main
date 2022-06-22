@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace app\services\message\yihaotong;
+namespace app\services\yihaotong;
 
 
 use app\dao\sms\SmsRecordDao;
