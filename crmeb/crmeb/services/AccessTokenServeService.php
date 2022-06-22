@@ -154,7 +154,7 @@ class AccessTokenServeService extends HttpService
         }
         $result = json_decode($res, true) ?: false;
         if (!isset($result['status']) || $result['status'] != 200) {
-            throw new ApiException(410087);
+            throw new ApiException($result['msg']);
         }
         return $result['data'] ?? [];
 
