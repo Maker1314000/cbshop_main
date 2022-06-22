@@ -81,7 +81,7 @@ class NoticeSmsService extends NoticeService
 
         foreach ($adminList as $item) {
             $data = ['order_id' => $order['order_id'], 'admin_name' => $item['nickname']];
-            $this->sendSms($item['phone'], $data, 'ADMIN_RETURN_GOODS_CODE');
+            $this->sendSms($item['phone'], $data, 'send_order_apply_refund');
         }
         return true;
     }
@@ -100,7 +100,7 @@ class NoticeSmsService extends NoticeService
         $adminList = $StoreServiceServices->getStoreServiceOrderNotice();
         foreach ($adminList as $item) {
             $data = ['order_id' => $order['order_id'], 'admin_name' => $item['nickname']];
-            $this->sendSms($item['phone'], $data, 'ADMIN_TAKE_DELIVERY_CODE');
+            $this->sendSms($item['phone'], $data, 'send_admin_confirm_take_over');
         }
         return true;
     }
@@ -120,7 +120,7 @@ class NoticeSmsService extends NoticeService
         $adminList = $StoreServiceServices->getStoreServiceOrderNotice();
         foreach ($adminList as $item) {
             $data = ['order_id' => $order['order_id'], 'admin_name' => $item['nickname']];
-            $this->sendSms($item['phone'], $data, 'ADMIN_PAY_SUCCESS_CODE');
+            $this->sendSms($item['phone'], $data, 'admin_pay_success_code');
         }
         return true;
     }
