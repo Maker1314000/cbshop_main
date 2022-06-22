@@ -119,7 +119,7 @@ class AccessTokenServeService extends HttpService
         $response = $this->postRequest($this->get(self::USER_LOGIN), $params);
         $response = json_decode($response, true);
         if (!$response) {
-            throw new ApiException(410085);
+            throw new ApiException(410085, ['msg' => '']);
         }
         if ($response['status'] === 200) {
             return $response['data'];
