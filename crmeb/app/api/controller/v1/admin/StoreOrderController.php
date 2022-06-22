@@ -20,7 +20,7 @@ use app\services\order\StoreOrderServices;
 use app\services\order\StoreOrderWapServices;
 use app\services\order\StoreOrderWriteOffServices;
 use app\services\pay\OrderOfflineServices;
-use app\services\serve\ServeServices;
+use app\services\yihaotong\ServeServices;
 use app\services\user\UserServices;
 use app\services\shipping\ExpressServices;
 use crmeb\utils\ApiErrorCode;

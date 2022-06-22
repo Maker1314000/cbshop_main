@@ -13,7 +13,7 @@ namespace app\services\order;
 
 use app\services\BaseServices;
 use app\dao\order\StoreOrderDao;
-use app\services\serve\ServeServices;
+use app\services\yihaotong\ServeServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\FormBuilder as Form;
 use app\services\shipping\ExpressServices;

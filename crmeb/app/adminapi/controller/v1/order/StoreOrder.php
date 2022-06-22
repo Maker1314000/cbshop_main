@@ -13,7 +13,7 @@ namespace app\adminapi\controller\v1\order;
 
 use app\adminapi\controller\AuthController;
 use app\adminapi\validate\order\StoreOrderValidate;
-use app\services\serve\ServeServices;
+use app\services\yihaotong\ServeServices;
 use app\services\order\{StoreOrderCartInfoServices,
     StoreOrderDeliveryServices,
     StoreOrderRefundServices,
