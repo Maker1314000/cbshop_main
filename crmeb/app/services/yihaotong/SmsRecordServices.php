@@ -14,7 +14,7 @@ namespace app\services\yihaotong;
 
 use app\dao\sms\SmsRecordDao;
 use app\services\BaseServices;
-use app\services\serve\ServeServices;
+use app\services\yihaotong\ServeServices;
 
 /**
  * 短信发送记录

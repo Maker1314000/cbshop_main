@@ -18,7 +18,7 @@ use app\adminapi\validate\serve\MealValidata;
 use app\adminapi\validate\serve\ServeValidata;
 use app\services\system\config\SystemConfigServices;
 use crmeb\services\CacheService;
-use app\services\serve\ServeServices;
+use app\services\yihaotong\ServeServices;
 use think\facade\App;
 
 /**

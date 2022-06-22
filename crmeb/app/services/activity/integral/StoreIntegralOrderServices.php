@@ -14,7 +14,7 @@ namespace app\services\activity\integral;
 use app\dao\activity\integral\StoreIntegralOrderDao;
 use app\services\BaseServices;
 use app\services\product\sku\StoreProductAttrValueServices;
-use app\services\serve\ServeServices;
+use app\services\yihaotong\ServeServices;
 use app\services\shipping\ExpressServices;
 use app\services\user\UserServices;
 use app\services\user\UserAddressServices;

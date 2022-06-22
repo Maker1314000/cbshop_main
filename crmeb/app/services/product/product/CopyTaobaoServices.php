@@ -13,7 +13,7 @@ declare (strict_types=1);
 namespace app\services\product\product;
 
 use app\services\BaseServices;
-use app\services\serve\ServeServices;
+use app\services\yihaotong\ServeServices;
 use app\services\system\attachment\SystemAttachmentCategoryServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use crmeb\exceptions\AdminException;
