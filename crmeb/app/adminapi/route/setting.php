@@ -152,6 +152,9 @@ Route::group('setting', function () {
     Route::get('get_agreement/:type', 'v1.setting.SystemAgreement/getAgreement')->option(['real_name' => '获取协议内容']);
     Route::post('save_agreement', 'v1.setting.SystemAgreement/saveAgreement')->option(['real_name' => '设置协议内容']);
 
+    //获取版权信息
+    Route::get('get_version', 'v1.setting.SystemConfig/getVersion')->option(['real_name' => '获取版权信息']);
+
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,

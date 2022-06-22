@@ -366,4 +366,17 @@ class SystemConfig extends AuthController
         }
         return app('json')->success($data);
     }
+
+    /**
+     * 获取版本号信息
+     * @return mixed
+     */
+    public function getVersion()
+    {
+        $version = get_crmeb_version();
+        return app('json')->success([
+            'version' => $version,
+            'label' => 19
+        ]);
+    }
 }
