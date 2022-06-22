@@ -45,7 +45,7 @@ class SmsSendServices extends BaseServices
             $templateId = CacheService::get('NOTCE_SMS_' . $mark);
             if (!$templateId) {
                 $templateId = SystemNotification::where('mark',$mark)->value('sms_id');
-                $templateId = $templateId ? $templateId : null;
+                $templateId = $templateId ?? 0;
                 CacheService::set('NOTCE_SMS_' . $mark, $templateId);
             }
             $res = $services->sms()->send($phone, $templateId, $data);
