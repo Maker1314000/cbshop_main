@@ -51,15 +51,7 @@ class Json
             /** @var Lang $lang */
             $lang = app()->make(Lang::class, Config::get('lang'));
 
-            $res['msg'] = $lang::get($msg, [], $range);
-
-            if (count($replace)) {
-                $vars = array_keys($replace);
-                foreach ($vars as &$v) {
-                    $v = "{:{$v}}";
-                }
-                $res['msg'] = str_replace($vars, $replace, $res['msg']);
-            }
+            $res['msg'] = $lang::get($msg, $replace, $range);
         }
 
         return Response::create($res, 'json', $this->code);

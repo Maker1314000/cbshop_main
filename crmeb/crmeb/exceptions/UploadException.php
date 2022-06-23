@@ -46,15 +46,7 @@ class UploadException extends \RuntimeException
             /** @var Lang $lang */
             $lang = app()->make(Lang::class, Config::get('lang'));
 
-            $message = $lang::get($message, [], $range);
-
-            if (count($replace)) {
-                $vars = array_keys($replace);
-                foreach ($vars as &$v) {
-                    $v = "{:{$v}}";
-                }
-                $message = str_replace($vars, $replace, $message);
-            }
+            $message = $lang::get($message, $replace, $range);
         }
 
         parent::__construct($message, $code, $previous);
