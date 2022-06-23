@@ -17,7 +17,6 @@ use app\services\wechat\WechatReplyServices;
 use crmeb\exceptions\AdminException;
 use app\services\pay\PayNotifyServices;
 use crmeb\exceptions\ApiException;
-use crmeb\utils\ApiErrorCode;
 use crmeb\services\easywechat\Application;
 use EasyWeChat\Message\Article;
 use EasyWeChat\Message\Image;

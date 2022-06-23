@@ -380,21 +380,21 @@ class StoreIntegralServices extends BaseServices
         $orderServices = app()->make(StoreIntegralOrderServices::class);
         $userBuyCount = $orderServices->getBuyCount($uid, $integralId);
         if ($StoreIntegralInfo['once_num'] < $num && $StoreIntegralInfo['once_num'] != -1) {
-            throw new ApiException(413019, ['num' => $StoreIntegralInfo['once_num']]);
+            throw new ApiException(410313, ['num' => $StoreIntegralInfo['once_num']]);
         }
         if ($StoreIntegralInfo['num'] < ($userBuyCount + $num) && $StoreIntegralInfo['num'] != -1) {
-            throw new ApiException(413004, ['num' => $StoreIntegralInfo['num']]);
+            throw new ApiException(410298, ['num' => $StoreIntegralInfo['num']]);
         }
         $res = $attrValueServices->getOne(['product_id' => $integralId, 'unique' => $unique, 'type' => 4]);
         if ($num > $res['quota']) {
-            throw new ApiException(413003, ['num' => $num]);
+            throw new ApiException(410297, ['num' => $num]);
         }
         $product_stock = $attrValueServices->value(['product_id' => $StoreIntegralInfo['product_id'], 'suk' => $res['suk'], 'type' => 0], 'stock');
         if ($product_stock < $num) {
-            throw new ApiException(413003, ['num' => $num]);
+            throw new ApiException(410297, ['num' => $num]);
         }
         if (!CacheService::checkStock($unique, $num, 4)) {
-            throw new ApiException(413003, ['num' => $num]);
+            throw new ApiException(410297, ['num' => $num]);
         }
         return $unique;
     }

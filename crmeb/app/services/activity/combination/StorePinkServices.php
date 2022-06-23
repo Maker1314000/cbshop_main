@@ -511,7 +511,7 @@ class StorePinkServices extends BaseServices
             ['status', '=', 1],
             ['stop_time', '>', time()],
         ]);
-        if (!$pinkT) throw new ApiException(413020);
+        if (!$pinkT) throw new ApiException(410314);
         list($pinkAll, $pinkT, $count, $idAll, $uidAll) = $this->getPinkMemberAndPinkK($pinkT);
         if (count($pinkAll)) {
             $count = $pinkT['people'] - ($this->dao->count(['k_id' => $pink_id, 'is_refund' => 0]) + 1);
@@ -521,7 +521,7 @@ class StorePinkServices extends BaseServices
             } else {
                 //拼团完成
                 $this->PinkComplete($uidAll, $idAll, $uid, $pinkT);
-                throw new ApiException(413022);
+                throw new ApiException(410316);
             }
         }
         /** @var StoreOrderServices $orderService */
@@ -588,7 +588,7 @@ class StorePinkServices extends BaseServices
                         $valueData .= '&pid=' . $user['uid'];
                     }
                     $res = MiniProgramService::qrcodeService()->appCodeUnlimit($valueData, 'pages/activity/goods_combination_status/index', 280);
-                    if (!$res) throw new ApiException(411881);
+                    if (!$res) throw new ApiException(410167);
                     $uploadType = (int)sys_config('upload_type', 1);
                     $upload = UploadService::init();
                     $res = (string)EntityBody::factory($res);
@@ -619,7 +619,7 @@ class StorePinkServices extends BaseServices
                 if ($imageInfo['image_type'] == 1)
                     $data['url'] = $siteUrl . $url;
                 $posterImage = UtilService::setShareMarketingPoster($data, 'routine/activity/pink/poster');
-                if (!is_array($posterImage)) throw new ApiException(411886);
+                if (!is_array($posterImage)) throw new ApiException(410172);
                 $systemAttachmentServices->save([
                     'name' => $posterImage['name'],
                     'att_dir' => $posterImage['dir'],
@@ -643,7 +643,7 @@ class StorePinkServices extends BaseServices
                     $codeUrl = set_http_type($siteUrl . '/pages/activity/goods_combination_status/index?id=' . $pinkId . '&spread=' . $user['uid'], 1);//二维码链接
                     $imageInfo = UtilService::getQRCodePath($codeUrl, $name);
                     if (is_string($imageInfo)) {
-                        throw new ApiException(411881);
+                        throw new ApiException(410167);
                     }
                     $systemAttachmentServices->save([
                         'name' => $imageInfo['name'],
@@ -662,7 +662,7 @@ class StorePinkServices extends BaseServices
                 $data['url'] = $url;
                 if ($imageInfo['image_type'] == 1) $data['url'] = $siteUrl . $url;
                 $posterImage = UtilService::setShareMarketingPoster($data, 'wap/activity/pink/poster');
-                if (!is_array($posterImage)) throw new ApiException(411886);
+                if (!is_array($posterImage)) throw new ApiException(410172);
                 $systemAttachmentServices->save([
                     'name' => $posterImage['name'],
                     'att_dir' => $posterImage['dir'],
@@ -852,7 +852,7 @@ class StorePinkServices extends BaseServices
                         $valueData .= '&pid=' . $user['uid'];
                     }
                     $res = MiniProgramService::qrcodeService()->appCodeUnlimit($valueData, 'pages/activity/goods_combination_status/index', 280);
-                    if (!$res) throw new ApiException(411881);
+                    if (!$res) throw new ApiException(410167);
                     $uploadType = (int)sys_config('upload_type', 1);
                     $upload = UploadService::init();
                     $res = $upload->to('routine/activity/pink/code')->validate()->setAuthThumb(false)->stream($res, $name);

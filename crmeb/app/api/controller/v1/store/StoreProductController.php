@@ -11,15 +11,10 @@
 namespace app\api\controller\v1\store;
 
 use app\Request;
-use app\services\other\QrcodeServices;
 use app\services\product\product\StoreCategoryServices;
 use app\services\product\product\StoreProductReplyServices;
 use app\services\product\product\StoreProductServices;
 use app\services\user\UserServices;
-use crmeb\exceptions\AdminException;
-use crmeb\exceptions\ApiException;
-use crmeb\utils\AdminApiErrorCode;
-use crmeb\utils\ApiErrorCode;
 
 /**
  * 商品类

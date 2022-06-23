@@ -12,8 +12,6 @@ namespace app\api\controller\v1\store;
 
 use app\Request;
 use app\services\activity\coupon\StoreCouponIssueServices;
-use crmeb\utils\ApiErrorCode;
-use crmeb\utils\ErrorCode;
 
 /**
  * 优惠券类
@@ -63,7 +61,7 @@ class StoreCouponsController
         /** @var StoreCouponIssueServices $couponIssueService */
         $couponIssueService = app()->make(StoreCouponIssueServices::class);
         $couponIssueService->issueUserCoupon($couponId, $request->user());
-        return app('json')->success(414601);
+        return app('json')->success(410319);
     }
 
     /**

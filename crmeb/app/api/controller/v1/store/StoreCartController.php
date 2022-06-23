@@ -13,8 +13,6 @@ namespace app\api\controller\v1\store;
 use app\Request;
 use app\services\activity\combination\StorePinkServices;
 use app\services\order\StoreCartServices;
-use crmeb\utils\ApiErrorCode;
-use crmeb\utils\ErrorCode;
 
 /**
  * 购物车类
@@ -84,7 +82,7 @@ class StoreCartController
             if ($where['pinkId']) {
                 /** @var StorePinkServices $pinkServices */
                 $pinkServices = app()->make(StorePinkServices::class);
-                if ($pinkServices->isPinkStatus($where['pinkId'])) return app('json')->fail(413021);
+                if ($pinkServices->isPinkStatus($where['pinkId'])) return app('json')->fail(410315);
             }
         } elseif ($where['advanceId']) {
             $type = 6;
@@ -162,6 +160,6 @@ class StoreCartController
             ['unique', '']
         ], true);
         $this->services->modifyCart($cart_id, $product_id, $unique);
-        return app('json')->success(412052);
+        return app('json')->success(410225);
     }
 }

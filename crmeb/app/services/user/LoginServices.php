@@ -364,7 +364,7 @@ class LoginServices extends BaseServices
     {
         $userInfo = $this->dao->get($uid);
         if (!$userInfo) {
-            throw new ApiException(411000);
+            throw new ApiException(410113);
         }
         if ($this->dao->getOne([['phone', '=', $phone], ['user_type', '<>', 'h5'], ['is_del', '=', 0]])) {
             throw new ApiException(410039);
@@ -396,7 +396,7 @@ class LoginServices extends BaseServices
     {
         $userInfo = $this->dao->get(['uid' => $uid, 'is_del' => 0]);
         if (!$userInfo) {
-            throw new ApiException(411000);
+            throw new ApiException(410113);
         }
         if ($userInfo->phone == $phone) {
             throw new ApiException(410042);

@@ -62,21 +62,21 @@ class UserExtractController
         ]);
         $extractType = Config::get('pay.extractType', []);
         if (!in_array($extractInfo['extract_type'], $extractType))
-            return app('json')->fail(411070);
-        if (!preg_match('/^[0-9]+(.[0-9]{1,2})?$/', (float)$extractInfo['money'])) return app('json')->fail(411071);
+            return app('json')->fail(410114);
+        if (!preg_match('/^[0-9]+(.[0-9]{1,2})?$/', (float)$extractInfo['money'])) return app('json')->fail(410115);
         if (!$extractInfo['cardnum'] == '')
             if (!preg_match('/^([1-9]{1})(\d{15}|\d{16}|\d{18})$/', $extractInfo['cardnum']))
-                return app('json')->fail(411072);
+                return app('json')->fail(410116);
         if ($extractInfo['extract_type'] == 'alipay') {
-            if (trim($extractInfo['name']) == '') return app('json')->fail(411073);
+            if (trim($extractInfo['name']) == '') return app('json')->fail(410117);
         } else if ($extractInfo['extract_type'] == 'bank') {
-            if (!$extractInfo['cardnum']) return app('json')->fail(411074);
-            if (!$extractInfo['bankname']) return app('json')->fail(411075);
+            if (!$extractInfo['cardnum']) return app('json')->fail(410118);
+            if (!$extractInfo['bankname']) return app('json')->fail(410119);
         }
         $uid = (int)$request->uid();
         if ($this->services->cash($uid, $extractInfo))
-            return app('json')->success(411076);
+            return app('json')->success(410120);
         else
-            return app('json')->fail(411077);
+            return app('json')->fail(410121);
     }
 }

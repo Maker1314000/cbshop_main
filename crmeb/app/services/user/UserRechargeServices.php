@@ -419,7 +419,7 @@ class UserRechargeServices extends BaseServices
     {
         $order = $this->dao->getOne(['order_id' => $orderId, 'paid' => 0]);
         if (!$order) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
         /** @var UserServices $userServices */
         $userServices = app()->make(UserServices::class);
@@ -429,14 +429,14 @@ class UserRechargeServices extends BaseServices
         }
         $price = bcadd((string)$order['price'], (string)$order['give_price'], 2);
         if (!$this->dao->update($order['id'], ['paid' => 1, 'pay_time' => time()], 'id')) {
-            throw new ApiException(412113);
+            throw new ApiException(410286);
         }
         $now_money = bcadd((string)$user['now_money'], (string)$price, 2);
         /** @var UserMoneyServices $userMoneyServices */
         $userMoneyServices = app()->make(UserMoneyServices::class);
         $userMoneyServices->income('user_recharge', $user['uid'], ['number' => $price, 'price' => $order['price'], 'give_price' => $order['give_price']], $now_money, $order['id']);
         if (!$userServices->update((int)$order['uid'], ['now_money' => $now_money], 'uid')) {
-            throw new ApiException(412114);
+            throw new ApiException(410287);
         }
 
         /** @var CapitalFlowServices $capitalFlowServices */

@@ -63,7 +63,7 @@ class Common extends BaseController
     {
         $serviceInfoList = $services->getServiceList(['status' => 1, 'online' => 1]);
         if (!count($serviceInfoList['list'])) {
-            return app('json')->fail(411500);
+            return app('json')->fail(410136);
         }
         $uids = array_column($serviceInfoList['list'], 'uid');
         $toUid = $tourist_uid = $uid = 0;
@@ -103,7 +103,7 @@ class Common extends BaseController
             $userInfo['is_tourist'] = (bool)$tourist_uid;
             return app('json')->success($userInfo->toArray());
         } else {
-            return app('json')->fail(411500);
+            return app('json')->fail(410136);
         }
     }
 

@@ -23,7 +23,6 @@ use crmeb\exceptions\ApiException;
 use crmeb\services\FormBuilder as Form;
 use crmeb\services\WechatService;
 use crmeb\services\workerman\ChannelService;
-use crmeb\utils\ApiErrorCode;
 use think\facade\Route as Url;
 
 /**
@@ -389,7 +388,7 @@ class UserExtractServices extends BaseServices
         }
 
         if ($data['extract_type'] == 'weixin' && bccomp($data['money'], '1', 2) < 0) {
-            throw new ApiException(411085);
+            throw new ApiException(410112);
         }
 
         /** @var WechatUserServices $wechatServices */
@@ -462,11 +461,11 @@ class UserExtractServices extends BaseServices
         }
         $res1 = $this->transaction(function () use ($insertData, $data, $uid, $userService, $user, $mark) {
             if (!$res1 = $this->dao->save($insertData)) {
-                throw new ApiException(ApiErrorCode::ERROR_USER_MESSAGE[415487]);
+                throw new ApiException(410121);
             }
             $balance = bcsub((string)$user['brokerage_price'], (string)$data['money'], 2) ?? 0;
             if (!$userService->update($uid, ['brokerage_price' => $balance], 'uid')) {
-                throw new ApiException(411077);
+                throw new ApiException(410121);
             }
 
             //保存佣金记录

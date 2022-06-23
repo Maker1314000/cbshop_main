@@ -109,7 +109,7 @@ class DivisionController
         /** @var UserServices $userService */
         $userService = app()->make(UserServices::class);
         $upPercent = $userService->value(['uid' => $agentId], 'division_percent');
-        if ($agentPercent >= $upPercent) return app('json')->fail(411700);
+        if ($agentPercent >= $upPercent) return app('json')->fail(410164);
         $userService->update(['uid' => $uid, 'agent_id' => $agentId], ['division_percent' => $agentPercent]);
         return app('json')->success(100014);
     }

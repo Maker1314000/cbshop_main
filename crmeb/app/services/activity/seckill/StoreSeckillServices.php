@@ -73,14 +73,14 @@ class StoreSeckillServices extends BaseServices
             $where[] = ['stop_time', '>=', $time - 86400];
             $seckill_one = $this->dao->getOne($where, $field);
             if (!$seckill_one) {
-                throw new ApiException(414604);
+                throw new ApiException(410322);
             }
             /** @var SystemGroupDataServices $systemGroupDataService */
             $systemGroupDataService = app()->make(SystemGroupDataServices::class);
             $seckillTime = array_column($systemGroupDataService->getConfigNameValue('routine_seckill_time'), null, 'id');
             $config = $seckillTime[$seckill_one['time_id']] ?? false;
             if (!$config) {
-                throw new ApiException(414604);
+                throw new ApiException(410322);
             }
             $now_hour = date('H', time());
             $start_hour = $config['time'];
@@ -88,9 +88,9 @@ class StoreSeckillServices extends BaseServices
             if ($start_hour <= $now_hour && $end_hour > $now_hour) {
                 return $seckill_one;
             } else if ($start_hour > $now_hour) {
-                throw new ApiException(414603);
+                throw new ApiException(410321);
             } else {
-                throw new ApiException(414604);
+                throw new ApiException(410322);
             }
         } else {
             $seckillTime = sys_data('routine_seckill_time') ?: [];//秒杀时间段
@@ -464,7 +464,7 @@ class StoreSeckillServices extends BaseServices
         $uid = (int)$request->uid();
         $storeInfo = $this->dao->getOne(['id' => $id], '*', ['description']);
         if (!$storeInfo) {
-            throw new ApiException(413000);
+            throw new ApiException(410294);
         } else {
             $storeInfo = $storeInfo->toArray();
         }
@@ -516,7 +516,7 @@ class StoreSeckillServices extends BaseServices
             $seckillTime = array_column($systemGroupDataService->getConfigNameValue('routine_seckill_time'), null, 'id');
             $config = $seckillTime[$storeInfo['time_id']] ?? false;
             if (!$config) {
-                throw new ApiException(414604);
+                throw new ApiException(410322);
             }
             $now_hour = date('H', time());
             $start_hour = $config['time'];
@@ -630,23 +630,23 @@ class StoreSeckillServices extends BaseServices
         //检查商品活动状态
         $StoreSeckillinfo = $this->getSeckillCount($seckillId, '*,title as store_name');
         if ($StoreSeckillinfo['once_num'] < $cartNum) {
-            throw new ApiException(413019, ['num' => $StoreSeckillinfo['once_num']]);
+            throw new ApiException(410313, ['num' => $StoreSeckillinfo['once_num']]);
         }
         /** @var StoreOrderServices $orderServices */
         $orderServices = app()->make(StoreOrderServices::class);
         $userBuyCount = $orderServices->getBuyCount($uid, 'seckill_id', $seckillId);
         if ($StoreSeckillinfo['num'] < ($userBuyCount + $cartNum)) {
-            throw new ApiException(413004, ['num' => $StoreSeckillinfo['num']]);
+            throw new ApiException(410298, ['num' => $StoreSeckillinfo['num']]);
         }
         if ($StoreSeckillinfo['num'] < $cartNum) {
-            throw new ApiException(413023, ['num' => $StoreSeckillinfo['num']]);
+            throw new ApiException(410317, ['num' => $StoreSeckillinfo['num']]);
         }
         $attrInfo = $attrValueServices->getOne(['product_id' => $seckillId, 'unique' => $unique, 'type' => 1]);
         if (!$attrInfo || $attrInfo['product_id'] != $seckillId) {
-            throw new ApiException(413011);
+            throw new ApiException(410305);
         }
         if ($cartNum > $attrInfo['quota']) {
-            throw new ApiException(413002);
+            throw new ApiException(410296);
         }
         return [$attrInfo, $unique, $StoreSeckillinfo];
     }

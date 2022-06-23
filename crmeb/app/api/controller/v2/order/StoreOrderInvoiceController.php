@@ -17,8 +17,6 @@ use app\services\order\StoreOrderServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use app\services\system\store\SystemStoreServices;
 use crmeb\services\UtilService;
-use crmeb\utils\ApiErrorCode;
-use crmeb\utils\ErrorCode;
 use think\Request;
 
 /**
@@ -77,7 +75,7 @@ class StoreOrderInvoiceController
     {
         if (!strlen(trim($uni))) return app('json')->fail(100100);
         $order = $services->getUserOrderDetail($uni, (int)$request->uid(), []);
-        if (!$order) return app('json')->fail(412000);
+        if (!$order) return app('json')->fail(410173);
         $order = $order->toArray();
         $orderInvoice = $this->services->getOne(['order_id' => $order['id']]);
         $order['invoice'] = $orderInvoice;

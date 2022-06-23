@@ -1600,7 +1600,7 @@ class UserServices extends BaseServices
         if (!$userInfo['spread_uid'] && $spreadUid != $uid && $userSpreadUid != $userInfo['uid']) {
             if ((sys_config('brokerage_bindind') == 2 && $userInfo['add_time'] == $userInfo['last_time']) || sys_config('brokerage_bindind') == 1) {
                 if (!$this->dao->update($uid, ['spread_uid' => $spreadUid, 'spread_time' => time()], 'uid')) {
-                    throw new ApiException(412115);
+                    throw new ApiException(410288);
                 }
                 /** @var UserBillServices $userBill */
                 $userBill = app()->make(UserBillServices::class);
@@ -1855,7 +1855,7 @@ class UserServices extends BaseServices
      */
     public function setMemberOverdueTime($vip_day, int $user_id, int $is_money_level, $member_type = false)
     {
-        if ($vip_day == 0) throw new ApiException(412116);
+        if ($vip_day == 0) throw new ApiException(410289);
         $user_info = $this->getUserInfo($user_id);
         if (!$user_info) throw new ApiException(410032);
         if (!$member_type) $member_type = "month";

@@ -83,12 +83,12 @@ class UserInvoiceServices extends BaseServices
         }
         $invoice_func = $this->invoiceFuncStatus();
         if (!$invoice_func['invoice_func']) {
-            throw new ApiException(412107);
+            throw new ApiException(410280);
         }
         //专用发票
         if ($invoice['type'] == 2) {
             if (!$invoice_func['special_invoice']) {
-                throw new ApiException(412108);
+                throw new ApiException(410281);
             }
         }
         return $invoice;
@@ -142,7 +142,7 @@ class UserInvoiceServices extends BaseServices
         $invoice = $this->dao->get(['uid' => $uid, 'name' => $data['name'], 'drawer_phone' => $data['drawer_phone'], 'is_del' => 0]);
         if ($id) {
             if ($invoice && $id != $invoice['id']) {
-                throw new ApiException(412109);
+                throw new ApiException(410282);
             }
             if ($this->dao->update($id, $data, 'id')) {
                 if ($data['is_default']) {
@@ -154,7 +154,7 @@ class UserInvoiceServices extends BaseServices
             }
         } else {
             if ($invoice) {
-                throw new ApiException(412109);
+                throw new ApiException(410282);
             }
             if ($add_invoice = $this->dao->save($data)) {
                 $id = (int)$add_invoice['id'];
@@ -185,7 +185,7 @@ class UserInvoiceServices extends BaseServices
             throw new ApiException(100101);
         }
         if (!$this->dao->setDefault($uid, $id, $invoice['header_type'], $invoice['type'])) {
-            throw new ApiException(412110);
+            throw new ApiException(410283);
         }
         return true;
     }

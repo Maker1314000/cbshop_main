@@ -84,7 +84,7 @@ class StoreOrderComputedServices extends BaseServices
         if ($offlinePayStatus == 2) unset($systemPayType['offline']);
         if (strtolower($payType) != 'pc' && strtolower($payType) != 'friend') {
             if (!array_key_exists($payType, $systemPayType)) {
-                throw new ApiException(412068);
+                throw new ApiException(410241);
             }
         }
         if (!$userInfo) {
@@ -158,7 +158,7 @@ class StoreOrderComputedServices extends BaseServices
             $couponServices = app()->make(StoreCouponUserServices::class);
             $couponInfo = $couponServices->getOne([['id', '=', $couponId], ['uid', '=', $uid], ['is_fail', '=', 0], ['status', '=', 0], ['start_time', '<', time()], ['end_time', '>', time()]], '*', ['issue']);
             if (!$couponInfo) {
-                throw new ApiException(412069);
+                throw new ApiException(410242);
             }
             $type = $couponInfo['applicable_type'] ?? 0;
             $flag = false;
@@ -199,7 +199,7 @@ class StoreOrderComputedServices extends BaseServices
                 $flag = true;
             }
             if (!$flag) {
-                throw new ApiException(412070);
+                throw new ApiException(410243);
             }
             $payPrice = (float)bcsub((string)$payPrice, (string)$couponInfo['coupon_price'], 2);
             if ($isCreate) {
@@ -210,7 +210,7 @@ class StoreOrderComputedServices extends BaseServices
             $couponPrice = 0;
         }
         if (!$res1) {
-            throw new ApiException(412071);
+            throw new ApiException(410244);
         }
         return [$payPrice, $couponPrice];
     }

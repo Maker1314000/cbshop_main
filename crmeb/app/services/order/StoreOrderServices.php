@@ -1711,11 +1711,11 @@ HTML;
     {
         $order = $this->getUserOrderDetail($uni, $uid);
         if (!$order) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
         $order = $this->tidyOrder($order);
         if ($order['_status']['_type'] != 0 && $order['_status']['_type'] != -2 && $order['_status']['_type'] != 4)
-            throw new ApiException(412083);
+            throw new ApiException(410256);
 
         $order->is_del = 1;
         /** @var StoreOrderStatusServices $statusService */
@@ -1760,10 +1760,10 @@ HTML;
     {
         $order = $this->dao->getOne(['order_id' => $order_id, 'uid' => $uid, 'is_del' => 0]);
         if (!$order) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
         if ($order->paid) {
-            throw new ApiException(412084);
+            throw new ApiException(410257);
         }
         /** @var StoreOrderCartInfoServices $cartServices */
         $cartServices = app()->make(StoreOrderCartInfoServices::class);
@@ -2148,7 +2148,7 @@ HTML;
         if ($orderInfo) {
             $orderInfo = $orderInfo->toArray();
         } else {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
         $orderInfo = $this->tidyOrder($orderInfo, true);
         /** @var UserServices $userServices */
@@ -2186,7 +2186,7 @@ HTML;
     {
         $orderInfo = $this->dao->get($id);
         if (!$orderInfo) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
         $orderInfo = $this->tidyOrder($orderInfo, true);
         $cartInfo = $orderInfo['cartInfo'] ?? [];
@@ -2194,7 +2194,7 @@ HTML;
         if ($cart_ids) {
             foreach ($cart_ids as $cart) {
                 if (!isset($cart['cart_id']) || !$cart['cart_id'] || !isset($cart['cart_num']) || !$cart['cart_num'] || $cart['cart_num'] <= 0) {
-                    throw new ApiException(412050);
+                    throw new ApiException(410223);
                 }
             }
             $cart_ids = array_combine(array_column($cart_ids, 'cart_id'), $cart_ids);
@@ -2222,18 +2222,18 @@ HTML;
     {
         if (!$uni) throw new ApiException(100100);
         $order = $this->getUserOrderDetail($uni, $uid);
-        if (!$order) throw new ApiException(412000);
+        if (!$order) throw new ApiException(410173);
         $order = $this->tidyOrder($order, true);
         $cateId = [];
 
         foreach ($order['cartInfo'] as $v) {
-            if ($v['combination_id']) throw new ApiException(412085);
-            elseif ($v['bargain_id']) throw new ApiException(412086);
-            elseif ($v['seckill_id']) throw new ApiException(412087);
-            elseif ($v['advance_id']) throw new ApiException(412088);
+            if ($v['combination_id']) throw new ApiException(410258);
+            elseif ($v['bargain_id']) throw new ApiException(410259);
+            elseif ($v['seckill_id']) throw new ApiException(410260);
+            elseif ($v['advance_id']) throw new ApiException(410261);
             else $cateId[] = $services->setCart($uid, (int)$v['product_id'], (int)$v['cart_num'], $v['productInfo']['attrInfo']['unique'] ?? '', '0', true);
         }
-        if (!$cateId) throw new ApiException(412089);
+        if (!$cateId) throw new ApiException(410262);
         return $cateId;
     }
 
@@ -2259,7 +2259,7 @@ HTML;
 
         $orderCache = CacheService::get($key);
         if (!$orderCache || !isset($orderCache['order_id'])) {
-            throw new ApiException(412090);
+            throw new ApiException(410263);
         }
 
         $payType = isset($orderCache['other_pay_type']) && $orderCache['other_pay_type'] == true;
@@ -2270,7 +2270,7 @@ HTML;
         }
 
         if (!$orderInfo) {
-            throw new ApiException(412091);
+            throw new ApiException(410264);
         }
         return $payServices->alipayOrder($orderInfo->toArray(), $quitUrl);
     }
@@ -2288,7 +2288,7 @@ HTML;
     public function getUserOrderByKey(StoreOrderEconomizeServices $services, string $uni, int $uid): array
     {
         $order = $this->getUserOrderDetail($uni, $uid, ['split', 'invoice']);
-        if (!$order) throw new ApiException(413000);
+        if (!$order) throw new ApiException(410294);
         $order = $order->toArray();
         $splitNum = [];
         //是否开启门店自提

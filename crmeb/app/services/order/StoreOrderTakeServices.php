@@ -50,17 +50,17 @@ class StoreOrderTakeServices extends BaseServices
     {
         $order = $this->dao->getUserOrderDetail($uni, $uid);
         if (!$order) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
         /** @var StoreOrderServices $orderServices */
         $orderServices = app()->make(StoreOrderServices::class);
         $order = $orderServices->tidyOrder($order);
         if ($order['_status']['_type'] != 2) {
-            throw new ApiException(412093);
+            throw new ApiException(410266);
         }
         //存在拆分发货 需要分开收货
         if ($this->dao->count(['pid' => $order['id']])) {
-            throw new ApiException(412093);
+            throw new ApiException(410266);
         }
         $order->status = 2;
         /** @var StoreOrderStatusServices $statusService */
@@ -73,7 +73,7 @@ class StoreOrderTakeServices extends BaseServices
             ]);
         $res = $res && $this->storeProductOrderUserTakeDelivery($order);
         if (!$res) {
-            throw new ApiException(412032);
+            throw new ApiException(410205);
         }
         return $order;
     }
@@ -104,7 +104,7 @@ class StoreOrderTakeServices extends BaseServices
             //事业部
             $res4 = $this->divisionBrokerage($order, $userInfo);
             if (!($res1 && $res2 && $res3 && $res4)) {
-                throw new ApiException(412032);
+                throw new ApiException(410205);
             }
             return true;
         }, $isTran);

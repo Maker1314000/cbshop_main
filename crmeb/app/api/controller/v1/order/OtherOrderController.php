@@ -52,7 +52,7 @@ class OtherOrderController
     {
         list($pay_price) = $request->getMore([['pay_price', 0]], true);
         $old_price = $pay_price;
-        if (!$pay_price || !is_numeric($pay_price)) return app('json')->fail(412017);
+        if (!$pay_price || !is_numeric($pay_price)) return app('json')->fail(410190);
         $uid = $request->uid();
         /** @var UserServices $userService */
         $userService = app()->make(UserServices::class);
@@ -97,20 +97,20 @@ class OtherOrderController
             ['quitUrl', ''],
             ['mc_id', 0]
         ], true);
-        if ($money <= 0.00) return app('json')->fail(412018);
+        if ($money <= 0.00) return app('json')->fail(410191);
         $payType = strtolower($payType);
         if (in_array($type, [1, 2])) {
             /** @var MemberCardServices $memberCardService */
             $memberCardService = app()->make(MemberCardServices::class);
             $isOpenMember = $memberCardService->isOpenMemberCard();
-            if (!$isOpenMember) return app('json')->fail(412019);
+            if (!$isOpenMember) return app('json')->fail(410192);
         }
         $channelType = $userServices->getUserInfo($uid)['user_type'];
         $order = $OtherOrderServices->createOrder($uid, $channelType, $memberType, $price, $payType, $type, $money, $mcId);
-        if ($order === false) return app('json')->fail(412020);
+        if ($order === false) return app('json')->fail(410193);
         $order_id = $order['order_id'];
         $orderInfo = $OtherOrderServices->getOne(['order_id' => $order_id]);
-        if (!$orderInfo) return app('json')->fail(412021);
+        if (!$orderInfo) return app('json')->fail(410194);
         $orderInfo = $orderInfo->toArray();
 
         $info = compact('order_id');
@@ -118,13 +118,13 @@ class OtherOrderController
         if ($order_id) {
             switch ($payType) {
                 case PayServices::WEIXIN_PAY:
-                    if ($orderInfo['paid']) return app('json')->fail(412001);
+                    if ($orderInfo['paid']) return app('json')->fail(410174);
                     //支付金额为0
                     if (bcsub((string)$orderInfo['pay_price'], '0', 2) <= 0) {
                         //创建订单jspay支付
                         $payPriceStatus = $OtherOrderServices->zeroYuanPayment($orderInfo, $uid);
                         if ($payPriceStatus)//0元支付成功
-                            return app('json')->status('success', 412022, $info);
+                            return app('json')->status('success', 410195, $info);
                         else
                             return app('json')->status('pay_error');
                     } else {
@@ -132,9 +132,9 @@ class OtherOrderController
                         $payServices = app()->make(OrderPayServices::class);
                         $info['jsConfig'] = $payServices->orderPay($orderInfo, $from);
                         if ($from == 'weixinh5') {
-                            return app('json')->status('wechat_h5_pay', 412023, $info);
+                            return app('json')->status('wechat_h5_pay', 410196, $info);
                         } else {
-                            return app('json')->status('wechat_pay', 412023, $info);
+                            return app('json')->status('wechat_pay', 410196, $info);
                         }
                     }
                 case PayServices::YUE_PAY:
@@ -142,7 +142,7 @@ class OtherOrderController
                     $yueServices = app()->make(YuePayServices::class);
                     $pay = $yueServices->yueOrderPay($orderInfo, $uid);
                     if ($pay['status'] === true)
-                        return app('json')->status('success', 412024, $info);
+                        return app('json')->status('success', 410197, $info);
                     else {
                         if (is_array($pay))
                             return app('json')->status($pay['status'], $pay['msg'], $info);
@@ -151,14 +151,14 @@ class OtherOrderController
                     }
                 case PayServices::ALIAPY_PAY:
                     if (!$quitUrl && $from != 'routine' && !request()->isApp()) {
-                        return app('json')->status('pay_error', 412025, $info);
+                        return app('json')->status('pay_error', 410198, $info);
                     }
                     //支付金额为0
                     if (bcsub((string)$orderInfo['pay_price'], '0', 2) <= 0) {
                         //创建订单jspay支付
                         $payPriceStatus = $OtherOrderServices->zeroYuanPayment($orderInfo);
                         if ($payPriceStatus)//0元支付成功
-                            return app('json')->status('success', 412026, $info);
+                            return app('json')->status('success', 410199, $info);
                         else
                             return app('json')->status('pay_error');
                     } else {
@@ -168,12 +168,12 @@ class OtherOrderController
                         $payKey = md5($orderInfo['order_id']);
                         CacheService::set($payKey, ['order_id' => $orderInfo['order_id'], 'other_pay_type' => true], 300);
                         $info['pay_key'] = $payKey;
-                        return app('json')->status(PayServices::ALIAPY_PAY . '_pay',  412023, $info);
+                        return app('json')->status(PayServices::ALIAPY_PAY . '_pay',  410196, $info);
                     }
                 case PayServices::OFFLINE_PAY:
-                    return app('json')->status('success', 412023, $info);
+                    return app('json')->status('success', 410196, $info);
             }
-        } else return app('json')->fail(412027);
+        } else return app('json')->fail(410200);
     }
 
     /**

@@ -95,7 +95,7 @@ class PayServices
                 case 'store':
                     return WechatService::nativePay($openid, $orderId, $price, $successAction, $body);
                 default:
-                    throw new ApiException(412104);
+                    throw new ApiException(410277);
             }
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage());

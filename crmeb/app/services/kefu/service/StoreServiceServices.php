@@ -187,11 +187,11 @@ class StoreServiceServices extends BaseServices
         if (!$toUid) {
             $serviceInfoList = $this->getServiceList(['status' => 1, 'online' => 1]);
             if (!count($serviceInfoList)) {
-                throw new ApiException(411500);
+                throw new ApiException(410136);
             }
             $uids = array_column($serviceInfoList['list'], 'uid');
             if (!$uids) {
-                throw new ApiException(411500);
+                throw new ApiException(410136);
             }
             /** @var StoreServiceRecordServices $recordServices */
             $recordServices = app()->make(StoreServiceRecordServices::class);
@@ -205,7 +205,7 @@ class StoreServiceServices extends BaseServices
                 $toUid = $uids[array_rand($uids)] ?? 0;
             }
             if (!$toUid) {
-                throw new ApiException(411500);
+                throw new ApiException(410136);
             }
         }
         $userInfo = $this->dao->get(['uid' => $toUid], ['nickname', 'avatar']);

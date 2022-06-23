@@ -447,8 +447,8 @@ class StoreBargainServices extends BaseServices
 
         //获取砍价商品信息
         $bargain = $this->dao->getOne(['id' => $id], '*', ['description']);
-        if (!$bargain) throw new ApiException(413012);
-        if ($bargain['stop_time'] < time()) throw new ApiException(413005);
+        if (!$bargain) throw new ApiException(410306);
+        if ($bargain['stop_time'] < time()) throw new ApiException(410299);
         list($productAttr, $productValue) = $storeProductAttrServices->getProductAttrDetail($id, $request->uid(), 0, 2, $bargain['product_id']);
         foreach ($productValue as $v) {
             $bargain['attr'] = $v;
@@ -520,26 +520,26 @@ class StoreBargainServices extends BaseServices
         $bargainUserServices = app()->make(StoreBargainUserServices::class);
         $bargainUserInfo = $bargainUserServices->getOne(['uid' => $uid, 'bargain_id' => $bargainId, 'status' => 1, 'is_del' => 0]);
         if (!$bargainUserInfo)
-            throw new ApiException(413013);
+            throw new ApiException(410307);
         $bargainUserTableId = $bargainUserInfo['id'];
         if ($bargainUserInfo['bargain_price_min'] < bcsub((string)$bargainUserInfo['bargain_price'], (string)$bargainUserInfo['price'], 2)) {
-            throw new ApiException(413014);
+            throw new ApiException(410308);
         }
         if ($bargainUserInfo['status'] == 3)
-            throw new ApiException(413015);
+            throw new ApiException(410309);
         /** @var StoreProductAttrValueServices $attrValueServices */
         $attrValueServices = app()->make(StoreProductAttrValueServices::class);
         $res = $attrValueServices->getOne(['product_id' => $bargainId, 'type' => 2]);
         if (!$this->validBargain($bargainId) || !$res) {
-            throw new ApiException(413001);
+            throw new ApiException(410295);
         }
         $StoreBargainInfo = $this->dao->get($bargainId);
         if (1 > $res['quota']) {
-            throw new ApiException(413002);
+            throw new ApiException(410296);
         }
         $product_stock = $attrValueServices->value(['product_id' => $StoreBargainInfo['product_id'], 'suk' => $res['suk'], 'type' => 0], 'stock');
         if ($product_stock < 1) {
-            throw new ApiException(413002);
+            throw new ApiException(410296);
         }
         //修改砍价状态
         $this->setBargainUserStatus($bargainId, $uid, $bargainUserTableId);
@@ -589,7 +589,7 @@ class StoreBargainServices extends BaseServices
             ['stop_time', '>', time()],
             ['id', '=', $bargainId],
         ]);
-        if (!$bargainInfo) throw new ApiException(413005);
+        if (!$bargainInfo) throw new ApiException(410299);
         $bargainInfo = $bargainInfo->toArray();
         /** @var StoreBargainUserServices $bargainUserService */
         $bargainUserService = app()->make(StoreBargainUserServices::class);
@@ -600,7 +600,7 @@ class StoreBargainServices extends BaseServices
             /** @var StoreBargainUserHelpServices $bargainUserHelpService */
             $bargainUserHelpService = app()->make(StoreBargainUserHelpServices::class);
             $count = $bargainUserService->count(['uid' => $uid, 'bargain_id' => $bargainId, 'is_del' => 0]);
-            if ($count >= $bargainInfo['num']) throw new ApiException(413006);
+            if ($count >= $bargainInfo['num']) throw new ApiException(410300);
             return $this->transaction(function () use ($bargainUserService, $bargainUserHelpService, $bargainId, $uid, $bargainInfo) {
                 $bargainUserInfo = $bargainUserService->setBargain($bargainId, $uid, $bargainInfo);
                 $price = $bargainUserHelpService->setBargainRecord($uid, $bargainUserInfo->toArray(), $bargainInfo);
@@ -629,17 +629,17 @@ class StoreBargainServices extends BaseServices
             ['stop_time', '>', time()],
             ['id', '=', $bargainId],
         ]);
-        if (!$bargainInfo) throw new ApiException(413005);
+        if (!$bargainInfo) throw new ApiException(410299);
         $bargainInfo = $bargainInfo->toArray();
         /** @var StoreBargainUserHelpServices $userHelpService */
         $userHelpService = app()->make(StoreBargainUserHelpServices::class);
         /** @var StoreBargainUserServices $bargainUserService */
         $bargainUserService = app()->make(StoreBargainUserServices::class);
         $bargainUserTableId = $bargainUserService->getBargainUserTableId($bargainId, $bargainUserUid);
-        if (!$bargainUserTableId) throw new ApiException(413007);
+        if (!$bargainUserTableId) throw new ApiException(410301);
         $bargainUserInfo = $bargainUserService->get($bargainUserTableId)->toArray();
         $count = $userHelpService->isBargainUserHelpCount($bargainId, $bargainUserTableId, $uid);
-        if (!$count) throw new ApiException(413008);
+        if (!$count) throw new ApiException(410302);
         $price = $userHelpService->setBargainRecord($uid, $bargainUserInfo, $bargainInfo);
         if ($price) {
             if (!$bargainUserService->getSurplusPrice($bargainUserTableId, 1)) {
@@ -730,13 +730,13 @@ class StoreBargainServices extends BaseServices
     {
         $storeBargainInfo = $this->dao->get($bargainId, ['title', 'image', 'price']);
         if (!$storeBargainInfo) {
-            throw new ApiException(413009);
+            throw new ApiException(410303);
         }
         /** @var StoreBargainUserServices $services */
         $services = app()->make(StoreBargainUserServices::class);
         $bargainUser = $services->get(['bargain_id' => $bargainId, 'uid' => $user['uid']], ['price', 'bargain_price_min']);
         if (!$bargainUser) {
-            throw new ApiException(413010);
+            throw new ApiException(410304);
         }
         try {
             $siteUrl = sys_config('site_url');
@@ -756,7 +756,7 @@ class StoreBargainServices extends BaseServices
                     $codeUrl = set_http_type($siteUrl . '/pages/activity/goods_bargain_details/index?id=' . $bargainId . '&bargain=' . $user['uid'] . '&spread=' . $user['uid'], 1);//二维码链接
                     $imageInfo = UtilService::getQRCodePath($codeUrl, $name);
                     if (is_string($imageInfo)) {
-                        throw new ApiException(411881);
+                        throw new ApiException(410167);
                     }
                     $systemAttachmentServices->save([
                         'name' => $imageInfo['name'],
@@ -776,7 +776,7 @@ class StoreBargainServices extends BaseServices
                 if ($imageInfo['image_type'] == 1) $data['url'] = $siteUrl . $url;
                 $posterImage = UtilService::setShareMarketingPoster($data, 'wap/activity/bargain/poster');
                 if (!is_array($posterImage)) {
-                    throw new ApiException(411886);
+                    throw new ApiException(410172);
                 }
                 $systemAttachmentServices->save([
                     'name' => $posterImage['name'],
@@ -817,7 +817,7 @@ class StoreBargainServices extends BaseServices
                     $imageInfo['image_type'] = $uploadType;
                     if ($imageInfo['image_type'] == 1) $remoteImage = UtilService::remoteImage($siteUrl . $imageInfo['dir']);
                     else $remoteImage = UtilService::remoteImage($imageInfo['dir']);
-                    if (!$remoteImage['status']) throw new ApiException(411881);
+                    if (!$remoteImage['status']) throw new ApiException(410167);
                     $systemAttachmentServices->save([
                         'name' => $imageInfo['name'],
                         'att_dir' => $imageInfo['dir'],
@@ -836,7 +836,7 @@ class StoreBargainServices extends BaseServices
                 if ($imageInfo['image_type'] == 1)
                     $data['url'] = $siteUrl . $url;
                 $posterImage = UtilService::setShareMarketingPoster($data, 'routine/activity/bargain/poster');
-                if (!is_array($posterImage)) throw new ApiException(411886);
+                if (!is_array($posterImage)) throw new ApiException(410172);
                 $systemAttachmentServices->save([
                     'name' => $posterImage['name'],
                     'att_dir' => $posterImage['dir'],
@@ -870,13 +870,13 @@ class StoreBargainServices extends BaseServices
     {
         $storeBargainInfo = $this->dao->get($bargainId, ['title', 'image', 'price']);
         if (!$storeBargainInfo) {
-            throw new ApiException(413009);
+            throw new ApiException(410303);
         }
         /** @var StoreBargainUserServices $services */
         $services = app()->make(StoreBargainUserServices::class);
         $bargainUser = $services->get(['bargain_id' => $bargainId, 'uid' => $user['uid']], ['price', 'bargain_price_min']);
         if (!$bargainUser) {
-            throw new ApiException(413010);
+            throw new ApiException(410304);
         }
         $data['url'] = '';
         $data['title'] = $storeBargainInfo['title'];
@@ -902,7 +902,7 @@ class StoreBargainServices extends BaseServices
                         $valueData .= '&spread=' . $user['uid'];
                     }
                     $res = MiniProgramService::qrcodeService()->appCodeUnlimit($valueData, 'pages/activity/goods_bargain_details/index', 280);
-                    if (!$res) throw new ApiException(411881);
+                    if (!$res) throw new ApiException(410167);
                     $uploadType = (int)sys_config('upload_type', 1);
                     $upload = UploadService::init();
                     $res = (string)EntityBody::factory($res);
@@ -954,13 +954,13 @@ class StoreBargainServices extends BaseServices
     public function checkBargainStock(int $uid, int $bargainId, int $cartNum = 1, string $unique = '')
     {
         if (!$this->validBargain($bargainId)) {
-            throw new ApiException(413001);
+            throw new ApiException(410295);
         }
         /** @var StoreProductAttrValueServices $attrValueServices */
         $attrValueServices = app()->make(StoreProductAttrValueServices::class);
         $attrInfo = $attrValueServices->getOne(['product_id' => $bargainId, 'type' => 2]);
         if (!$attrInfo || $attrInfo['product_id'] != $bargainId) {
-            throw new ApiException(413011);
+            throw new ApiException(410305);
         }
         $productInfo = $this->dao->get($bargainId, ['*', 'title as store_name']);
         /** @var StoreBargainUserServices $bargainUserService */
@@ -971,7 +971,7 @@ class StoreBargainServices extends BaseServices
         }
         $unique = $attrInfo['unique'];
         if ($cartNum > $attrInfo['quota']) {
-            throw new ApiException(413002);
+            throw new ApiException(410296);
         }
         return [$attrInfo, $unique, $productInfo, $bargainUserInfo];
     }

@@ -98,7 +98,7 @@ class Order extends AuthController
             ['fictitious_content', '']//虚拟发货内容
         ]);
         $services->delivery((int)$id, $data);
-        return app('json')->success(412100);
+        return app('json')->success(410273);
     }
 
     /**
@@ -162,10 +162,10 @@ class Order extends AuthController
         ], true);
         $order = $this->services->getOne(['order_id' => $order_id], 'id,remark');
         if (!$order) {
-            return app('json')->fail(412000);
+            return app('json')->fail(410173);
         }
         if (!strlen(trim($remark))) {
-            return app('json')->fail(412004);
+            return app('json')->fail(410177);
         }
         $order->remark = $remark;
         if (!$order->save()) {
@@ -219,21 +219,21 @@ class Order extends AuthController
             $data['refund_status'] = 0;
             $data['refund_type'] = 3;
         } else {
-            return app('json')->fail(412008);
+            return app('json')->fail(410181);
         }
         if ($orderInfo['pay_price'] == 0 || $type == 2) {
             $orderInfo->refund_status = $data['refund_status'];
             $orderInfo->save();
-            return app('json')->success(412009);
+            return app('json')->success(410182);
         }
-        if ($orderInfo['pay_price'] == $orderInfo['refund_price']) return app('json')->fail(412010);
+        if ($orderInfo['pay_price'] == $orderInfo['refund_price']) return app('json')->fail(410183);
         if (!$price) {
-            return app('json')->fail(412011);
+            return app('json')->fail(410184);
         }
         $data['refund_price'] = bcadd($price, $orderInfo['refund_price'], 2);
         $bj = bccomp((float)$orderInfo['pay_price'], (float)$data['refund_price'], 2);
         if ($bj < 0) {
-            return app('json')->fail(412012);
+            return app('json')->fail(410185);
         }
         $refundData['pay_price'] = $orderInfo['pay_price'];
         $refundData['refund_price'] = $price;
@@ -245,10 +245,10 @@ class Order extends AuthController
         //修改订单退款状态
         if ($this->services->update((int)$orderInfo['id'], $data)) {
             $services->storeProductOrderRefundY($data, $orderInfo, $price);
-            return app('json')->success(412013);
+            return app('json')->success(410186);
         } else {
             $services->storeProductOrderRefundYFasle((int)$orderInfo['id'], $price);
-            return app('json')->fail(412014);
+            return app('json')->fail(410187);
         }
     }
 
@@ -260,7 +260,7 @@ class Order extends AuthController
     public function orderInfo(StoreProductServices $productServices, $id)
     {
         if (!$id || !($orderInfo = $this->services->get($id))) {
-            return app('json')->fail(412000);
+            return app('json')->fail(410173);
         }
         /** @var UserServices $services */
         $services = app()->make(UserServices::class);
@@ -348,13 +348,13 @@ class Order extends AuthController
 
         $orderInfo = $this->services->get(['id' => $id], ['verify_code', 'uid']);
         if (!$orderInfo) {
-            return app('json')->fail(412000);
+            return app('json')->fail(410173);
         }
         if (!$orderInfo->verify_code) {
-            return app('json')->fail(412099);
+            return app('json')->fail(410272);
         }
         $services->writeOffOrder($orderInfo->verify_code, 1, $orderInfo->uid);
-        return app('json')->success(412016);
+        return app('json')->success(410189);
     }
 
 }

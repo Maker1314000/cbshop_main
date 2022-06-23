@@ -118,7 +118,7 @@ class StoreBargainUserHelpServices extends BaseServices
         //剩余砍价金额
         $coverPrice = bcsub((string)$bargainUserInfo['bargain_price'], (string)$bargainUserInfo['bargain_price_min'], 2);
         $surplusPrice = bcsub((string)$coverPrice, (string)$bargainUserInfo['price'], 2);//TODO 用户剩余要砍掉的价格
-        if (0.00 === (float)$surplusPrice) throw new ApiException(413005);
+        if (0.00 === (float)$surplusPrice) throw new ApiException(410299);
         if (($bargainInfo['people_num'] - $people) == 1) {
             $price = $surplusPrice;
         } else {
@@ -133,7 +133,7 @@ class StoreBargainUserHelpServices extends BaseServices
         } else {
             //帮砍次数限制
             $count = $this->dao->count(['uid' => $uid, 'bargain_id' => $bargainInfo['id'], 'type' => 0]);
-            if ($count >= $bargainInfo['bargain_num']) throw new ApiException(413016);
+            if ($count >= $bargainInfo['bargain_num']) throw new ApiException(410310);
             $type = 0;
         }
         /** @var StoreBargainUserServices $bargainUserService */
@@ -148,7 +148,7 @@ class StoreBargainUserHelpServices extends BaseServices
             'type' => $type,
         ]);
         $res = $res1 && $res2;
-        if (!$res) throw new AdminException(413013);
+        if (!$res) throw new AdminException(410307);
         return $price;
     }
 

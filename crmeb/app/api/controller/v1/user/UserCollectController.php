@@ -58,9 +58,9 @@ class UserCollectController
         if (!$id || !is_numeric($id)) return app('json')->fail(100100);
         $res = $this->services->productRelation((int)$id, $request->uid(), 'collect', $category);
         if (!$res) {
-            return app('json')->fail(411090);
+            return app('json')->fail(410129);
         } else {
-            return app('json')->success(411091);
+            return app('json')->success(410130);
         }
     }
 
@@ -101,9 +101,9 @@ class UserCollectController
         $productIdS = $collectInfo['id'];
         $res = $this->services->productRelationAll($productIdS, $uid, 'collect', $collectInfo['category']);
         if (!$res) {
-            return app('json')->fail(411091);
+            return app('json')->fail(410130);
         } else {
-            return app('json')->success(411090);
+            return app('json')->success(410129);
         }
     }
 }

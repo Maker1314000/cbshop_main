@@ -194,7 +194,7 @@ class StoreIntegralOrderServices extends BaseServices
             //创建订单
             $order = $this->dao->save($orderInfo);
             if (!$order) {
-                throw new ApiException(412027);
+                throw new ApiException(410200);
             }
             //扣库存
             $this->decGoodsStock($productInfo, $num);
@@ -234,7 +234,7 @@ class StoreIntegralOrderServices extends BaseServices
             $res2 = $res2 && false != $res3;
         }
         if (!$res2) {
-            throw new ApiException(412054);
+            throw new ApiException(410227);
         }
     }
 
@@ -253,10 +253,10 @@ class StoreIntegralOrderServices extends BaseServices
         try {
             $res5 = $res5 && $StoreIntegralServices->decIntegralStock((int)$num, $productInfo['product_id'], $productInfo['unique']);
             if (!$res5) {
-                throw new ApiException(413002);
+                throw new ApiException(410296);
             }
         } catch (\Throwable $e) {
-            throw new ApiException(413002);
+            throw new ApiException(410296);
         }
     }
 
@@ -339,7 +339,7 @@ class StoreIntegralOrderServices extends BaseServices
         $StoreProductAttrValueServices = app()->make(StoreProductAttrValueServices::class);
         $attrValue = $StoreProductAttrValueServices->uniqueByField($unique, 'product_id,suk,price,image,unique');
         if(!$attrValue || !isset($attrValue['storeIntegral']) || !$attrValue['storeIntegral']){
-            throw new ApiException(413001);
+            throw new ApiException(410295);
         }
         $data = [];
         $attrValue = is_object($attrValue) ? $attrValue->toArray() : $attrValue;

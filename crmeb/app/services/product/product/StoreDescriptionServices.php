@@ -15,7 +15,6 @@ namespace app\services\product\product;
 use app\dao\product\product\StoreDescriptionDao;
 use app\services\BaseServices;
 use crmeb\exceptions\AdminException;
-use crmeb\utils\AdminApiErrorCode;
 
 /**
  * Class StoreDescriptionService

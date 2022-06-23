@@ -32,13 +32,13 @@ class AddressValidate extends Validate
     ];
 
     protected $message = [
-        'real_name.require' => 411655,
-        'real_name.max' => 411656,
-        'phone.require' => 411657,
-        'phone.regex' => 411658,
-        'province.require' => 411659,
-        'city.require' => 411660,
-        'district.require' => 411661,
-        'detail.require' => 411662,
+        'real_name.require' => 410155,
+        'real_name.max' => 410156,
+        'phone.require' => 410157,
+        'phone.regex' => 410158,
+        'province.require' => 410159,
+        'city.require' => 410160,
+        'district.require' => 410161,
+        'detail.require' => 410162,
     ];
 }

@@ -32,7 +32,7 @@ class StoreIntegralOrderController
             'num'
         ], true);
         if (!$unique) {
-            return app('json')->fail(412028);
+            return app('json')->fail(410201);
         }
         $user = $request->user()->toArray();
         return app('json')->success($this->services->getOrderConfirmData($user, $unique, $num));
@@ -59,7 +59,7 @@ class StoreIntegralOrderController
         ], true);
         $productInfo = $storeProductAttrValueServices->uniqueByField($unique);
         if (!$productInfo || !isset($productInfo['storeIntegral']) || !$productInfo['storeIntegral']) {
-            return app('json')->fail(412029);
+            return app('json')->fail(410202);
         }
         $productInfo = is_object($productInfo) ? $productInfo->toArray() : $productInfo;
 
@@ -69,7 +69,7 @@ class StoreIntegralOrderController
         try {
             //弹出队列
             if (!CacheService::popStock($unique, $num, 4)) {
-                return app('json')->fail(413002);
+                return app('json')->fail(410296);
             }
             $order = $this->services->createOrder($uid, $addressId, $mark, $request->user()->toArray(), $num, $productInfo);
         } catch (\Throwable $e) {
@@ -77,7 +77,7 @@ class StoreIntegralOrderController
             CacheService::setStock($unique, $num, 4, false);
             return app('json')->fail($e->getMessage());
         }
-        return app('json')->status('success', 412030, ['orderId' => $order['order_id']]);
+        return app('json')->status('success', 410203, ['orderId' => $order['order_id']]);
     }
 
     /**
@@ -90,7 +90,7 @@ class StoreIntegralOrderController
     {
         if (!strlen(trim($uni))) return app('json')->fail(100100);
         $order = $this->services->getOne(['order_id' => $uni, 'is_del' => 0]);
-        if (!$order) return app('json')->fail(412000);
+        if (!$order) return app('json')->fail(410173);
         $order = $order->toArray();
         $orderData = $this->services->tidyOrder($order);
         return app('json')->success($orderData);
@@ -123,9 +123,9 @@ class StoreIntegralOrderController
         if (!$order_id) return app('json')->fail(100100);
         $order = $this->services->takeOrder($order_id, (int)$request->uid());
         if ($order) {
-            return app('json')->success(412031);
+            return app('json')->success(410204);
         } else
-            return app('json')->fail(412032);
+            return app('json')->fail(410205);
     }
 
     /**
@@ -136,8 +136,8 @@ class StoreIntegralOrderController
      */
     public function express(Request $request, ExpressServices $expressServices, $uni)
     {
-        if (!$uni || !($order = $this->services->getUserOrderDetail($uni, $request->uid()))) return app('json')->fail(412000);
-        if ($order['delivery_type'] != 'express' || !$order['delivery_id']) return app('json')->fail(412033);
+        if (!$uni || !($order = $this->services->getUserOrderDetail($uni, $request->uid()))) return app('json')->fail(410173);
+        if ($order['delivery_type'] != 'express' || !$order['delivery_id']) return app('json')->fail(410206);
         $cacheName = 'integral' . $order['order_id'] . $order['delivery_id'];
         return app('json')->success([
             'order' => $order,

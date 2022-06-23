@@ -72,7 +72,7 @@ class UserSignServices extends BaseServices
         $data['balance'] = $integral_balance + $number;
         $data['add_time'] = time();
         if (!$this->dao->save($data)) {
-            throw new ApiException(412117);
+            throw new ApiException(410290);
         }
         /** @var UserBillServices $userBill */
         $userBill = app()->make(UserBillServices::class);
@@ -88,7 +88,7 @@ class UserSignServices extends BaseServices
             $data['pm'] = 1;
             $data['status'] = 1;
             if (!$userBill->save($data)) {
-                throw new ApiException(412118);
+                throw new ApiException(410291);
             }
             //检测会员等级
             try {
@@ -131,7 +131,7 @@ class UserSignServices extends BaseServices
     {
         $sign_list = \crmeb\services\GroupDataService::getData('sign_day_num') ?: [];
         if (!count($sign_list)) {
-            throw new ApiException(412119);
+            throw new ApiException(410292);
         }
         /** @var UserServices $userServices */
         $userServices = app()->make(UserServices::class);
@@ -140,7 +140,7 @@ class UserSignServices extends BaseServices
             throw new ApiException(410032);
         }
         if ($this->getIsSign($uid, 'today')) {
-            throw new ApiException(412120);
+            throw new ApiException(410293);
         }
         $sign_num = 0;
         $user_sign_num = $user['sign_num'];
@@ -186,7 +186,7 @@ class UserSignServices extends BaseServices
             $user->integral = (int)$user->integral + (int)$sign_num;
             if ($exp_num) $user->exp = (int)$user->exp + (int)$exp_num;
             if (!$user->save()) {
-                throw new ApiException(412114);
+                throw new ApiException(410287);
             }
         });
         return $sign_num;

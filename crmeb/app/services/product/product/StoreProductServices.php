@@ -38,7 +38,6 @@ use app\jobs\ProductLogJob;
 use app\jobs\ProductCopyJob;
 use crmeb\exceptions\ApiException;
 use crmeb\services\GroupDataService;
-use crmeb\utils\AdminApiErrorCode;
 use Lizhichao\Word\VicWord;
 use think\facade\Config;
 
@@ -801,7 +800,7 @@ class StoreProductServices extends BaseServices
             $storeProductCateServices = app()->make(StoreProductCateServices::class);
             $storeProductCateServices->update(['product_id' => $id], ['status' => 0]);
             if (!$res) throw new AdminException(100008);
-            return AdminApiErrorCode::ERR_PRODUCT[411602];
+            return 100002;
         }
     }
 
@@ -1923,7 +1922,7 @@ class StoreProductServices extends BaseServices
     public function getCode(int $id, string $userType, $user)
     {
         if (!$id || !$this->isValidProduct($id)) {
-            throw new ApiException(413000);
+            throw new ApiException(410294);
         }
         switch ($userType) {
             case 'wechat':
@@ -1933,7 +1932,7 @@ class StoreProductServices extends BaseServices
                 $qrcodeService = app()->make(QrcodeServices::class);
                 $url = $qrcodeService->getWechatQrcodePath($name, '/pages/goods_details/index?id=' . $id . '&spread=' . $user['uid']);
                 if ($url === false) {
-                    throw new ApiException(411881);
+                    throw new ApiException(410167);
                 }
                 return image_to_base64($url);
             case 'routine':
@@ -1941,7 +1940,7 @@ class StoreProductServices extends BaseServices
                 $qrcodeService = app()->make(QrcodeServices::class);
                 $url = $qrcodeService->getRoutineQrcodePath($id, $user['uid'], 0, ['is_promoter' => $user['is_promoter']]);
                 if (!$url) {
-                    throw new ApiException(411881);
+                    throw new ApiException(410167);
                 } else {
                     if ($url == 'unpublished') throw new ApiException('小程序尚未发布,无法生成商品海报');
                     return $url;

@@ -51,15 +51,15 @@ class StoreOrderWriteOffServices extends BaseServices
     {
         $orderInfo = $this->dao->getOne(['verify_code' => $code, 'paid' => 1, 'refund_status' => 0, 'is_del' => 0]);
         if (!$orderInfo) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
         if (!$orderInfo['verify_code'] || ($orderInfo->shipping_type != 2 && $orderInfo->delivery_type != 'send')) {
-            throw new ApiException(412094);
+            throw new ApiException(410267);
         }
         /** @var StoreOrderRefundServices $storeOrderRefundServices */
         $storeOrderRefundServices = app()->make(StoreOrderRefundServices::class);
         if ($storeOrderRefundServices->count(['store_order_id' => $orderInfo['id'], 'refund_type' => [1, 2, 4, 5], 'is_cancel' => 0, 'is_del' => 0])) {
-            throw new ApiException(412095);
+            throw new ApiException(410268);
         }
         if ($uid) {
             $isAuth = true;
@@ -76,11 +76,11 @@ class StoreOrderWriteOffServices extends BaseServices
                     break;
             }
             if (!$isAuth) {
-                throw new ApiException(412096);
+                throw new ApiException(410269);
             }
         }
         if ($orderInfo->status == 2) {
-            throw new ApiException(412097);
+            throw new ApiException(410270);
         }
         /** @var StoreOrderCartInfoServices $orderCartInfo */
         $orderCartInfo = app()->make(StoreOrderCartInfoServices::class);
@@ -90,14 +90,14 @@ class StoreOrderWriteOffServices extends BaseServices
         if ($cartInfo) $orderInfo['image'] = $cartInfo['cart_info']['productInfo']['image'];
         if ($orderInfo->shipping_type == 2) {
             if ($orderInfo->status > 0) {
-                throw new ApiException(412097);
+                throw new ApiException(410270);
             }
         }
         if ($orderInfo->combination_id && $orderInfo->pink_id) {
             /** @var StorePinkServices $services */
             $services = app()->make(StorePinkServices::class);
             $res = $services->getCount([['id', '=', $orderInfo->pink_id], ['status', '<>', 2]]);
-            if ($res) throw new ApiException(412098);
+            if ($res) throw new ApiException(410271);
         }
         if ($confirm == 0) {
             /** @var UserServices $services */
@@ -116,11 +116,11 @@ class StoreOrderWriteOffServices extends BaseServices
             $storeOrdeTask = app()->make(StoreOrderTakeServices::class);
             $re = $storeOrdeTask->storeProductOrderUserTakeDelivery($orderInfo);
             if (!$re) {
-                throw new ApiException(412099);
+                throw new ApiException(410272);
             }
             return $orderInfo->toArray();
         } else {
-            throw new ApiException(412099);
+            throw new ApiException(410272);
         }
     }
 }

@@ -118,7 +118,6 @@ class SystemRoleServices extends BaseServices
         if (!in_array($rule, array_map(function ($item) {
             return trim(strtolower(str_replace(' ', '', $item)));
         }, array_column($auth, 'api_url')))) {
-//            throw new AuthException(ApiErrorCode::ERR_RULE);
             return true;
         }
         //验证访问接口是否有权限

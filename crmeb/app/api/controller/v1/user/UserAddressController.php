@@ -68,7 +68,7 @@ class UserAddressController
         $uid = (int)$request->uid();
         $res = $this->services->setDefault($uid, (int)$id);
         if (!$res)
-            return app('json')->fail(411650);
+            return app('json')->fail(410150);
         else
             return app('json')->success(100014);
     }
@@ -106,11 +106,11 @@ class UserAddressController
             [['id', 'd'], 0],
             [['type', 'd'], 0]
         ]);
-        if (!isset($addressInfo['address']['province']) || !$addressInfo['address']['province'] || $addressInfo['address']['province'] == '省') return app('json')->fail(411651);
-        if (!isset($addressInfo['address']['city']) || !$addressInfo['address']['city'] || $addressInfo['address']['city'] == '市') return app('json')->fail(411652);
-        if (!isset($addressInfo['address']['district']) || !$addressInfo['address']['district'] || $addressInfo['address']['district'] == '区') return app('json')->fail(411652);
-        if (!isset($addressInfo['address']['city_id']) && $addressInfo['type'] == 0) return app('json')->fail(411653);
-        if (!$addressInfo['detail']) return app('json')->fail(411654);
+        if (!isset($addressInfo['address']['province']) || !$addressInfo['address']['province'] || $addressInfo['address']['province'] == '省') return app('json')->fail(410151);
+        if (!isset($addressInfo['address']['city']) || !$addressInfo['address']['city'] || $addressInfo['address']['city'] == '市') return app('json')->fail(410152);
+        if (!isset($addressInfo['address']['district']) || !$addressInfo['address']['district'] || $addressInfo['address']['district'] == '区') return app('json')->fail(410152);
+        if (!isset($addressInfo['address']['city_id']) && $addressInfo['type'] == 0) return app('json')->fail(410153);
+        if (!$addressInfo['detail']) return app('json')->fail(410154);
         $uid = (int)$request->uid();
         $res = $this->services->editAddress($uid, $addressInfo);
         if ($res) {

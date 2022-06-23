@@ -9,8 +9,6 @@ use app\services\activity\lottery\LuckLotteryRecordServices;
 use app\services\activity\lottery\LuckLotteryServices;
 use app\services\other\QrcodeServices;
 use app\services\wechat\WechatServices;
-use crmeb\utils\ApiErrorCode;
-use crmeb\utils\ErrorCode;
 
 class LuckLotteryController
 {
@@ -36,7 +34,7 @@ class LuckLotteryController
         if (!$factor) return app('json')->fail(100100);
         $lottery = $this->services->getFactorLottery((int)$factor);
         if (!$lottery) {
-            return app('json')->fail(414600);
+            return app('json')->fail(410318);
         }
         $uid = (int)$request->uid();
         $lottery = $lottery->toArray();
@@ -107,7 +105,7 @@ class LuckLotteryController
             return app('json')->fail(100100);
         }
         $uid = (int)$request->uid();
-        return app('json')->success($lotteryRecordServices->receivePrize($uid, $id, compact('name', 'phone', 'address', 'mark')) ? 414601 : 414602);
+        return app('json')->success($lotteryRecordServices->receivePrize($uid, $id, compact('name', 'phone', 'address', 'mark')) ? 410319 : 410320);
     }
 
     /**

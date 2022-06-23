@@ -256,7 +256,7 @@ class StoreAdvanceServices extends BaseServices
         $uid = (int)$request->uid();
         $storeInfo = $this->dao->getOne(['id' => $id], '*', ['description']);
         if (!$storeInfo) {
-            throw new ApiException(413000);
+            throw new ApiException(410294);
         } else {
             $storeInfo = $storeInfo->toArray();
         }
@@ -417,12 +417,12 @@ class StoreAdvanceServices extends BaseServices
         $orderServices = app()->make(StoreOrderServices::class);
         $userBuyCount = $orderServices->getBuyCount($uid, 'advance_id', $advanceId);
         if ($productInfo['num'] < ($userBuyCount + $cartNum)) {
-            throw new ApiException(413004, ['num' => $productInfo['num']]);
+            throw new ApiException(410298, ['num' => $productInfo['num']]);
         }
-        if ($productInfo['start_time'] > time()) throw new ApiException(414603);
-        if ($productInfo['stop_time'] < time()) throw new ApiException(414604);
+        if ($productInfo['start_time'] > time()) throw new ApiException(410321);
+        if ($productInfo['stop_time'] < time()) throw new ApiException(410322);
         if ($cartNum > $attrInfo['quota']) {
-            throw new ApiException(413003, ['num' => $cartNum]);
+            throw new ApiException(410297, ['num' => $cartNum]);
         }
         return [$attrInfo, $unique, $productInfo];
     }

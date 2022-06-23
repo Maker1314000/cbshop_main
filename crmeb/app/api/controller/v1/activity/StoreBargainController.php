@@ -214,7 +214,7 @@ class StoreBargainController
         if ($posterUrl) {
             return app('json')->success(['url' => $posterUrl]);
         } else {
-            return app('json')->fail(411886);
+            return app('json')->fail(410172);
         }
     }
 

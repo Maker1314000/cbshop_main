@@ -23,8 +23,6 @@ use app\services\pay\OrderOfflineServices;
 use app\services\serve\ServeServices;
 use app\services\user\UserServices;
 use app\services\shipping\ExpressServices;
-use crmeb\utils\ApiErrorCode;
-use crmeb\utils\ErrorCode;
 
 /**
  * 订单类
@@ -110,7 +108,7 @@ class StoreOrderController
     public function detail(Request $request, StoreOrderServices $services, UserServices $userServices, $orderId)
     {
         $order = $this->service->getOne(['order_id' => $orderId], '*', ['pink']);
-        if (!$order) return app('json')->fail(412000);
+        if (!$order) return app('json')->fail(410173);
         $order = $order->toArray();
         $nickname = $userServices->value(['uid' => $order['uid']], 'nickname');
         $orderInfo = $services->tidyOrder($order, true);
@@ -128,7 +126,7 @@ class StoreOrderController
     public function delivery_gain(UserServices $userServices, $orderId)
     {
         $order = $this->service->getOne(['order_id' => $orderId], 'real_name,user_phone,user_address,order_id,uid,status,paid,id');
-        if (!$order) return app('json')->fail(412000);
+        if (!$order) return app('json')->fail(410173);
         if ($order['paid']) {
             $order['nickname'] = $userServices->value(['uid' => $order['uid']], 'nickname');
             $order = $order->hidden(['uid', 'status', 'paid'])->toArray();
@@ -170,7 +168,7 @@ class StoreOrderController
             unset($data['delivery_type']);
         }
         $services->delivery((int)$id, $data);
-        return app('json')->success(412100);
+        return app('json')->success(410273);
     }
 
     /**
@@ -187,12 +185,12 @@ class StoreOrderController
             ['price', '']
         ], true);
         $order = $this->service->getOne(['order_id' => $order_id], 'id,user_phone,id,paid,pay_price,order_id,total_price,total_postage,pay_postage,gain_integral');
-        if (!$order) return app('json')->fail(412000);
+        if (!$order) return app('json')->fail(410173);
         if ($order['paid']) {
-            return app('json')->fail(412001);
+            return app('json')->fail(410174);
         }
-        if ($price === '') return app('json')->fail(412002);
-        if ($price < 0) return app('json')->fail(412003);
+        if ($price === '') return app('json')->fail(410175);
+        if ($price < 0) return app('json')->fail(410176);
         if ($order['pay_price'] == $price) return app('json')->success(100001);
         $services->updateOrder($order['id'], ['total_price' => $order['total_price'], 'pay_price' => $price]);
         return app('json')->success(100001);
@@ -210,8 +208,8 @@ class StoreOrderController
             ['remark', '']
         ], true);
         $order = $this->service->getOne(['order_id' => $order_id], 'id,remark');
-        if (!$order) return app('json')->fail(412000);
-        if (!strlen(trim($remark))) return app('json')->fail(412004);
+        if (!$order) return app('json')->fail(410173);
+        if (!strlen(trim($remark))) return app('json')->fail(410177);
         $order->remark = $remark;
         if (!$order->save())
             return app('json')->fail(100025);
@@ -323,7 +321,7 @@ class StoreOrderController
             $orderRefund = $orderServices->getOne(['order_id' => $orderId]);
             $is_admin = 1;
             if ($services->count(['store_order_id' => $orderRefund['id'], 'refund_type' => [0, 1, 2, 4, 5], 'is_cancel' => 0, 'is_del' => 0])) {
-                return app('json')->fail(412005);
+                return app('json')->fail(410178);
             }
         }
         if (!$is_admin) {
@@ -331,14 +329,14 @@ class StoreOrderController
                 return app('json')->fail(100026);
             }
             if ($orderRefund['is_cancel'] == 1) {
-                return app('json')->fail(412006);
+                return app('json')->fail(410179);
             }
             $orderInfo = $this->service->get((int)$orderRefund['store_order_id']);
             if (!$orderInfo) {
                 return app('json')->fail(100026);
             }
             if (!in_array($orderRefund['refund_type'], [1, 2, 5])) {
-                return app('json')->fail(412007);
+                return app('json')->fail(410180);
             }
 
             if ($type == 1) {
@@ -346,22 +344,22 @@ class StoreOrderController
             } else if ($type == 2) {
                 $data['refund_type'] = 3;
             } else {
-                return app('json')->fail(412008);
+                return app('json')->fail(410181);
             }
             $data['refunded_time'] = time();
             //拒绝退款
             if ($type == 2) {
                 $services->refuseRefund((int)$orderRefund['id'], $data, $orderRefund);
-                return app('json')->success(412009);
+                return app('json')->success(410182);
             } else {
-                if ($orderRefund['refund_price'] == $orderInfo['refunded_price']) return app('json')->fail(412010);
+                if ($orderRefund['refund_price'] == $orderInfo['refunded_price']) return app('json')->fail(410183);
                 if (!$price) {
-                    return app('json')->fail(412011);
+                    return app('json')->fail(410184);
                 }
                 $data['refunded_price'] = bcadd($price, $orderRefund['refunded_price'], 2);
                 $bj = bccomp((float)$orderRefund['refund_price'], (float)$data['refunded_price'], 2);
                 if ($bj < 0) {
-                    return app('json')->fail(412012);
+                    return app('json')->fail(410185);
                 }
                 $refundData['pay_price'] = $orderInfo['pay_price'];
                 $refundData['refund_price'] = $price;
@@ -370,10 +368,10 @@ class StoreOrderController
                 //修改订单退款状态
                 if ($services->agreeRefund((int)$orderRefund['id'], $refundData)) {
                     $services->update((int)$orderRefund['id'], $data);
-                    return app('json')->success(412013);
+                    return app('json')->success(410186);
                 } else {
                     $services->storeProductOrderRefundYFasle((int)$orderInfo['id'], $price);
-                    return app('json')->fail(412014);
+                    return app('json')->fail(410187);
                 }
             }
         } else {
@@ -386,16 +384,16 @@ class StoreOrderController
                 $refund_price = 0;
             } else {
                 if ($order['pay_price'] == $order['refund_price']) {
-                    return app('json')->fail(412010);
+                    return app('json')->fail(410183);
                 }
                 if (!$data['refund_price']) {
-                    return app('json')->fail(412011);
+                    return app('json')->fail(410184);
                 }
                 $refund_price = $data['refund_price'];
                 $data['refund_price'] = bcadd($data['refund_price'], $order['refund_price'], 2);
                 $bj = bccomp((string)$order['pay_price'], (string)$data['refund_price'], 2);
                 if ($bj < 0) {
-                    return app('json')->fail(412012);
+                    return app('json')->fail(410185);
                 }
             }
             if ($data['type'] == 1) {
@@ -409,7 +407,7 @@ class StoreOrderController
             //拒绝退款
             if ($type == 2) {
                 $this->service->update((int)$order['id'], ['refund_status' => 0, 'refund_type' => 3]);
-                return app('json')->success(412009);
+                return app('json')->success(410182);
             } else {
                 unset($data['type']);
                 $refund_data['pay_price'] = $order['pay_price'];
@@ -440,10 +438,10 @@ class StoreOrderController
                 //修改订单退款状态
                 if ($services->agreeRefund((int)$res->id, $refund_data)) {
                     $this->service->update($id, $data);
-                    return app('json')->success(412013);
+                    return app('json')->success(410186);
                 } else {
                     $services->storeProductOrderRefundYFasle((int)$id, $refund_price);
-                    return app('json')->fail(412014);
+                    return app('json')->fail(410187);
                 }
             }
         }
@@ -465,13 +463,13 @@ class StoreOrderController
             ['verify_code', ''],
             ['is_confirm', 0]
         ], true);
-        if (!$verifyCode) return app('json')->fail(412015);
+        if (!$verifyCode) return app('json')->fail(410188);
         $uid = $request->uid();
         $orderInfo = $services->writeOffOrder($verifyCode, (int)$isConfirm, $uid);
         if ($isConfirm == 0) {
             return app('json')->success($orderInfo);
         }
-        return app('json')->success(412016);
+        return app('json')->success(410189);
     }
 
     /**
@@ -567,12 +565,12 @@ class StoreOrderController
             ['order_id', ''],
         ], true);
         if (!$remark)
-            return app('json')->fail(412004);
+            return app('json')->fail(410177);
         if (!$order_id)
             return app('json')->fail(100100);
 
         if (!$order = $services->get(['order_id' => $order_id])) {
-            return app('json')->fail(412000);
+            return app('json')->fail(410173);
         }
         $order->remark = $remark;
         if ($order->save()) {

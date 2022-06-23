@@ -160,7 +160,7 @@ class SystemConfigValidata extends Validate
     protected function checkMinPrice($value, $rule, $data = [])
     {
         if ($data['brokerage_type'] == 1 && bccomp($value, '1', 2) < 0) {
-            return 411085;
+            return 410112;
         }
         return true;
     }

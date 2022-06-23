@@ -12,11 +12,7 @@ namespace app\adminapi\controller\v1\order;
 
 use app\adminapi\controller\AuthController;
 use app\services\order\DeliveryServiceServices;
-use app\services\user\UserServices;
 use app\services\user\UserWechatuserServices;
-use crmeb\exceptions\AdminException;
-use crmeb\utils\AdminApiErrorCode;
-use crmeb\utils\ErrorCode;
 use think\facade\App;
 
 /**

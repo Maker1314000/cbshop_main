@@ -70,7 +70,7 @@ class LoginServices extends BaseServices
 
         $userInfo = $user->get(['account' => $account]);
         if (!$userInfo) {
-            throw new ApiException(411505);
+            throw new ApiException(410141);
         }
         if ($password && !password_verify($password, $userInfo->password)) {
             throw new ApiException(410025);
@@ -102,16 +102,16 @@ class LoginServices extends BaseServices
         $service = app()->make(WechatOpenService::class);
         $info = $service->getAuthorizationInfo();
         if (!$info) {
-            throw new ApiException(411092);
+            throw new ApiException(410131);
         }
         $wechatInfo = $info->getOriginal();
         if (!isset($wechatInfo['unionid'])) {
-            throw new ApiException(411093);
+            throw new ApiException(410132);
         }
         if (!isset($wechatInfo['nickname'])) {
             $wechatInfo = WechatAuthService::oauth2Service()->getUserInfo($wechatInfo['openid'])->toArray();
             if (!isset($wechatInfo['nickname']))
-                throw new ApiException(411092);
+                throw new ApiException(410131);
             if (isset($wechatInfo['tagid_list']))
                 $wechatInfo['tagid_list'] = implode(',', $wechatInfo['tagid_list']);
         } else {

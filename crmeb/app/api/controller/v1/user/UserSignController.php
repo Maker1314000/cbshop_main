@@ -14,7 +14,6 @@ use app\Request;
 use app\services\user\member\MemberCardServices;
 use app\services\user\UserServices;
 use app\services\user\UserSignServices;
-use crmeb\utils\ApiErrorCode;
 
 /**
  * 用户签到
@@ -94,9 +93,9 @@ class UserSignController
     {
         $uid = (int)$request->uid();
         if ($integral = $this->services->sign($uid)) {
-            return app('json')->success(411083, ['integral' => $integral], ['integral' => $integral]);
+            return app('json')->success(410127, ['integral' => $integral], ['integral' => $integral]);
         }
-        return app('json')->fail(411084);
+        return app('json')->fail(410128);
     }
 
     /**

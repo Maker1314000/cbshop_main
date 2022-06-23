@@ -215,7 +215,7 @@ class DivisionAgentApplyServices extends BaseServices
             } else {
                 $res = false;
             }
-            if (!$res) throw new ApiException(411881);
+            if (!$res) throw new ApiException(410167);
             $imageInfo = $this->downloadImage($resCode['url'], $name);
             $systemAttachment->attachmentAdd($name, $imageInfo['size'], $imageInfo['type'], $imageInfo['att_dir'], $imageInfo['att_dir'], 1, $imageInfo['image_type'], time(), 2);
         }

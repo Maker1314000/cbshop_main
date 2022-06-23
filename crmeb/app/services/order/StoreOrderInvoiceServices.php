@@ -121,19 +121,19 @@ class StoreOrderInvoiceServices extends BaseServices
         $userInvoiceServices = app()->make(UserInvoiceServices::class);
         $order = $storeOrderServices->getOne(['order_id|id' => $order_id, 'is_del' => 0]);
         if (!$order) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
         //检测再带查询
         $invoice = $userInvoiceServices->checkInvoice($invoice_id, $uid);
 
         if ($this->dao->getOne(['order_id' => $order['id'], 'uid' => $uid])) {
-            throw new ApiException(412076);
+            throw new ApiException(410249);
         }
         if ($order['refund_status'] == 2) {
-            throw new ApiException(412053);
+            throw new ApiException(410226);
         }
         if ($order['refund_status'] == 1) {
-            throw new ApiException(412077);
+            throw new ApiException(410250);
         }
         unset($invoice['id'], $invoice['add_time']);
         $data = [];
@@ -144,7 +144,7 @@ class StoreOrderInvoiceServices extends BaseServices
         $data['is_pay'] = $order['paid'] == 1 ? 1 : 0;
         $data = array_merge($data, $invoice);
         if (!$re = $this->dao->save($data)) {
-            throw new ApiException(412078);
+            throw new ApiException(410251);
         }
         return ['id' => $re->id];
     }
@@ -176,7 +176,7 @@ class StoreOrderInvoiceServices extends BaseServices
         $storeOrderServices = app()->make(StoreOrderServices::class);
         $orderInfo = $storeOrderServices->getOne(['id' => $oid, 'is_del' => 0]);
         if (!$orderInfo) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
         $pid = $orderInfo['pid'] > 0 ? $orderInfo['pid'] : $orderInfo['id'];
         //查询开票记录

@@ -347,7 +347,7 @@ class UserLevelServices extends BaseServices
         $userServices = app()->make(UserServices::class);
         $user = $userServices->getUserInfo($uid);
         if (!$user) {
-            throw new ApiException(412111);
+            throw new ApiException(410284);
         }
         /** @var SystemUserLevelServices $systemUserLevel */
         $systemUserLevel = app()->make(SystemUserLevelServices::class);
@@ -369,7 +369,7 @@ class UserLevelServices extends BaseServices
                 $data['status'] = 1;
                 $data['is_del'] = 0;
                 if (!$this->dao->update($uservip['id'], $data, 'id')) {
-                    throw new ApiException(412112);
+                    throw new ApiException(410285);
                 }
             } else {
                 $data = array_merge($data, [
@@ -382,13 +382,13 @@ class UserLevelServices extends BaseServices
                     'discount' => $vipinfo['discount'],
                 ]);
                 if (!$this->dao->save($data)) {
-                    throw new ApiException(412112);
+                    throw new ApiException(410285);
                 }
             }
             $data['add_time'] += 1;
         }
         if (!$userServices->update($uid, ['level' => end($userAllLevel)['id']], 'uid')) {
-            throw new ApiException(412112);
+            throw new ApiException(410285);
         }
         return true;
     }
@@ -407,7 +407,7 @@ class UserLevelServices extends BaseServices
         $userServices = app()->make(UserServices::class);
         $user = $userServices->getUserInfo($uid);
         if (!$user) {
-            throw new ApiException(412111);
+            throw new ApiException(410284);
         }
         $userLevelInfo = $this->getUerLevelInfoByUid($uid);
         if (empty($userLevelInfo)) {

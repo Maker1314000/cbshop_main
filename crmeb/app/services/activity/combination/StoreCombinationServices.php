@@ -170,10 +170,10 @@ class StoreCombinationServices extends BaseServices
     {
         $info = $this->dao->get($id);
         if (!$info) {
-            throw new ApiException(413000);
+            throw new ApiException(410294);
         }
         if ($info->is_del) {
-            throw new ApiException(413017);
+            throw new ApiException(410311);
         }
         if ($info['start_time'])
             $start_time = date('Y-m-d H:i:s', $info['start_time']);
@@ -369,7 +369,7 @@ class StoreCombinationServices extends BaseServices
         $uid = (int)$request->uid();
         $storeInfo = $this->dao->getOne(['id' => $id], '*', ['description', 'total']);
         if (!$storeInfo) {
-            throw new ApiException(413017);
+            throw new ApiException(410311);
         } else {
             $storeInfo = $storeInfo->toArray();
         }
@@ -526,7 +526,7 @@ class StoreCombinationServices extends BaseServices
                 $id = $pink['is_refund'];
                 return $this->getPinkInfo($request, $id);
             } else {
-                throw new ApiException(412053);
+                throw new ApiException(410226);
             }
         }
         list($pinkAll, $pinkT, $count, $idAll, $uidAll) = $pinkService->getPinkMemberAndPinkK($pink);
@@ -552,7 +552,7 @@ class StoreCombinationServices extends BaseServices
         if ($pinkT['uid'] == $user['uid']) $userBool = 1;
         $combinationOne = $this->getCombinationOne($pink['cid']);
         if (!$combinationOne) {
-            throw new ApiException(413018);
+            throw new ApiException(410312);
         }
 
         $data['userInfo']['uid'] = $user['uid'];
@@ -602,24 +602,24 @@ class StoreCombinationServices extends BaseServices
         }
         $attrInfo = $attrValueServices->getOne(['product_id' => $combinationId, 'unique' => $unique, 'type' => 3]);
         if (!$attrInfo || $attrInfo['product_id'] != $combinationId) {
-            throw new ApiException(413011);
+            throw new ApiException(410305);
         }
         $StoreCombinationInfo = $productInfo = $this->getCombinationOne($combinationId, '*,title as store_name');
         if (!$StoreCombinationInfo) {
-            throw new ApiException(413001);
+            throw new ApiException(410295);
         }
         /** @var StoreOrderServices $orderServices */
         $orderServices = app()->make(StoreOrderServices::class);
         $userBuyCount = $orderServices->getBuyCount($uid, 'combination_id', $combinationId);
         if ($StoreCombinationInfo['once_num'] < $cartNum) {
-            throw new ApiException(413019, ['num' => $StoreCombinationInfo['once_num']]);
+            throw new ApiException(410313, ['num' => $StoreCombinationInfo['once_num']]);
         }
         if ($StoreCombinationInfo['num'] < ($userBuyCount + $cartNum)) {
-            throw new ApiException(413004, ['num' => $StoreCombinationInfo['num']]);
+            throw new ApiException(410298, ['num' => $StoreCombinationInfo['num']]);
         }
 
         if ($cartNum > $attrInfo['quota']) {
-            throw new ApiException(413002);
+            throw new ApiException(410296);
         }
         return [$attrInfo, $unique, $productInfo];
     }

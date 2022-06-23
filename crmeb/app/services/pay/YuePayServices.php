@@ -35,10 +35,10 @@ class YuePayServices extends BaseServices
     public function yueOrderPay(array $orderInfo, $uid)
     {
         if (!$orderInfo) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
         if ($orderInfo['paid']) {
-            throw new ApiException(412001);
+            throw new ApiException(410174);
         }
         $type = 'pay_product';
         if (isset($orderInfo['member_type'])) {
@@ -73,7 +73,7 @@ class YuePayServices extends BaseServices
                     break;
             }
             if (!$res) {
-                throw new ApiException(412106);
+                throw new ApiException(410279);
             }
         });
         return ['status' => true];

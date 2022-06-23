@@ -5,8 +5,6 @@ namespace app\api\controller\v1\order;
 use app\Request;
 use app\services\order\StoreOrderRefundServices;
 use app\services\order\StoreOrderServices;
-use crmeb\utils\ApiErrorCode;
-use crmeb\utils\ErrorCode;
 
 class StoreOrderRefundController
 {
@@ -67,10 +65,10 @@ class StoreOrderRefundController
         if (!strlen(trim($uni))) return app('json')->fail(100100);
         $orderRefund = $this->services->get(['order_id' => $uni, 'is_cancel' => 0]);
         if (!$orderRefund || $orderRefund['uid'] != $request->uid()) {
-            return app('json')->fail(412000);
+            return app('json')->fail(410173);
         }
         if (!in_array($orderRefund['refund_type'], [1, 2, 4, 5])) {
-            return app('json')->fail(412051);
+            return app('json')->fail(410224);
         }
         $this->services->update($orderRefund['id'], ['is_cancel' => 1]);
         $this->services->cancelOrderRefundCartInfo((int)$orderRefund['id'], (int)$orderRefund['store_order_id'], $orderRefund);

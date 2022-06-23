@@ -84,7 +84,7 @@ class MemberCardController
         $data['from'] = $this->channelType[$data['from']];
         $uid = (int)$request->uid();
         $this->services->drawMemberCard($data, $uid);
-        return app('json')->success(411800);
+        return app('json')->success(410165);
     }
 
     /**

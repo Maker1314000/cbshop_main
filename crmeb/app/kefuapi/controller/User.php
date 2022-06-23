@@ -105,7 +105,7 @@ class User extends AuthController
             return app('json')->fail(100026);
         }
         if (!($userInfo = $userServices->get($uid))) {
-            return app('json')->fail(411000);
+            return app('json')->fail(410113);
         }
         if ($userInfo->group_id == $id) {
             return app('json')->fail(410103);

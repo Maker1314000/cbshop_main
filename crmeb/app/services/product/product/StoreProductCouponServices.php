@@ -81,7 +81,7 @@ class StoreProductCouponServices extends BaseServices
         $storeOrder = app()->make(StoreOrderServices::class);
         $order = $storeOrder->getOne(['order_id' => $orderId]);
         if (!$order || $order['uid'] != $uid) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
         $key = 'order_product_coupon_' . $uid . '_' . $order['id'];
         return CacheService::redisHandler()->get($key, []);
@@ -105,7 +105,7 @@ class StoreProductCouponServices extends BaseServices
         $storeOrder = app()->make(StoreOrderServices::class);
         $order = $storeOrder->getOne(['id' => $orderId]);
         if (!$order || $order['uid'] != $uid) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
         /** @var StoreOrderCartInfoServices $storeOrderCartInfo */
         $storeOrderCartInfo = app()->make(StoreOrderCartInfoServices::class);

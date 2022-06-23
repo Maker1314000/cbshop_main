@@ -12,12 +12,9 @@ namespace app\api\controller\v1\order;
 
 use app\Request;
 use app\services\pay\PayServices;
-use app\services\user\UserServices;
 use app\services\shipping\ExpressServices;
 use app\services\system\admin\SystemAdminServices;
 use app\services\user\UserInvoiceServices;
-use crmeb\utils\ApiErrorCode;
-use crmeb\utils\ErrorCode;
 use app\services\activity\{lottery\LuckLotteryServices,
     bargain\StoreBargainServices,
     combination\StoreCombinationServices,
@@ -101,7 +98,7 @@ class StoreOrderController
     public function confirm(Request $request, ShippingTemplatesServices $services)
     {
         if (!$services->get(1, ['id'])) {
-            return app('json')->fail(412034);
+            return app('json')->fail(410207);
         }
         [$cartId, $new, $addressId, $shipping_type] = $request->postMore([
             'cartId',
@@ -110,7 +107,7 @@ class StoreOrderController
             ['shipping_type', 1],
         ], true);
         if (!is_string($cartId) || !$cartId) {
-            return app('json')->fail(412028);
+            return app('json')->fail(410201);
         }
         $user = $request->user()->toArray();
         return app('json')->success($this->services->getOrderConfirmData($user, $cartId, !!$new, $addressId, (int)$shipping_type));
@@ -128,14 +125,14 @@ class StoreOrderController
         if (!$key) return app('json')->fail(100100);
         $uid = $request->uid();
         if ($this->services->be(['order_id|unique' => $key, 'uid' => $uid, 'is_del' => 0]))
-            return app('json')->status('extend_order', ApiErrorCode::ERROR_ORDER_MESSAGE[411424], ['orderId' => $key, 'key' => $key]);
+            return app('json')->status('extend_order', 410173, ['orderId' => $key, 'key' => $key]);
         list($addressId, $couponId, $payType, $useIntegral, $mark, $combinationId, $pinkId, $seckill_id, $bargainId, $shipping_type) = $request->postMore([
             'addressId', 'couponId', ['payType', 'yue'], ['useIntegral', 0], 'mark', ['combinationId', 0], ['pinkId', 0], ['seckill_id', 0], ['bargainId', ''],
             ['shipping_type', 1],
         ], true);
         $payType = strtolower($payType);
         $cartGroup = $this->services->getCacheOrderInfo($uid, $key);
-        if (!$cartGroup) return app('json')->fail(412035);
+        if (!$cartGroup) return app('json')->fail(410208);
         $priceGroup = $computedServices->setParamData([
             'combinationId' => $combinationId,
             'pinkId' => $pinkId,
@@ -170,7 +167,7 @@ class StoreOrderController
         if (!$key) return app('json')->fail(100100);
         $uid = (int)$request->uid();
         if ($checkOrder = $this->services->getOne(['order_id|unique' => $key, 'uid' => $uid, 'is_del' => 0]))
-            return app('json')->status('extend_order', 412036, ['orderId' => $checkOrder['order_id'], 'key' => $key]);
+            return app('json')->status('extend_order', 410209, ['orderId' => $checkOrder['order_id'], 'key' => $key]);
         [$addressId, $couponId, $payType, $useIntegral, $mark, $combinationId, $pinkId, $seckill_id, $bargainId, $from, $shipping_type, $real_name, $phone, $storeId, $news, $invoice_id, $quitUrl, $advanceId, $virtual_type, $customForm] = $request->postMore([
             [['addressId', 'd'], 0],
             [['couponId', 'd'], 0],
@@ -196,7 +193,7 @@ class StoreOrderController
         $payType = strtolower($payType);
         $cartGroup = $this->services->getCacheOrderInfo($uid, $key);
         if (!$cartGroup) {
-            return app('json')->fail(412035);
+            return app('json')->fail(410208);
         }
         //下单前砍价验证
         if ($bargainId) {
@@ -211,16 +208,16 @@ class StoreOrderController
             /** @var StorePinkServices $pinkServices */
             $pinkServices = app()->make(StorePinkServices::class);
             if ($pinkServices->isPink($pinkId, $uid))
-                return app('json')->status('ORDER_EXIST', 412037, ['orderId' => $this->services->getStoreIdPink($pinkId, $uid)]);
+                return app('json')->status('ORDER_EXIST', 410210, ['orderId' => $this->services->getStoreIdPink($pinkId, $uid)]);
             if ($this->services->getIsOrderPink($pinkId, $uid))
-                return app('json')->status('ORDER_EXIST', 412038, ['orderId' => $this->services->getStoreIdPink($pinkId, $uid)]);
+                return app('json')->status('ORDER_EXIST', 410211, ['orderId' => $this->services->getStoreIdPink($pinkId, $uid)]);
             if (!CacheService::checkStock(md5($pinkId), 1, 3) || !CacheService::popStock(md5($pinkId), 1, 3)) {
-                return app('json')->fail(412039);
+                return app('json')->fail(410212);
             }
         }
         if ($from != 'pc') {
             if (!$this->services->checkPaytype($payType)) {
-                return app('json')->fail(412040);
+                return app('json')->fail(410213);
             }
         } else {
             $payType = 'pc';
@@ -242,7 +239,7 @@ class StoreOrderController
                     $type = 6;
                 }
                 if ($type && (!CacheService::checkStock($item['product_attr_unique'], (int)$item['cart_num'], $type) || !CacheService::popStock($item['product_attr_unique'], (int)$item['cart_num'], $type))) {
-                    return app('json')->fail(412041, null, ['cart_num' => $item['cart_num'], 'unit_name' => $item['productInfo']['unit_name']]);
+                    return app('json')->fail(410214, null, ['cart_num' => $item['cart_num'], 'unit_name' => $item['productInfo']['unit_name']]);
 
                 }
             }
@@ -267,12 +264,12 @@ class StoreOrderController
                     if ($type) CacheService::setStock($value['product_attr_unique'], (int)$value['cart_num'], $type, false);
                 }
             }
-            return app('json')->fail(412027);
+            return app('json')->fail(410200);
         }
         $orderId = $order['order_id'];
         $orderInfo = $this->services->getOne(['order_id' => $orderId]);
         if (!$orderInfo || !isset($orderInfo['paid'])) {
-            return app('json')->fail(412021);
+            return app('json')->fail(410194);
         }
         //创建开票数据
         if ($invoice_id) {
@@ -283,7 +280,7 @@ class StoreOrderController
         if ($orderId) {
             switch ($payType) {
                 case PayServices::WEIXIN_PAY:
-                    if ($orderInfo['paid']) return app('json')->fail(412001);
+                    if ($orderInfo['paid']) return app('json')->fail(410174);
                     //支付金额为0
                     if (bcsub((string)$orderInfo['pay_price'], '0', 2) <= 0) {
                         //创建订单jspay支付
@@ -291,7 +288,7 @@ class StoreOrderController
                         $success = app()->make(StoreOrderSuccessServices::class);
                         $payPriceStatus = $success->zeroYuanPayment($orderInfo, $uid, PayServices::WEIXIN_PAY);
                         if ($payPriceStatus)//0元支付成功
-                            return app('json')->status('success', 412022, $info);
+                            return app('json')->status('success', 410195, $info);
                         else
                             return app('json')->status('pay_error');
                     } else {
@@ -302,9 +299,9 @@ class StoreOrderController
                         }
                         $info['jsConfig'] = $payServices->orderPay($orderInfo, $from);
                         if ($from == 'weixinh5') {
-                            return app('json')->status('wechat_h5_pay', 412030, $info);
+                            return app('json')->status('wechat_h5_pay', 410203, $info);
                         } else {
-                            return app('json')->status('wechat_pay', 412030, $info);
+                            return app('json')->status('wechat_pay', 410203, $info);
                         }
                     }
                 case PayServices::YUE_PAY:
@@ -312,7 +309,7 @@ class StoreOrderController
                     $yueServices = app()->make(YuePayServices::class);
                     $pay = $yueServices->yueOrderPay($orderInfo, $uid);
                     if ($pay['status'] === true)
-                        return app('json')->status('success', 412024, $info);
+                        return app('json')->status('success', 410197, $info);
                     else {
                         if (is_array($pay))
                             return app('json')->status($pay['status'], $pay['msg'], $info);
@@ -321,7 +318,7 @@ class StoreOrderController
                     }
                 case PayServices::ALIAPY_PAY:
                     if (!$quitUrl && ($request->isH5() || $request->isWechat())) {
-                        return app('json')->status('pay_error', 412025, $info);
+                        return app('json')->status('pay_error', 410198, $info);
                     }
                     [$url, $param] = explode('?', $quitUrl);
                     $quitUrl = $url . '?order_id=' . $orderInfo['order_id'];
@@ -332,7 +329,7 @@ class StoreOrderController
                         $success = app()->make(StoreOrderSuccessServices::class);
                         $payPriceStatus = $success->zeroYuanPayment($orderInfo, $uid, PayServices::ALIAPY_PAY);
                         if ($payPriceStatus)//0元支付成功
-                            return app('json')->status('success', 412026, $info);
+                            return app('json')->status('success', 410199, $info);
                         else
                             return app('json')->status('pay_error');
                     } else {
@@ -342,14 +339,14 @@ class StoreOrderController
                         $payKey = md5($orderInfo['order_id']);
                         CacheService::set($payKey, ['order_id' => $orderInfo['order_id'], 'other_pay_type' => false], 300);
                         $info['pay_key'] = $payKey;
-                        return app('json')->status(PayServices::ALIAPY_PAY . '_pay', 412030, $info);
+                        return app('json')->status(PayServices::ALIAPY_PAY . '_pay', 410203, $info);
                     }
                 case PayServices::OFFLINE_PAY:
                 case 'pc':
                 case 'friend':
-                    return app('json')->status('success', 412030, $info);
+                    return app('json')->status('success', 410203, $info);
             }
-        } else return app('json')->fail(412027);
+        } else return app('json')->fail(410200);
     }
 
     /**
@@ -392,11 +389,11 @@ class StoreOrderController
         $orderInfo->save();
         $order = $this->services->get(['order_id' => $uni]);
         if (!$order)
-            return app('json')->fail(412000);
+            return app('json')->fail(410173);
         if ($order['paid'])
-            return app('json')->fail(412001);
+            return app('json')->fail(410174);
         if ($order['pink_id'] && $services->isPinkStatus($order['pink_id'])) {
-            return app('json')->fail(412042);
+            return app('json')->fail(410215);
         }
         $isChannel = $this->getChennel[$from];
         //缓存不存在 ｜｜ 切换另一端支付
@@ -442,18 +439,18 @@ class StoreOrderController
                 break;
             case PayServices::ALIAPY_PAY:
                 if (!$quitUrl && $from != 'routine') {
-                    return app('json')->fail(412025);
+                    return app('json')->fail(410198);
                 }
                 $isCode = $from == 'routine' || $from == 'pc';
                 $jsConfig = $payServices->alipayOrder($order->toArray(), $quitUrl, $isCode);
                 if ($isCode && !($jsConfig->invalid ?? false)) $jsConfig->invalid = time() + 60;
                 $payKey = md5($order['order_id']);
                 CacheService::set($payKey, ['order_id' => $order['order_id'], 'other_pay_type' => false], 300);
-                return app('json')->status(PayServices::ALIAPY_PAY . '_pay', 412030, ['jsConfig' => $jsConfig, 'order_id' => $order['order_id'], 'pay_key' => $payKey]);
+                return app('json')->status(PayServices::ALIAPY_PAY . '_pay', 410203, ['jsConfig' => $jsConfig, 'order_id' => $order['order_id'], 'pay_key' => $payKey]);
             case PayServices::YUE_PAY:
                 $pay = $yuePayServices->yueOrderPay($order->toArray(), $request->uid());
                 if ($pay['status'] === true)
-                    return app('json')->status('success', 412024);
+                    return app('json')->status('success', 410197);
                 else {
                     if (is_array($pay))
                         return app('json')->status($pay['status'], $pay['msg']);
@@ -462,11 +459,11 @@ class StoreOrderController
                 }
             case PayServices::OFFLINE_PAY:
                 if ($this->services->setOrderTypePayOffline($order['order_id']))
-                    return app('json')->status('success', 412030);
+                    return app('json')->status('success', 410203);
                 else
-                    return app('json')->status('success', 412043);
+                    return app('json')->status('success', 410216);
         }
-        return app('json')->fail(412045);
+        return app('json')->fail(410218);
     }
 
     /**
@@ -561,7 +558,7 @@ class StoreOrderController
         /** @var StoreOrderCartInfoServices $storeOrderCartInfoServices */
         $storeOrderCartInfoServices = app()->make(StoreOrderCartInfoServices::class);
         $order = $this->services->getUserOrderDetail($uni, (int)$request->uid(), ['split', 'invoice']);
-        if (!$order) return app('json')->fail(412000);
+        if (!$order) return app('json')->fail(410173);
         $order = $order->toArray();
         $orderData = $this->services->tidyOrder($order, true, true);
         $splitNum = $storeOrderCartInfoServices->getSplitCartNum($order['cart_id']);
@@ -629,9 +626,9 @@ class StoreOrderController
         if (!$uni) return app('json')->fail(100100);
         $order = $services->takeOrder($uni, (int)$request->uid());
         if ($order) {
-            return app('json')->success(412031);
+            return app('json')->success(410204);
         } else
-            return app('json')->fail(412032);
+            return app('json')->fail(410205);
     }
 
 
@@ -666,8 +663,8 @@ class StoreOrderController
             $orderInfo['delivery_name'] = $order['refund_express_name'];
             $orderInfo['delivery_code'] = '';
         } else {
-            if (!$uni || !($order = $this->services->getUserOrderDetail($uni, $request->uid(), []))) return app('json')->fail(412000);
-            if ($type != 'refund' && ($order['delivery_type'] != 'express' || !$order['delivery_id'])) return app('json')->fail(412033);
+            if (!$uni || !($order = $this->services->getUserOrderDetail($uni, $request->uid(), []))) return app('json')->fail(410173);
+            if ($type != 'refund' && ($order['delivery_type'] != 'express' || !$order['delivery_id'])) return app('json')->fail(410206);
             $express = $type == 'refund' ? $order['refund_express'] : $order['delivery_id'];
             $cacheName = $uni . $express;
             $orderInfo = [];
@@ -722,14 +719,14 @@ class StoreOrderController
         $user_info = $request->user();
         $group['nickname'] = $user_info['nickname'];
         $group['avatar'] = $user_info['avatar'];
-        if (!$cartInfo) return app('json')->fail(413000);
+        if (!$cartInfo) return app('json')->fail(410294);
         $orderUid = $this->services->value(['id' => $cartInfo['oid']], 'uid');
-        if ($uid != $orderUid) return app('json')->fail(413000);
+        if ($uid != $orderUid) return app('json')->fail(410294);
         if ($replyServices->be(['oid' => $cartInfo['oid'], 'unique' => $unique]))
-            return app('json')->fail(412046);
+            return app('json')->fail(410219);
         $group['comment'] = htmlspecialchars(trim($group['comment']));
-        if ($group['product_score'] < 1) return app('json')->fail(412047);
-        else if ($group['service_score'] < 1) return app('json')->fail(412048);
+        if ($group['product_score'] < 1) return app('json')->fail(410220);
+        else if ($group['service_score'] < 1) return app('json')->fail(410221);
         if ($cartInfo['cart_info']['combination_id']) $productId = $cartInfo['cart_info']['product_id'];
         else if ($cartInfo['cart_info']['seckill_id']) $productId = $cartInfo['cart_info']['product_id'];
         else if ($cartInfo['cart_info']['bargain_id']) $productId = $cartInfo['cart_info']['product_id'];
@@ -746,12 +743,12 @@ class StoreOrderController
 
         $res = $replyServices->save($group);
         if (!$res) {
-            return app('json')->fail(412049);
+            return app('json')->fail(410222);
         }
         try {
             $this->services->checkOrderOver($replyServices, $cartInfoServices->getCartColunm(['oid' => $cartInfo['oid']], 'unique', ''), $cartInfo['oid']);
         } catch (\Exception $e) {
-            return app('json')->fail(412049);
+            return app('json')->fail(410222);
         }
         //缓存抽奖次数
         /** @var LuckLotteryServices $luckLotteryServices */
@@ -817,7 +814,7 @@ class StoreOrderController
         if ($cart_ids) {
             foreach ($cart_ids as $cart) {
                 if (!isset($cart['cart_id']) || !$cart['cart_id'] || !isset($cart['cart_num']) || !$cart['cart_num'] || $cart['cart_num'] <= 0) {
-                    return app('json')->fail(412050);
+                    return app('json')->fail(410223);
                 }
             }
             $cart_ids = array_combine(array_column($cart_ids, 'cart_id'), $cart_ids);
@@ -877,7 +874,7 @@ class StoreOrderController
         if ($data['cart_ids']) {
             foreach ($data['cart_ids'] as $cart) {
                 if (!isset($cart['cart_id']) || !$cart['cart_id'] || !isset($cart['cart_num']) || !$cart['cart_num']) {
-                    return app('json')->fail(412050);
+                    return app('json')->fail(410223);
                 }
             }
         }
@@ -885,7 +882,7 @@ class StoreOrderController
         $order = $storeOrderServices->get($id);
         $uid = (int)$request->uid();
         if (!$order || $uid != $order['uid']) {
-            return app('json')->fail(412000);
+            return app('json')->fail(410173);
         }
         $refundData = [
             'refund_reason' => $data['text'],
@@ -976,7 +973,7 @@ class StoreOrderController
     public function product(Request $request, StoreOrderCartInfoServices $services)
     {
         list($unique) = $request->postMore([['unique', '']], true);
-        if (!$unique || !($cartInfo = $services->getOne(['unique' => $unique]))) return app('json')->fail(413000);
+        if (!$unique || !($cartInfo = $services->getOne(['unique' => $unique]))) return app('json')->fail(410294);
         $cartInfo = $cartInfo->toArray();
         $cartProduct = [];
         $cartProduct['cart_num'] = $cartInfo['cart_info']['cart_num'];

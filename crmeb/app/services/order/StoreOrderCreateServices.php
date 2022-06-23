@@ -138,7 +138,7 @@ class StoreOrderCreateServices extends BaseServices
             $addressInfo = $addressInfo->toArray();
         } else {
             if ((!$real_name || !$phone) && $virtual_type == 0) {
-                throw new ApiException(412072);
+                throw new ApiException(410245);
             }
             $addressInfo['real_name'] = $real_name;
             $addressInfo['phone'] = $phone;
@@ -174,7 +174,7 @@ class StoreOrderCreateServices extends BaseServices
             $systemPayType = PayServices::PAY_TYPE;
             unset($systemPayType['offline']);
             if ($payType != 'pc' && !array_key_exists($payType, $systemPayType)) {
-                throw new ApiException(412073);
+                throw new ApiException(410246);
             }
         }
         //$shipping_type = 1 快递发货 $shipping_type = 2 门店自提
@@ -229,7 +229,7 @@ class StoreOrderCreateServices extends BaseServices
             $storeServices = app()->make(SystemStoreServices::class);
             $orderInfo['store_id'] = $storeServices->getStoreDispose($storeId, 'id');
             if (!$orderInfo['store_id']) {
-                throw new ApiException(412074);
+                throw new ApiException(410247);
             }
         }
         /** @var StoreOrderCartInfoServices $cartServices */
@@ -241,7 +241,7 @@ class StoreOrderCreateServices extends BaseServices
             //创建订单
             $order = $this->dao->save($orderInfo);
             if (!$order) {
-                throw new ApiException(412027);
+                throw new ApiException(410200);
             }
             //记录自提人电话和姓名
             /** @var UserServices $userService */
@@ -295,7 +295,7 @@ class StoreOrderCreateServices extends BaseServices
             $res2 = $res2 && false != $res3;
         }
         if (!$res2) {
-            throw new ApiException(412054);
+            throw new ApiException(410227);
         }
     }
 
@@ -329,10 +329,10 @@ class StoreOrderCreateServices extends BaseServices
                 else $res5 = $res5 && $services->decProductStock((int)$cart['cart_num'], (int)$cart['productInfo']['id'], isset($cart['productInfo']['attrInfo']) ? $cart['productInfo']['attrInfo']['unique'] : '');
             }
             if (!$res5) {
-                throw new ApiException(412065);
+                throw new ApiException(410238);
             }
         } catch (\Throwable $e) {
-            throw new ApiException(412065);
+            throw new ApiException(410238);
         }
     }
 
@@ -385,7 +385,7 @@ class StoreOrderCreateServices extends BaseServices
 //            $cartInfo = $this->computeOrderProductPostage($cartInfo, $priceData, $addressId);
         } catch (\Throwable $e) {
             Log::error('订单商品结算失败,File：' . $e->getFile() . ',Line：' . $e->getLine() . ',Message：' . $e->getMessage());
-            throw new ApiException(412075);
+            throw new ApiException(410248);
         }
         //truePice实际支付单价（存在）
         //几件商品总体优惠 以及积分抵扣金额

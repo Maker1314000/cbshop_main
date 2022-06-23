@@ -40,11 +40,11 @@ class OrderOfflineServices extends BaseServices
         $orderSerives = app()->make(StoreOrderServices::class);
         $orderInfo = $orderSerives->get($id);
         if (!$orderInfo) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
 
         if ($orderInfo->paid) {
-            throw new ApiException(412001);
+            throw new ApiException(410174);
         }
         $orderInfo->paid = 1;
         $orderInfo->pay_time = time();

@@ -41,10 +41,10 @@ class RechargeServices
         $rechargeServices = app()->make(UserRechargeServices::class);
         $recharge = $rechargeServices->getRecharge($recharge_id);
         if (!$recharge) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
         if ($recharge['paid'] == 1) {
-            throw new ApiException(412001);
+            throw new ApiException(410174);
         }
         $userType = '';
         switch ($recharge['recharge_type']) {
@@ -57,14 +57,14 @@ class RechargeServices
                 break;
         }
         if (!$userType) {
-            throw new ApiException(412105);
+            throw new ApiException(410278);
         }
         /** @var WechatUserServices $wechatUser */
         $wechatUser = app()->make(WechatUserServices::class);
         $openid = $wechatUser->uidToOpenid((int)$recharge['uid'], $userType);
         if ($recharge['recharge_type'] != 'weixinh5' && !request()->isApp()) {
             if (!$openid) {
-                throw new ApiException(412102);
+                throw new ApiException(410275);
             }
         }else{
             $openid = '';

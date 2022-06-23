@@ -52,7 +52,7 @@ class LoginServices extends BaseServices
     {
         $kefuInfo = $this->dao->get(['account' => $account]);
         if (!$kefuInfo) {
-            throw new AuthException(411505);
+            throw new AuthException(410141);
         }
         if ($password && !password_verify($password, $kefuInfo->password)) {
             throw new AuthException(410025);
@@ -139,21 +139,21 @@ class LoginServices extends BaseServices
         $service = app()->make(WechatOpenService::class);
         $info = $service->getAuthorizationInfo();
         if (!$info) {
-            throw new AuthException(411092);
+            throw new AuthException(410131);
         }
         $original = $info->getOriginal();
         if (!isset($original['unionid'])) {
-            throw new AuthException(411093);
+            throw new AuthException(410132);
         }
         /** @var WechatUserServices $userService */
         $userService = app()->make(WechatUserServices::class);
         $uid = $userService->value(['unionid' => $original['unionid']], 'uid');
         if (!$uid) {
-            throw new AuthException(411094);
+            throw new AuthException(410133);
         }
         $kefuInfo = $this->dao->get(['uid' => $uid]);
         if (!$kefuInfo) {
-            throw new AuthException(411509);
+            throw new AuthException(410142);
         }
         if (!$kefuInfo->status) {
             throw new AuthException(410027);

@@ -44,10 +44,10 @@ class OrderPayServices
     public function orderPay(array $orderInfo, string $payType)
     {
         if ($orderInfo['paid']) {
-            throw new ApiException(412001);
+            throw new ApiException(410174);
         }
         if ($orderInfo['pay_price'] <= 0) {
-            throw new ApiException(412101);
+            throw new ApiException(410274);
         }
         $openid = '';
         if (!in_array($payType, ['weixinh5', 'pc']) && !request()->isApp()) {
@@ -60,7 +60,7 @@ class OrderPayServices
             $services = app()->make(WechatUserServices::class);
             $openid = $services->uidToOpenid($orderInfo['pay_uid'] ?? $orderInfo['uid'], $userType);
             if (!$openid) {
-                throw new ApiException(412102);
+                throw new ApiException(410275);
             }
         }
         $site_name = sys_config('site_name');
@@ -76,7 +76,7 @@ class OrderPayServices
         }
 
         if (!$body) {
-            throw new ApiException(412103);
+            throw new ApiException(410276);
         }
 
         /** @var StoreOrderServices $orderServices */
@@ -95,10 +95,10 @@ class OrderPayServices
     public function alipayOrder(array $orderInfo, string $quitUrl, bool $isCode = false)
     {
         if ($orderInfo['paid']) {
-            throw new ApiException(412001);
+            throw new ApiException(410174);
         }
         if ($orderInfo['pay_price'] <= 0) {
-            throw new ApiException(412101);
+            throw new ApiException(410274);
         }
         $site_name = sys_config('site_name');
         if (isset($orderInfo['member_type'])) {
@@ -113,7 +113,7 @@ class OrderPayServices
         }
 
         if (!$body) {
-            throw new ApiException(412103);
+            throw new ApiException(410276);
         }
 
         /** @var StoreOrderServices $orderServices */

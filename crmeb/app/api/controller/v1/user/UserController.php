@@ -117,7 +117,7 @@ class UserController
             ['nickname', ''],
         ], true);
         if (!$avatar && $nickname == '') {
-            return app('json')->fail(411095);
+            return app('json')->fail(410134);
         }
         $uid = (int)$request->uid();
         if ($this->services->eidtNickname($uid, ['avatar' => $avatar, 'nickname' => $nickname])) {
@@ -226,6 +226,6 @@ class UserController
         /** @var UserCancelServices $userCancelServices */
         $userCancelServices = app()->make(UserCancelServices::class);
         $userCancelServices->SetUserCancel($request->uid());
-        return app('json')->success(411099);
+        return app('json')->success(410135);
     }
 }

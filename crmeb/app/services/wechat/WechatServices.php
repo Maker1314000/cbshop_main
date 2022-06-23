@@ -81,12 +81,12 @@ class WechatServices extends BaseServices
         try {
             $wechatInfo = WechatAuthService::oauth2Service()->oauth();
         } catch (\Exception $e) {
-            throw new ApiException(411092);
+            throw new ApiException(410131);
         }
         if (!isset($wechatInfo['nickname'])) {
             $wechatInfo = WechatAuthService::oauth2Service()->getUserInfo($wechatInfo['openid'])->toArray();
             if (!isset($wechatInfo['nickname']))
-                throw new ApiException(411092);
+                throw new ApiException(410131);
             if (isset($wechatInfo['tagid_list']))
                 $wechatInfo['tagid_list'] = implode(',', $wechatInfo['tagid_list']);
         } else {
@@ -131,12 +131,12 @@ class WechatServices extends BaseServices
         try {
             $wechatInfo = WechatAuthService::oauth2Service()->oauth();
         } catch (\Exception $e) {
-            throw new ApiException(411092);
+            throw new ApiException(410131);
         }
         if (!isset($wechatInfo['nickname'])) {
             $wechatInfo = WechatAuthService::oauth2Service()->getUserInfo($wechatInfo['openid'])->toArray();
             if (!isset($wechatInfo['nickname']))
-                throw new ApiException(411092);
+                throw new ApiException(410131);
             if (isset($wechatInfo['tagid_list']))
                 $wechatInfo['tagid_list'] = implode(',', $wechatInfo['tagid_list']);
         } else {

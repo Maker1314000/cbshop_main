@@ -49,7 +49,7 @@ class StoreOrderSuccessServices extends BaseServices
     public function zeroYuanPayment(array $orderInfo, int $uid, string $payType = PayServices::YUE_PAY)
     {
         if ($orderInfo['paid']) {
-            throw new ApiException(412092);
+            throw new ApiException(410265);
         }
         return $this->paySuccess($orderInfo, $payType);//余额支付成功
     }

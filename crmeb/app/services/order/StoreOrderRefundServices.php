@@ -720,16 +720,16 @@ class StoreOrderRefundServices extends BaseServices
     public function orderApplyRefund($order, string $refundReasonWap = '', string $refundReasonWapExplain = '', array $refundReasonWapImg = [], int $refundType = 0, $cart_id = 0, $refund_num = 0)
     {
         if (!$order) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
         if ($order['refund_status'] == 2) {
-            throw new ApiException(412053);
+            throw new ApiException(410226);
         }
         if ($order['refund_status'] == 1) {
-            throw new ApiException(412077);
+            throw new ApiException(410250);
         }
         if ($order['total_num'] < $refund_num) {
-            throw new ApiException(412079);
+            throw new ApiException(410252);
         }
         $this->transaction(function () use ($order, $refundReasonWap, $refundReasonWapExplain, $refundReasonWapImg, $refundType, $refund_num, $cart_id) {
             $status = 0;
@@ -749,7 +749,7 @@ class StoreOrderRefundServices extends BaseServices
                 $storeOrderCartInfoServices = app()->make(StoreOrderCartInfoServices::class);
                 $cart_info = $storeOrderCartInfoServices->getSplitCartList($order_id, 'cart_info');
                 if (!$cart_info) {
-                    throw new ApiException(412080);
+                    throw new ApiException(410253);
                 }
                 $cart_ids = [];
                 foreach ($cart_info as $key => $cart) {
@@ -783,7 +783,7 @@ class StoreOrderRefundServices extends BaseServices
             $res2 = false !== $this->storeOrderServices->update(['id' => $order['id']], $data);
             $res = $res1 && $res2;
             if (!$res)
-                throw new ApiException(412081);
+                throw new ApiException(410254);
             //子订单申请退款
             if ($order['pid'] > 0) {
                 $p_order = $this->storeOrderServices->get((int)$order['pid']);
@@ -868,7 +868,7 @@ class StoreOrderRefundServices extends BaseServices
             $order = $orderServices->get($id);
         }
         if (!$order) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
 
         $is_now = $this->dao->getCount([
@@ -878,7 +878,7 @@ class StoreOrderRefundServices extends BaseServices
             ['is_del', '=', 0],
             ['is_pink_cancel', '=', 0]
         ]);
-        if ($is_now) throw new ApiException(412082);
+        if ($is_now) throw new ApiException(410255);
 
         $refund_num = $order['total_num'];
         $refund_price = $order['pay_price'];
@@ -892,7 +892,7 @@ class StoreOrderRefundServices extends BaseServices
             $refund_num = 0;
             foreach ($cart_ids as $cart) {
                 if ($cart['cart_num'] + $cartInfo[$cart['cart_id']]['refund_num'] > $cartInfo[$cart['cart_id']]['cart_num']) {
-                    throw new ApiException(412079);
+                    throw new ApiException(410252);
                 }
                 $refund_num = bcadd((string)$refund_num, (string)$cart['cart_num'], 0);
             }
@@ -920,7 +920,7 @@ class StoreOrderRefundServices extends BaseServices
         } else {
             foreach ($cartInfos as $cart) {
                 if ($cart['refund_num'] > 0) {
-                    throw new ApiException(412079);
+                    throw new ApiException(410252);
                 }
             }
         }
@@ -952,7 +952,7 @@ class StoreOrderRefundServices extends BaseServices
             $storeOrderRefundServices = app()->make(StoreOrderRefundServices::class);
             $res3 = $storeOrderRefundServices->save($refundData);
             if (!$res3) {
-                throw new ApiException(412078);
+                throw new ApiException(410251);
             }
             $res4 = true;
             if ($cart_ids) {
@@ -1065,7 +1065,7 @@ class StoreOrderRefundServices extends BaseServices
     {
         if (!strlen(trim($uni))) throw new ApiException(100100);
         $order = $this->dao->get(['order_id' => $uni], ['*']);
-        if (!$order) throw new ApiException(412000);
+        if (!$order) throw new ApiException(410173);
         $order = $order->toArray();
 
         /** @var StoreOrderServices $orderServices */
@@ -1202,7 +1202,7 @@ class StoreOrderRefundServices extends BaseServices
             $orderRefundInfo = $this->dao->get(['id' => $id, 'is_cancel' => 0]);
         }
         if (!$orderRefundInfo) {
-            throw new ApiException(412000);
+            throw new ApiException(410173);
         }
         $cart_ids = array_column($orderRefundInfo['cart_info'], 'id');
         /** @var StoreOrderCartInfoServices $storeOrderCartInfoServices */
@@ -1236,11 +1236,11 @@ class StoreOrderRefundServices extends BaseServices
             throw new AdminException(100100);
         }
         if (!$remark) {
-            throw new AdminException(412004);
+            throw new AdminException(410177);
         }
 
         if (!$order = $this->dao->get($id)) {
-            throw new AdminException(412000);
+            throw new AdminException(410173);
         }
         $order->remark = $remark;
         if (!$order->save()) {

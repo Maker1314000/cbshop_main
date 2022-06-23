@@ -118,26 +118,26 @@ class UserInvoiceController
             ['card_number', ''],
             ['is_default', 0]
         ]);
-        if (!$data['drawer_phone']) return app('json')->fail(411600);
+        if (!$data['drawer_phone']) return app('json')->fail(410144);
         if (!check_phone($data['drawer_phone'])) return app('json')->fail(410018);
-        if (!$data['name']) return app('json')->fail(411601);
+        if (!$data['name']) return app('json')->fail(410145);
         if (!in_array($data['header_type'], [1, 2])) {
             $data['header_type'] = empty($data['duty_number']) ? 1 : 2;
         }
         if ($data['header_type'] == 1 && !preg_match('/^[\x80-\xff]{2,60}$/', $data['name'])) {
-            return app('json')->fail(411602);
+            return app('json')->fail(410146);
         }
         if ($data['header_type'] == 2 && !preg_match('/^[0-9a-zA-Z&\(\)\（\）\x80-\xff]{2,150}$/', $data['name'])) {
-            return app('json')->fail(411602);
+            return app('json')->fail(410146);
         }
         if ($data['header_type'] == 2 && !$data['duty_number']) {
-            return app('json')->fail(411603);
+            return app('json')->fail(410147);
         }
         if ($data['header_type'] == 2 && !preg_match('/^[A-Z0-9]{15}$|^[A-Z0-9]{17}$|^[A-Z0-9]{18}$|^[A-Z0-9]{20}$/', $data['duty_number'])) {
-            return app('json')->fail(411604);
+            return app('json')->fail(410148);
         }
         if ($data['card_number'] && !preg_match('/^[1-9]\d{11,19}$/', $data['card_number'])) {
-            return app('json')->fail(411605);
+            return app('json')->fail(410149);
         }
         $uid = (int)$request->uid();
         $re = $this->services->saveInvoice($uid, $data);
