@@ -15,6 +15,7 @@ namespace app\services\serve;
 use app\services\BaseServices;
 use crmeb\services\express\Express;
 use crmeb\services\FormBuilder;
+use crmeb\services\printer\Printer;
 use crmeb\services\product\Product;
 use crmeb\services\serve\Serve;
 use crmeb\services\sms\Sms;
@@ -78,6 +79,14 @@ class ServeServices extends BaseServices
     public function express(array $config = [])
     {
         return app()->make(Express::class, [$this->getConfig($config)]);
+    }
+    /**
+     * 小票打印
+     * @return Express
+     */
+    public function orderPrint(array $config = [])
+    {
+        return app()->make(Printer::class, [$this->getConfig($config)]);
     }
 
     /**
