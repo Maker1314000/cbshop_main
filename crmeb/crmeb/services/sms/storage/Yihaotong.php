@@ -17,10 +17,10 @@ use think\facade\Config;
 
 
 /**
- * Class Yunxin
+ * Class yihaotong
  * @package crmeb\services\sms\storage
  */
-class Yunxin extends BaseSmss
+class Yihaotong extends BaseSmss
 {
 
     /**

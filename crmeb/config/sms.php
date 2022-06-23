@@ -21,7 +21,7 @@ return [
     //驱动模式
     'stores' => [
         //云信
-        'yunxin' => [
+        'yihaotong' => [
 
         ],
         //创蓝
@@ -30,7 +30,7 @@ return [
         ],
         //阿里云
         'aliyun' => [
-            
+
         ]
     ]
 ];

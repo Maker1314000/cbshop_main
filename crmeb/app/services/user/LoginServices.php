@@ -162,7 +162,7 @@ class LoginServices extends BaseServices
         if ($this->dao->getOne(['account' => $phone, 'is_del' => 0]) && $type == 'register') {
             throw new ApiException(410028);
         }
-        $default = Config::get('sms.default', 'yunxin');
+        $default = Config::get('sms.default', 'yihaotong');
         $defaultMaxPhoneCount = Config::get('sms.maxPhoneCount', 10);
         $defaultMaxIpCount = Config::get('sms.maxIpCount', 50);
         $maxPhoneCount = Config::get('sms.stores.' . $default . '.maxPhoneCount', $defaultMaxPhoneCount);

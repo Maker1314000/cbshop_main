@@ -13,7 +13,7 @@ namespace crmeb\services\sms;
 
 use crmeb\basic\BaseManager;
 use crmeb\services\AccessTokenServeService;
-use crmeb\services\sms\storage\Yunxin;
+use crmeb\services\sms\storage\yihaotong;
 use think\Container;
 use think\facade\Config;
 
@@ -21,14 +21,14 @@ use think\facade\Config;
 /**
  * Class Sms1
  * @package crmeb\services\sms
- * @mixin Yunxin
+ * @mixin yihaotong
  */
 class Sms extends BaseManager
 {
     /**
      * @var array|string[]
      */
-    protected $type = ['yunxin', 'aliyun'];
+    protected $type = ['yihaotong', 'aliyun'];
 
     /**
      * 空间名
@@ -43,7 +43,7 @@ class Sms extends BaseManager
     protected function getDefaultDriver()
     {
         return $this->type[(int)sys_config('sms_type', 0)];
-//        return Config::get('sms.default', 'yunxin');
+//        return Config::get('sms.default', 'yihaotong');
     }
 
 

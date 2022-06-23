@@ -64,7 +64,7 @@ class SmsAdminServices extends BaseServices
     public function register(string $account, string $password, string $url, string $phone, string $code, string $sign)
     {
         /** @var Sms $sms */
-        $sms = app()->make(Sms::class, ['yunxin']);
+        $sms = app()->make(Sms::class, ['yihaotong']);
         $status = $sms->register($account, md5(trim($password)), $url, $phone, $code, $sign);
         if ($status['status'] == 400) {
             throw new AdminException(400462, ['msg' => $status['msg']]);
@@ -82,7 +82,7 @@ class SmsAdminServices extends BaseServices
     public function captcha(string $phone)
     {
         /** @var Sms $sms */
-        $sms = app()->make(Sms::class, ['yunxin']);
+        $sms = app()->make(Sms::class, ['yihaotong']);
         //TODO
         $res = json_decode(HttpService::getRequest($sms->getSmsUrl(), compact('phone')), true);
         if (!isset($res['status']) && $res['status'] !== 200) {
@@ -102,7 +102,7 @@ class SmsAdminServices extends BaseServices
     {
         /** @var Sms $sms */
         $sms = app()->make(Sms::class, [
-            'yunxin', [
+            'yihaotong', [
                 'sms_account' => $account,
                 'sms_token' => $token,
                 'site_url' => sys_config('site_url')
@@ -135,7 +135,7 @@ class SmsAdminServices extends BaseServices
     public function getSmsData()
     {
         $account = sys_config('sms_account');
-        $sms = app()->make(Sms::class, ['yunxin', [
+        $sms = app()->make(Sms::class, ['yihaotong', [
             'sms_account' => $account,
             'sms_token' => sys_config('sms_token'),
             'site_url' => sys_config('site_url')
