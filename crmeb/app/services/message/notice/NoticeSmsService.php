@@ -51,17 +51,13 @@ class NoticeSmsService extends NoticeService
 
     }
 
-
     /**
      * 发送短信消息
-     * @param string $tempCode 模板消息常量名称
-     * @param $uid uid
-     * @param array $data 模板内容
-     * @param string $link 跳转链接
-     * @param string|null $color 文字颜色
-     * @return bool|mixed
+     * @param $phone
+     * @param array $data
+     * @return bool|void
      */
-    public function sendSms($phone, array $data, string $mark)
+    public function sendSms($phone, array $data)
     {
         try {
             $this->isopend = $this->notceinfo['is_sms'] === 1;
