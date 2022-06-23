@@ -178,7 +178,7 @@ class LoginServices extends BaseServices
         $code = rand(100000, 999999);
         $data['code'] = $code;
         $data['time'] = $time;
-        $res = $services->send(true, $phone, $data, 'VERIFICATION_CODE_TIME');
+        $res = $services->send(true, $phone, $data, 'verify_code');
         if ($res !== true)
             throw new ApiException(410031);
         return $code;
