@@ -9,7 +9,11 @@ use app\services\user\UserBillServices;
 use crmeb\interfaces\ListenerInterface;
 use think\facade\Log;
 
-//确认收货
+/**
+ * 订单确认收货
+ * Class OrderTake
+ * @package app\listener\order
+ */
 class OrderTake implements ListenerInterface
 {
     public function handle($event): void

@@ -23,6 +23,11 @@ use crmeb\exceptions\AdminException;
 use crmeb\interfaces\ListenerInterface;
 use think\facade\Log;
 
+/**
+ * 订单支付成功后
+ * Class OrderPaySuccess
+ * @package app\listener\order
+ */
 class OrderPaySuccess implements ListenerInterface
 {
     public function handle($event): void
