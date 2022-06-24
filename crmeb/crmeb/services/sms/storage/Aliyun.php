@@ -51,10 +51,10 @@ class Aliyun extends BaseSms
     protected function initialize(array $config = [])
     {
         parent::initialize($config);
-        $this->param['SignName'] = sys_config('aliyun_SignName');
-        $this->param['AccessKeyId'] = sys_config('aliyun_AccessKeyId');
-        $this->AccessKeySecret = sys_config('aliyun_AccessKeySecret');
-        $this->param['RegionId'] = sys_config('aliyun_RegionId');
+        $this->param['SignName'] = $config['sign_name'] ?? '';
+        $this->param['AccessKeyId'] = $config['access_key_id'] ?? '';
+        $this->AccessKeySecret = $config['access_key_secret'] ?? '';
+        $this->param['RegionId'] = $config['region_id'] ?? '';
         $this->param['SignatureNonce'] = uniqid(mt_rand(0, 0xffff), true);
         $this->param['Timestamp'] = gmdate('Y-m-d\TH:i:s\Z');
         $this->templates = Config::get($this->configFile . '.stores.' . $this->name . '.template_id', []);
@@ -143,17 +143,31 @@ class Aliyun extends BaseSms
         return preg_replace('/%7E/', '~', $result);
     }
 
-    public function open(){}
+    public function open()
+    {
+    }
 
-    public function modify(string $sign = null , string $phone, string $code){}
+    public function modify(string $sign = null, string $phone, string $code)
+    {
+    }
 
-    public function info(){}
+    public function info()
+    {
+    }
 
-    public function temps(int $page = 0, int $limit = 10, int $type = 1){}
+    public function temps(int $page = 0, int $limit = 10, int $type = 1)
+    {
+    }
 
-    public function apply(string $title, string $content, int $type){}
+    public function apply(string $title, string $content, int $type)
+    {
+    }
 
-    public function applys(int $tempType, int $page, int $limit){}
+    public function applys(int $tempType, int $page, int $limit)
+    {
+    }
 
-    public function record($record_id){}
+    public function record($record_id)
+    {
+    }
 }

@@ -32,12 +32,12 @@ abstract class BaseSms extends BaseStorage
      * @param AccessTokenServeService $accessTokenServeService
      * @param string $configFile
      */
-    public function __construct(string $name, AccessTokenServeService $accessTokenServeService, string $configFile)
+    public function __construct(string $name, AccessTokenServeService $accessTokenServeService, string $configFile, array $config = [])
     {
         $this->accessToken = $accessTokenServeService;
         $this->name = $name;
         $this->configFile = $configFile;
-        $this->initialize();
+        $this->initialize($config);
     }
 
     /**

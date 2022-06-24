@@ -77,7 +77,7 @@ class Sms extends BaseManager
         }
 
         $handleAccessToken = new AccessTokenServeService($this->config['account'] ?? '', $this->config['secret'] ?? '');
-        $handle = Container::getInstance()->invokeClass($class, [$this->getDefaultDriver(), $handleAccessToken, $this->configFile]);
+        $handle = Container::getInstance()->invokeClass($class, [$this->getDefaultDriver(), $handleAccessToken, $this->configFile, $this->config]);
         $this->config = [];
         return $handle;
     }
