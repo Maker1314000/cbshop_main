@@ -34,9 +34,9 @@ return [
             app()->getBasePath() . 'api/lang/zh-cn.php',
         ],
         'en-us'    => [
-            app()->getBasePath() . 'lang/zh-cn.php',
-            app()->getBasePath() . 'adminapi/lang/zh-cn.php',
-            app()->getBasePath() . 'api/lang/zh-cn.php',
+            app()->getBasePath() . 'lang/en-us.php',
+            app()->getBasePath() . 'adminapi/lang/en-us.php',
+            app()->getBasePath() . 'api/lang/en-us.php',
         ],
     ],
     // Accept-Language转义为对应语言包名称
