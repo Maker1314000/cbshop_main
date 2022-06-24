@@ -46,7 +46,7 @@ return [
         'notice.notice' => [\app\listener\notice\Notice::class], //通知->消息事件
     ],
     'subscribe' => [
-        crmeb\subscribes\TaskSubscribe::class,//定时任务事件订阅类
+        \app\subscribes\TaskSubscribe::class,//定时任务事件订阅类
     ]
 ];
 

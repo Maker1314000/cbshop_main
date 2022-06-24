@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace crmeb\subscribes;
+namespace app\subscribes;
 
 /**
  * 订单事件

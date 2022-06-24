@@ -8,18 +8,21 @@
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-namespace crmeb\subscribes;
+namespace app\subscribes;
+
 
 /**
- * 用户消息事件
- * Class MessageSubscribe
+ * 素材消息事件
+ * Class MaterialSubscribe
  * @package crmeb\subscribes
  */
-class MessageSubscribe
+class MaterialSubscribe
 {
+
     public function handle()
     {
 
     }
+
 
 }
