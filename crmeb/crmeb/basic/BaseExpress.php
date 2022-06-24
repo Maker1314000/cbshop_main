@@ -14,6 +14,7 @@ namespace crmeb\basic;
 use crmeb\services\AccessTokenServeService;
 
 /**
+ * 物流查询
  * Class BaseExpress
  * @package crmeb\basic
  */

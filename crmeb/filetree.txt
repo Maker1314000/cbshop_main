@@ -4,7 +4,7 @@
 ├── config 系统配置
 ├── crmeb crmeb核心文件目录
 ├── public 程序入口目录
-├── route 程序路由配置
+├── route 程序入口路由配置
 ├── runtime 缓存目录
 ├── temp docker临时文件目录
 ├── vendor 扩展包compose 安装目录
