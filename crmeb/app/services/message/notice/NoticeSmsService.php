@@ -21,6 +21,7 @@ use app\services\yihaotong\SmsRecordServices;
 use app\services\serve\ServeServices;
 use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
+use crmeb\services\sms\Sms;
 use think\facade\Log;
 
 
@@ -92,9 +93,26 @@ class NoticeSmsService extends NoticeService
                 $templateId = $notifyServices->value(['mark' => $mark], 'sms_id') ?? 0;
                 CacheService::set('NOTICE_SMS_' . $mark, $templateId);
             }
-            $res = $services->sms()->send($phone, $templateId, $data);
+
+            //获取发送短信驱动类型
+            $type = (int)sys_config('sms_type', 0);
+            if (isset(Sms::SMS_TYPE[$type])) {
+                $typeStr = Sms::SMS_TYPE[$type];
+            } else {
+                $typeStr = Sms::SMS_TYPE[0];
+                Log::error([
+                    'message' => '发送短信时当前发送驱动不存在：' . $type,
+                    'phone' => $phone,
+                    'data' => $data,
+                    'mark' => $mark
+                ]);
+            }
+
+            $smsMake = $services->sms($typeStr);
+            //发送短信
+            $res = $smsMake->send($phone, $templateId, $data);
             if ($res === false) {
-                throw new ApiException($services->getError());
+                throw new ApiException($smsMake->getError());
             } else {
                 /** @var SmsRecordServices $recordServices */
                 $recordServices = app()->make(SmsRecordServices::class);
