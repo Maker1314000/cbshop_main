@@ -1,0 +1,90 @@
+.
+├── basic
+│   ├── BaseController.php
+│   ├── BaseExpress.php
+│   ├── BaseJobs.php
+│   ├── BaseManager.php
+│   ├── BaseMessage.php
+│   ├── BaseModel.php
+│   ├── BasePay.php
+│   ├── BasePrinter.php
+│   ├── BaseProduct.php
+│   ├── BaseSms.php
+│   ├── BaseSmss.php
+│   ├── BaseStorage.php
+│   └── BaseUpload.php
+├── command
+│   ├── stubs
+│   ├── Dao.php
+│   ├── Service.php
+│   ├── Timer.php
+│   └── Workerman.php
+├── exceptions
+│   ├── AdminException.php
+│   ├── ApiException.php
+│   ├── AuthException.php
+│   ├── PayException.php
+│   ├── SmsException.php
+│   ├── TemplateException.php
+│   ├── UploadException.php
+│   └── WechatReplyException.php
+├── interfaces
+│   ├── JobInterface.php
+│   ├── ListenerInterface.php
+│   ├── MiddlewareInterface.php
+│   ├── NoticeInrerfaces.php
+│   └── ProviderInterface.php
+├── services
+│   ├── easywechat
+│   ├── express
+│   ├── printer
+│   ├── product
+│   ├── serve
+│   ├── sms
+│   ├── template
+│   ├── upload
+│   ├── workerman
+│   ├── AccessTokenServeService.php
+│   ├── AliPayService.php
+│   ├── CacheService.php
+│   ├── CopyProductService.php
+│   ├── DownloadImageService.php
+│   ├── EnterpriseWechatService.php
+│   ├── ExpressService.php
+│   ├── FileService.php
+│   ├── FormBuilder.php
+│   ├── GroupDataService.php
+│   ├── HttpService.php
+│   ├── Mini3rdProgramService.php
+│   ├── MiniProgramService.php
+│   ├── MysqlBackupService.php
+│   ├── QrcodeService.php
+│   ├── SpreadsheetExcelService.php
+│   ├── SystemConfigService.php
+│   ├── UpgradeService.php
+│   ├── UploadService.php
+│   ├── UtilService.php
+│   ├── WechatOpenService.php
+│   └── WechatService.php
+├── traits
+│   ├── CurdControllerTrait.php
+│   ├── ErrorTrait.php
+│   ├── JwtAuthModelTrait.php
+│   ├── ModelTrait.php
+│   ├── QueueTrait.php
+│   ├── SearchDaoTrait.php
+│   └── ServicesTrait.php
+├── utils
+│   ├── Arr.php
+│   ├── Canvas.php
+│   ├── Captcha.php
+│   ├── ErrorCode.php
+│   ├── Hook.php
+│   ├── Json.php
+│   ├── JwtAuth.php
+│   ├── QRcode.php
+│   ├── Queue.php
+│   └── Str.php
+└── filetree.txt
+
+17 directories, 70 files
