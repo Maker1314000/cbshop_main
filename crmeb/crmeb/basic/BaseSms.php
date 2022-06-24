@@ -17,7 +17,7 @@ use crmeb\services\AccessTokenServeService;
  * Class BaseSmss
  * @package crmeb\basic
  */
-abstract class BaseSmss extends BaseStorage
+abstract class BaseSms extends BaseStorage
 {
 
     /**

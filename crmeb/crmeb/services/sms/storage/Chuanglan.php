@@ -11,7 +11,7 @@
 
 namespace crmeb\services\sms\storage;
 
-use crmeb\basic\BaseSmss;
+use crmeb\basic\BaseSms;
 use crmeb\exceptions\AdminException;
 use think\facade\Config;
 
@@ -20,7 +20,7 @@ use think\facade\Config;
  * Class Chuanglan
  * @package crmeb\services\sms\storage
  */
-class Chuanglan extends BaseSmss
+class Chuanglan extends BaseSms
 {
 
     /**

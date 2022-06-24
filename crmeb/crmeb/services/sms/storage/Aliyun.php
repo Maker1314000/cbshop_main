@@ -11,7 +11,7 @@
 
 namespace crmeb\services\sms\storage;
 
-use crmeb\basic\BaseSmss;
+use crmeb\basic\BaseSms;
 use crmeb\services\HttpService;
 use think\facade\Config;
 
@@ -20,7 +20,7 @@ use think\facade\Config;
  * Class Aliyun
  * @package crmeb\services\sms\storage
  */
-class Aliyun extends BaseSmss
+class Aliyun extends BaseSms
 {
     protected $apiUrl = 'https://dysmsapi.aliyuncs.com/';
 
