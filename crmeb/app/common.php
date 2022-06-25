@@ -13,6 +13,8 @@
 use think\exception\ValidateException;
 use crmeb\services\FormBuilder as Form;
 use crmeb\services\UploadService;
+use think\facade\Config;
+use think\facade\Lang;
 
 if (!function_exists('getWorkerManUrl')) {
 
@@ -901,5 +903,51 @@ if (!function_exists('get_thumb_water')) {
             }
         }
         return is_string($list) ? ($data['image'] ?? '') : $data;
+    }
+}
+
+if (!function_exists('getLang')) {
+    /**
+     * 多语言
+     * @param $code
+     * @param array $replace
+     * @return array|string|string[]
+     */
+    function getLang($code, array $replace = [])
+    {
+        $config = Config::get('lang');
+        $request = app()->request;
+        $message = 'Code Error';
+
+        if (!$range = $request->header('lang')) {
+            $range = $request->cookie($config['cookie_var']);
+        }
+
+        $langData = array_values($config['accept_language']);
+        if (!in_array($range, $langData)) {
+            $range = 'zh-cn';
+        }
+
+        $fileArr = $config['extend_list'][$range];
+        if ($fileArr) {
+            $lang = [];
+            foreach ($fileArr as $file) {
+                $lang = $lang + include $file;
+            }
+            $message = (string)($lang[$code] ?? 'Code Error');
+        }
+
+        if (!empty($replace) && is_array($replace)) {
+
+            // 关联索引解析
+            $key = array_keys($replace);
+            foreach ($key as &$v) {
+                $v = "{:{$v}}";
+            }
+            $message = str_replace($key, $replace, $message);
+
+        }
+
+        return $message;
     }
 }

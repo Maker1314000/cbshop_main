@@ -11,9 +11,6 @@
 
 namespace crmeb\exceptions;
 
-use think\facade\Config;
-use think\facade\Lang;
-
 /**
  * API应用错误信息
  * Class ApiException
@@ -33,19 +30,7 @@ class ApiException extends \RuntimeException
 
         if (is_numeric($message)) {
             $code = $message;
-
-            if (!$range = app()->request->header('lang')) {
-                $range = app()->request->cookie(Config::get('lang.cookie_var'));
-            }
-            $langData = array_values(Config::get('lang.accept_language', []));
-            if (!in_array($range, $langData)) {
-                $range = 'zh-cn';
-            }
-
-            /** @var Lang $lang */
-            $lang = app()->make(Lang::class, Config::get('lang'));
-
-            $message = $lang::get($message, $replace, $range);
+            $message = getLang($message, $replace);
         }
 
         parent::__construct($message, $code, $previous);

@@ -11,9 +11,6 @@
 
 namespace crmeb\utils;
 
-
-use think\facade\Config;
-use think\facade\Lang;
 use think\Response;
 
 /**
@@ -33,26 +30,13 @@ class Json
 
     public function make(int $status, string $msg, ?array $data = null, ?array $replace = []): Response
     {
-        $request = app()->request;
         $res = compact('status', 'msg');
 
         if (!is_null($data))
             $res['data'] = $data;
 
-        if (is_numeric($res['msg'])) {
-            if (!$range = $request->header('lang')) {
-                $range = $request->cookie(Config::get('lang.cookie_var'));
-            }
-            $langData = array_values(Config::get('lang.accept_language', []));
-            if (!in_array($range, $langData)) {
-                $range = 'zh-cn';
-            }
-
-            /** @var Lang $lang */
-            $lang = app()->make(Lang::class, Config::get('lang'));
-
-            $res['msg'] = $lang::get($msg, $replace, $range);
-        }
+        if (is_numeric($res['msg']))
+            $res['msg'] = getLang($res['msg'], $replace);
 
         return Response::create($res, 'json', $this->code);
     }
