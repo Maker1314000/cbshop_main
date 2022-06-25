@@ -28,7 +28,7 @@ class CopyProduct extends BaseManager
      * 空间名
      * @var string
      */
-    protected $namespace = '\\crmeb\\services\\product\\storage\\';
+    protected $namespace = '\\crmeb\\services\\copyproduct\\storage\\';
 
     /**
      * 默认驱动

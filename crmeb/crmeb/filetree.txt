@@ -45,7 +45,6 @@
 │   ├── AccessTokenServeService.php
 │   ├── AliPayService.php
 │   ├── CacheService.php
-│   ├── CopyProductService.php
 │   ├── DownloadImageService.php
 │   ├── FileService.php
 │   ├── FormBuilder.php
