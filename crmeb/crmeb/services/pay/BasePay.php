@@ -8,13 +8,13 @@
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-namespace crmeb\basic;
+namespace crmeb\services\pay;
 
 use EasyWeChat\Payment\Order;
 
 /**
  * Class BasePay
- * @package crmeb\basic
+ * @package crmeb\services\pay
  */
 abstract class BasePay extends BaseStorage
 {

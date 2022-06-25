@@ -15,7 +15,7 @@ use crmeb\services\AccessTokenServeService;
 
 /**
  * Class BaseProduct
- * @package crmeb\basic
+ * @package crmeb\services\copyproduct
  */
 abstract class BaseCopyProduct extends BaseStorage
 {
