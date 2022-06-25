@@ -11,14 +11,14 @@
 
 namespace crmeb\services\copyproduct\storage;
 
-use crmeb\basic\BaseProduct;
+use crmeb\services\copyproduct\BaseCopyProduct;
 
 /**
  * 复制主流商城商品
  * Class CopyProductService
  * @package crmeb\services
  */
-class CopyProductService extends BaseProduct
+class CopyProductService extends BaseCopyProduct
 {
     //接口地址
     protected static $api = [

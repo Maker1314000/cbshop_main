@@ -11,14 +11,14 @@
 
 namespace crmeb\services\copyproduct\storage;
 
-use crmeb\basic\BaseProduct;
+use crmeb\services\copyproduct\BaseCopyProduct;
 
 
 /**
  * Class Copy
  * @package crmeb\services\product\storage
  */
-class Copy extends BaseProduct
+class Copy extends BaseCopyProduct
 {
 
     /**
