@@ -15,7 +15,7 @@ namespace app\services\user;
 use app\dao\user\UserDao;
 use app\services\BaseServices;
 use app\services\yihaotong\SmsRecordServices;
-use app\services\message\notice\NoticeSmsService;
+use app\services\message\notice\SmsService;
 use app\services\wechat\WechatUserServices;
 use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
@@ -157,7 +157,7 @@ class LoginServices extends BaseServices
         return true;
     }
 
-    public function verify(NoticeSmsService $services, $phone, $type, $time, $ip)
+    public function verify(SmsService $services, $phone, $type, $time, $ip)
     {
         if ($this->dao->getOne(['account' => $phone, 'is_del' => 0]) && $type == 'register') {
             throw new ApiException(410028);
