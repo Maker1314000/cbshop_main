@@ -11,6 +11,7 @@
 
 namespace crmeb\services\upload;
 
+use crmeb\basic\BaseStorage;
 use think\facade\Config;
 
 /**

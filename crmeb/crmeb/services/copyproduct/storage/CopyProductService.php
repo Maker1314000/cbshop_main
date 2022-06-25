@@ -9,14 +9,16 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace crmeb\services;
+namespace crmeb\services\copyproduct\storage;
+
+use crmeb\basic\BaseProduct;
 
 /**
  * 复制主流商城商品
  * Class CopyProductService
  * @package crmeb\services
  */
-class CopyProductService
+class CopyProductService extends BaseProduct
 {
     //接口地址
     protected static $api = [
@@ -644,5 +646,15 @@ class CopyProductService
         $header[] = ['title' => '操作', 'slot' => 'action', 'align' => 'center', 'minWidth' => 70];
         $info = ['attr' => $attr, 'value' => $valueNew, 'header' => $header];
         return $info;
+    }
+
+    public function open()
+    {
+        // TODO: Implement open() method.
+    }
+
+    public function goods(string $url)
+    {
+        // TODO: Implement goods() method.
     }
 }

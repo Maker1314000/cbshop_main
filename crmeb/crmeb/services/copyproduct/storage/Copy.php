@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace crmeb\services\product\storage;
+namespace crmeb\services\copyproduct\storage;
 
 use crmeb\basic\BaseProduct;
 
