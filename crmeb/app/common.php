@@ -932,14 +932,7 @@ if (!function_exists('getLang')) {
 
         //读取当前语言的语言包
         $lang = CacheService::redisHandler()->remember('lang_' . $range, function () use ($config, $range) {
-            $fileArr = $config['extend_list'][$range];
-            $lang = [];
-            foreach ($fileArr as $file) {
-                if (file_exists($file)) {
-                    $lang = $lang + include $file;
-                }
-            }
-            return $lang;
+            return include $config['extend_list'][$range];
         }, 3600);
 
         //获取返回文字
