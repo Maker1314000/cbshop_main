@@ -9,15 +9,17 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace crmeb\services;
+namespace crmeb\services\express\storage;
 
-class ExpressService
+use crmeb\services\express\BaseExpress;
+
+class AliyunService extends BaseExpress
 {
     protected static $api = [
         'query' => 'https://wuliu.market.alicloudapi.com/kdi'
     ];
 
-    public static function query($no, $type = '')
+    public function query(string $no = '',string $type = '')
     {
         $appCode = sys_config('system_express_app_code');
         if (!$appCode) return false;
@@ -26,4 +28,18 @@ class ExpressService
         return $result;
     }
 
+    public function open()
+    {
+        // TODO: Implement open() method.
+    }
+
+    public function dump($data)
+    {
+        // TODO: Implement dump() method.
+    }
+
+    public function temp(string $com)
+    {
+        // TODO: Implement temp() method.
+    }
 }
