@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 namespace crmeb\services\upload\storage;
 
-use crmeb\basic\BaseUpload;
+use crmeb\services\upload\BaseUpload;
 use crmeb\exceptions\AdminException;
 use crmeb\exceptions\UploadException;
 use Guzzle\Http\EntityBody;
