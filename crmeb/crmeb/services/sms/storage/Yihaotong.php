@@ -11,7 +11,7 @@
 
 namespace crmeb\services\sms\storage;
 
-use crmeb\basic\BaseSms;
+use crmeb\services\sms\BaseSms;
 use crmeb\exceptions\AdminException;
 use think\facade\Config;
 

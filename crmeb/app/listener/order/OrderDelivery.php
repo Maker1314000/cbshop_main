@@ -18,7 +18,6 @@ class OrderDelivery implements ListenerInterface
     {
         [$orderInfo, $storeTitle, $data, $type] = $event;
 
-
         //到期自动收货
         $time = sys_config('system_delivery_time') ?? 0;
         if ($time != 0) {

@@ -11,10 +11,6 @@
 
 namespace crmeb\exceptions;
 
-use think\facade\Config;
-use think\facade\Lang;
-use Throwable;
-
 /**
  * 微信消息回复错误
  * Class WechatReplyException
@@ -22,7 +18,7 @@ use Throwable;
  */
 class WechatReplyException extends \RuntimeException
 {
-    public function __construct($message, $replace = [], $code = 0, Throwable $previous = null)
+    public function __construct($message, $replace = [], $code = 0, \Throwable $previous = null)
     {
         if (is_array($message)) {
             $errInfo = $message;
@@ -34,19 +30,7 @@ class WechatReplyException extends \RuntimeException
 
         if (is_numeric($message)) {
             $code = $message;
-
-            if (!$range = app()->request->header('lang')) {
-                $range = app()->request->cookie(Config::get('lang.cookie_var'));
-            }
-            $langData = array_values(Config::get('lang.accept_language', []));
-            if (!in_array($range, $langData)) {
-                $range = 'zh-cn';
-            }
-
-            /** @var Lang $lang */
-            $lang = app()->make(Lang::class, Config::get('lang'));
-
-            $message = $lang::get($message, $replace, $range);
+            $message = getLang($message, $replace);
         }
 
         parent::__construct($message, $code, $previous);

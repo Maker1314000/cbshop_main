@@ -46,8 +46,10 @@ class OrderCreateAfter implements ListenerInterface
 
         //订单自动取消
         $this->pushJob($order['id'], $combinationId, $seckillId, $bargainId);
+
         //计算订单实际金额
         OrderCreateAfterJob::dispatch([$order, $group, $combinationId || $seckillId || $bargainId]);
+
         //下单记录
         ProductLogJob::dispatch(['order', ['uid' => $uid, 'order_id' => $order['id']]]);
     }

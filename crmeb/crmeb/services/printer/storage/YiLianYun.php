@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 namespace crmeb\services\printer\storage;
 
-use crmeb\basic\BasePrinter;
+use crmeb\services\printer\BasePrinter;
 
 /**
  * Class YiLianYun

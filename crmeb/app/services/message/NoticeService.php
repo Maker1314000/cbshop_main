@@ -19,7 +19,10 @@ use app\services\order\StoreOrderCartInfoServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\CacheService;
 
-
+/**
+ * 站内信services类
+ * Class MessageSystemServices
+ */
 class NoticeService extends BaseServices
 {
 
@@ -28,7 +31,7 @@ class NoticeService extends BaseServices
      * @var array
      */
 //    protected $type = [
-//        'is_sms' => NoticeSmsService::class,
+//        'is_sms' => SmsService::class,
 //        'is_system' => SystemSendServices::class,
 //        'is_wechat' => WechatTemplateService::class,
 //        'is_routine' => RoutineTemplateServices::class,

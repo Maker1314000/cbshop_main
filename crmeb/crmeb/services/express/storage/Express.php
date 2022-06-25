@@ -12,7 +12,7 @@
 namespace crmeb\services\express\storage;
 
 use app\services\shipping\ExpressServices;
-use crmeb\basic\BaseExpress;
+use crmeb\services\express\BaseExpress;
 use crmeb\exceptions\AdminException;
 
 /**

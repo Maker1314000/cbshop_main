@@ -31,7 +31,7 @@ use think\facade\Log;
  * User: xurongyao <763569752@qq.com>
  * Date: 2021/9/22 1:23 PM
  */
-class NoticeSmsService extends NoticeService
+class SmsService extends NoticeService
 {
     /**
      * 判断是否开启权限

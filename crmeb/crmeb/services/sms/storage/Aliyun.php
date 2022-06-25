@@ -11,7 +11,7 @@
 
 namespace crmeb\services\sms\storage;
 
-use crmeb\basic\BaseSms;
+use crmeb\services\sms\BaseSms;
 use crmeb\services\HttpService;
 use think\facade\Config;
 
