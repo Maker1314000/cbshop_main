@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+use crmeb\services\CacheService;
 use think\exception\ValidateException;
 use crmeb\services\FormBuilder as Form;
 use crmeb\services\UploadService;
@@ -917,35 +918,41 @@ if (!function_exists('getLang')) {
     {
         $config = Config::get('lang');
         $request = app()->request;
-        $message = 'Code Error';
 
+        //获取接口传入的语言类型
         if (!$range = $request->header('lang')) {
             $range = $request->cookie($config['cookie_var']);
         }
 
+        //如果找到当前语言类型，默认中文
         $langData = array_values($config['accept_language']);
         if (!in_array($range, $langData)) {
             $range = 'zh-cn';
         }
 
-        $fileArr = $config['extend_list'][$range];
-        if ($fileArr) {
+        //读取当前语言的语言包
+        $lang = CacheService::redisHandler()->remember('lang_' . $range, function () use ($config, $range) {
+            $fileArr = $config['extend_list'][$range];
             $lang = [];
             foreach ($fileArr as $file) {
-                $lang = $lang + include $file;
+                if (file_exists($file)) {
+                    $lang = $lang + include $file;
+                }
             }
-            $message = (string)($lang[$code] ?? 'Code Error');
-        }
+            return $lang;
+        }, 3600);
 
+        //获取返回文字
+        $message = (string)($lang[$code] ?? 'Code Error');
+
+        //替换变量
         if (!empty($replace) && is_array($replace)) {
-
             // 关联索引解析
             $key = array_keys($replace);
             foreach ($key as &$v) {
                 $v = "{:{$v}}";
             }
             $message = str_replace($key, $replace, $message);
-
         }
 
         return $message;
