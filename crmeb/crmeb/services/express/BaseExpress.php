@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace crmeb\basic;
+namespace crmeb\services\express;
 
 use crmeb\services\AccessTokenServeService;
 
