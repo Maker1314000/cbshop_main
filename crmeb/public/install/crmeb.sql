@@ -8843,7 +8843,7 @@ CREATE TABLE IF NOT EXISTS `eb_system_notification` (
 
 INSERT INTO `eb_system_notification` (`id`, `mark`, `name`, `title`, `is_system`, `is_app`, `is_wechat`, `is_routine`, `is_sms`, `is_ent_wechat`, `system_title`, `system_text`, `app_id`, `sms_id`, `wechat_id`, `routine_id`, `ent_wechat_text`, `variable`, `url`, `type`, `add_time`) VALUES
 (1, 'bind_spread_uid', '绑定推广关系', '注册完成给上级发送', 1, 0, 1, 1, 0, 0, '绑定下级通知', '恭喜，又一员猛将将永久绑定到您的团队，用户{nickname}加入您的队伍！', 0, 0, 31, 4, '0', '{nikename}用户名', '', 1, 0),
-(2, 'order_pay_success', '支付成功给用户发送', '支付成功给用户发送', 1, 0, 1, 1, 2, 0, '购买成功通知', '您购买的商品已支付成功，支付金额{pay_price}元，订单号{order_id},感谢您的光临！', 0, 520268520268, 26, 12, '0', '{order_id}订单号,{total_num}商品总数,{pay_price}支付金额', '', 1, 0),
+(2, 'order_pay_success', '支付成功给用户发送', '支付成功给用户发送', 1, 0, 1, 1, 2, 0, '购买成功通知', '您购买的商品已支付成功，支付金额{pay_price}元，订单号{order_id},感谢您的光临！', 0, 520268, 26, 12, '0', '{order_id}订单号,{total_num}商品总数,{pay_price}支付金额', '', 1, 0),
 (3, 'order_take', '确认收货提醒发送', '确认收货用户提醒发送', 1, 0, 1, 1, 2, 0, '确认收货通知', '亲，您的订单{order_id},商品{store_name}已确认收货,感谢您的光临！', 0, 520271, 17, 3, '0', '{order_id}订单号,{store_name}商品名称', '', 1, 0),
 (4, 'price_revision', '改价提醒发送', '改价给用户提醒发送', 1, 0, 1, 0, 2, 0, '改价通知', '您的订单{order_id}，实际支付金额已被修改为{pay_price}', 0, 528288, 36, 0, '0', '{order_id}订单号,{pay_price}订单金额', '', 1, 0),
 (5, 'order_refund', '退款成功提醒发送', '退款给用户提醒发送', 1, 0, 1, 1, 0, 0, '退款成功通知', '您的订单{order_id}已同意退款,退款金额{refund_price}元。', 0, 0, 18, 10, '0', '{order_id}订单号,{refund_price}退款金额,{pay_price}订单金额', '', 1, 0),
