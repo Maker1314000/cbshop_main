@@ -13,7 +13,7 @@ use app\services\user\UserServices;
 use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
 use crmeb\services\FormBuilder as Form;
-use crmeb\services\UploadService;
+use app\services\other\UploadService;
 use think\facade\Route;
 
 class DivisionAgentApplyServices extends BaseServices

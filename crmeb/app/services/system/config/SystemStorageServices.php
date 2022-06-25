@@ -16,7 +16,7 @@ use app\dao\system\config\SystemStorageDao;
 use app\services\BaseServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\FormBuilder;
-use crmeb\services\UploadService;
+use app\services\other\UploadService;
 use crmeb\traits\ServicesTrait;
 
 /**

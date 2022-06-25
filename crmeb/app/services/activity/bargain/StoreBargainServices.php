@@ -29,7 +29,7 @@ use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
 use crmeb\services\app\MiniProgramService;
-use crmeb\services\UploadService;
+use app\services\other\UploadService;
 use crmeb\services\UtilService;
 use crmeb\utils\ErrorCode;
 use Guzzle\Http\EntityBody;

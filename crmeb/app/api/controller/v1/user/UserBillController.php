@@ -19,7 +19,7 @@ use app\services\user\UserBillServices;
 use app\services\user\UserBrokerageServices;
 use app\services\user\UserMoneyServices;
 use crmeb\services\app\MiniProgramService;
-use crmeb\services\UploadService;
+use app\services\other\UploadService;
 use crmeb\services\UtilService;
 
 /**

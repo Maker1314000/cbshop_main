@@ -13,7 +13,7 @@
 use crmeb\services\CacheService;
 use think\exception\ValidateException;
 use crmeb\services\FormBuilder as Form;
-use crmeb\services\UploadService;
+use app\services\other\UploadService;
 use think\facade\Config;
 use think\facade\Lang;
 

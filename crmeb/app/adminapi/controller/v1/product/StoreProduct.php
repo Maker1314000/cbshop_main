@@ -17,7 +17,7 @@ use app\services\other\CacheServices;
 use app\services\product\product\StoreCategoryServices;
 use app\services\product\product\StoreProductServices;
 use crmeb\services\FileService;
-use crmeb\services\UploadService;
+use app\services\other\UploadService;
 use think\facade\App;
 
 /**

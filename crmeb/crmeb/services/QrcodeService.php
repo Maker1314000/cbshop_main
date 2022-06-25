@@ -11,6 +11,7 @@
 namespace crmeb\services;
 
 use app\services\system\attachment\SystemAttachmentServices;
+use app\services\other\UploadService;
 
 class QrcodeService
 {

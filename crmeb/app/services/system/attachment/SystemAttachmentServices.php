@@ -17,7 +17,7 @@ use app\dao\system\attachment\SystemAttachmentDao;
 use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
 use crmeb\exceptions\UploadException;
-use crmeb\services\UploadService;
+use app\services\other\UploadService;
 use crmeb\traits\ServicesTrait;
 
 /**
