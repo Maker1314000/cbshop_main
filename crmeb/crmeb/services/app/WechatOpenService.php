@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace crmeb\services;
+namespace crmeb\services\app;
 
 use crmeb\services\easywechat\Application;
 

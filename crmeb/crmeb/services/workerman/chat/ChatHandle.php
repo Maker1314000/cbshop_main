@@ -21,7 +21,7 @@ use app\services\user\UserServices;
 use app\services\wechat\WechatUserServices;
 use app\services\user\UserAuthServices;
 use crmeb\exceptions\AuthException;
-use crmeb\services\WechatService;
+use crmeb\services\app\WechatService;
 use crmeb\services\workerman\Response;
 use crmeb\utils\Arr;
 use think\facade\Log;

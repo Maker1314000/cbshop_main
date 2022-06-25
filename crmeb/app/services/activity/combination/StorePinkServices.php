@@ -21,7 +21,7 @@ use app\services\system\attachment\SystemAttachmentServices;
 use app\services\user\UserServices;
 use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
-use crmeb\services\MiniProgramService;
+use crmeb\services\app\MiniProgramService;
 use crmeb\services\UploadService;
 use crmeb\services\UtilService;
 use Guzzle\Http\EntityBody;

@@ -47,23 +47,18 @@
 │   ├── CacheService.php
 │   ├── CopyProductService.php
 │   ├── DownloadImageService.php
-│   ├── EnterpriseWechatService.php
 │   ├── ExpressService.php
 │   ├── FileService.php
 │   ├── FormBuilder.php
 │   ├── GroupDataService.php
 │   ├── HttpService.php
-│   ├── Mini3rdProgramService.php
-│   ├── MiniProgramService.php
 │   ├── MysqlBackupService.php
 │   ├── QrcodeService.php
 │   ├── SpreadsheetExcelService.php
 │   ├── SystemConfigService.php
 │   ├── UpgradeService.php
 │   ├── UploadService.php
-│   ├── UtilService.php
-│   ├── WechatOpenService.php
-│   └── WechatService.php
+│   └── UtilService.php
 ├── traits
 │   ├── CurdControllerTrait.php
 │   ├── ErrorTrait.php

@@ -14,7 +14,7 @@ namespace app\jobs;
 use app\services\other\QrcodeServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use crmeb\basic\BaseJobs;
-use crmeb\services\MiniProgramService;
+use crmeb\services\app\MiniProgramService;
 use crmeb\services\UploadService;
 use crmeb\services\UtilService;
 use crmeb\traits\QueueTrait;

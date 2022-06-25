@@ -11,7 +11,7 @@
 namespace app\adminapi\controller\v1\application\wechat;
 
 use app\adminapi\controller\AuthController;
-use crmeb\services\WechatService;
+use crmeb\services\app\WechatService;
 use think\facade\App;
 use app\services\wechat\WechatNewsCategoryServices;
 use app\services\article\ArticleServices;

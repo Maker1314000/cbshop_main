@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace crmeb\services;
+namespace crmeb\services\app;
 
 use crmeb\exceptions\AdminException;
 use app\services\pay\PayNotifyServices;

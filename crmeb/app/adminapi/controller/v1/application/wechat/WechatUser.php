@@ -15,7 +15,8 @@ use app\adminapi\controller\AuthController;
 use app\adminapi\model\order\StoreOrder;
 use app\adminapi\model\user\{User, UserBill};
 use app\models\wechat\WechatUser as UserModel;
-use crmeb\services\{FormBuilder as Form, WechatService};
+use crmeb\services\FormBuilder as Form;
+use crmeb\services\app\WechatService;
 use think\Collection;
 use think\facade\Route as Url;
 

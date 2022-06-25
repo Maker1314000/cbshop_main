@@ -13,7 +13,7 @@ use app\services\user\UserLabelServices;
 use app\services\user\UserServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\UploadService;
-use crmeb\services\WechatService;
+use crmeb\services\app\WechatService;
 
 class WechatQrcodeServices extends BaseServices
 {

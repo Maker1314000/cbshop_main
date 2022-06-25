@@ -16,7 +16,7 @@ use app\services\BaseServices;
 use app\dao\wechat\WechatReplyDao;
 use app\services\kefu\KefuServices;
 use crmeb\exceptions\AdminException;
-use crmeb\services\WechatService;
+use crmeb\services\app\WechatService;
 
 /**
  *

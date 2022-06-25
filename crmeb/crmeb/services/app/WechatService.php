@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace crmeb\services;
+namespace crmeb\services\app;
 
 use app\services\message\wechat\MessageServices;
 use app\services\wechat\WechatMessageServices;

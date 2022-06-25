@@ -14,8 +14,9 @@ use app\adminapi\controller\AuthController;
 use crmeb\exceptions\AdminException;
 use app\services\message\TemplateMessageServices;
 use crmeb\services\{
-    FormBuilder as Form, template\Template, WechatService
+    FormBuilder as Form, template\Template
 };
+use crmeb\services\app\WechatService;
 use think\facade\App;
 use think\facade\Route as Url;
 use think\Request;

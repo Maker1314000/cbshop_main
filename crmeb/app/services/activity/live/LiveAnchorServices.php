@@ -19,7 +19,7 @@ use crmeb\exceptions\AdminException;
 use crmeb\services\CacheService;
 use app\jobs\LiveJob;
 use crmeb\services\FormBuilder as Form;
-use crmeb\services\MiniProgramService;
+use crmeb\services\app\MiniProgramService;
 use FormBuilder\components\Validate;
 use think\facade\Route as Url;
 

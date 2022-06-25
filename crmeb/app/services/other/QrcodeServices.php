@@ -16,10 +16,10 @@ use app\services\BaseServices;
 use app\dao\other\QrcodeDao;
 use app\services\system\attachment\SystemAttachmentServices;
 use crmeb\exceptions\AdminException;
-use crmeb\services\MiniProgramService;
+use crmeb\services\app\MiniProgramService;
 use crmeb\services\UploadService;
 use crmeb\services\UtilService;
-use crmeb\services\WechatService;
+use crmeb\services\app\WechatService;
 use Guzzle\Http\EntityBody;
 
 /**

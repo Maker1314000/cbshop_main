@@ -21,7 +21,7 @@ use app\services\user\UserVisitServices;
 use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
 use crmeb\services\CacheService as Cache;
-use crmeb\services\MiniProgramService;
+use crmeb\services\app\MiniProgramService;
 use crmeb\services\template\Template;
 use think\facade\Config;
 

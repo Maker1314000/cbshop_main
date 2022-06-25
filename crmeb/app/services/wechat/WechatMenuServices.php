@@ -15,7 +15,7 @@ namespace app\services\wechat;
 use app\dao\wechat\WechatMenuDao;
 use app\services\BaseServices;
 use crmeb\exceptions\AdminException;
-use crmeb\services\WechatService;
+use crmeb\services\app\WechatService;
 
 /**
  * 微信菜单

@@ -19,7 +19,8 @@ use think\facade\App;
 use think\Request;
 use think\facade\Route as Url;
 use app\adminapi\controller\AuthController;
-use crmeb\services\{FileService, FormBuilder as Form, MiniProgramService, template\Template, UploadService};
+use crmeb\services\{FileService, FormBuilder as Form, template\Template, UploadService};
+use crmeb\services\app\MiniProgramService;
 use think\facade\Cache;
 
 /**

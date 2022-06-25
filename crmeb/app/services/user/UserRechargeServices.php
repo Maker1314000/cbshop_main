@@ -19,9 +19,9 @@ use app\services\statistic\CapitalFlowServices;
 use app\services\system\config\SystemGroupDataServices;
 use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
-use crmeb\services\{
-    FormBuilder as Form, MiniProgramService, WechatService
-};
+use crmeb\services\FormBuilder as Form;
+use crmeb\services\app\WechatService;
+use crmeb\services\app\MiniProgramService;
 use think\facade\Route as Url;
 
 /**

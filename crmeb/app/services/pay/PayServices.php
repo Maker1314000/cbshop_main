@@ -14,8 +14,8 @@ namespace app\services\pay;
 
 use crmeb\exceptions\ApiException;
 use crmeb\services\AliPayService;
-use crmeb\services\MiniProgramService;
-use crmeb\services\WechatService;
+use crmeb\services\app\MiniProgramService;
+use crmeb\services\app\WechatService;
 
 /**
  * 支付统一入口

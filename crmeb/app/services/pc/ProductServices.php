@@ -16,7 +16,7 @@ use app\services\BaseServices;
 use app\services\product\product\StoreProductServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use app\services\user\UserServices;
-use crmeb\services\MiniProgramService;
+use crmeb\services\app\MiniProgramService;
 use crmeb\services\UploadService;
 use crmeb\services\UtilService;
 use Guzzle\Http\EntityBody;

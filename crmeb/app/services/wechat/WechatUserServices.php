@@ -19,7 +19,7 @@ use app\services\user\UserServices;
 use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
 use crmeb\exceptions\AuthException;
-use crmeb\services\WechatService;
+use crmeb\services\app\WechatService;
 use think\facade\Log;
 
 /**

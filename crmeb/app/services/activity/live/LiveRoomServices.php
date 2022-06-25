@@ -17,7 +17,7 @@ use app\dao\activity\live\LiveRoomDao;
 use app\services\BaseServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\DownloadImageService;
-use crmeb\services\MiniProgramService;
+use crmeb\services\app\MiniProgramService;
 use think\facade\Log;
 
 /**

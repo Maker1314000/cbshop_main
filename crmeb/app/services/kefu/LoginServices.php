@@ -19,7 +19,7 @@ use think\facade\Cache;
 use app\services\BaseServices;
 use crmeb\services\CacheService;
 use app\dao\service\StoreServiceDao;
-use crmeb\services\WechatOpenService;
+use crmeb\services\app\WechatOpenService;
 use app\services\wechat\WechatUserServices;
 
 /**

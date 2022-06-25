@@ -13,8 +13,8 @@ namespace app\api\controller\v1;
 
 
 use crmeb\services\AliPayService;
-use crmeb\services\MiniProgramService;
-use crmeb\services\WechatService;
+use crmeb\services\app\MiniProgramService;
+use crmeb\services\app\WechatService;
 
 /**
  * 支付回调

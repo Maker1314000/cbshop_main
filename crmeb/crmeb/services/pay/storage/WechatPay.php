@@ -15,8 +15,8 @@ namespace crmeb\services\pay\storage;
 use crmeb\basic\BasePay;
 use crmeb\exceptions\PayException;
 use crmeb\interfaces\PayInterface;
-use crmeb\services\MiniProgramService;
-use crmeb\services\WechatService;
+use crmeb\services\app\MiniProgramService;
+use crmeb\services\app\WechatService;
 use EasyWeChat\Payment\API;
 use EasyWeChat\Payment\Order;
 

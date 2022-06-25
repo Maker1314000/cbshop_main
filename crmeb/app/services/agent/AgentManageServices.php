@@ -21,7 +21,8 @@ use app\services\user\UserBrokerageServices;
 use app\services\user\UserExtractServices;
 use app\services\user\UserServices;
 use crmeb\exceptions\AdminException;
-use crmeb\services\{MiniProgramService, QrcodeService, UploadService};
+use crmeb\services\app\MiniProgramService;
+use crmeb\services\{QrcodeService, UploadService};
 
 /**
  *
