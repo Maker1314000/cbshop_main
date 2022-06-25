@@ -1797,7 +1797,6 @@ HTML;
         //订单商品全部评价完成
         $replyServices->count(['unique' => $uniqueList, 'oid' => $oid]);
         if ($replyServices->count(['unique' => $uniqueList, 'oid' => $oid]) == count($uniqueList)) {
-            event('StoreProductOrderOver', [$oid]);
             $res = $this->dao->update($oid, ['status' => '3']);
             if (!$res) throw new ApiException(100007);
             /** @var StoreOrderStatusServices $statusService */
