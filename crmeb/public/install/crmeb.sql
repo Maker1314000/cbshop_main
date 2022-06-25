@@ -7646,7 +7646,13 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (394, 'aliyun_AccessKeyId', 'text', 'input', 98, '', 1, '', 0, 0, '\"\"', '阿里云AccessKeyId', '阿里云AccessKeyId', 100, 1),
 (395, 'aliyun_AccessKeySecret', 'text', 'input', 98, '', 1, '', 100, 0, '\"\"', '阿里云AccessKeySecret', '阿里云AccessKeySecret', 99, 1),
 (396, 'aliyun_RegionId', 'text', 'input', 98, '', 1, '', 100, 0, '\"\"', '阿里云RegionId', '阿里云RegionId', 98, 1),
-(397, 'aliyun_SignName', 'text', 'input', 98, '', 1, '', 100, 0, '\"\"', '短信签名', '短信签名', 97, 1);
+(397, 'aliyun_SignName', 'text', 'input', 98, '', 1, '', 100, 0, '\"\"', '短信签名', '短信签名', 97, 1),
+(402, 'tencent_sms_region', 'text', 'input', 99, '', 1, '', 100, 0, '\"ap-beijing\"', '短信区域', '短信区域ap-beijing、ap-guangzhou、ap-nanjing任选其一填写', 0, 1),
+(401, 'tencent_sms_sign_name', 'text', '', 99, '', 1, '', 100, 0, '\"\"', '腾讯云短信签名', '腾讯云短信签名', 0, 1),
+(400, 'tencent_sms_secret_key', 'text', 'input', 99, '', 1, '', 100, 0, '\"\"', 'AccessKeySecret', '腾讯云AccessKeySecret', 0, 1),
+(399, 'tencent_sms_secret_id', 'text', 'input', 99, '', 1, '', 100, 0, '\"\"', 'AccessKeyId', '腾讯云AccessKeyId', 0, 1),
+(398, 'tencent_sms_app_id', 'text', 'input', 99, '', 1, '', 100, 0, '\"\"', 'SKD AppID', '腾讯云短信应用SKD APPID', 0, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -7719,7 +7725,8 @@ INSERT INTO `eb_system_config_tab` (`id`, `pid`, `title`, `eng_title`, `status`,
 (95, 23, '好友代付', 'friend_pay', 1, 0, '', 0, 0),
 (96, 65, '短信接口配置', 'sms_config', 1, 0, '', 3, 0),
 (97, 96, '基础配置', 'sms_config_basic', 1, 0, '', 3, 0),
-(98, 96, '阿里云配置', 'sms_aliyun', 1, 0, '', 3, 0);
+(98, 96, '阿里云配置', 'sms_aliyun', 1, 0, '', 3, 0),
+(99, 96, '腾讯云短信', 'tencent_sms', 1, 0, '', 0, 0);
 
 -- --------------------------------------------------------
 

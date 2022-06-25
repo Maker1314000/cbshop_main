@@ -54,13 +54,50 @@ class ServeServices extends BaseServices
         ], $config);
     }
 
+
+    /**
+     * 根据类型获取短信发送配置
+     * @param string $type
+     * @param array $configDefault
+     * @return array
+     */
+    protected function getTypeConfig(string $type, array $configDefault = [])
+    {
+        $config = [];
+        switch ($type) {
+            case Sms::SMS_TYPE_YIHAPTONG:
+                $config = $this->getConfig($configDefault);
+                break;
+            case Sms::SMS_TYPE_ALIYUN:
+                $config = [
+                    'sign_name' => sys_config('aliyun_SignName'),
+                    'access_key_id' => sys_config('aliyun_AccessKeyId'),
+                    'access_key_secret' => sys_config('aliyun_AccessKeySecret'),
+                    'region_id' => sys_config('aliyun_RegionId'),
+                ];
+                break;
+            case Sms::SMS_TYPE_TENCENT:
+                $config = [
+                    'sms_sdk_app_id' => sys_config('tencent_sms_app_id'),
+                    'secret_id' => sys_config('tencent_sms_secret_id'),
+                    'secret_key' => sys_config('tencent_sms_secret_key'),
+                    'sign_name' => sys_config('tencent_sms_sign_name'),
+                    'region' => sys_config('tencent_sms_region'),
+                ];
+                break;
+        }
+        return $config;
+    }
+
     /**
      * 短信
+     * @param string|null $type
+     * @param array $config
      * @return Sms
      */
-    public function sms(array $config = [])
+    public function sms(string $type = Sms::SMS_TYPE_YIHAPTONG, array $config = [])
     {
-        return app()->make(Sms::class, [$this->getConfig($config)]);
+        return app()->make(Sms::class, [$type, $this->getTypeConfig($type, $config)]);
     }
 
     /**
@@ -80,6 +117,7 @@ class ServeServices extends BaseServices
     {
         return app()->make(Express::class, [$this->getConfig($config)]);
     }
+
     /**
      * 小票打印
      * @return Express

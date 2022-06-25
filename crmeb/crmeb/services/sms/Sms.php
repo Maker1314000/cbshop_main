@@ -25,10 +25,24 @@ use think\facade\Config;
  */
 class Sms extends BaseManager
 {
+
+    //类型常量 一号通
+    const SMS_TYPE_YIHAPTONG = 'yihaotong';
+    //类型常量 阿里云
+    const SMS_TYPE_ALIYUN = 'aliyun';
+    //类型常量 腾讯云
+    const SMS_TYPE_TENCENT = 'tencent';
+
     /**
      * @var array|string[]
      */
-    protected $type = ['yihaotong', 'aliyun'];
+    const SMS_TYPE = [self::SMS_TYPE_YIHAPTONG, self::SMS_TYPE_ALIYUN, self::SMS_TYPE_TENCENT];
+
+    /**
+     * 默认类型
+     * @var string
+     */
+    protected $defaultType = self::SMS_TYPE_YIHAPTONG;
 
     /**
      * 空间名
@@ -42,8 +56,7 @@ class Sms extends BaseManager
      */
     protected function getDefaultDriver()
     {
-        return $this->type[(int)sys_config('sms_type', 0)];
-//        return Config::get('sms.default', 'yihaotong');
+        return $this->defaultType;
     }
 
 
@@ -64,7 +77,7 @@ class Sms extends BaseManager
         }
 
         $handleAccessToken = new AccessTokenServeService($this->config['account'] ?? '', $this->config['secret'] ?? '');
-        $handle = Container::getInstance()->invokeClass($class, [$this->getDefaultDriver(), $handleAccessToken, $this->configFile]);
+        $handle = Container::getInstance()->invokeClass($class, [$this->getDefaultDriver(), $handleAccessToken, $this->configFile, $this->config]);
         $this->config = [];
         return $handle;
     }
