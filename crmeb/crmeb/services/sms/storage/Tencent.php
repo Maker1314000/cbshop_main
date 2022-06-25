@@ -89,11 +89,11 @@ class Tencent extends BaseSms
     protected function initialize(array $config = [])
     {
         parent::initialize($config);
-        $this->smsSdkAppId = $config['sms_sdk_app_id'] ?? '';
-        $this->secretId = $config['secret_id'] ?? '';
-        $this->secretKey = $config['secret_key'] ?? '';
-        $this->signName = $config['sign_name'] ?? '';
-        $this->region = $config['region'] ?? '';
+        $this->smsSdkAppId = $config['tencent_sms_app_id'] ?? '';
+        $this->secretId = $config['tencent_sms_secret_id'] ?? '';
+        $this->secretKey = $config['tencent_sms_secret_key'] ?? '';
+        $this->signName = $config['tencent_sms_sign_name'] ?? '';
+        $this->region = $config['tencent_sms_region'] ?? '';
     }
 
     /**
