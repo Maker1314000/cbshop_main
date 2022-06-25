@@ -10,41 +10,52 @@
 // +----------------------------------------------------------------------
 namespace crmeb\basic;
 
+use EasyWeChat\Payment\Order;
+
 /**
  * Class BasePay
  * @package crmeb\basic
  */
 abstract class BasePay extends BaseStorage
 {
-
     /**
-     * 支付参数配置
-     * @var array
+     * @var string
      */
-    protected $configPay = [];
+    protected $payType;
 
     /**
-     * 发起支付
-     * @param array|null $configPay
-     * @return mixed
-     */
-    abstract public function pay(?array $configPay = []);
-
-    /**
-     * 退款
-     * @param array|null $configPay
-     * @return mixed
-     */
-    abstract public function refund(?array $configPay = []);
-
-    /**
-     * 设置支付参数
-     * @param array $configPay
+     * 设置支付类型
+     * @param string $type
      * @return $this
      */
-    public function setConfigPay(array $configPay)
+    public function setPayType(string $type)
     {
-        $this->configPay = $configPay;
+        $this->payType = $type;
         return $this;
     }
+
+    /**
+     * 设置支付类型
+     * @param string $type
+     * @return $this
+     */
+    public function authSetPayType()
+    {
+        if (!$this->payType) {
+            if (request()->isPc()) {
+                $this->payType = Order::NATIVE;
+            }
+            if (request()->isApp()) {
+                $this->payType = Order::APP;
+            }
+            if (request()->isRoutine() || request()->isWechat()) {
+                $this->payType = Order::JSAPI;
+            }
+            if (request()->isH5()) {
+                $this->payType = 'h5';
+            }
+        }
+    }
+
+
 }

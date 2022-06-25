@@ -11,7 +11,9 @@
 
 namespace crmeb\services;
 
+use Alipay\EasySDK\Payment\Wap\Models\AlipayTradeWapPayResponse;
 use crmeb\utils\Hook;
+use think\facade\Event;
 use think\facade\Log;
 use think\facade\Route as Url;
 use Alipay\EasySDK\Kernel\Config;
@@ -124,7 +126,7 @@ class AliPayService
      * @param string $quitUrl 同步跳转地址
      * @param string $siteUrl
      * @param bool $isCode
-     * @return \Alipay\EasySDK\Payment\Wap\Models\AlipayTradeWapPayResponse
+     * @return AlipayTradeWapPayResponse
      */
     public function create(string $title, string $orderId, string $totalAmount, string $passbackParams, string $quitUrl = '', string $siteUrl = '', bool $isCode = false)
     {
@@ -197,16 +199,7 @@ class AliPayService
     public static function handleNotify()
     {
         return self::instance()->notify(function ($notify) {
-            if (isset($notify->out_trade_no)) {
-                if (isset($notify->attach) && $notify->attach) {
-                    if (($count = strpos($notify->out_trade_no, '_')) !== false) {
-                        $notify->trade_no = $notify->out_trade_no;
-                        $notify->out_trade_no = substr($notify->out_trade_no, $count + 1);
-                    }
-                    return (new Hook(PayNotifyServices::class, 'aliyun'))->listen($notify->attach, $notify->out_trade_no, $notify->trade_no);
-                }
-                return false;
-            }
+            return Event::until('pay.notify', ['aliyun', $notify]);
         });
     }
 
