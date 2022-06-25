@@ -22,7 +22,6 @@ use app\services\user\UserExtractServices;
 use app\services\user\UserServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\app\MiniProgramService;
-use crmeb\services\QrcodeService;
 use app\services\other\UploadService;
 
 /**
@@ -333,7 +332,9 @@ class AgentManageServices extends BaseServices
         $systemAttachmentModel = app()->make(SystemAttachmentServices::class);
         $imageInfo = $systemAttachmentModel->getInfo(['name' => $name]);
         if (!$imageInfo) {
-            $urlCode = QrcodeService::getWechatQrcodePath($uid . '_h5_' . $userInfo['is_promoter'] . '_user.jpg', '?spread=' . $uid);
+            /** @var QrcodeServices $qrcodeService */
+            $qrcodeService = app()->make(QrcodeServices::class);
+            $urlCode = $qrcodeService->getWechatQrcodePathAgent($uid . '_h5_' . $userInfo['is_promoter'] . '_user.jpg', '?spread=' . $uid);
         } else $urlCode = $imageInfo['att_dir'];
         return ['code_src' => $urlCode];
     }
