@@ -52,9 +52,9 @@ class Aliyun extends BaseSms
     {
         parent::initialize($config);
         $this->param['SignName'] = $config['sign_name'] ?? '';
-        $this->param['AccessKeyId'] = $config['access_key_id'] ?? '';
-        $this->AccessKeySecret = $config['access_key_secret'] ?? '';
-        $this->param['RegionId'] = $config['region_id'] ?? '';
+        $this->param['AccessKeyId'] = $config['aliyun_AccessKeyId'] ?? '';
+        $this->AccessKeySecret = $config['aliyun_AccessKeySecret'] ?? '';
+        $this->param['RegionId'] = $config['aliyun_RegionId'] ?? '';
         $this->param['SignatureNonce'] = uniqid(mt_rand(0, 0xffff), true);
         $this->param['Timestamp'] = gmdate('Y-m-d\TH:i:s\Z');
         $this->templates = Config::get($this->configFile . '.stores.' . $this->name . '.template_id', []);

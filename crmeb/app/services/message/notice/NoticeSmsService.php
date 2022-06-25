@@ -33,7 +33,6 @@ use think\facade\Log;
  */
 class NoticeSmsService extends NoticeService
 {
-
     /**
      * 判断是否开启权限
      * @var bool
@@ -95,20 +94,8 @@ class NoticeSmsService extends NoticeService
             }
 
             //获取发送短信驱动类型
-            $type = (int)sys_config('sms_type', 0);
-            if (isset(Sms::SMS_TYPE[$type])) {
-                $typeStr = Sms::SMS_TYPE[$type];
-            } else {
-                $typeStr = Sms::SMS_TYPE[0];
-                Log::error([
-                    'message' => '发送短信时当前发送驱动不存在：' . $type,
-                    'phone' => $phone,
-                    'data' => $data,
-                    'mark' => $mark
-                ]);
-            }
-
-            $smsMake = $services->sms($typeStr);
+            $type = sys_config('sms_type', '');
+            $smsMake = $services->sms($type);
             //发送短信
             $res = $smsMake->send($phone, $templateId, $data);
             if ($res === false) {

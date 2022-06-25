@@ -19,6 +19,7 @@ use crmeb\services\printer\Printer;
 use crmeb\services\product\Product;
 use crmeb\services\serve\Serve;
 use crmeb\services\sms\Sms;
+use think\facade\Config;
 
 /**
  * 平台服务入口
@@ -44,6 +45,7 @@ class ServeServices extends BaseServices
 
     /**
      * 获取配置
+     * @param array $config
      * @return array
      */
     public function getConfig(array $config = [])
@@ -63,28 +65,17 @@ class ServeServices extends BaseServices
      */
     protected function getTypeConfig(string $type, array $configDefault = [])
     {
-        $config = [];
-        switch ($type) {
-            case Sms::SMS_TYPE_YIHAPTONG:
-                $config = $this->getConfig($configDefault);
-                break;
-            case Sms::SMS_TYPE_ALIYUN:
-                $config = [
-                    'sign_name' => sys_config('aliyun_SignName'),
-                    'access_key_id' => sys_config('aliyun_AccessKeyId'),
-                    'access_key_secret' => sys_config('aliyun_AccessKeySecret'),
-                    'region_id' => sys_config('aliyun_RegionId'),
-                ];
-                break;
-            case Sms::SMS_TYPE_TENCENT:
-                $config = [
-                    'sms_sdk_app_id' => sys_config('tencent_sms_app_id'),
-                    'secret_id' => sys_config('tencent_sms_secret_id'),
-                    'secret_key' => sys_config('tencent_sms_secret_key'),
-                    'sign_name' => sys_config('tencent_sms_sign_name'),
-                    'region' => sys_config('tencent_sms_region'),
-                ];
-                break;
+        if (!$type) {
+            $type = Config::get('sms.default', '');
+        }
+        $config = Config::get('sms.stores.' . $type);
+        foreach ($config as $key => &$item) {
+            if (empty($item)) {
+                $item = sys_config($key);
+            }
+        }
+        if ($configDefault) {
+            $config = array_merge($config, $configDefault);
         }
         return $config;
     }
@@ -95,13 +86,14 @@ class ServeServices extends BaseServices
      * @param array $config
      * @return Sms
      */
-    public function sms(string $type = Sms::SMS_TYPE_YIHAPTONG, array $config = [])
+    public function sms(string $type = null, array $config = [])
     {
         return app()->make(Sms::class, [$type, $this->getTypeConfig($type, $config)]);
     }
 
     /**
      * 复制商品
+     * @param array $config
      * @return Product
      */
     public function copy(array $config = [])
@@ -111,6 +103,7 @@ class ServeServices extends BaseServices
 
     /**
      * 电子面单
+     * @param array $config
      * @return Express
      */
     public function express(array $config = [])
@@ -120,6 +113,7 @@ class ServeServices extends BaseServices
 
     /**
      * 小票打印
+     * @param array $config
      * @return Express
      */
     public function orderPrint(array $config = [])
@@ -129,6 +123,7 @@ class ServeServices extends BaseServices
 
     /**
      * 用户
+     * @param array $config
      * @return Serve
      */
     public function user(array $config = [])

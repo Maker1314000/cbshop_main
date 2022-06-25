@@ -11,7 +11,7 @@
 
 return [
     //默认支付模式
-    'default' => 'aliyun',
+    'default' => 'yihaotong',
     //单个手机每日发送上限
     'maxPhoneCount' => 10,
     //验证码每分钟发送上线
@@ -22,15 +22,22 @@ return [
     'stores' => [
         //云信
         'yihaotong' => [
-
-        ],
-        //创蓝
-        'chuanglan' => [
-
+            'sms_account' => '',
+            'sms_token' => ''
         ],
         //阿里云
         'aliyun' => [
-
+            'sign_name' => '',
+            'aliyun_AccessKeyId' => '',
+            'aliyun_AccessKeySecret' => '',
+            'aliyun_RegionId' => '',
+        ],
+        'tencent' => [
+            'tencent_sms_app_id' => '',
+            'tencent_sms_secret_id' => '',
+            'tencent_sms_secret_key' => '',
+            'tencent_sms_sign_name' => '',
+            'tencent_sms_region' => '',
         ]
     ]
 ];

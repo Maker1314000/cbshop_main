@@ -49,7 +49,7 @@ class AdminAuthServices extends BaseServices
         $cacheService = app()->make(CacheService::class);
 
         if (!$token || $token === 'undefined') {
-            throw new AuthException(400172);
+            throw new AuthException(110003);
         }
         /** @var JwtAuth $jwtAuth */
         $jwtAuth = app()->make(JwtAuth::class);
@@ -60,7 +60,7 @@ class AdminAuthServices extends BaseServices
         $md5Token = md5($token);
         if (!$cacheService->hasToken($md5Token) || !($cacheToken = $cacheService->getTokenBucket($md5Token))) {
             $this->authFailAfter($id, $type);
-            throw new AuthException(400172);
+            throw new AuthException(110003);
         }
         //是否超出有效次数
         if (isset($cacheToken['invalidNum']) && $cacheToken['invalidNum'] >= 3) {
@@ -68,7 +68,7 @@ class AdminAuthServices extends BaseServices
                 $cacheService->clearToken($md5Token);
             }
             $this->authFailAfter($id, $type);
-            throw new AuthException(400172);
+            throw new AuthException(110003);
         }
 
 
@@ -84,7 +84,7 @@ class AdminAuthServices extends BaseServices
                 $cacheService->clearToken($md5Token);
             }
             $this->authFailAfter($id, $type);
-            throw new AuthException(400172);
+            throw new AuthException(110003);
         }
 
         //获取管理员信息
@@ -94,7 +94,7 @@ class AdminAuthServices extends BaseServices
                 $cacheService->clearToken($md5Token);
             }
             $this->authFailAfter($id, $type);
-            throw new AuthException(400172);
+            throw new AuthException(110003);
         }
 
         $adminInfo->type = $type;
