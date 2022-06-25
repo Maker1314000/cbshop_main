@@ -11,7 +11,7 @@
 namespace crmeb\services\template\storage;
 
 use app\services\message\TemplateMessageServices;
-use crmeb\basic\BaseMessage;
+use crmeb\services\template\BaseMessage;
 use crmeb\services\WechatService;
 use think\facade\Log;
 

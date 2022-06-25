@@ -94,7 +94,7 @@ class SmsService extends NoticeService
             }
 
             //获取发送短信驱动类型
-            $type = sys_config('sms_type', '');
+            $type = sys_config('sms_type', null);
             $smsMake = $services->sms($type);
             //发送短信
             $res = $smsMake->send($phone, $templateId, $data);

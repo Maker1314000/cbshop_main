@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace crmeb\basic;
+namespace crmeb\services\template;
 
 use think\facade\Config;
 

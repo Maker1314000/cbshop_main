@@ -44,6 +44,7 @@ return [
         'user.userLevel' => [\app\listener\user\UserLevel::class], //用户升级事件
         'user.userVisit' => [\app\listener\user\UserVisit::class], //用户访问事件
         'notice.notice' => [\app\listener\notice\Notice::class], //通知->消息事件
+        'pay.notify' => [\app\listener\pay\Notify::class],//支付异步回调
     ],
     'subscribe' => [
         \app\subscribes\TaskSubscribe::class,//定时任务事件订阅类
