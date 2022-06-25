@@ -11,10 +11,15 @@
 
 namespace app\services\order;
 
+use app\services\activity\coupon\StoreCouponIssueServices;
 use app\services\BaseServices;
 use app\dao\order\StoreOrderDao;
+use app\services\message\MessageSystemServices;
+use app\services\product\sku\StoreProductAttrValueServices;
+use app\services\product\sku\StoreProductVirtualServices;
 use app\services\serve\ServeServices;
 use crmeb\exceptions\AdminException;
+use crmeb\exceptions\ApiException;
 use crmeb\services\FormBuilder as Form;
 use app\services\shipping\ExpressServices;
 
@@ -533,5 +538,117 @@ class StoreOrderDeliveryServices extends BaseServices
             }
         }
         return $weight ?: ($default === false ? 0 : $default);
+    }
+
+    /**
+     * 虚拟商品自动发货
+     * @param $orderInfo
+     */
+    public function virtualSend($orderInfo)
+    {
+        /** @var StoreOrderStatusServices $statusService */
+        $statusService = app()->make(StoreOrderStatusServices::class);
+        /** @var StoreOrderCartInfoServices $services */
+        $services = app()->make(StoreOrderCartInfoServices::class);
+        $orderInfo['cart_info'] = $services->getOrderCartInfo((int)$orderInfo['id']);
+        $activityStatus = $orderInfo['combination_id'] || $orderInfo['seckill_id'] || $orderInfo['bargain_id'];
+        if ($orderInfo['virtual_type'] == 1) {
+            /** @var StoreOrderServices $orderService */
+            $orderService = app()->make(StoreOrderServices::class);
+            $sku = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['attrInfo']['suk'];
+            if ($activityStatus) {
+                $product_id = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['product_id'];
+                /** @var StoreProductAttrValueServices $attrValue */
+                $attrValue = app()->make(StoreProductAttrValueServices::class);
+                $disk_info = $attrValue->value(['product_id' => $product_id, 'suk' => $sku, 'type' => 0, 'is_virtual' => 1], 'disk_info');
+            } else {
+                $disk_info = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['attrInfo']['disk_info'];
+            }
+            if ($disk_info != '') {
+                $orderService->update(['id' => $orderInfo['id']], ['status' => 1, 'delivery_type' => 'fictitious', 'virtual_info' => $disk_info, 'remark' => '密钥自动发放：' . $disk_info]);
+                $this->SystemSend($orderInfo['uid'], [
+                    'mark' => 'virtual_info',
+                    'title' => '虚拟密钥发放',
+                    'content' => '您购买的密钥商品已支付成功，支付金额' . $orderInfo['pay_price'] . '元，订单号：' . $orderInfo['order_id'] . '，密钥：' . $disk_info . '，感谢您的光临！'
+                ]);
+            } else {
+                if ($activityStatus) {
+                    $product_id = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['product_id'];
+                    /** @var StoreProductAttrValueServices $attrValue */
+                    $attrValue = app()->make(StoreProductAttrValueServices::class);
+                    $unique = $attrValue->value(['product_id' => $product_id, 'suk' => $sku, 'type' => 0, 'is_virtual' => 1], 'unique');
+                } else {
+                    $unique = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['attrInfo']['unique'];
+                }
+                /** @var StoreProductVirtualServices $virtualService */
+                $virtualService = app()->make(StoreProductVirtualServices::class);
+                $virtual = $virtualService->get(['attr_unique' => $unique, 'uid' => 0]);
+                $virtual->order_id = $orderInfo['order_id'];
+                $virtual->uid = $orderInfo['uid'];
+                $virtual->save();
+                $orderService->update(['id' => $orderInfo['id']], ['status' => 1, 'delivery_type' => 'fictitious', 'virtual_info' => $virtual->card_unique, 'remark' => '卡密已自动发放，卡号：' . $virtual->card_no . '；密码：' . $virtual->card_pwd]);
+                $this->SystemSend($orderInfo['uid'], [
+                    'mark' => 'virtual_info',
+                    'title' => '虚拟卡密发放',
+                    'content' => '您购买的卡密商品已支付成功，支付金额' . $orderInfo['pay_price'] . '元，订单号：' . $orderInfo['order_id'] . '，卡号：' . $virtual->card_no . '；密码：' . $virtual->card_pwd . '，感谢您的光临！'
+                ]);
+            }
+            $statusService->save([
+                'oid' => $orderInfo['id'],
+                'change_type' => 'delivery_fictitious',
+                'change_message' => '卡密自动发货',
+                'change_time' => time()
+            ]);
+        } elseif ($orderInfo['virtual_type'] == 2) {
+            if ($activityStatus) {
+                $sku = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['attrInfo']['suk'];
+                $product_id = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['product_id'];
+                /** @var StoreProductAttrValueServices $attrValue */
+                $attrValue = app()->make(StoreProductAttrValueServices::class);
+                $coupon_id = $attrValue->value(['product_id' => $product_id, 'suk' => $sku, 'type' => 0, 'is_virtual' => 1], 'coupon_id');
+            } else {
+                $coupon_id = $orderInfo['cart_info'][$orderInfo['cart_id'][0]]['cart_info']['productInfo']['attrInfo']['coupon_id'];
+            }
+            /** @var StoreCouponIssueServices $issueService */
+            $issueService = app()->make(StoreCouponIssueServices::class);
+            $coupon = $issueService->get($coupon_id);
+            if ($issueService->setCoupon($coupon, [$orderInfo['uid']])) {
+                /** @var StoreOrderServices $orderService */
+                $orderService = app()->make(StoreOrderServices::class);
+                $orderService->update(['id' => $orderInfo['id']], ['status' => 1, 'delivery_type' => 'fictitious', 'virtual_info' => $coupon_id, 'remark' => '优惠券已自动发放']);
+                $this->SystemSend($orderInfo['uid'], [
+                    'mark' => 'virtual_info',
+                    'title' => '购买优惠券发放',
+                    'content' => '您购买的优惠券已支付成功，支付金额' . $orderInfo['pay_price'] . '元，订单号' . $orderInfo['order_id'] . '请在个人中心优惠券中查看,感谢您的光临！'
+                ]);
+            } else {
+                throw new ApiException(410323);
+            }
+            $statusService->save([
+                'oid' => $orderInfo['id'],
+                'change_type' => 'delivery_fictitious',
+                'change_message' => '优惠券自动发货',
+                'change_time' => time()
+            ]);
+        }
+    }
+
+    /**
+     * 虚拟商品站内信
+     * @param int $uid
+     * @param array $noticeInfo
+     */
+    public function SystemSend(int $uid, array $noticeInfo)
+    {
+        /** @var MessageSystemServices $MessageSystemServices */
+        $MessageSystemServices = app()->make(MessageSystemServices::class);
+        $data = [];
+        $data['mark'] = $noticeInfo['mark'];
+        $data['uid'] = $uid;
+        $data['title'] = $noticeInfo['title'];
+        $data['content'] = $noticeInfo['content'];
+        $data['type'] = 1;
+        $data['add_time'] = time();
+        $MessageSystemServices->save($data);
     }
 }

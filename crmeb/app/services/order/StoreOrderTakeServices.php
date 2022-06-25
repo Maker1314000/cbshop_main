@@ -552,4 +552,28 @@ class StoreOrderTakeServices extends BaseServices
 
         }
     }
+
+    /**
+     * 检查主订单是否需要修改状态
+     * @param $pid
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function checkMaster($pid)
+    {
+        $p_order = $this->dao->get((int)$pid, ['id,pid,status']);
+        //主订单全部发货 且子订单没有待收货 有待评价
+        if ($p_order['status'] == 1 && !$this->dao->count(['pid' => $pid, 'status' => 2]) && $this->dao->count(['pid' => $pid, 'status' => 3])) {
+            $this->dao->update($p_order['id'], ['status' => 2]);
+            /** @var StoreOrderStatusServices $statusService */
+            $statusService = app()->make(StoreOrderStatusServices::class);
+            $statusService->save([
+                'oid' => $p_order['id'],
+                'change_type' => 'take_delivery',
+                'change_message' => '已收货',
+                'change_time' => time()
+            ]);
+        }
+    }
 }
