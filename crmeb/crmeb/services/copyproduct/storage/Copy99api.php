@@ -12,7 +12,7 @@
 namespace crmeb\services\product\storage;
 
 
-use crmeb\basic\BaseProduct;
+use crmeb\services\copyproduct\BaseCopyProduct;
 use crmeb\services\CacheService;
 use crmeb\services\HttpService;
 
@@ -20,7 +20,7 @@ use crmeb\services\HttpService;
  * Class Copy99api
  * @package crmeb\services\product\storage
  */
-class Copy99api extends BaseProduct
+class Copy99api extends BaseCopyProduct
 {
 
     /**

@@ -12,6 +12,7 @@
 namespace crmeb\services\copyproduct;
 
 use crmeb\services\AccessTokenServeService;
+use crmeb\basic\BaseStorage;
 
 /**
  * Class BaseProduct
