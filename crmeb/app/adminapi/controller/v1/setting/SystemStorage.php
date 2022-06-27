@@ -15,7 +15,7 @@ namespace app\adminapi\controller\v1\setting;
 use app\adminapi\controller\AuthController;
 use app\services\system\config\SystemConfigServices;
 use app\services\system\config\SystemStorageServices;
-use crmeb\services\UploadService;
+use app\services\other\UploadService;
 use think\facade\App;
 
 /**

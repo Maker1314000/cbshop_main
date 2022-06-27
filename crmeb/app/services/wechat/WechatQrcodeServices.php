@@ -12,8 +12,8 @@ use app\services\user\UserLabelRelationServices;
 use app\services\user\UserLabelServices;
 use app\services\user\UserServices;
 use crmeb\exceptions\AdminException;
-use crmeb\services\UploadService;
-use crmeb\services\WechatService;
+use app\services\other\UploadService;
+use crmeb\services\app\WechatService;
 
 class WechatQrcodeServices extends BaseServices
 {

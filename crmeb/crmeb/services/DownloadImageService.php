@@ -13,6 +13,7 @@ namespace crmeb\services;
 
 
 use crmeb\exceptions\AdminException;
+use app\services\other\UploadService;
 use think\Image;
 
 class DownloadImageService

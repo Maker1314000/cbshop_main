@@ -18,8 +18,8 @@ use app\services\system\config\SystemConfigServices;
 use app\services\user\UserBillServices;
 use app\services\user\UserBrokerageServices;
 use app\services\user\UserMoneyServices;
-use crmeb\services\MiniProgramService;
-use crmeb\services\UploadService;
+use crmeb\services\app\MiniProgramService;
+use app\services\other\UploadService;
 use crmeb\services\UtilService;
 
 /**

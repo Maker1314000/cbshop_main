@@ -16,10 +16,10 @@ use app\services\BaseServices;
 use app\dao\other\QrcodeDao;
 use app\services\system\attachment\SystemAttachmentServices;
 use crmeb\exceptions\AdminException;
-use crmeb\services\MiniProgramService;
-use crmeb\services\UploadService;
+use crmeb\services\app\MiniProgramService;
+use app\services\other\UploadService;
 use crmeb\services\UtilService;
-use crmeb\services\WechatService;
+use crmeb\services\app\WechatService;
 use Guzzle\Http\EntityBody;
 
 /**
@@ -130,6 +130,43 @@ class QrcodeServices extends BaseServices
         $this->dao->save($data);
     }
 
+    /**
+     * 获取二维码完整路径，不存在则自动生成
+     * @param string $name 路径名
+     * @param string $link 需要生成二维码的跳转路径
+     * @param int $type https 1 = http , 0 = https
+     * @param bool $force 是否返回false
+     * @return bool|mixed|string
+     */
+    public function getWechatQrcodePathAgent(string $name, string $link, bool $force = false)
+    {
+        /** @var SystemAttachmentServices $systemAttchment */
+        $systemAttchment = app()->make(SystemAttachmentServices::class);
+        try {
+            $imageInfo = $systemAttchment->getInfo(['name'=>$name]);
+            $siteUrl = sys_config('site_url');
+            if (!$imageInfo) {
+                $codeUrl = UtilService::setHttpType($siteUrl . $link, request()->isSsl() ? 0 : 1);//二维码链接
+                $imageInfo = UtilService::getQRCodePath($codeUrl, $name);
+                if (is_string($imageInfo) && $force)
+                    return false;
+                if (is_array($imageInfo)) {
+                    $systemAttchment->attachmentAdd($imageInfo['name'], $imageInfo['size'], $imageInfo['type'], $imageInfo['dir'], $imageInfo['thumb_path'], 1, $imageInfo['image_type'], $imageInfo['time'], 2);
+                    $url = $imageInfo['dir'];
+                } else {
+                    $url = '';
+                    $imageInfo = ['image_type' => 0];
+                }
+            } else $url = $imageInfo['att_dir'];
+            if ($imageInfo['image_type'] == 1 && $url) $url = $siteUrl . $url;
+            return $url;
+        } catch (\Throwable $e) {
+            if ($force)
+                return false;
+            else
+                return '';
+        }
+    }
     /**
      * 获取二维码完整路径，不存在则自动生成
      * @param string $name

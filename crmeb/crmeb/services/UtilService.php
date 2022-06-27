@@ -12,6 +12,7 @@
 namespace crmeb\services;
 
 use think\facade\Config;
+use app\services\other\UploadService;
 
 /**
  * Class UtilService

@@ -27,7 +27,7 @@ use app\services\user\UserLevelServices;
 use app\services\user\UserServices;
 use app\services\wechat\WechatUserServices;
 use crmeb\basic\BaseJobs;
-use crmeb\services\WechatService;
+use crmeb\services\app\WechatService;
 use crmeb\services\workerman\ChannelService;
 use crmeb\traits\QueueTrait;
 use think\exception\ValidateException;

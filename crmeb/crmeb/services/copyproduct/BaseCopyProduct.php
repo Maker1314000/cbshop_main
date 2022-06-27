@@ -9,15 +9,15 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace crmeb\basic;
+namespace crmeb\services\copyproduct;
 
 use crmeb\services\AccessTokenServeService;
 
 /**
  * Class BaseProduct
- * @package crmeb\basic
+ * @package crmeb\services\copyproduct
  */
-abstract class BaseProduct extends BaseStorage
+abstract class BaseCopyProduct extends BaseStorage
 {
 
     /**

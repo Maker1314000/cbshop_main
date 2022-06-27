@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
@@ -10,13 +10,11 @@
 // +----------------------------------------------------------------------
 namespace app\adminapi\controller\v1\agent;
 
-
 use app\adminapi\controller\AuthController;
 use app\services\agent\AgentLevelServices;
 use app\services\agent\AgentManageServices;
 use app\services\user\UserServices;
 use think\facade\App;
-
 
 /**
  * 分销商管理控制器
@@ -154,7 +152,7 @@ class AgentManage extends AuthController
     }
 
     /**
-     * TODO 查看小程序推广二维码
+     * 查看小程序推广二维码
      * @param string $uid
      */
     public function look_xcx_code($uid = '')

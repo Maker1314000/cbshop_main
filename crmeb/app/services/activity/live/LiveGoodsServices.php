@@ -17,7 +17,7 @@ use app\dao\activity\live\LiveGoodsDao;
 use app\services\BaseServices;
 use app\services\product\product\StoreProductServices;
 use crmeb\exceptions\AdminException;
-use crmeb\services\MiniProgramService;
+use crmeb\services\app\MiniProgramService;
 use crmeb\services\DownloadImageService;
 use crmeb\utils\Str;
 use think\facade\Log;

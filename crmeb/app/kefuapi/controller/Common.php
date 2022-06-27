@@ -26,7 +26,7 @@ use app\services\kefu\service\StoreServiceServices;
 use app\api\validate\user\StoreServiceFeedbackValidate;
 use app\services\kefu\service\StoreServiceFeedbackServices;
 use crmeb\exceptions\AuthException;
-use crmeb\services\UploadService;
+use app\services\other\UploadService;
 use crmeb\utils\Arr;
 use crmeb\utils\JwtAuth;
 use think\facade\Cache;

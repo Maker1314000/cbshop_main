@@ -19,7 +19,7 @@ use app\services\user\UserVisitServices;
 use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
 use crmeb\services\CacheService as Cache;
-use crmeb\services\WechatService as WechatAuthService;
+use crmeb\services\app\WechatService as WechatAuthService;
 use crmeb\utils\Canvas;
 
 /**

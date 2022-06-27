@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace crmeb\services\product;
+namespace crmeb\services\copyproduct;
 
 use crmeb\basic\BaseManager;
 use crmeb\services\AccessTokenServeService;
@@ -19,16 +19,16 @@ use think\Container;
 
 /**
  * Class Product
- * @package crmeb\services\product
- * @mixin \crmeb\services\product\storage\Copy
+ * @package crmeb\services\copyproduct
+ * @mixin \crmeb\services\copyproduct\CopyProduct
  */
-class Product extends BaseManager
+class CopyProduct extends BaseManager
 {
     /**
      * 空间名
      * @var string
      */
-    protected $namespace = '\\crmeb\\services\\product\\storage\\';
+    protected $namespace = '\\crmeb\\services\\copyproduct\\storage\\';
 
     /**
      * 默认驱动

@@ -1,5 +1,13 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 namespace app\adminapi\controller\v1\agent;
 
 use app\adminapi\controller\AuthController;
@@ -10,6 +18,11 @@ use app\services\user\UserServices;
 use crmeb\exceptions\AdminException;
 use think\facade\App;
 
+/**
+ * 事业部控制器
+ * Class Division
+ * @package app\adminapi\controller\v1\agent
+ */
 class Division extends AuthController
 {
     /**
@@ -222,39 +235,5 @@ class Division extends AuthController
         $applyServices = app()->make(DivisionAgentApplyServices::class);
         $applyServices->delApply($id);
         return app('json')->success(100002);
-    }
-
-    /**
-     * 获取代理商协议
-     * @param AgreementServices $agreementServices
-     * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
-     */
-    public function agentAgreementInfo(AgreementServices $agreementServices)
-    {
-        $list = $agreementServices->getAgreementBytype(2);
-        return app('json')->success($list);
-    }
-
-    /**
-     * 保存代理商协议
-     * @param AgreementServices $agreementServices
-     * @return mixed
-     */
-    public function agentAgreementSave(AgreementServices $agreementServices)
-    {
-        $data = $this->request->postMore([
-            ['id', 0],
-            ['type', 2],
-            ['title', ""],
-            ['content', ''],
-            ['status', ''],
-        ]);
-        $data['title'] = '代理商规则';
-        $data['status'] = 1;
-        $res = $agreementServices->saveAgreement($data, $data['id']);
-        return app('json')->success(100000);
     }
 }

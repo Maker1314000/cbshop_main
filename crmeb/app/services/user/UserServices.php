@@ -39,7 +39,7 @@ use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
 use crmeb\services\FormBuilder as Form;
 use crmeb\services\FormBuilder;
-use crmeb\services\WechatService;
+use crmeb\services\app\WechatService;
 use think\Exception;
 use think\facade\Route as Url;
 

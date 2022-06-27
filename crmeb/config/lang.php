@@ -25,7 +25,7 @@ return [
     // 是否使用Cookie记录
     'use_cookie'      => true,
     // 多语言cookie变量
-    'cookie_var'      => 'think_lang',
+    'cookie_var'      => 'cb_lang',
     // 扩展语言包
     'extend_list'     => [
         'zh-cn'       => app()->getBasePath() . 'lang/zh-cn.php',

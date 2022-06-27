@@ -9,11 +9,11 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace crmeb\interfaces;
+namespace crmeb\services\pay;
 
 /**
  * Interface PayInterface
- * @package crmeb\interfaces
+ * @package crmeb\services\pay
  */
 interface PayInterface
 {

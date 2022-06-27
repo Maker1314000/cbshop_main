@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
@@ -10,13 +10,12 @@
 // +----------------------------------------------------------------------
 namespace app\adminapi\controller\v1\agent;
 
-
 use app\adminapi\controller\AuthController;
 use app\services\agent\AgentLevelTaskServices;
 use think\facade\App;
 
-
 /**
+ * 分销等级任务控制器
  * Class AgentLevelTask
  * @package app\controller\admin\v1\agent
  */
@@ -34,7 +33,7 @@ class AgentLevelTask extends AuthController
     }
 
     /**
-     * 显示资源列表
+     * 显示等级任务列表
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
@@ -56,7 +55,7 @@ class AgentLevelTask extends AuthController
     }
 
     /**
-     * 显示创建资源表单页
+     * 等级任务添加表单
      * @return mixed
      * @throws \FormBuilder\Exception\FormBuilderException
      */
@@ -71,7 +70,7 @@ class AgentLevelTask extends AuthController
     }
 
     /**
-     * 保存新建的资源
+     * 保存等级任务
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
@@ -107,7 +106,7 @@ class AgentLevelTask extends AuthController
     }
 
     /**
-     * 显示编辑资源表单页
+     * 等级任务修改表单
      * @param $id
      * @return mixed
      * @throws \FormBuilder\Exception\FormBuilderException
@@ -118,7 +117,7 @@ class AgentLevelTask extends AuthController
     }
 
     /**
-     * 保存更新的资源
+     * 修改等级任务
      * @param $id
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException
@@ -150,7 +149,7 @@ class AgentLevelTask extends AuthController
     }
 
     /**
-     * 删除指定资源
+     * 删除等级任务
      * @param $id
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException

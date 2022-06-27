@@ -17,7 +17,7 @@ use app\services\BaseServices;
 use app\services\serve\ServeServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\CacheService;
-use crmeb\services\ExpressService;
+use crmeb\services\express\storage\AliyunService;
 use crmeb\services\FormBuilder as Form;
 
 /**
@@ -212,7 +212,9 @@ class ExpressServices extends BaseServices
                     }
                     break;
                 case 2:
-                    $result = ExpressService::query($expressNum, $com);
+                    /** @var AliyunService $services */
+                    $services = app()->make(AliyunService::class);
+                    $result = $services->query($expressNum, $com);
                     if (is_array($result) &&
                         isset($result['result']) &&
                         isset($result['result']['deliverystatus']) &&

@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace crmeb\services;
+namespace crmeb\services\app;
 
 use app\services\message\wechat\MessageServices;
 use app\services\wechat\WechatMessageServices;
@@ -25,11 +25,9 @@ use EasyWeChat\Message\News;
 use EasyWeChat\Message\Text;
 use EasyWeChat\Message\Video;
 use EasyWeChat\Message\Voice;
-use EasyWeChat\Payment\API;
 use EasyWeChat\Payment\Order;
 use EasyWeChat\Server\Guard;
 use Symfony\Component\HttpFoundation\Request;
-use think\facade\Event;
 use think\Response;
 use crmeb\utils\Hook;
 use think\facade\Cache;
@@ -485,17 +483,6 @@ class WechatService
         }
     }
 
-    /**
-     * 查询退款
-     * @param string $orderNo
-     * @param string $type
-     * @return \EasyWeChat\Support\Collection|\Psr\Http\Message\ResponseInterface
-     */
-    public static function queryRefund(string $orderNo, string $type = API::OUT_TRADE_NO)
-    {
-        return self::paymentService()->queryRefund($orderNo, $type);
-    }
-
     public static function payOrderRefund($orderNo, array $opt)
     {
         if (!isset($opt['pay_price'])) throw new AdminException(400730);
@@ -527,8 +514,17 @@ class WechatService
     public static function handleNotify()
     {
         return self::paymentService()->handleNotify(function ($notify, $successful) {
-            if ($successful) {
-                return Event::until('pay.notify', ['wechat', $notify]);
+            if ($successful && isset($notify->out_trade_no)) {
+                if (isset($notify->attach) && $notify->attach) {
+                    if (($count = strpos($notify->out_trade_no, '_')) !== false) {
+                        $notify->out_trade_no = substr($notify->out_trade_no, $count + 1);
+                    }
+                    return (new Hook(PayNotifyServices::class, 'wechat'))->listen($notify->attach, $notify->out_trade_no, $notify->transaction_id);
+                }
+                /** @var WechatMessageServices $wechatMessageService */
+                $wechatMessageService = app()->make(WechatMessageServices::class);
+                $wechatMessageService->setOnceMessage($notify, $notify->openid, 'payment_success', $notify->out_trade_no);
+                return false;
             }
         });
     }

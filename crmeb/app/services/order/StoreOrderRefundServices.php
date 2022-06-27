@@ -33,8 +33,8 @@ use crmeb\exceptions\ApiException;
 use crmeb\services\AliPayService;
 use crmeb\services\CacheService;
 use crmeb\services\FormBuilder as Form;
-use crmeb\services\MiniProgramService;
-use crmeb\services\WechatService;
+use crmeb\services\app\MiniProgramService;
+use crmeb\services\app\WechatService;
 use crmeb\services\workerman\ChannelService;
 
 

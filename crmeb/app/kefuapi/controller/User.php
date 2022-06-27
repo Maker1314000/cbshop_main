@@ -16,7 +16,7 @@ use app\Request;
 use app\services\system\attachment\SystemAttachmentServices;
 use app\services\user\UserGroupServices;
 use crmeb\services\CacheService;
-use crmeb\services\UploadService;
+use app\services\other\UploadService;
 use think\facade\App;
 use app\services\kefu\UserServices;
 use app\services\user\UserLabelCateServices;

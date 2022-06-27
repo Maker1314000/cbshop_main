@@ -21,7 +21,7 @@ use app\services\wechat\WechatUserServices;
 use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
 use crmeb\services\FormBuilder as Form;
-use crmeb\services\WechatService;
+use crmeb\services\app\WechatService;
 use crmeb\services\workerman\ChannelService;
 use think\facade\Route as Url;
 
