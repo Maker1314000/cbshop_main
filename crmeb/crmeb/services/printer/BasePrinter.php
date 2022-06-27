@@ -11,7 +11,7 @@
 
 namespace crmeb\services\printer;
 
-use crmeb\services\printer\AccessToken;
+use crmeb\basic\BaseStorage;
 
 /**
  * Class BasePrinter
