@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
@@ -10,14 +10,13 @@
 // +----------------------------------------------------------------------
 namespace app\adminapi\controller\v1\agent;
 
-
 use app\adminapi\controller\AuthController;
 use app\services\agent\AgentLevelServices;
 use app\services\agent\AgentLevelTaskServices;
 use think\facade\App;
 
-
 /**
+ * 分销等级控制器
  * Class AgentLevel
  * @package app\controller\admin\v1\agent
  */
@@ -35,7 +34,7 @@ class AgentLevel extends AuthController
     }
 
     /**
-     * 显示资源列表
+     * 后台分销等级列表
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
@@ -51,7 +50,7 @@ class AgentLevel extends AuthController
     }
 
     /**
-     * 显示创建资源表单页
+     * 添加分销等级表单
      * @return mixed
      * @throws \FormBuilder\Exception\FormBuilderException
      */
@@ -61,7 +60,7 @@ class AgentLevel extends AuthController
     }
 
     /**
-     * 保存新建的资源
+     * 保存分销等级
      * @return mixed
      */
     public function save()
@@ -98,7 +97,7 @@ class AgentLevel extends AuthController
     }
 
     /**
-     * 显示编辑资源表单页
+     * 编辑分销等级表单
      * @param $id
      * @return mixed
      * @throws \FormBuilder\Exception\FormBuilderException
@@ -109,7 +108,7 @@ class AgentLevel extends AuthController
     }
 
     /**
-     * 保存更新的资源
+     * 修改分销等级
      * @param $id
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException
@@ -148,7 +147,7 @@ class AgentLevel extends AuthController
     }
 
     /**
-     * 删除指定资源
+     * 删除分销等级
      * @param $id
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException
@@ -158,11 +157,14 @@ class AgentLevel extends AuthController
     public function delete($id)
     {
         if (!$id) return app('json')->fail(100100);
+        //检查分销等级数据是否存在
         $levelInfo = $this->services->getLevelInfo((int)$id);
         if ($levelInfo) {
+            //更新数据为已删除
             $res = $this->services->update($id, ['is_del' => 1]);
             if (!$res)
                 return app('json')->fail(100008);
+            //删除该等级的任务为已删除
             /** @var AgentLevelTaskServices $agentLevelTaskServices */
             $agentLevelTaskServices = app()->make(AgentLevelTaskServices::class);
             $agentLevelTaskServices->update(['level_id' => $id], ['is_del' => 1]);
