@@ -15,8 +15,8 @@ namespace crmeb\services\pay\storage;
 use Alipay\EasySDK\Payment\Common\Models\AlipayTradeFastpayRefundQueryResponse;
 use Alipay\EasySDK\Payment\Common\Models\AlipayTradeRefundResponse;
 use Alipay\EasySDK\Payment\Wap\Models\AlipayTradeWapPayResponse;
-use crmeb\basic\BasePay;
-use crmeb\interfaces\PayInterface;
+use crmeb\services\pay\BasePay;
+use crmeb\services\pay\PayInterface;
 use crmeb\services\AliPayService;
 
 /**

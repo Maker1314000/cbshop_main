@@ -12,7 +12,28 @@
 namespace crmeb\services\pay;
 
 
-class Pay
+use crmeb\basic\BaseManager;
+use think\facade\Config;
+
+/**
+ * Class Pay
+ * @package crmeb\services\pay
+ */
+class Pay extends BaseManager
 {
+    /**
+     * 空间名
+     * @var string
+     */
+    protected $namespace = '\\crmeb\\services\\pay\\storage\\';
+
+    /**
+     * 默认驱动
+     * @return mixed
+     */
+    protected function getDefaultDriver()
+    {
+        return Config::get('pay.default', 'wechat_pay');
+    }
 
 }

@@ -11,6 +11,7 @@
 namespace crmeb\services\pay;
 
 use EasyWeChat\Payment\Order;
+use crmeb\basic\BaseStorage;
 
 /**
  * Class BasePay
