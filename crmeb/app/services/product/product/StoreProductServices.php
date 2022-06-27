@@ -371,6 +371,7 @@ class StoreProductServices extends BaseServices
         $attr = $data['attrs'];
         $is_virtual = $data['is_virtual']; //是否虚拟商品
         $virtual_type = $data['virtual_type']; //虚拟商品类型
+        $attr = array_merge($attr);
         list($value, $head) = attr_format($attr);
         $valueNew = [];
         $count = 0;

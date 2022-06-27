@@ -47,9 +47,11 @@ class Copy extends BaseCopyProduct
     }
 
     /** 复制商品
+     * @param string $url
+     * @param array $options
      * @return mixed
      */
-    public function goods(string $url)
+    public function goods(string $url, array $options = [])
     {
         $param['url'] = $url;
         return $this->accessToken->httpRequest(self::PRODUCT_GOODS, $param);

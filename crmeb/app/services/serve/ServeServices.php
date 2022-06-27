@@ -93,12 +93,13 @@ class ServeServices extends BaseServices
 
     /**
      * 复制商品
+     * @param string|null $type
      * @param array $config
      * @return CopyProduct
      */
-    public function copy(array $config = [])
+    public function copy(string $type = null, array $config = [])
     {
-        return app()->make(CopyProduct::class, [$this->getConfig($config)]);
+        return app()->make(CopyProduct::class, [$type, $this->getConfig($config)]);
     }
 
     /**
