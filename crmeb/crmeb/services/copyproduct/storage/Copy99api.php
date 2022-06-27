@@ -9,7 +9,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace crmeb\services\product\storage;
+namespace crmeb\services\copyproduct\storage;
 
 
 use crmeb\services\copyproduct\BaseCopyProduct;
@@ -18,7 +18,7 @@ use crmeb\services\HttpService;
 
 /**
  * Class Copy99api
- * @package crmeb\services\product\storage
+ * @package crmeb\services\copyproduct\storage
  */
 class Copy99api extends BaseCopyProduct
 {
