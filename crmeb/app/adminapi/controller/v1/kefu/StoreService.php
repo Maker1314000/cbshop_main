@@ -8,7 +8,7 @@
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-namespace app\adminapi\controller\v1\application\wechat;
+namespace app\adminapi\controller\v1\kefu;
 
 use app\adminapi\controller\AuthController;
 use app\services\kefu\LoginServices;
@@ -47,6 +47,7 @@ class StoreService extends AuthController
      */
     public function index()
     {
+        var_dump(111);
         return app('json')->success($this->services->getServiceList([]));
     }
 
