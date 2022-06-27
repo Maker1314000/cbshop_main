@@ -2,13 +2,12 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-
 namespace app\adminapi\controller\v1\cms;
 
 use app\adminapi\controller\AuthController;
@@ -23,8 +22,16 @@ use think\facade\App;
  */
 class ArticleCategory extends AuthController
 {
+    /**
+     * @var ArticleCategoryServices
+     */
     protected $service;
 
+    /**
+     * ArticleCategory constructor.
+     * @param App $app
+     * @param ArticleCategoryServices $service
+     */
     public function __construct(App $app, ArticleCategoryServices $service)
     {
         parent::__construct($app);
@@ -62,6 +69,7 @@ class ArticleCategory extends AuthController
     /**
      * 保存新建分类
      * @return mixed
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function save()
     {
@@ -84,12 +92,13 @@ class ArticleCategory extends AuthController
 
     /**
      * 创建修改表单
-     * @param $id
+     * @param int $id
      * @return mixed
      * @throws \FormBuilder\Exception\FormBuilderException
      */
-    public function edit($id)
+    public function edit($id = 0)
     {
+        if (!$id) return app('json')->fail(100100);
         return app('json')->success($this->service->createForm($id));
     }
 
@@ -97,6 +106,7 @@ class ArticleCategory extends AuthController
      * 保存修改分类
      * @param $id
      * @return mixed
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function update($id)
     {
@@ -118,9 +128,11 @@ class ArticleCategory extends AuthController
      * 删除文章分类
      * @param $id
      * @return mixed
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function delete($id)
     {
+        if (!$id) return app('json')->fail(100100);
         $this->service->del($id);
         CacheService::delete('ARTICLE_CATEGORY');
         return app('json')->success(100002);
