@@ -2,15 +2,13 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-
 namespace app\adminapi\controller\v1\diy;
-
 
 use app\adminapi\controller\AuthController;
 use app\services\activity\bargain\StoreBargainServices;
@@ -22,13 +20,19 @@ use app\services\other\CacheServices;
 use app\services\product\product\StoreCategoryServices;
 use app\services\product\product\StoreProductServices;
 use crmeb\exceptions\AdminException;
-use crmeb\services\FileService;
 use think\facade\App;
 
+/**
+ *
+ * Class Diy
+ * @package app\controller\admin\v1\diy
+ */
 class Diy extends AuthController
 {
-    protected $services;
-
+    /**
+     * @param App $app
+     * @param DiyServices $services
+     */
     public function __construct(App $app, DiyServices $services)
     {
         parent::__construct($app);
@@ -56,7 +60,7 @@ class Diy extends AuthController
     }
 
     /**
-     * 保存资源
+     * 保存可视化编辑资源
      * @param int $id
      * @return mixed
      */
@@ -186,23 +190,21 @@ class Diy extends AuthController
      */
     public function setStatus($id)
     {
-//        $name = $this->services->value(['id' => $id], 'template_name');
-//        if (!is_file(public_path('template') . $name . '.zip')) {
-//            throw new AdminException('请上传模板压缩包');
-//        }
-//        FileService::delDir(runtime_path('wap'));
-//        FileService::delDir(public_path('pages'));
-//        FileService::delDir(public_path('static'));
-//        @unlink(public_path() . 'index.html');
         $this->services->setStatus($id);
-//        FileService::zipOpen(public_path('template') . $name . '.zip', public_path());
         return app('json')->success(100014);
     }
 
     /**
      * 获取一条数据
      * @param int $id
+     * @param StoreProductServices $services
+     * @param StoreSeckillServices $seckillServices
+     * @param StoreCombinationServices $combinationServices
+     * @param StoreBargainServices $bargainServices
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function getInfo(int $id, StoreProductServices $services, StoreSeckillServices $seckillServices, StoreCombinationServices $combinationServices, StoreBargainServices $bargainServices)
     {
@@ -300,13 +302,11 @@ class Diy extends AuthController
                     }
                 }
             } else {
-                if ($info['value']) {
-                    if (isset($info['value']['d_goodList']['goodsList'])) {
-                        $info['value']['d_goodList']['goodsList']['list'] = [];
-                    }
-                    if (isset($info['value']['d_goodList']['goodsList']['ids']) && count($info['value']['d_goodList']['goodsList']['ids'])) {
-                        $info['value']['d_goodList']['goodsList']['list'] = $services->getSearchList(['ids' => $info['value']['d_goodList']['goodsList']['ids']]);
-                    }
+                if (isset($info['value']['d_goodList']['goodsList'])) {
+                    $info['value']['d_goodList']['goodsList']['list'] = [];
+                }
+                if (isset($info['value']['d_goodList']['goodsList']['ids']) && count($info['value']['d_goodList']['goodsList']['ids'])) {
+                    $info['value']['d_goodList']['goodsList']['list'] = $services->getSearchList(['ids' => $info['value']['d_goodList']['goodsList']['ids']]);
                 }
             }
         }
@@ -377,14 +377,6 @@ class Diy extends AuthController
         /** @var StoreCategoryServices $categoryService */
         $categoryService = app()->make(StoreCategoryServices::class);
         $list = $categoryService->cascaderList(1, 1);
-//        $list = $categoryService->getTierList(1, 1);
-//        $data = [];
-//        foreach ($list as $value) {
-//            $data[] = [
-//                'id' => $value['id'],
-//                'title' => $value['html'] . $value['cate_name']
-//            ];
-//        }
         return app('json')->success($list);
     }
 
@@ -463,6 +455,7 @@ class Diy extends AuthController
     /**
      * 添加页面
      * @return mixed
+     * @throws \FormBuilder\Exception\FormBuilderException
      */
     public function create()
     {
