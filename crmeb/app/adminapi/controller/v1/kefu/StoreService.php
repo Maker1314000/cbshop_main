@@ -47,7 +47,6 @@ class StoreService extends AuthController
      */
     public function index()
     {
-        var_dump(111);
         return app('json')->success($this->services->getServiceList([]));
     }
 
