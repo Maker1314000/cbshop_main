@@ -78,6 +78,10 @@ class PayServices
                 $payType = 'wechat_pay';
             }
 
+            if ($payType == 'alipay') {
+                $payType = 'ali_pay';
+            }
+
             /** @var Pay $pay */
             $pay = app()->make(Pay::class, [$payType]);
 
