@@ -34,7 +34,6 @@ use app\Request;
 use crmeb\services\CacheService;
 use app\services\other\UploadService;
 use crmeb\services\workerman\ChannelService;
-use crmeb\utils\ErrorCode;
 use think\facade\Cache;
 
 /**

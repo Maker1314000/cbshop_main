@@ -14,7 +14,6 @@ namespace app\api\controller\v2\store;
 
 use app\services\order\StoreCartServices;
 use app\Request;
-use crmeb\utils\ErrorCode;
 
 class StoreCartController
 {
@@ -39,7 +38,7 @@ class StoreCartController
             ['product_id', 0]
         ], true);
         $this->services->resetCart($id, $request->uid(), $product_id, $unique, $num);
-        return app('json')->success(ErrorCode::MODIFY_SUCCESS);
+        return app('json')->success(100001);
     }
 
     /**
@@ -73,9 +72,9 @@ class StoreCartController
         ], true);
         /** @var StoreCartServices $cartService */
         $cartService = app()->make(StoreCartServices::class);
-        if (!$product_id || !is_numeric($product_id)) return app('json')->fail(ErrorCode::ERR_PARAM_MISS);
+        if (!$product_id || !is_numeric($product_id)) return app('json')->fail(100100);
         $res = $cartService->setCartNum($request->uid(), $product_id, $num, $unique, $type);
-        if ($res) return app('json')->success(ErrorCode::MODIFY_SUCCESS);
-        return app('json')->fail(ErrorCode::MODIFY_FAILED);
+        if ($res) return app('json')->success(100001);
+        return app('json')->fail(100007);
     }
 }

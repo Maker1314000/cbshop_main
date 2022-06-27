@@ -15,7 +15,6 @@ namespace app\services\activity\bargain;
 use app\Request;
 use app\services\BaseServices;
 use app\dao\activity\bargain\StoreBargainUserDao;
-use crmeb\utils\ErrorCode;
 
 /**
  *
@@ -203,7 +202,7 @@ class StoreBargainUserServices extends BaseServices
     public function cancelBargain($bargainId, $uid)
     {
         $status = $this->dao->getBargainUserStatus($bargainId, $uid);
-        if ($status != 1) return app('json')->fail(ErrorCode::CANCEL_FAILED);
+        if ($status != 1) return app('json')->fail(100020);
         $id = $this->dao->value(['bargain_id' => $bargainId, 'uid' => $uid, 'is_del' => 0], 'id');
         return $this->dao->update($id, ['is_del' => 1]);
     }
