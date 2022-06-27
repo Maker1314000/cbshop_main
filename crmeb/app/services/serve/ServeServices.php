@@ -96,9 +96,9 @@ class ServeServices extends BaseServices
      * @param array $config
      * @return Product
      */
-    public function copy(array $config = [])
+    public function copy(string $type = null, array $config = [])
     {
-        return app()->make(Product::class, [$this->getConfig($config)]);
+        return app()->make(Product::class, [$type, $this->getConfig($config)]);
     }
 
     /**

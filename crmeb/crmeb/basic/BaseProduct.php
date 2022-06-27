@@ -55,7 +55,9 @@ abstract class BaseProduct extends BaseStorage
     abstract public function open();
 
     /**复制商品
+     * @param string $url
+     * @param array $options
      * @return mixed
      */
-    abstract public function goods(string $url);
+    abstract public function goods(string $url, array $options = []);
 }

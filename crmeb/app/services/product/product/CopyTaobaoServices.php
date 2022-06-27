@@ -17,7 +17,6 @@ use app\services\serve\ServeServices;
 use app\services\system\attachment\SystemAttachmentCategoryServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use crmeb\exceptions\AdminException;
-use crmeb\services\CopyProductService;
 use crmeb\services\UploadService;
 
 /**
@@ -56,7 +55,7 @@ class CopyTaobaoServices extends BaseServices
             case 1://平台
                 /** @var ServeServices $services */
                 $services = app()->make(ServeServices::class);
-                $resultData = $services->copy()->goods($url);
+                $resultData = $services->copy('copy')->goods($url);
                 if (isset($resultData['description_image']) && is_string($resultData['description_image'])) {
                     $resultData['description_image'] = json_decode($resultData['description_image'], true);
                 }
@@ -69,69 +68,11 @@ class CopyTaobaoServices extends BaseServices
             case 2://99API
                 $apikey = sys_config('copy_product_apikey');
                 if (!$apikey) throw new AdminException(400554);
-                if ((!$type || !$id) && $url) {
-                    $url_arr = parse_url($url);
-                    if (isset($url_arr['host'])) {
-                        foreach ($this->host as $name) {
-                            if (strpos($url_arr['host'], $name) !== false) {
-                                $type = $name;
-                            }
-                        }
-                    }
-                    $type = ($type == 'pinduoduo' || $type == 'yangkeduo') ? 'pdd' : $type;
-                    switch ($type) {
-                        case 'taobao':
-                        case 'tmall':
-                            $params = [];
-                            if (isset($url_arr['query']) && $url_arr['query']) {
-                                $queryParts = explode('&', $url_arr['query']);
-                                foreach ($queryParts as $param) {
-                                    $item = explode('=', $param);
-                                    if (isset($item[0]) && $item[1]) $params[$item[0]] = $item[1];
-                                }
-                            }
-                            $id = $params['id'] ?? '';
-                            break;
-                        case 'jd':
-                            $params = [];
-                            if (isset($url_arr['path']) && $url_arr['path']) {
-                                $path = str_replace('.html', '', $url_arr['path']);
-                                $params = explode('/', $path);
-                            }
-                            $id = $params[1] ?? '';
-                            break;
-                        case 'pdd':
-                            $params = [];
-                            if (isset($url_arr['query']) && $url_arr['query']) {
-                                $queryParts = explode('&', $url_arr['query']);
-                                foreach ($queryParts as $param) {
-                                    $item = explode('=', $param);
-                                    if (isset($item[0]) && $item[1]) $params[$item[0]] = $item[1];
-                                }
-                            }
-                            $id = $params['goods_id'] ?? $params['goodsId'] ?? '';
-                            break;
-                        case 'suning':
-                            $params = [];
-                            if (isset($url_arr['path']) && $url_arr['path']) {
-                                $path = str_replace('.html', '', $url_arr['path']);
-                                $params = explode('/', $path);
-                            }
-                            $id = $params[2] ?? '';
-                            $shopid = $params[1] ?? '';
-                            break;
-                        case '1688':
-                            $params = [];
-                            if (isset($url_arr['query']) && $url_arr['query']) {
-                                $path = str_replace('.html', '', $url_arr['path']);
-                                $params = explode('/', $path);
-                            }
-                            $id = $params[2] ?? '';
-                            $shopid = $params[1] ?? '';
-                            break;
-                    }
-                }
-                $result = CopyProductService::getInfo($type, ['itemid' => $id, 'shopid' => $shopid], $apikey);
+                /** @var ServeServices $services */
+                $services = app()->make(ServeServices::class);
+                $result = $services->copy('copy99api')->goods($url, [
+                    'apikey' => $apikey,
+                ]);
                 break;
         }
         if (isset($result['status']) && $result['status']) {
