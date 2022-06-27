@@ -43,10 +43,10 @@ class AliPay extends BasePay implements PayInterface
      * @param array $options
      * @return AlipayTradeWapPayResponse|mixed
      */
-    public function creare(string $orderId, string $totalFee, string $attach, string $body, string $detail, array $options = [])
+    public function create(string $orderId, string $totalFee, string $attach, string $body, string $detail, array $options = [])
     {
         $code = false;
-        if (request()->isPC() || request()->isRoutine()) {
+        if (request()->isPC() || request()->isRoutine() || !empty($options['isCode'])) {
             $code = true;
         }
 

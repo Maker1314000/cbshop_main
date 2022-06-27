@@ -31,7 +31,13 @@ use Symfony\Component\HttpFoundation\Request;
 use think\Response;
 use crmeb\utils\Hook;
 use think\facade\Cache;
+use crmeb\services\SystemConfigService;
 
+/**
+ * 微信公众号
+ * Class WechatService
+ * @package crmeb\services\app
+ */
 class WechatService
 {
     /**
@@ -39,6 +45,9 @@ class WechatService
      */
     protected static $instance;
 
+    /**
+     * @return array
+     */
     public static function options()
     {
         $wechat = SystemConfigService::more(['wechat_appid', 'wechat_app_appid', 'wechat_app_appsecret', 'wechat_appsecret', 'wechat_token', 'wechat_encodingaeskey', 'wechat_encode']);
@@ -74,13 +83,20 @@ class WechatService
         return $config;
     }
 
-
+    /**
+     * @param bool $cache
+     * @return Application
+     */
     public static function application($cache = false)
     {
         (self::$instance === null || $cache === true) && (self::$instance = new Application(self::options()));
         return self::$instance;
     }
 
+    /**
+     * @return Response
+     * @throws \EasyWeChat\Server\BadRequestException
+     */
     public static function serve(): Response
     {
         $wechat = self::application(true);
@@ -93,6 +109,7 @@ class WechatService
     /**
      * 监听行为
      * @param Guard $server
+     * @throws \EasyWeChat\Core\Exceptions\InvalidArgumentException
      */
     private static function hook($server)
     {

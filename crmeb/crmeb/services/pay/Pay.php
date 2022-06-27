@@ -13,11 +13,15 @@ namespace crmeb\services\pay;
 
 
 use crmeb\basic\BaseManager;
+use crmeb\services\pay\storage\AliPay;
+use crmeb\services\pay\storage\WechatPay;
 use think\facade\Config;
 
 /**
  * Class Pay
  * @package crmeb\services\pay
+ * @mixin AliPay
+ * @mixin WechatPay
  */
 class Pay extends BaseManager
 {
