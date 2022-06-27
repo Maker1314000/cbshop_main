@@ -14,7 +14,6 @@ namespace app\api\controller\v2\store;
 use app\Request;
 use app\services\product\product\StoreProductServices;
 use app\services\product\sku\StoreProductAttrServices;
-use crmeb\utils\ErrorCode;
 
 class StoreProductController
 {
@@ -36,7 +35,7 @@ class StoreProductController
             ['id', 0],
             ['type', 0]
         ], true);
-        if (!$id) return app('json')->fail(ErrorCode::ERR_PARAM_MISS);
+        if (!$id) return app('json')->fail(100100);
         /** @var StoreProductAttrServices $storeProductAttrServices */
         $storeProductAttrServices = app()->make(StoreProductAttrServices::class);
         list($data['productAttr'], $data['productValue']) = $storeProductAttrServices->getProductAttrDetail($id, $request->uid(), $type);

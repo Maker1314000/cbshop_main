@@ -31,7 +31,6 @@ use crmeb\services\CacheService;
 use crmeb\services\app\MiniProgramService;
 use app\services\other\UploadService;
 use crmeb\services\UtilService;
-use crmeb\utils\ErrorCode;
 use Guzzle\Http\EntityBody;
 
 /**
@@ -805,7 +804,7 @@ class StoreBargainServices extends BaseServices
                         $valueData .= '&spread=' . $user['uid'];
                     }
                     $res = MiniProgramService::qrcodeService()->appCodeUnlimit($valueData, 'pages/activity/goods_bargain_details/index', 280);
-                    if (!$res) throw new ApiException(ErrorCode::ERR_QR_CODE_GEN_FAILED);
+                    if (!$res) throw new ApiException(400237);
                     $uploadType = (int)sys_config('upload_type', 1);
                     $upload = UploadService::init();
                     $res = (string)EntityBody::factory($res);
