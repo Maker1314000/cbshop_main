@@ -12,6 +12,7 @@
 namespace crmeb\services\pay;
 
 /**
+ * 支付接口类
  * Interface PayInterface
  * @package crmeb\services\pay
  */
@@ -36,7 +37,7 @@ interface PayInterface
      * @param array $options
      * @return mixed
      */
-    public function creare(string $orderId, string $totalFee, string $attach, string $body, string $detail, array $options = []);
+    public function create(string $orderId, string $totalFee, string $attach, string $body, string $detail, array $options = []);
 
     /**
      * 企业支付到零钱

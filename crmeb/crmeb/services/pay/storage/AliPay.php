@@ -15,8 +15,8 @@ namespace crmeb\services\pay\storage;
 use Alipay\EasySDK\Payment\Common\Models\AlipayTradeFastpayRefundQueryResponse;
 use Alipay\EasySDK\Payment\Common\Models\AlipayTradeRefundResponse;
 use Alipay\EasySDK\Payment\Wap\Models\AlipayTradeWapPayResponse;
-use crmeb\basic\BasePay;
-use crmeb\interfaces\PayInterface;
+use crmeb\services\pay\BasePay;
+use crmeb\services\pay\PayInterface;
 use crmeb\services\AliPayService;
 
 /**
@@ -43,10 +43,10 @@ class AliPay extends BasePay implements PayInterface
      * @param array $options
      * @return AlipayTradeWapPayResponse|mixed
      */
-    public function creare(string $orderId, string $totalFee, string $attach, string $body, string $detail, array $options = [])
+    public function create(string $orderId, string $totalFee, string $attach, string $body, string $detail, array $options = [])
     {
         $code = false;
-        if (request()->isPC() || request()->isRoutine()) {
+        if (request()->isPC() || request()->isRoutine() || !empty($options['isCode'])) {
             $code = true;
         }
 

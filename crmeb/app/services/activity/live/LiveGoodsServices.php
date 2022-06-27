@@ -18,7 +18,7 @@ use app\services\BaseServices;
 use app\services\product\product\StoreProductServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\app\MiniProgramService;
-use crmeb\services\DownloadImageService;
+use crmeb\utils\DownloadImage;
 use crmeb\utils\Str;
 use think\facade\Log;
 
@@ -76,8 +76,8 @@ class LiveGoodsServices extends BaseServices
         $product_ids = array_column($goods_info, 'id');
         $this->create($product_ids);
         $miniUpload = MiniProgramService::materialTemporaryService();
-        /** @var DownloadImageService $download */
-        $download = app()->make(DownloadImageService::class);
+        /** @var DownloadImage $download */
+        $download = app()->make(DownloadImage::class);
         $dataAll = $data = [];
         $time = time();
         foreach ($goods_info as $product) {
@@ -121,9 +121,10 @@ class LiveGoodsServices extends BaseServices
     {
         $liveGoods = $this->dao->getColumn([['goods_id', '>', 0]], '*', 'id');
         if ($liveGoods) {
+            /** @var DownloadImage $downloadImage */
+            $downloadImage = app()->make(DownloadImage::class);
             foreach ($liveGoods as $good) {
-                $path = root_path() . 'public' . app()->make(DownloadImageService::class)->thumb(true)->downloadImage($good['cover_img'])['path'];
-
+                $path = root_path() . 'public' . $downloadImage->thumb(true)->downloadImage($good['cover_img'])['path'];
                 $coverImgUrl = MiniProgramService::materialTemporaryService()->uploadImage($path)->media_id;
                 @unlink($path);
                 $res = MiniProgramService::addGoods($coverImgUrl, $good['name'], $good['price_type'], $good['url'], floatval($good['price']));
@@ -144,7 +145,9 @@ class LiveGoodsServices extends BaseServices
             throw new AdminException(400427);
 
         $goods = $goods->toArray();
-        $path = root_path() . 'public' . app()->make(DownloadImageService::class)->thumb(true)->downloadImage($goods['cover_img'])['path'];
+        /** @var DownloadImage $downloadImage */
+        $downloadImage = app()->make(DownloadImage::class);
+        $path = root_path() . 'public' . $downloadImage->thumb(true)->downloadImage($goods['cover_img'])['path'];
 
         $url = 'pages/goods_details/index?id=' . $goods['product_id'];
         $coverImgUrl = MiniProgramService::materialTemporaryService()->uploadImage($path)->media_id;

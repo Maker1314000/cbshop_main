@@ -43,7 +43,7 @@ class WechatPay extends BasePay implements PayInterface
      * @param array $options
      * @return array|mixed|string
      */
-    public function creare(string $orderId, string $totalFee, string $attach, string $body, string $detail, array $options = [])
+    public function create(string $orderId, string $totalFee, string $attach, string $body, string $detail, array $options = [])
     {
         $this->authSetPayType();
 

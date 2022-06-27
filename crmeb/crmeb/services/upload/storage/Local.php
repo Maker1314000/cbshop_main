@@ -12,8 +12,7 @@ namespace crmeb\services\upload\storage;
 
 use crmeb\services\upload\BaseUpload;
 use crmeb\exceptions\AdminException;
-use crmeb\exceptions\UploadException;
-use crmeb\services\DownloadImageService;
+use crmeb\utils\DownloadImage;
 use think\exception\ValidateException;
 use think\facade\Config;
 use think\facade\Filesystem;
@@ -297,8 +296,8 @@ class Local extends BaseUpload
                 $watermark_image = '.' . $this->defaultPath . '/' . $this->thumbWaterPath . '/' . $name;
                 if (!file_exists($watermark_image)) {
                     try {
-                        /** @var DownloadImageService $down */
-                        $down = app()->make(DownloadImageService::class);
+                        /** @var DownloadImage $down */
+                        $down = app()->make(DownloadImage::class);
                         $data = $down->path($this->thumbWaterPath)->downloadImage($waterConfig['watermark_image'], $name);
                         $watermark_image = $data['path'] ?? '';
                     } catch (\Throwable $e) {

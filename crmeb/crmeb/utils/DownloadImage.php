@@ -9,14 +9,23 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-namespace crmeb\services;
+namespace crmeb\utils;
 
 
-use crmeb\exceptions\AdminException;
 use app\services\other\UploadService;
+use crmeb\exceptions\AdminException;
 use think\Image;
 
-class DownloadImageService
+/**
+ * 下载图片到本地
+ * Class DownloadImage
+ * @package crmeb\utils
+ * @method $this thumb(bool $thumb) 是否生成缩略图
+ * @method $this thumbWidth(int $thumbWidth) 缩略图宽度
+ * @method $this thumHeight(int $thumHeight) 缩略图宽度
+ * @method $this path(int $path) 存储位置
+ */
+class DownloadImage
 {
     //是否生成缩略图
     protected $thumb = false;
@@ -27,6 +36,9 @@ class DownloadImageService
     //存储位置
     protected $path = 'attach';
 
+    /**
+     * @var string[]
+     */
     protected $rules = ['thumb', 'thumbWidth', 'thumHeight', 'path'];
 
     /**
@@ -123,4 +135,5 @@ class DownloadImageService
             throw new \RuntimeException('Method does not exist' . __CLASS__ . '->' . $name . '()');
         }
     }
+
 }

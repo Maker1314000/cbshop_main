@@ -47,8 +47,8 @@ trait QueueTrait
         }
         if ($queueName) {
             $queue->setQueueName($queueName);
-        } else if (self::queueName()) {
-            $queue->setQueueName(self::queueName());
+        } else if (static::queueName()) {
+            $queue->setQueueName(static::queueName());
         }
         return $queue->push();
     }
@@ -70,8 +70,8 @@ trait QueueTrait
         }
         if ($queueName) {
             $queue->setQueueName($queueName);
-        } else if (self::queueName()) {
-            $queue->setQueueName(self::queueName());
+        } else if (static::queueName()) {
+            $queue->setQueueName(static::queueName());
         }
         return $queue->push();
     }
@@ -94,8 +94,8 @@ trait QueueTrait
         }
         if ($queueName) {
             $queue->setQueueName($queueName);
-        } else if (self::queueName()) {
-            $queue->setQueueName(self::queueName());
+        } else if (static::queueName()) {
+            $queue->setQueueName(static::queueName());
         }
         return $queue->push();
     }

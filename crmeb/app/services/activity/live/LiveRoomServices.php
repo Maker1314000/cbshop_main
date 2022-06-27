@@ -16,7 +16,7 @@ namespace app\services\activity\live;
 use app\dao\activity\live\LiveRoomDao;
 use app\services\BaseServices;
 use crmeb\exceptions\AdminException;
-use crmeb\services\DownloadImageService;
+use crmeb\utils\DownloadImage;
 use crmeb\services\app\MiniProgramService;
 use think\facade\Log;
 
@@ -135,8 +135,10 @@ class LiveRoomServices extends BaseServices
     public function wxCreate($room)
     {
         try {
-            $coverImg = app()->make(DownloadImageService::class)->downloadImage($room['cover_img'])['path'];
-            $shareImg = app()->make(DownloadImageService::class)->downloadImage($room['share_img'])['path'];
+            /** @var DownloadImage $downloadImage */
+            $downloadImage = app()->make(DownloadImage::class);
+            $coverImg = $downloadImage->downloadImage($room['cover_img'])['path'];
+            $shareImg = $downloadImage->downloadImage($room['share_img'])['path'];
         } catch (\Throwable $e) {
             Log::error('添加直播间封面图出错误，原因：' . $e->getMessage());
             $coverImg = $room['cover_img'];

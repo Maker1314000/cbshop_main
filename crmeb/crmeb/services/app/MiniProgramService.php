@@ -12,6 +12,7 @@
 namespace crmeb\services\app;
 
 use crmeb\exceptions\AdminException;
+use crmeb\services\SystemConfigService;
 use app\services\pay\PayNotifyServices;
 use EasyWeChat\Foundation\Application;
 use EasyWeChat\Payment\Order;
@@ -19,7 +20,8 @@ use think\facade\Route as Url;
 use crmeb\utils\Hook;
 use think\facade\Cache;
 
-/**微信小程序接口
+/**
+ * 微信小程序接口
  * Class WechatMinService
  * @package service
  */
@@ -83,6 +85,9 @@ class MiniProgramService
      */
     protected static $instance;
 
+    /**
+     * @return array
+     */
     public static function options()
     {
         $wechat = SystemConfigService::more(['wechat_app_appsecret', 'wechat_app_appid', 'site_url', 'routine_appId', 'routine_appsecret']);
