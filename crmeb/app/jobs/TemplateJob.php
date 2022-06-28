@@ -57,7 +57,7 @@ class TemplateJob extends BaseJobs
                 $template->url($link);
             }
 
-            $tempid = CacheService::get($tempCode, function () use ($type, $tempCode) {
+            $tempid = CacheService::get('wechat_'.$tempCode, function () use ($type, $tempCode) {
                 //判断小程序还是公众号，获取数据id
                 $is_type = $type == 'wechat' ? 'is_wechat' : 'is_routine';
                 /** @var SystemNotificationServices $notifyServices */
