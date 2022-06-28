@@ -193,10 +193,18 @@ class StoreCategoryServices extends BaseServices
         if ($this->dao->getOne(['cate_name' => $data['cate_name'], 'pid' => $data['pid']])) {
             throw new AdminException(400101);
         }
+
+        $parent = $this->dao->getOne(['id' => $data['pid']]);
+        if (!$parent || $parent['pid'] > 0) {
+            throw new AdminException(400740);
+        }
+
         $data['add_time'] = time();
         $res = $this->dao->save($data);
         if (!$res) throw new AdminException(100006);
         CacheService::delete('CATEGORY');
+        CacheService::delete('CATEGORY_LIST');
+        return (int)$res->id;
     }
 
     /**
@@ -209,6 +217,12 @@ class StoreCategoryServices extends BaseServices
         if (!$data['cate_name']) {
             throw new AdminException(400100);
         }
+
+        $parent = $this->dao->getOne(['id' => $data['pid']]);
+        if (!$parent || $parent['pid'] > 0) {
+            throw new AdminException(400740);
+        }
+
         $cate = $this->dao->getOne(['cate_name' => $data['cate_name'], 'pid' => $data['pid']]);
         if ($cate && $cate['id'] != $id) {
             throw new AdminException(400101);
@@ -221,6 +235,7 @@ class StoreCategoryServices extends BaseServices
             if (!$res) throw new AdminException(100007);
         });
         CacheService::delete('CATEGORY');
+        CacheService::delete('CATEGORY_LIST');
     }
 
     /**
@@ -235,6 +250,7 @@ class StoreCategoryServices extends BaseServices
         $res = $this->dao->delete($id);
         if (!$res) throw new AdminException(100008);
         CacheService::delete('CATEGORY');
+        CacheService::delete('CATEGORY_LIST');
     }
 
     /**
@@ -261,5 +277,33 @@ class StoreCategoryServices extends BaseServices
                 return $this->dao->getCategory();
             });
         }
+    }
+
+    /**
+     * 分类详情
+     * @param int $id
+     * @return array|\think\Model|null
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function getInfo(int $id)
+    {
+        $info = $this->dao->get($id, ['id', 'cate_name', 'pid', 'pic', 'big_pic', 'sort', 'is_show']);
+        if ($info) {
+            $info = $info->toArray();
+        }
+        return $info;
+    }
+
+    /**
+     * 分类列表
+     * @return mixed
+     */
+    public function getCategoryList(array $where)
+    {
+        return CacheService::get('CATEGORY_LIST', function () use ($where) {
+            return $this->dao->getALlByIndex($where, 'id,cate_name,pid,pic,big_pic,sort,is_show');
+        }, 86400);
     }
 }
