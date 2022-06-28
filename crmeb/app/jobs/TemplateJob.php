@@ -13,8 +13,8 @@ namespace app\jobs;
 
 
 use app\services\message\SystemNotificationServices;
-use app\services\message\TemplateMessageServices;
 use crmeb\basic\BaseJobs;
+use crmeb\services\CacheService;
 use crmeb\services\template\Template;
 use crmeb\traits\QueueTrait;
 use think\facade\Log;
@@ -56,16 +56,14 @@ class TemplateJob extends BaseJobs
                 }
                 $template->url($link);
             }
-            //判断小程序还是公众号，获取数据id
-            $typeField = $type == 'wechat' ? 'wechat_id' : 'routine_id';
-            /** @var SystemNotificationServices $notifyServices */
-            $notifyServices = app()->make(SystemNotificationServices::class);
-            $typeId = $notifyServices->value(['mark' => $tempCode], $typeField);
 
-            //获取模版id
-            /** @var TemplateMessageServices $tempMsgServices */
-            $tempMsgServices = app()->make(TemplateMessageServices::class);
-            $tempid = $tempMsgServices->value(['id' => $typeId], 'tempid');
+            $tempid = CacheService::get($tempCode, function () use ($type, $tempCode) {
+                //判断小程序还是公众号，获取数据id
+                $is_type = $type == 'wechat' ? 'is_wechat' : 'is_routine';
+                /** @var SystemNotificationServices $notifyServices */
+                $notifyServices = app()->make(SystemNotificationServices::class);
+                return $notifyServices->getNotInfo(['type' => $is_type, 'mark' => $tempCode])['tempid'];
+            });
 
             return $template->send($tempid, $data);
         } catch (\Exception $e) {
