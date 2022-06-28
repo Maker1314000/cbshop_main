@@ -12,7 +12,11 @@
 namespace app\listener\notice;
 
 use app\services\message\notice\{
-    EnterpriseWechatService, NoticeSmsService, RoutineTemplateListService, SystemMsgService, WechatTemplateListService
+    EnterpriseWechatService,
+    RoutineTemplateListService,
+    SmsService,
+    SystemMsgService,
+    WechatTemplateListService
 };
 use app\services\message\NoticeService;
 use app\services\order\StoreOrderCartInfoServices;
@@ -47,8 +51,8 @@ class Notice implements ListenerInterface
             /** @var EnterpriseWechatService $EnterpriseWechat */
             $EnterpriseWechat = app()->make(EnterpriseWechatService::class);
 
-            /** @var  NoticeSmsService $NoticeSms */
-            $NoticeSms = app()->make(NoticeSmsService::class);
+            /** @var  SmsService $NoticeSms */
+            $NoticeSms = app()->make(SmsService::class);
 
             /** @var StoreOrderCartInfoServices $orderInfoServices */
             $orderInfoServices = app()->make(StoreOrderCartInfoServices::class);
@@ -275,7 +279,7 @@ class Notice implements ListenerInterface
                         //站内信
                         $SystemMsg->sendMsg($uid, ['title' => $pink->title, 'count' => $pink->people]);
                         //模板消息公众号模版消息
-                        $WechatTemplateList->sendOrderPinkFial($uid, $pink, $pink->title);
+                        $WechatTemplateList->sendOrderPinkFail($uid, $pink, $pink->title);
                         //模板消息小程序订阅消息
                         $RoutineTemplateList->sendPinkFail($uid, $pink->title, $pink->people, '亲，您拼团失败，自动为您申请退款，退款金额为：' . $pink->price, '/pages/order_details/index?order_id=' . $pink->order_id);
                         break;

@@ -2,14 +2,13 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 namespace app\adminapi\controller\v1\order;
-
 
 use app\adminapi\controller\AuthController;
 use app\adminapi\validate\order\StoreOrderValidate;
@@ -62,8 +61,11 @@ class StoreOrder extends AuthController
     }
 
     /**
-     * 获取订单列表
+     * 订单列表
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function lst()
     {
@@ -86,12 +88,11 @@ class StoreOrder extends AuthController
 
     /**
      * 核销码核销
-     * @param $code 核销码
-     * @param int $confirm 确认核销 0=确认，1=核销
+     * @param StoreOrderWriteOffServices $services
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
      */
     public function write_order(StoreOrderWriteOffServices $services)
     {
@@ -135,9 +136,10 @@ class StoreOrder extends AuthController
     }
 
     /**
-     * 修改支付金额等
+     * 订单改价表单
      * @param $id
-     * @return mixed|\think\response\Json|void
+     * @return mixed
+     * @throws \FormBuilder\Exception\FormBuilderException
      */
     public function edit($id)
     {
@@ -146,9 +148,10 @@ class StoreOrder extends AuthController
     }
 
     /**
-     * 修改订单
+     * 订单改价
      * @param $id
      * @return mixed
+     * @throws \Exception
      */
     public function update($id)
     {
@@ -223,7 +226,8 @@ class StoreOrder extends AuthController
 
     /**
      * 订单发送货
-     * @param $id 订单id
+     * @param $id
+     * @param StoreOrderDeliveryServices $services
      * @return mixed
      */
     public function update_delivery($id, StoreOrderDeliveryServices $services)
@@ -252,7 +256,8 @@ class StoreOrder extends AuthController
 
     /**
      * 订单拆单发送货
-     * @param $id 订单id
+     * @param $id
+     * @param StoreOrderDeliveryServices $services
      * @return mixed
      */
     public function split_delivery($id, StoreOrderDeliveryServices $services)

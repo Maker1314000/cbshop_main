@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
@@ -35,8 +35,11 @@ class SystemStore extends AuthController
     }
 
     /**
-     * 获取门店列表1
+     * 门店列表
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function index()
     {
@@ -88,7 +91,7 @@ class SystemStore extends AuthController
      * 设置单个门店是否显示
      * @param string $is_show
      * @param string $id
-     * @return json
+     * @return mixed
      */
     public function set_show($is_show = '', $id = '')
     {
@@ -103,8 +106,9 @@ class SystemStore extends AuthController
 
     /**
      * 保存修改门店信息
-     * param int $id
-     * */
+     * @param int $id
+     * @return mixed
+     */
     public function save($id = 0)
     {
         $data = $this->request->postMore([
@@ -140,6 +144,7 @@ class SystemStore extends AuthController
     /**
      * 删除恢复门店
      * @param $id
+     * @return mixed
      */
     public function delete($id)
     {

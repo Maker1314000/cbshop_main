@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
@@ -21,7 +21,10 @@ use think\facade\App;
  */
 class SmsTemplateApply extends AuthController
 {
-
+    /**
+     * @param App $app
+     * @param ServeServices $services
+     */
     public function __construct(App $app, ServeServices $services)
     {
         parent::__construct($app);
@@ -30,6 +33,7 @@ class SmsTemplateApply extends AuthController
 
     /**
      * 异步获取模板列表
+     * @return mixed
      */
     public function index()
     {
@@ -61,9 +65,8 @@ class SmsTemplateApply extends AuthController
     }
 
     /**
-     * 显示创建资源表单页.
-     *
-     * @return string
+     * 显示创建资源表单页
+     * @return mixed
      * @throws \FormBuilder\Exception\FormBuilderException
      */
     public function create()
@@ -73,6 +76,7 @@ class SmsTemplateApply extends AuthController
 
     /**
      * 保存新建的资源
+     * @return mixed
      */
     public function save()
     {
