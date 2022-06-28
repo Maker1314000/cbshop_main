@@ -18,7 +18,7 @@
 ├── event.php //事件配置
 ├── middleware.php //中间件
 ├── provider.php //容器Provider定义文件
-├── service.php 
+├── service.php
 └── filetree.txt //目录说明
 
 11 directories, 12 files

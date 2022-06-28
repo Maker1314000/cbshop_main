@@ -77,7 +77,7 @@ class WechatService
                 'key' => trim($payment['pay_weixin_key']),
                 'cert_path' => public_path() . $payment['pay_weixin_client_cert'],
                 'key_path' => public_path() . $payment['pay_weixin_client_key'],
-                'notify_url' => trim(SystemConfigService::get('site_url')) . '/api/wechat/notify'
+                'notify_url' => trim(sys_config('site_url')) . '/api/wechat/notify'
             ];
         }
         return $config;
