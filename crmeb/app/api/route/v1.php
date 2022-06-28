@@ -316,7 +316,7 @@ Route::group(function () {
     //小程序登陆
     Route::post('wechat/mp_auth', 'v1.wechat.AuthController/mp_auth')->name('mpAuth');//小程序登陆
     Route::get('wechat/get_logo', 'v1.wechat.AuthController/get_logo')->name('getLogo');//小程序登陆授权展示logo
-    Route::get('wechat/teml_ids', 'v1.wechat.AuthController/teml_ids')->name('wechatTemlIds');//小程序订阅消息
+    Route::get('wechat/temp_ids', 'v1.wechat.AuthController/temp_ids')->name('wechatTempIds');//小程序订阅消息
     Route::get('wechat/live', 'v1.wechat.AuthController/live')->name('wechatLive');//小程序直播列表
     Route::get('wechat/livePlaybacks/:id', 'v1.wechat.AuthController/livePlaybacks')->name('livePlaybacks');//小程序直播回放
 

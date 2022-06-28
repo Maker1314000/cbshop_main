@@ -11,6 +11,7 @@
 
 namespace crmeb\services\template;
 
+use crmeb\basic\BaseStorage;
 use think\facade\Config;
 
 abstract class BaseMessage extends BaseStorage
