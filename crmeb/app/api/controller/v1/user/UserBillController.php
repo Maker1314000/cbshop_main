@@ -12,6 +12,7 @@ namespace app\api\controller\v1\user;
 
 
 use app\Request;
+use app\services\other\PosterServices;
 use app\services\other\QrcodeServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use app\services\system\config\SystemConfigServices;
@@ -20,7 +21,6 @@ use app\services\user\UserBrokerageServices;
 use app\services\user\UserMoneyServices;
 use crmeb\services\app\MiniProgramService;
 use app\services\other\UploadService;
-use crmeb\services\UtilService;
 
 /**
  * 账单类
@@ -245,7 +245,7 @@ class UserBillController
                         ),
                         'background' => $item['pic']
                     );
-                    $resRoutine = $resRoutine && $posterInfo = UtilService::setSharePoster($config, 'routine/spread/poster', $user['uid'] . '_' . $user['is_promoter'] . '_user_routine_poster_' . $key . '.jpg');
+                    $resRoutine = $resRoutine && $posterInfo = PosterServices::setSharePoster($config, 'routine/spread/poster', $user['uid'] . '_' . $user['is_promoter'] . '_user_routine_poster_' . $key . '.jpg');
                     if (!is_array($posterInfo)) return app('json')->fail($posterInfo);
                     $systemAttachment->attachmentAdd($posterInfo['name'], $posterInfo['size'], $posterInfo['type'], $posterInfo['dir'], $posterInfo['thumb_path'], 1, $posterInfo['image_type'], $posterInfo['time'], 2);
                     if ($resRoutine) {
@@ -267,7 +267,7 @@ class UserBillController
                 }
                 if (!$imageInfo) {
                     $codeUrl = set_http_type($siteUrl . '?spread=' . $user['uid'], $request->isSsl() ? 0 : 1);//二维码链接
-                    $imageInfo = UtilService::getQRCodePath($codeUrl, $name);
+                    $imageInfo = PosterServices::getQRCodePath($codeUrl, $name);
                     if (is_string($imageInfo)) return app('json')->fail(410167, ['error' => $imageInfo]);
                     $systemAttachment->attachmentAdd($imageInfo['name'], $imageInfo['size'], $imageInfo['type'], $imageInfo['dir'], $imageInfo['thumb_path'], 1, $imageInfo['image_type'], $imageInfo['time'], 2);
                     $urlCode = $imageInfo['dir'];
@@ -318,7 +318,7 @@ class UserBillController
                         ),
                         'background' => $item['pic']
                     );
-                    $resWap = $resWap && $posterInfo = UtilService::setSharePoster($config, 'wap/spread/poster', $user['uid'] . '_' . $user['is_promoter'] . '_user_wap_poster_' . $key . '.jpg');
+                    $resWap = $resWap && $posterInfo = PosterServices::setSharePoster($config, 'wap/spread/poster', $user['uid'] . '_' . $user['is_promoter'] . '_user_wap_poster_' . $key . '.jpg');
                     if (!is_array($posterInfo)) return app('json')->fail($posterInfo);
                     $systemAttachment->attachmentAdd($posterInfo['name'], $posterInfo['size'], $posterInfo['type'], $posterInfo['dir'], $posterInfo['thumb_path'], 1, $posterInfo['image_type'], $posterInfo['time'], 2);
                     if ($resWap) {

@@ -68,35 +68,6 @@ class UserController
     }
 
     /**
-     * 添加点赞
-     * @param Request $request
-     * @return mixed
-     */
-//    public function like_add(Request $request)
-//    {
-//        list($id, $category) = UtilService::postMore([['id',0], ['category','product']], $request, true);
-//        if(!$id || !is_numeric($id))  return app('json')->fail('参数错误');
-//        $res = StoreProductRelation::productRelation($id,$request->uid(),'like',$category);
-//        if(!$res) return  app('json')->fail(StoreProductRelation::getErrorInfo());
-//        else return app('json')->success();
-//    }
-
-    /**
-     * 取消点赞
-     * @param Request $request
-     * @return mixed
-     */
-//    public function like_del(Request $request)
-//    {
-//        list($id, $category) = UtilService::postMore([['id',0], ['category','product']], $request, true);
-//        if(!$id || !is_numeric($id)) return app('json')->fail('参数错误');
-//        $res = StoreProductRelation::unProductRelation($id, $request->uid(),'like',$category);
-//        if(!$res) return app('json')->fail(StoreProductRelation::getErrorInfo());
-//        else return app('json')->success();
-//    }
-
-
-    /**
      * 获取活动状态
      * @return mixed
      */

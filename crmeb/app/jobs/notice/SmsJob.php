@@ -12,7 +12,7 @@
 namespace app\jobs\notice;
 
 
-use app\services\message\notice\SmsService;
+use app\services\message\notice\NoticeSmsService;
 use crmeb\basic\BaseJobs;
 use crmeb\traits\QueueTrait;
 use think\facade\Log;
@@ -33,8 +33,8 @@ class SmsJob extends BaseJobs
     {
 
         try{
-            /** @var SmsService $smsServices */
-            $smsServices = app()->make(SmsService::class);
+            /** @var NoticeSmsService $smsServices */
+            $smsServices = app()->make(NoticeSmsService::class);
             $smsServices->send(true, $phone, $data, $template);
             return true;
         }catch (\Throwable $e) {

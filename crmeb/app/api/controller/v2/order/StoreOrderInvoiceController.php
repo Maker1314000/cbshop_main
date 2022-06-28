@@ -14,9 +14,9 @@ namespace app\api\controller\v2\order;
 
 use app\services\order\StoreOrderInvoiceServices;
 use app\services\order\StoreOrderServices;
+use app\services\other\PosterServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use app\services\system\store\SystemStoreServices;
-use crmeb\services\UtilService;
 use think\Request;
 
 /**
@@ -102,7 +102,7 @@ class StoreOrderInvoiceController
             $imageInfo = $attachmentServices->getInfo(['name' => $name]);
             $siteUrl = sys_config('site_url');
             if (!$imageInfo) {
-                $imageInfo = UtilService::getQRCodePath($order['verify_code'], $name);
+                $imageInfo = PosterServices::getQRCodePath($order['verify_code'], $name);
                 if (is_array($imageInfo)) {
                     $attachmentServices->attachmentAdd($imageInfo['name'], $imageInfo['size'], $imageInfo['type'], $imageInfo['dir'], $imageInfo['thumb_path'], 1, $imageInfo['image_type'], $imageInfo['time'], 2);
                     $url = $imageInfo['dir'];

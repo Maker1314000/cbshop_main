@@ -15,6 +15,7 @@ use app\services\system\config\SystemStorageServices;
 use crmeb\exceptions\UploadException;
 use crmeb\services\SystemConfigService;
 use crmeb\services\upload\Upload;
+use crmeb\utils\DownloadImage;
 
 /**
  * Class UploadService
@@ -66,7 +67,6 @@ class UploadService
                 break;
             default:
                 throw new UploadException(400733);
-                break;
         }
 
         //除了本地存储其他都去获取配置信息
@@ -124,8 +124,8 @@ class UploadService
         //远程图片 下载到本地处理
         if ($is_remote_down) {
             try {
-                /** @var DownloadImageService $down */
-                $down = app()->make(DownloadImageService::class);
+                /** @var DownloadImage $down */
+                $down = app()->make(DownloadImage::class);
                 $data = $down->path('thumb_water')->downloadImage($filePath);
                 $filePath = $data['path'] ?? '';
             } catch (\Throwable $e) {

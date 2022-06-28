@@ -38,10 +38,7 @@ use app\services\pay\OrderPayServices;
 use app\services\pay\YuePayServices;
 use app\services\product\product\StoreProductReplyServices;
 use app\services\shipping\ShippingTemplatesServices;
-use app\services\system\attachment\SystemAttachmentServices;
-use app\services\system\store\SystemStoreServices;
 use crmeb\services\CacheService;
-use crmeb\services\UtilService;
 use think\facade\Cache;
 
 /**

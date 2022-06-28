@@ -1,24 +1,11 @@
 <?php
-// +----------------------------------------------------------------------
-// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
-// +----------------------------------------------------------------------
-// | Author: CRMEB Team <admin@crmeb.com>
-// +----------------------------------------------------------------------
 
-namespace crmeb\services;
+namespace app\services\other;
 
+use dh2y\qrcode\QRcode;
 use think\facade\Config;
-use app\services\other\UploadService;
 
-/**
- * Class UtilService
- * @package crmeb\services
- */
-class UtilService
+class PosterServices
 {
     /**
      * TODO 砍价 拼团 分享海报生成
@@ -267,8 +254,9 @@ class UtilService
             if (!$siteUrl) return '请前往后台设置->系统设置->网站域名 填写您的域名格式为：http://域名';
             $info = [];
             $outfiles = Config::get('qrcode.cache_dir');
-            $code = new \crmeb\utils\QRcode();
-            $wapCodePath = $code->setCacheDir($outfiles)->png($url, $outfiles . '/' . $name)->getPath(); //获取二维码生成的地址
+            $code = new QRcode();
+            if (!file_exists($outfiles)) mkdir($outfiles, 0775, true);
+            $wapCodePath = $code->png($url, $outfiles . '/' . $name)->getPath(); //获取二维码生成的地址
             $content = file_get_contents('.' . $wapCodePath);
             if ($uploadType === 1) {
                 $info["code"] = 200;

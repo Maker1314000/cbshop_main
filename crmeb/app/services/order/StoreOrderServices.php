@@ -16,6 +16,7 @@ use app\jobs\AutoCommentJob;
 use app\services\activity\combination\StorePinkServices;
 use app\services\activity\seckill\StoreSeckillServices;
 use app\services\BaseServices;
+use app\services\other\PosterServices;
 use app\services\pay\OrderPayServices;
 use app\services\pay\PayServices;
 use app\services\product\product\StoreProductLogServices;
@@ -34,7 +35,6 @@ use crmeb\services\CacheService;
 use crmeb\services\FormBuilder as Form;
 use crmeb\services\printer\Printer;
 use crmeb\services\SystemConfigService;
-use crmeb\services\UtilService;
 use crmeb\traits\ServicesTrait;
 use crmeb\utils\Arr;
 use think\facade\Log;
@@ -2316,7 +2316,7 @@ HTML;
             $imageInfo = $attachmentServices->getInfo(['name' => $name]);
             $siteUrl = sys_config('site_url');
             if (!$imageInfo) {
-                $imageInfo = UtilService::getQRCodePath($order['verify_code'], $name);
+                $imageInfo = PosterServices::getQRCodePath($order['verify_code'], $name);
                 if (is_array($imageInfo)) {
                     $attachmentServices->attachmentAdd($imageInfo['name'], $imageInfo['size'], $imageInfo['type'], $imageInfo['dir'], $imageInfo['thumb_path'], 1, $imageInfo['image_type'], $imageInfo['time'], 2);
                     $url = $imageInfo['dir'];

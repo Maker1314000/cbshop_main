@@ -12,7 +12,7 @@
 namespace app\listener\notice;
 
 use app\services\message\notice\{
-    EnterpriseWechatService, SmsService, RoutineTemplateListService, SystemMsgService, WechatTemplateListService
+    EnterpriseWechatService, NoticeSmsService, RoutineTemplateListService, SystemMsgService, WechatTemplateListService
 };
 use app\services\message\NoticeService;
 use app\services\order\StoreOrderCartInfoServices;
@@ -47,8 +47,8 @@ class Notice implements ListenerInterface
             /** @var EnterpriseWechatService $EnterpriseWechat */
             $EnterpriseWechat = app()->make(EnterpriseWechatService::class);
 
-            /** @var  SmsService $NoticeSms */
-            $NoticeSms = app()->make(SmsService::class);
+            /** @var  NoticeSmsService $NoticeSms */
+            $NoticeSms = app()->make(NoticeSmsService::class);
 
             /** @var StoreOrderCartInfoServices $orderInfoServices */
             $orderInfoServices = app()->make(StoreOrderCartInfoServices::class);

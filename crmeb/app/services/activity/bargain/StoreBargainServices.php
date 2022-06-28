@@ -17,6 +17,7 @@ use app\jobs\ProductLogJob;
 use app\Request;
 use app\services\BaseServices;
 use app\services\order\StoreOrderServices;
+use app\services\other\PosterServices;
 use app\services\product\product\StoreCategoryServices;
 use app\services\product\product\StoreDescriptionServices;
 use app\services\product\product\StoreProductServices;
@@ -30,7 +31,6 @@ use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
 use crmeb\services\app\MiniProgramService;
 use app\services\other\UploadService;
-use crmeb\services\UtilService;
 use Guzzle\Http\EntityBody;
 
 /**
@@ -753,7 +753,7 @@ class StoreBargainServices extends BaseServices
                 $imageInfo = $systemAttachmentServices->getInfo(['name' => $name]);
                 if (!$imageInfo) {
                     $codeUrl = set_http_type($siteUrl . '/pages/activity/goods_bargain_details/index?id=' . $bargainId . '&bargain=' . $user['uid'] . '&spread=' . $user['uid'], 1);//二维码链接
-                    $imageInfo = UtilService::getQRCodePath($codeUrl, $name);
+                    $imageInfo = PosterServices::getQRCodePath($codeUrl, $name);
                     if (is_string($imageInfo)) {
                         throw new ApiException(410167);
                     }
@@ -773,7 +773,7 @@ class StoreBargainServices extends BaseServices
                 } else $url = $imageInfo['att_dir'];
                 $data['url'] = $url;
                 if ($imageInfo['image_type'] == 1) $data['url'] = $siteUrl . $url;
-                $posterImage = UtilService::setShareMarketingPoster($data, 'wap/activity/bargain/poster');
+                $posterImage = PosterServices::setShareMarketingPoster($data, 'wap/activity/bargain/poster');
                 if (!is_array($posterImage)) {
                     throw new ApiException(410172);
                 }
@@ -814,8 +814,8 @@ class StoreBargainServices extends BaseServices
                     }
                     $imageInfo = $upload->getUploadInfo();
                     $imageInfo['image_type'] = $uploadType;
-                    if ($imageInfo['image_type'] == 1) $remoteImage = UtilService::remoteImage($siteUrl . $imageInfo['dir']);
-                    else $remoteImage = UtilService::remoteImage($imageInfo['dir']);
+                    if ($imageInfo['image_type'] == 1) $remoteImage = PosterServices::remoteImage($siteUrl . $imageInfo['dir']);
+                    else $remoteImage = PosterServices::remoteImage($imageInfo['dir']);
                     if (!$remoteImage['status']) throw new ApiException(410167);
                     $systemAttachmentServices->save([
                         'name' => $imageInfo['name'],
@@ -834,7 +834,7 @@ class StoreBargainServices extends BaseServices
                 $data['url'] = $url;
                 if ($imageInfo['image_type'] == 1)
                     $data['url'] = $siteUrl . $url;
-                $posterImage = UtilService::setShareMarketingPoster($data, 'routine/activity/bargain/poster');
+                $posterImage = PosterServices::setShareMarketingPoster($data, 'routine/activity/bargain/poster');
                 if (!is_array($posterImage)) throw new ApiException(410172);
                 $systemAttachmentServices->save([
                     'name' => $posterImage['name'],
@@ -911,8 +911,8 @@ class StoreBargainServices extends BaseServices
                     }
                     $imageInfo = $upload->getUploadInfo();
                     $imageInfo['image_type'] = $uploadType;
-                    if ($imageInfo['image_type'] == 1) $remoteImage = UtilService::remoteImage($siteUrl . $imageInfo['dir']);
-                    else $remoteImage = UtilService::remoteImage($imageInfo['dir']);
+                    if ($imageInfo['image_type'] == 1) $remoteImage = PosterServices::remoteImage($siteUrl . $imageInfo['dir']);
+                    else $remoteImage = PosterServices::remoteImage($imageInfo['dir']);
                     if (!$remoteImage['status']) throw new ApiException($remoteImage['msg']);
                     $systemAttachmentServices->save([
                         'name' => $imageInfo['name'],
