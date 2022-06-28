@@ -66,7 +66,7 @@ class WechatPay extends BasePay implements PayInterface
                 }
                 return WechatService::jsPay($options['openid'], $orderId, $totalFee, $attach, $body, $detail);
             case 'h5':
-                return WechatService::paymentPrepare(null, $orderId, $totalFee, $attach, $body, $detail);
+                return WechatService::paymentPrepare(null, $orderId, $totalFee, $attach, $body, $detail, 'MWEB');
             default:
                 throw new PayException('微信支付:支付类型错误');
         }
