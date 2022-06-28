@@ -819,6 +819,8 @@ return [
     400737 => 'Fix the error, please try again',
     400738 => 'Please specify the table to be repaired',
     400739 => 'Please configure payment certificate',
+    400740 => 'Only two-level classification is supported',
+    400741 => 'Freight format error',
 
     410000 => 'Please enter the account number and password',
     410001 => 'Login successful',
