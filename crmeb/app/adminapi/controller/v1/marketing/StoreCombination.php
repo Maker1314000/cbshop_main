@@ -2,20 +2,18 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-
 namespace app\adminapi\controller\v1\marketing;
 
 use app\adminapi\controller\AuthController;
 use app\services\activity\combination\StoreCombinationServices;
 use app\services\activity\combination\StorePinkServices;
 use think\facade\App;
-
 
 /**
  * 拼团管理
@@ -117,16 +115,16 @@ class StoreCombination extends AuthController
                 return app('json')->fail(400507);
             }
         }
-        $bragain = [];
+        $combination = [];
         if ($id) {
-            $bragain = $this->services->get((int)$id);
-            if (!$bragain) {
+            $combination = $this->services->get((int)$id);
+            if (!$combination) {
                 return app('json')->fail(100026);
             }
         }
         //限制编辑
-        if ($data['copy'] == 0 && $bragain) {
-            if ($bragain['stop_time'] < time()) {
+        if ($data['copy'] == 0 && $combination) {
+            if ($combination['stop_time'] < time()) {
                 return app('json')->fail(400508);
             }
         }
@@ -142,10 +140,9 @@ class StoreCombination extends AuthController
     }
 
     /**
-     * 删除指定资源
-     *
-     * @param int $id
-     * @return \think\Response
+     * 删除拼团
+     * @param $id
+     * @return mixed
      */
     public function delete($id)
     {
@@ -165,7 +162,8 @@ class StoreCombination extends AuthController
         return app('json')->success($status == 0 ? 100014 : 100015);
     }
 
-    /**拼团列表
+    /**
+     * 拼团列表
      * @return mixed
      */
     public function combine_list()
@@ -180,7 +178,8 @@ class StoreCombination extends AuthController
         return app('json')->success($list);
     }
 
-    /**拼团人列表
+    /**
+     * 拼团人列表
      * @return mixed
      */
     public function order_pink($id)

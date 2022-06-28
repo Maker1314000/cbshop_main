@@ -2,13 +2,12 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-
 namespace app\adminapi\controller\v1\marketing;
 
 use app\adminapi\controller\AuthController;
@@ -36,9 +35,11 @@ class StoreBargain extends AuthController
     }
 
     /**
-     * 显示资源列表
-     *
-     * @return \think\Response
+     * 砍价列表
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function index()
     {
@@ -53,10 +54,9 @@ class StoreBargain extends AuthController
     }
 
     /**
-     * 保存新建的资源
-     *
-     * @param \think\Request $request
-     * @return \think\Response
+     * 保存砍价商品
+     * @param $id
+     * @return mixed
      */
     public function save($id)
     {
@@ -117,10 +117,9 @@ class StoreBargain extends AuthController
     }
 
     /**
-     * 显示指定的资源
-     *
-     * @param int $id
-     * @return \think\Response
+     * 获取详情
+     * @param $id
+     * @return mixed
      */
     public function read($id)
     {
@@ -129,10 +128,9 @@ class StoreBargain extends AuthController
     }
 
     /**
-     * 删除指定资源
-     *
-     * @param int $id
-     * @return \think\Response
+     * 删除砍价
+     * @param $id
+     * @return mixed
      */
     public function delete($id)
     {

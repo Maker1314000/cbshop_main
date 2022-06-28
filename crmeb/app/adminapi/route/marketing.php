@@ -24,24 +24,6 @@ Route::group('marketing', function () {
     Route::get('coupon/copy/:id', 'v1.marketing.StoreCouponIssue/copy')->option(['real_name' => '一键复制优惠券']);
     //发送优惠券列表
     Route::get('coupon/grant', 'v1.marketing.StoreCouponIssue/index')->option(['real_name' => '发送优惠券列表']);
-
-
-    //优惠券相关 资源路由
-    Route::get('coupon/list', 'v1.marketing.StoreCoupon/index')->option(['real_name' => '优惠券']);
-    //优惠卷添加
-    Route::get('coupon/create/:type', 'v1.marketing.StoreCoupon/create')->option(['real_name' => '优惠卷添加']);
-    //优惠卷数据添加添加
-    Route::post('coupon/save', 'v1.marketing.StoreCoupon/save')->option(['real_name' => '优惠卷数据添加']);
-    //优惠卷修改
-    Route::delete('coupon/del/:id', 'v1.marketing.StoreCoupon/delete')->option(['real_name' => '优惠卷修改']);
-    //修改状态
-    Route::put('coupon/status/:id', 'v1.marketing.StoreCoupon/status')->option(['real_name' => '修改优惠券状态']);
-    //发布优惠券表单
-    Route::get('coupon/issue/:id', 'v1.marketing.StoreCoupon/issue')->option(['real_name' => '发布优惠券表单']);
-    //发布优惠券
-    Route::post('coupon/issue/:id', 'v1.marketing.StoreCoupon/update_issue')->option(['real_name' => '发布优惠券']);
-
-
     //已发布优惠券删除
     Route::delete('coupon/released/:id', 'v1.marketing.StoreCouponIssue/delete')->option(['real_name' => '已发布优惠券删除']);
     //已发布优惠券修改状态表单

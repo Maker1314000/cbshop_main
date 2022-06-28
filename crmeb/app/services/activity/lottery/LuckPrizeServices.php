@@ -117,28 +117,6 @@ class LuckPrizeServices extends BaseServices
     }
 
     /**
-     * 修改奖品
-     * @param int $id
-     * @param array $data
-     * @return bool
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
-     */
-    public function edit(int $id, array $data)
-    {
-        $this->checkPrizeData($data);
-        $prize = $this->dao->get($id);
-        if (!$prize) {
-            throw new AdminException(400438);
-        }
-        if (!$this->dao->update($id, $data, 'id')) {
-            throw new AdminException(100007);
-        }
-        return true;
-    }
-
-    /**
      * 获取某个抽奖活动的所有奖品
      * @param int $lottery_id
      * @param string $field

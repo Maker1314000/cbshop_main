@@ -2,14 +2,13 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 namespace app\adminapi\controller\v1\marketing\integral;
-
 
 use app\adminapi\controller\AuthController;
 use app\services\serve\ServeServices;
@@ -120,7 +119,7 @@ class StoreIntegralOrder extends AuthController
 
     /**
      * 订单发送货
-     * @param $id 订单id
+     * @param $id
      * @return mixed
      */
     public function update_delivery($id)
@@ -147,12 +146,10 @@ class StoreIntegralOrder extends AuthController
         return app('json')->success(100010);
     }
 
-
     /**
      * 确认收货
-     * @param $id 订单id
+     * @param $id
      * @return mixed
-     * @throws \Exception
      */
     public function take_delivery($id)
     {
@@ -323,7 +320,7 @@ class StoreIntegralOrder extends AuthController
 
     /**
      * 订单发货后打印电子面单
-     * @param $orderId
+     * @param $order_id
      * @param StoreOrderDeliveryServices $storeOrderDeliveryServices
      * @return mixed
      */

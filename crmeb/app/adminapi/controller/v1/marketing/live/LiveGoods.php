@@ -2,13 +2,12 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-
 namespace app\adminapi\controller\v1\marketing\live;
 
 use app\adminapi\controller\AuthController;
@@ -33,6 +32,10 @@ class LiveGoods extends AuthController
         $this->services = $services;
     }
 
+    /**
+     * 直播间商品列表
+     * @return mixed
+     */
     public function list()
     {
         $where = $this->request->postMore([
@@ -44,6 +47,10 @@ class LiveGoods extends AuthController
         return app('json')->success($this->services->getList($where));
     }
 
+    /**
+     * 生成直播商品
+     * @return mixed
+     */
     public function create()
     {
         [$product_ids] = $this->request->postMore([
@@ -52,6 +59,14 @@ class LiveGoods extends AuthController
         return app('json')->success($this->services->create($product_ids));
     }
 
+    /**
+     * 上传直播商品
+     * @return mixed
+     * @throws \EasyWeChat\Core\Exceptions\InvalidArgumentException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
     public function add()
     {
         [$goods_info] = $this->request->postMore([
@@ -64,47 +79,81 @@ class LiveGoods extends AuthController
         return app('json')->success(100000);
     }
 
+    /**
+     * 商品详情
+     * @param $id
+     * @return mixed
+     */
     public function detail($id)
     {
-        if (!$id)
-            return app('json')->fail(100100);
+        if (!$id) return app('json')->fail(100100);
         $goods = $this->services->get($id, ['*'], ['product']);
         return app('json')->success($goods ? $goods->toArray() : []);
     }
 
+    /**
+     * 同步直播商品
+     * @return mixed
+     */
     public function syncGoods()
     {
         $this->services->syncGoodStatus();
         return app('json')->success(100038);
     }
 
+    /**
+     * 重新提交审核
+     * @param $id
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
     public function audit($id)
     {
-        if (!$id)
-            return app('json')->fail(100100);
+        if (!$id) return app('json')->fail(100100);
         $this->services->audit((int)$id);
         return app('json')->success(100014);
     }
 
+    /**
+     * 撤回审核
+     * @param $id
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
     public function resetAudit($id)
     {
-        if (!$id)
-            return app('json')->fail(100100);
+        if (!$id) return app('json')->fail(100100);
         $this->services->resetAudit((int)$id);
         return app('json')->success(100014);
     }
 
+    /**
+     * 设置状态
+     * @param int $id
+     * @param $is_show
+     * @return mixed
+     */
     public function setShow(int $id, $is_show)
     {
-        if (!$id)
-            return app('json')->fail(100100);
+        if (!$id) return app('json')->fail(100100);
         return app('json')->success($this->services->isShow($id, $is_show));
     }
 
+    /**
+     * 删除商品
+     * @param $id
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
     public function delete($id)
     {
-        if (!$id)
-            return app('json')->fail(100100);
+        if (!$id) return app('json')->fail(100100);
         $this->services->delete($id);
         return app('json')->success(100002);
     }

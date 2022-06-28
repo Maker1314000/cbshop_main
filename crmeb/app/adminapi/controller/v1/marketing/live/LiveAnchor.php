@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
@@ -47,7 +47,6 @@ class LiveAnchor extends AuthController
     /**
      * 添加修改表单
      * @return mixed
-     * @throws \FormBuilder\Exception\FormBuilderException
      */
     public function add()
     {
@@ -59,7 +58,6 @@ class LiveAnchor extends AuthController
 
     /**
      * 保存标签表单数据
-     * @param int $id
      * @return mixed
      */
     public function save()
@@ -75,12 +73,14 @@ class LiveAnchor extends AuthController
         $res = $this->services->save((int)$data['id'], $data);
         if ($res === true) {
             return app('json')->success(100000, ['auth' => false]);
+        }else{
+            return app('json')->fail(100006);
         }
     }
 
     /**
      * 删除
-     * @param $id
+     * @return mixed
      * @throws \Exception
      */
     public function delete()
@@ -95,8 +95,9 @@ class LiveAnchor extends AuthController
 
     /**
      * 设置会员等级显示|隐藏
-     *
-     * @return json
+     * @param string $id
+     * @param string $is_show
+     * @return mixed
      */
     public function setShow($id = '', $is_show = '')
     {

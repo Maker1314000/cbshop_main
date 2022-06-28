@@ -2,13 +2,12 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-
 namespace app\adminapi\controller\v1\marketing\live;
 
 use app\adminapi\controller\AuthController;
@@ -33,6 +32,10 @@ class LiveRoom extends AuthController
         $this->services = $services;
     }
 
+    /**
+     * 直播间列表
+     * @return mixed
+     */
     public function list()
     {
         $where = $this->request->postMore([
@@ -42,13 +45,21 @@ class LiveRoom extends AuthController
         return app('json')->success($this->services->getList($where));
     }
 
+    /**
+     * 直播间详情
+     * @param $id
+     * @return mixed
+     */
     public function detail($id)
     {
-        if (!$id)
-            return app('json')->fail(100100);
+        if (!$id) return app('json')->fail(100100);
         return app('json')->success($this->services->get((int)$id)->toArray());
     }
 
+    /**
+     * 添加直播间
+     * @return mixed
+     */
     public function add()
     {
         $data = $this->request->postMore([
@@ -72,6 +83,13 @@ class LiveRoom extends AuthController
         return app('json')->success(100000);
     }
 
+    /**
+     * 添加直播间商品
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
     public function addGoods()
     {
         [$room_id, $goods_ids] = $this->request->postMore([
@@ -82,29 +100,48 @@ class LiveRoom extends AuthController
         return app('json')->success(100000);
     }
 
+    /**
+     * 提交审核
+     * @param $id
+     * @return mixed
+     */
     public function apply($id)
     {
         [$status, $msg] = $this->request->postMore([
             ['status', ''],
             ['msg', '']
         ], true);
-
         $this->services->apply((int)$id, $status, $msg);
         return app('json')->success(100014);
     }
 
+    /**
+     * 设置状态
+     * @param $id
+     * @param $is_show
+     * @return mixed
+     */
     public function setShow($id, $is_show)
     {
         $this->services->isShow((int)$id, $is_show);
         return app('json')->success(100014);
     }
 
+    /**
+     * 删除直播间
+     * @param $id
+     * @return mixed
+     */
     public function delete($id)
     {
         $this->services->delete($id);
         return app('json')->success(100002);
     }
 
+    /**
+     * 同步直播间
+     * @return mixed
+     */
     public function syncRoom()
     {
         $this->services->syncRoomStatus();

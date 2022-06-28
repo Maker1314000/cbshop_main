@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
@@ -35,6 +35,10 @@ class LuckLottery extends AuthController
         $this->services = $services;
     }
 
+    /**
+     * 抽奖列表
+     * @return mixed
+     */
     public function index()
     {
         $where = $this->request->postMore([
@@ -46,6 +50,14 @@ class LuckLottery extends AuthController
         return app('json')->success($this->services->getList($where));
     }
 
+    /**
+     * 抽奖活动详情
+     * @param $id
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
     public function detail($id)
     {
         if (!$id) {
@@ -54,6 +66,14 @@ class LuckLottery extends AuthController
         return app('json')->success($this->services->getlotteryInfo((int)$id));
     }
 
+    /**
+     * 根据类型获取详情
+     * @param $factor
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
     public function factorInfo($factor)
     {
         if (!$factor) {
@@ -62,6 +82,10 @@ class LuckLottery extends AuthController
         return app('json')->success($this->services->getlotteryFactorInfo((int)$factor));
     }
 
+    /**
+     * 添加抽奖
+     * @return mixed
+     */
     public function add()
     {
         $data = $this->request->postMore([
@@ -107,6 +131,14 @@ class LuckLottery extends AuthController
         return app('json')->success($this->services->add($data) ? 100000 : 100006);
     }
 
+    /**
+     * 修改抽奖
+     * @param $id
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
     public function edit($id)
     {
         $data = $this->request->postMore([
@@ -156,9 +188,11 @@ class LuckLottery extends AuthController
     }
 
     /**
-     * 删除
-     * @param $id
-     * @throws \Exception
+     * 删除抽奖
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function delete()
     {
@@ -172,7 +206,12 @@ class LuckLottery extends AuthController
 
     /**
      * 设置活动状态
-     * @return json
+     * @param string $id
+     * @param string $status
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function setStatus($id = '', $status = '')
     {
