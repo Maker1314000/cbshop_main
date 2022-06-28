@@ -24,7 +24,7 @@ class HttpEnd
     public function handle(Response $response):void
     {
         //业务成功和失败分开存储
-        $status = isset($response->getData()["status"]) ? $response->getData()["status"] : 0;
+        $status = $response->getData()["status"] ?? 0;
         if ($status == 200) {
             //业务成功日志开关
             if (!config("log.success_log")) return;
