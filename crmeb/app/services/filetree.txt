@@ -47,7 +47,6 @@
 │   ├── StoreOrderDeliveryServices.php
 │   ├── StoreOrderEconomizeServices.php
 │   ├── StoreOrderInvoiceServices.php
-│   ├── StoreOrderOrderInvoiceServices.php
 │   ├── StoreOrderRefundServices.php
 │   ├── StoreOrderServices.php
 │   ├── StoreOrderSplitServices.php
