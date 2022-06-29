@@ -90,7 +90,7 @@ class StoreCategory extends AuthController
             ['is_show', 0]
         ]);
         $this->validate($data, StoreCategoryValidate::class, 'save');
-        $this->service->editData($id, $data);
+        $this->services->editData($id, $data);
         return app('json')->success('修改成功!');
     }
 

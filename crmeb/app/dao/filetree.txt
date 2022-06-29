@@ -30,7 +30,6 @@
 │   ├── StoreOrderDao.php
 │   ├── StoreOrderEconomizeDao.php
 │   ├── StoreOrderInvoiceDao.php
-│   ├── StoreOrderOrderInvoiceDao.php
 │   ├── StoreOrderRefundDao.php
 │   ├── StoreOrderStatusDao.php
 │   ├── StoreOrderStoreOrderCartInfoDao.php
