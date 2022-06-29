@@ -157,7 +157,7 @@
 	} from "@/config/cache";
 	// #endif
 	import {
-		getTemlIds,
+    getTempIds,
 		siteConfig
 	} from "@/api/api.js";
 	import {
@@ -321,7 +321,7 @@
 			this.getIndexData();
 			// #ifdef MP
 			if (this.$Cache.get(TIPS_KEY)) this.iShidden = true;
-			this.getTemlIds();
+			this.getTempIds();
 			// #endif
 			siteConfig()
 				.then((res) => {
@@ -481,10 +481,10 @@
 			// 	this.isShowAuth = e;
 			// },
 			// #ifdef MP
-			getTemlIds() {
+      getTempIds() {
 				let messageTmplIds = wx.getStorageSync(SUBSCRIBE_MESSAGE);
 				if (!messageTmplIds) {
-					getTemlIds().then((res) => {
+          getTempIds().then((res) => {
 						if (res.data)
 							wx.setStorageSync(SUBSCRIBE_MESSAGE, JSON.stringify(res.data));
 					});
