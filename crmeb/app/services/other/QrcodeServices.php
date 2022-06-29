@@ -17,8 +17,6 @@ use app\dao\other\QrcodeDao;
 use app\services\system\attachment\SystemAttachmentServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\app\MiniProgramService;
-use app\services\other\UploadService;
-use crmeb\services\UtilService;
 use crmeb\services\app\WechatService;
 use Guzzle\Http\EntityBody;
 
@@ -146,8 +144,8 @@ class QrcodeServices extends BaseServices
             $imageInfo = $systemAttchment->getInfo(['name'=>$name]);
             $siteUrl = sys_config('site_url');
             if (!$imageInfo) {
-                $codeUrl = UtilService::setHttpType($siteUrl . $link, request()->isSsl() ? 0 : 1);//二维码链接
-                $imageInfo = UtilService::getQRCodePath($codeUrl, $name);
+                $codeUrl = PosterServices::setHttpType($siteUrl . $link, request()->isSsl() ? 0 : 1);//二维码链接
+                $imageInfo = PosterServices::getQRCodePath($codeUrl, $name);
                 if (is_string($imageInfo) && $force)
                     return false;
                 if (is_array($imageInfo)) {
@@ -186,8 +184,8 @@ class QrcodeServices extends BaseServices
             }
             $siteUrl = sys_config('site_url');
             if (!$imageInfo) {
-                $codeUrl = UtilService::setHttpType($siteUrl . $link, request()->isSsl() ? 0 : 1);//二维码链接
-                $imageInfo = UtilService::getQRCodePath($codeUrl, $name);
+                $codeUrl = PosterServices::setHttpType($siteUrl . $link, request()->isSsl() ? 0 : 1);//二维码链接
+                $imageInfo = PosterServices::getQRCodePath($codeUrl, $name);
                 if (is_string($imageInfo) && $force)
                     return false;
                 if (is_array($imageInfo)) {
@@ -292,8 +290,8 @@ class QrcodeServices extends BaseServices
                 }
                 $imageInfo = $upload->getUploadInfo();
                 $imageInfo['image_type'] = $uploadType;
-                if ($imageInfo['image_type'] == 1) $remoteImage = UtilService::remoteImage($siteUrl . $imageInfo['dir']);
-                else $remoteImage = UtilService::remoteImage($imageInfo['dir']);
+                if ($imageInfo['image_type'] == 1) $remoteImage = PosterServices::remoteImage($siteUrl . $imageInfo['dir']);
+                else $remoteImage = PosterServices::remoteImage($imageInfo['dir']);
                 if (!$remoteImage['status']) return false;
                 if ($isSaveAttach) {
                     $systemAttachmentService->save([

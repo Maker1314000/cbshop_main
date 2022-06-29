@@ -86,9 +86,9 @@ class AuthController
      * 获取小程序订阅消息id
      * @return mixed
      */
-    public function teml_ids()
+    public function temp_ids()
     {
-        return app('json')->success($this->services->temlIds());
+        return app('json')->success($this->services->tempIds());
     }
 
     /**

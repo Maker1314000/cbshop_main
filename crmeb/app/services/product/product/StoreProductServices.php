@@ -668,9 +668,10 @@ class StoreProductServices extends BaseServices
      * @param array $valueList
      * @param int $productId
      * @param int $type
+     * @param int $validate
      * @return array
      */
-    public function validateProductAttr(array $attrList, array $valueList, int $productId, $type = 0)
+    public function validateProductAttr(array $attrList, array $valueList, int $productId, $type = 0, int $validate = 1)
     {
         $result = ['attr' => $attrList, 'value' => $valueList];
         $attrValueList = [];
@@ -706,13 +707,13 @@ class StoreProductServices extends BaseServices
             if (!isset($value['price']) || !is_numeric($value['price']) || floatval($value['price']) != $value['price']) {
                 throw new AdminException(400578);
             }
-            if (!isset($value['stock']) || !is_numeric($value['stock']) || intval($value['stock']) != $value['stock']) {
-                throw new AdminException(400579);
+            if ($validate && (!isset($value['stock']) || !is_numeric($value['stock']) || intval($value['stock']) != $value['stock'])) {
+                throw new AdminException(4005792);
             }
             if (!isset($value['cost']) || !is_numeric($value['cost']) || floatval($value['cost']) != $value['cost']) {
                 throw new AdminException(400580);
             }
-            if (!isset($value['pic']) || empty($value['pic'])) {
+            if ($validate && (!isset($value['pic']) || empty($value['pic']))) {
                 throw new AdminException(400581);
             }
             foreach ($value['detail'] as $attrName => $attrValue) {
@@ -747,13 +748,12 @@ class StoreProductServices extends BaseServices
         $skuArray = $storeProductAttrValueServices->getColumn(['product_id' => $productId, 'type' => $type], 'unique', 'suk');
         foreach ($valueList as $k => $value) {
             $sku = implode(',', $value['detail']);
-            $valueGroup[$sku] = [
+            $skuValue = [
                 'product_id' => $productId,
                 'suk' => $sku,
                 'price' => $value['price'],
                 'cost' => $value['cost'],
                 'ot_price' => $value['ot_price'],
-                'stock' => $value['stock'],
                 'unique' => $skuArray[$sku] ?? '',
                 'image' => $value['pic'],
                 'bar_code' => $value['bar_code'] ?? '',
@@ -770,6 +770,11 @@ class StoreProductServices extends BaseServices
                 'virtual_list' => $value['virtual_list'] ?? [],
                 'disk_info' => $value['disk_info'] ?? '',
             ];
+
+            if ($validate) {
+                $skuValue['stock'] = $value['stock'];
+            }
+            $valueGroup[$sku] = $skuValue;
         }
 
         if (!count($attrGroup) || !count($valueGroup)) {

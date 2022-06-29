@@ -2803,7 +2803,7 @@ CREATE TABLE IF NOT EXISTS `eb_store_product` (
   `is_postage` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否包邮',
   `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否删除',
   `mer_use` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商户是否代理 0不可代理1可代理',
-  `give_integral` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '获得积分',
+  `give_integral` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '获得积分',
   `cost` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '成本价',
   `is_seckill` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '秒杀状态 0 未开启 1已开启',
   `is_bargain` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '砍价状态 0未开启 1开启',
@@ -3287,7 +3287,6 @@ CREATE TABLE IF NOT EXISTS `eb_store_service` (
 
 INSERT INTO `eb_store_service` (`id`, `mer_id`, `uid`, `online`, `account`, `password`, `avatar`, `nickname`, `phone`, `add_time`, `status`, `notify`, `customer`, `uniqid`) VALUES
 (1, 0, 1, 0, '13000000000', '$2y$10$0sJdnsv5WgffssRfdBfir.JEiM5y5CG7Jo9S/VFADNnIWeR5h9uvi', '/statics/system_images/default_avatar.jpeg', 'CRMEB', '13000000000', 1642573891, 1, 1, 1, '');
-
 
 -- --------------------------------------------------------
 
@@ -7518,7 +7517,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (122, 'system_delivery_time', 'text', 'number', 27, '', 0, 'required:true,digits:true,min:0', 100, 0, '7', '自动收货时间', '系统自动收货时间,单位(天),0为不设置自动收货', 80, 1),
 (123, 'sms_account', 'text', 'input', 18, '', 0, '', 100, 0, '\"\"', '账号', '短信后台的登录账号', 0, 1),
 (137, 'sms_token', 'text', 'input', 18, '', 0, '', 100, 0, '\"\"', 'token/密码', 'token(注册时候的密码)', 0, 1),
-(138, 'h5_avatar', 'upload', 'input', 26, '', 1, '', 0, 0, '\"\\/statics\\/system_images\\/default_avatar.jpeg\"', '用户H5默认头像', '用户H5默认头像尺寸(80*80)', 3, 1),
+(138, 'h5_avatar', 'upload', 'input', 101, '', 1, '', 0, 0, '\"\\/statics\\/system_images\\/default_avatar.jpeg\"', '用户H5默认头像', '用户H5默认头像尺寸(80*80)', 3, 1),
 (139, 'offline_pay_status', 'radio', '', 29, '1=>开启\n2=>关闭', 0, '', 0, 0, '1', '线下支付状态', '线下支付请选择开启或关闭', 0, 1),
 (141, 'recharge_switch', 'radio', 'input', 28, '1=>开启\n0=>关闭', 1, '', 0, 0, '0', '小程序充值开关', '小程序提交审核前,需要关闭此功能', 4, 1),
 (142, 'tengxun_map_key', 'text', 'input', 26, '', 1, '', 0, 0, '\"SMJBZ-WCHK4-ZPZUA-DSIXI-XDDVQ-XWFX7\"', '腾讯地图KEY', '腾讯地图KEY，申请地址：https://lbs.qq.com', 0, 1),
@@ -7553,7 +7552,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (191, 'order_give_integral', 'text', 'input', 11, '', 0, '', 100, 0, '\"1\"', '下单赠送积分', '下单支付金额按比例赠送积分（实际支付1元赠送多少积分）', 0, 1),
 (193, 'member_func_status', 'radio', '', 45, '1=>开启\n0=>关闭', 0, '', 0, 0, '1', '用户等级启用', '商城用户等级功能开启|关闭', 0, 1),
 (194, 'member_price_status', 'radio', '', 67, '1=>开启\n0=>关闭', 0, '', 0, 0, '1', '商品会员折扣价展示启用', '商城商城会员折扣价格展示', 0, 1),
-(195, 'store_user_mobile', 'radio', '', 26, '1=>强制\n0=>不强制', 0, '', 0, 0, '0', '强制手机号登录', '商城用户强制手机号登录', 0, 1),
+(195, 'store_user_mobile', 'radio', '', 101, '1=>强制\n0=>不强制', 0, '', 0, 0, '0', '强制手机号登录', '商城用户强制手机号登录', 0, 1),
 (196, 'order_give_exp', 'text', 'input', 45, '', 0, '', 100, 0, '\"1\"', '下单赠送用户经验比例（实际支付1元赠送多少经验）', '下单赠送用户经验比例（实际支付1元赠送多少经验）', 0, 1),
 (198, 'sign_give_exp', 'text', 'input', 45, '', 0, '', 100, 0, '\"20\"', '签到赠送用户经验值', '签到赠送用户经验值', 0, 1),
 (199, 'invite_user_exp', 'text', 'input', 45, '', 0, '', 100, 0, '\"50\"', '邀请新用户赠送用户经验值', '邀请一个新用户赠送用户经验值', 0, 1),
@@ -7647,11 +7646,11 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (395, 'aliyun_AccessKeySecret', 'text', 'input', 98, '', 1, '', 100, 0, '\"\"', '阿里云AccessKeySecret', '阿里云AccessKeySecret', 99, 1),
 (396, 'aliyun_RegionId', 'text', 'input', 98, '', 1, '', 100, 0, '\"\"', '阿里云RegionId', '阿里云RegionId', 98, 1),
 (397, 'aliyun_SignName', 'text', 'input', 98, '', 1, '', 100, 0, '\"\"', '短信签名', '短信签名', 97, 1),
-(402, 'tencent_sms_region', 'text', 'input', 99, '', 1, '', 100, 0, '\"ap-beijing\"', '短信区域', '短信区域ap-beijing、ap-guangzhou、ap-nanjing任选其一填写', 0, 1),
-(401, 'tencent_sms_sign_name', 'text', '', 99, '', 1, '', 100, 0, '\"\"', '腾讯云短信签名', '腾讯云短信签名', 0, 1),
-(400, 'tencent_sms_secret_key', 'text', 'input', 99, '', 1, '', 100, 0, '\"\"', 'AccessKeySecret', '腾讯云AccessKeySecret', 0, 1),
+(398, 'tencent_sms_app_id', 'text', 'input', 99, '', 1, '', 100, 0, '\"\"', 'SKD AppID', '腾讯云短信应用SKD APPID', 0, 1),
 (399, 'tencent_sms_secret_id', 'text', 'input', 99, '', 1, '', 100, 0, '\"\"', 'AccessKeyId', '腾讯云AccessKeyId', 0, 1),
-(398, 'tencent_sms_app_id', 'text', 'input', 99, '', 1, '', 100, 0, '\"\"', 'SKD AppID', '腾讯云短信应用SKD APPID', 0, 1);
+(400, 'tencent_sms_secret_key', 'text', 'input', 99, '', 1, '', 100, 0, '\"\"', 'AccessKeySecret', '腾讯云AccessKeySecret', 0, 1),
+(401, 'tencent_sms_sign_name', 'text', '', 99, '', 1, '', 100, 0, '\"\"', '腾讯云短信签名', '腾讯云短信签名', 0, 1),
+(402, 'tencent_sms_region', 'text', 'input', 99, '', 1, '', 100, 0, '\"ap-beijing\"', '短信区域', '短信区域ap-beijing、ap-guangzhou、ap-nanjing任选其一填写', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -7679,28 +7678,28 @@ CREATE TABLE IF NOT EXISTS `eb_system_config_tab` (
 INSERT INTO `eb_system_config_tab` (`id`, `pid`, `title`, `eng_title`, `status`, `info`, `icon`, `type`, `sort`) VALUES
 (1, 0, '基础配置', 'basics', 1, 0, 'ios-settings', 0, 100),
 (2, 78, '公众号配置(H5)', 'wechat', 1, 0, 'ios-chatbubbles', 3, 0),
-(4, 23, '微信支付配置', 'pay', 1, 0, 'ios-chatbubbles', 0, 0),
+(4, 23, '微信支付配置', 'pay', 1, 0, 'ios-chatbubbles', 3, 0),
 (5, 0, '商城配置', 'store', 1, 0, 'md-cart', 0, 90),
 (7, 78, '小程序配置', 'routine', 1, 0, 'logo-android', 3, 0),
 (9, 0, '分销配置', 'fenxiao', 1, 0, 'md-contacts', 3, 0),
-(11, 5, '积分配置', 'point', 1, 0, 'logo-euro', 3, 0),
+(11, 100, '用户积分配置', 'point', 1, 0, 'logo-euro', 0, 0),
 (18, 65, '一号通', 'system_sms', 0, 0, 'ios-chatboxes', 3, 0),
 (21, 65, '小票打印配置', 'printing_deploy', 1, 0, 'logo-buffer', 3, 0),
-(23, 0, '支付配置', 'pay_config', 1, 0, 'logo-usd', 0, 70),
+(23, 65, '商城支付配置', 'pay_config', 1, 0, 'logo-usd', 3, 70),
 (26, 1, '站点配置', 'web_site', 1, 0, '', 0, 100),
 (27, 5, '商城基础配置', 'store_base', 1, 0, '', 0, 100),
-(28, 5, '用户充值配置', 'recharge_site', 1, 0, '', 0, 2),
-(29, 23, '线下支付配置', 'offline_pay', 1, 0, '', 0, 0),
-(30, 23, '余额支付配置', 'balance_pay', 1, 0, '', 0, 0),
+(28, 100, '用户充值配置', 'recharge_site', 1, 0, '', 0, 2),
+(29, 23, '线下支付配置', 'offline_pay', 1, 0, '', 3, 0),
+(30, 23, '余额支付配置', 'balance_pay', 1, 0, '', 3, 0),
 (31, 79, '基础配置', 'base_config', 0, 0, '', 0, 0),
 (41, 65, '采集商品配置', 'copy_product', 1, 0, '', 3, 0),
-(45, 5, '用户等级配置', 'store_member', 1, 0, '', 0, 3),
+(45, 100, '用户等级配置', 'store_member', 1, 0, '', 0, 3),
 (50, 5, '发票功能配置', 'store_invoice', 1, 0, '', 0, 0),
-(63, 23, '支付宝支付配置', 'ali_pay', 1, 0, '', 0, 0),
+(63, 23, '支付宝支付配置', 'ali_pay', 1, 0, '', 3, 0),
 (64, 65, '物流查询配置', 'logistics_select', 1, 0, '', 3, 0),
-(65, 0, '第三方接口设置', 'system_serve', 1, 0, 'md-briefcase', 3, 0),
+(65, 0, '接口设置', 'system_serve', 1, 0, 'md-briefcase', 3, 0),
 (66, 65, '电子面单配置', 'electronic_sheet', 1, 0, '', 3, 0),
-(67, 5, '付费会员配置', 'member_card', 1, 0, '', 0, 2),
+(67, 100, '付费会员配置', 'member_card', 1, 0, '', 0, 2),
 (69, 5, '客服端配置', 'kefu_config', 1, 0, '', 0, 0),
 (70, 5, '首页分享配置', 'share_index_config', 1, 0, '', 0, 0),
 (71, 5, '售后退款配置', 'refund_config', 1, 0, '', 0, 0),
@@ -7722,11 +7721,13 @@ INSERT INTO `eb_system_config_tab` (`id`, `pid`, `title`, `eng_title`, `status`,
 (92, 64, '阿里云配置', 'logistics_aliyun', 1, 0, '', 3, 0),
 (93, 66, '基础配置', 'electronic_basic', 1, 0, '', 3, 0),
 (94, 66, '一号通配置', 'system_electronic_config', 1, 0, '', 3, 0),
-(95, 23, '好友代付', 'friend_pay', 1, 0, '', 0, 0),
+(95, 23, '好友代付', 'friend_pay', 1, 0, '', 3, 0),
 (96, 65, '短信接口配置', 'sms_config', 1, 0, '', 3, 0),
 (97, 96, '基础配置', 'sms_config_basic', 1, 0, '', 3, 0),
 (98, 96, '阿里云配置', 'sms_aliyun', 1, 0, '', 3, 0),
-(99, 96, '腾讯云短信', 'tencent_sms', 1, 0, '', 0, 0);
+(99, 96, '腾讯云短信', 'tencent_sms', 1, 0, '', 0, 0),
+(100, 0, '用户配置', 'system_user_config', 1, 0, 'md-contact', 0, 0),
+(101, 100, '用户基础配置', 'user_config_basic', 1, 0, '', 0, 100);
 
 -- --------------------------------------------------------
 
@@ -8009,7 +8010,6 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (76, 32, '', '拼团列表', 'admin', 'marketing.store_combination', 'combina_list', '', '', '[]', 0, 1, 0, 1, '/admin/marketing/store_combination/combina_list', '', 1, 'marketing', 0, 'marketing-store_combination-combina_list', 0),
 (77, 33, '', '秒杀商品', 'admin', 'marketing.store_seckill', 'index', '', '', '[]', 0, 1, 0, 1, '/admin/marketing/store_seckill/index', '', 1, 'marketing', 1, 'marketing-store_seckill', 0),
 (78, 33, '', '秒杀配置', 'admin', 'marketing.store_seckill', 'index', '', '', '[]', 0, 1, 0, 1, '/admin/marketing/store_seckill_data/index/49', '', 1, 'marketing', 1, 'marketing-store_seckill-data', 0),
-(79, 34, '', '积分配置', 'admin', 'setting.system_config/index.html', 'index', '', '', '[]', 0, 1, 0, 1, '/admin/marketing/integral/system_config/3/11', '', 1, 'marketing', 1, 'marketing-integral-system_config', 0),
 (90, 32, '', '拼团添加', 'admin', 'marketing.store_combination', '', '', '', '[]', 0, 1, 0, 1, '/admin/marketing/store_combination/add_commodity/:id', '', 1, 'marketing', 0, '', 1),
 (91, 69, '', '公众号配置', 'admin', 'application.wechat', '', '', '', '[]', 0, 1, 0, 1, '/admin/app/wechat/setting', '', 1, 'app', 0, '', 1),
 (92, 69, '', '微信菜单', 'admin', 'application.wechat_menus', 'index', '', '', '[]', 0, 1, 0, 1, '/admin/app/wechat/setting/menus/index', '', 1, 'app', 0, 'application-wechat-menus', 0),
@@ -8603,8 +8603,6 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (834, 95, '', '短信记录列表', 'admin', '', '', 'notify/sms/record', 'GET', '[]', 0, 0, 0, 1, 'notify/sms/record', '', 2, '', 0, '', 0),
 (835, 28, '', '分销设置表单', 'admin', '', '', 'agent/config/edit_basics', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (836, 28, '', '分销设置表单提交', 'admin', '', '', 'agent/config/save_basics', 'POST', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(837, 79, '', '积分配置表单', 'admin', '', '', 'marketing/integral_config/edit_basics', 'GET', '[]', 0, 1, 0, 1, '', '', 2, '', 0, '', 0),
-(838, 79, '', '积分配置表单提交', 'admin', '', '', 'marketing/integral_config/save_basics', 'POST', '[]', 0, 1, 0, 1, '', '', 2, '', 0, '', 0),
 (843, 154, '', '签到天数头部数据', 'admin', '', '', 'setting/sign_data/header', 'GET', '[]', 0, 1, 0, 1, '', '', 2, '', 0, '', 0),
 (844, 154, '', '设置签到数据状态', 'admin', '', '', 'setting/sign_data/set_status/<id>/<status>', 'PUT', '[]', 0, 1, 0, 1, '', '', 2, '', 0, '', 0),
 (845, 154, '', '签到天数列表', 'admin', '', '', 'setting/sign_data', 'GET', '[]', 0, 1, 0, 1, '', '', 2, '', 0, '', 0),
@@ -8701,7 +8699,6 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (972, 909, '', '抽奖状态', 'admin', '', '', 'marketing/lottery/set_status/<id>/<status>', 'POST', '[]', 0, 0, 0, 1, '', '27/909', 2, '', 0, '', 0),
 (973, 909, '', '添加抽奖', 'admin', '', '', 'marketing/lottery/add', 'POST', '[]', 0, 0, 0, 1, '', '27/909', 2, '', 0, '', 0),
 (975, 28, '', '分销配置头部', 'admin', '', '', 'setting/config/header_basics', 'GET', '[]', 0, 0, 0, 1, '', '26/28', 2, '', 0, '', 0),
-(976, 717, '', '查看商品', 'admin', '', '', 'product/product/<id>', 'GET', '[]', 0, 0, 0, 1, '', '716/717', 2, '', 0, '', 0),
 (977, 657, '', '获取风格设置', 'admin', '', '', 'diy/get_color_change/<type>', 'GET', '[]', 0, 0, 0, 1, '', '12/656/657', 2, '', 0, '', 0),
 (978, 657, '', '获取个人中心菜单', 'admin', '', '', 'diy/get_member', 'GET', '[]', 0, 0, 0, 1, '', '12/656/657', 2, '', 0, '', 0),
 (979, 657, '', '个人中心组件分类', 'admin', '', '', 'diy/get_page_category', 'GET', '[]', 0, 0, 0, 1, '', '12/656/657', 2, '', 0, '', 0),
@@ -8722,7 +8719,6 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (994, 993, '', '小程序下载', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/app/routine/download', '135/993', 1, '', 0, 'routine-download', 0),
 (995, 994, '', '下载小程序页面数据', 'admin', '', '', 'app/routine/info', 'GET', '[]', 0, 0, 0, 1, '', '135/993/994', 2, '', 0, '', 0),
 (996, 994, '', '下载小程序模版', 'admin', '', '', 'app/routine/download', 'POST', '[]', 0, 0, 0, 1, '', '135/993/994', 2, '', 0, '', 0),
-(997, 716, '', '订单统计', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/statistic/order', '716', 1, '', 0, 'admin-statistic', 0),
 (998, 37, '', '资金流水', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/finance/capital_flow/index', '35/37', 1, '', 0, 'finance-capital_flow-index', 0),
 (999, 37, '', '账单记录', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/finance/billing_records/index', '35/37', 1, '', 0, 'finance-billing_records-index', 0),
 (1000, 566, '', '富文本上传图片', 'admin', '', '', '', '', '[]', 0, 0, 1, 1, '/admin/widget.images/index.html', '25/566', 1, '', 0, 'admin-user-user-index', 0),
@@ -8755,13 +8751,15 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (1052, 1023, '', '获取用户标签', 'admin', '', '', 'user/user_label', 'GET', '[]', 0, 0, 0, 1, '', '27/1023', 2, '', 0, '', 0),
 (1053, 27, '', '充值配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/marketing/recharge', '27', 1, '', 0, 'marketing-recharge-index', 0),
 (1055, 1009, '', '版本管理', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/app/app/version', '135/1009', 1, '', 0, 'admin-app-version', 0),
-(1056, 12, '', '第三方接口配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_config', '12', 1, '', 0, 'setting-other', 0),
+(1056, 12, '', '接口配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_config', '12', 1, '', 0, 'setting-other', 0),
 (1057, 1056, '', '小票打印配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_config/print/2/21', '12/1056', 1, '', 0, 'setting-other-print', 0),
 (1058, 1056, '', '商品采集配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_config/copy/2/41', '12/1056', 1, '', 0, 'setting-other-copy', 0),
 (1059, 1056, '', '物流查询配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_config/logistics/2/64', '12/1056', 1, '', 0, 'setting-other-logistics', 0),
 (1060, 1056, '', '电子面单配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_config/electronic/2/66', '12/1056', 1, '', 0, 'setting-other-electronic', 0),
 (1061, 12, '', '协议设置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/agreement', '12', 1, '', 0, 'setting-agreement', 0),
-(1062, 1056, '', '短信接口配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_config/sms/2/96', '12/1056', 1, '', 0, 'setting-other-sms', 0);
+(1062, 1056, '', '短信接口配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_config/sms/2/96', '12/1056', 1, '', 0, 'setting-other-sms', 0),
+(1063, 1056, '', '商城支付配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_config/pay/2/23', '12/1056', 1, '', 0, 'setting-other-pay', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -8868,6 +8866,7 @@ INSERT INTO `eb_system_notification` (`id`, `mark`, `name`, `title`, `is_system`
 (25, 'send_admin_confirm_take_over', '收货给客服发消息', '收货给客服发消息', 1, 0, 0, 0, 2, 1, '你有个新的用户收货待处理', '您有一笔订单已经确认收货，订单号{order_id}!', 0, 520422, 0, 0, '您有个订单确认收货\\n>订单号{order_id}', '{storeTitle}商品名称,{order_id}订单号', '', 2, 0),
 (26, 'order_pay_false', '提醒付款通知', '提醒付款通知用户提醒发送', 1, 0, 1, 0, 2, 0, '提醒付款通知', '您有未付款订单,订单号为:{order_id}，商品数量有限，请及时付款。', 0, 528116, 40, 0, '0', '', '', 1, 0),
 (27, 'verify_code', '短信验证码', '短信验证码', 0, 0, 0, 0, 2, 0, '短信验证码', '您的验证码是：{code}，有效期为5分钟。如非本人操作，可不予理会。', 0, 538393, 0, 0, '0', '', '', 1, 0);
+
 -- --------------------------------------------------------
 
 --

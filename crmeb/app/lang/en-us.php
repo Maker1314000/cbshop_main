@@ -819,6 +819,8 @@ return [
     400737 => 'Fix the error, please try again',
     400738 => 'Please specify the table to be repaired',
     400739 => 'Please configure payment certificate',
+    400740 => 'Only two-level classification is supported',
+    400741 => 'Freight format error',
 
     410000 => 'Please enter the account number and password',
     410001 => 'Login successful',
@@ -1144,6 +1146,7 @@ return [
     410321 => 'The event has not started',
     410322 => 'The event has ended',
     410323 => 'You already have this coupon, please do not buy it again',
+    410324 => 'Please check the express company code',
 
     //微信相关错误
     -1 => 'The system is busy, please try again later',

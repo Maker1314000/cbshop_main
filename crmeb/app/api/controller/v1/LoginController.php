@@ -13,7 +13,7 @@ namespace app\api\controller\v1;
 
 
 use app\Request;
-use app\services\message\notice\SmsService;
+use app\services\message\notice\NoticeSmsService;
 use app\services\wechat\WechatServices;
 use think\facade\Cache;
 use app\jobs\TaskJob;
@@ -119,7 +119,7 @@ class LoginController
      * @param Request $request
      * @return mixed
      */
-    public function verify(Request $request, SmsService $services)
+    public function verify(Request $request, NoticeSmsService $services)
     {
         [$phone, $type, $key, $code] = $request->postMore([['phone', 0], ['type', ''], ['key', ''], ['code', '']], true);
 

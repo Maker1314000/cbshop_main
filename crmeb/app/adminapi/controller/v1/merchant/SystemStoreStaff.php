@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
@@ -37,6 +37,9 @@ class SystemStoreStaff extends AuthController
     /**
      * 获取店员列表
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function index()
     {
@@ -48,6 +51,7 @@ class SystemStoreStaff extends AuthController
 
     /**
      * 门店列表
+     * @param SystemStoreServices $services
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
@@ -62,6 +66,9 @@ class SystemStoreStaff extends AuthController
      * 店员新增表单
      * @return mixed
      * @throws \FormBuilder\Exception\FormBuilderException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function create()
     {
@@ -72,6 +79,9 @@ class SystemStoreStaff extends AuthController
      * 店员修改表单
      * @return mixed
      * @throws \FormBuilder\Exception\FormBuilderException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function edit()
     {
@@ -83,6 +93,8 @@ class SystemStoreStaff extends AuthController
 
     /**
      * 保存店员信息
+     * @param int $id
+     * @return mixed
      */
     public function save($id = 0)
     {
@@ -162,6 +174,7 @@ class SystemStoreStaff extends AuthController
     /**
      * 删除店员
      * @param $id
+     * @return mixed
      */
     public function delete($id)
     {

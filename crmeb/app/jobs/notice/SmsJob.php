@@ -11,7 +11,6 @@
 
 namespace app\jobs\notice;
 
-
 use app\services\message\notice\SmsService;
 use crmeb\basic\BaseJobs;
 use crmeb\traits\QueueTrait;

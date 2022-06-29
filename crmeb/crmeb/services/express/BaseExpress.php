@@ -11,6 +11,7 @@
 
 namespace crmeb\services\express;
 
+use crmeb\basic\BaseStorage;
 use crmeb\services\AccessTokenServeService;
 
 /**

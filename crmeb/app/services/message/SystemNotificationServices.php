@@ -99,7 +99,6 @@ class SystemNotificationServices extends BaseServices
         $type = $where['type'];
         unset($where['type']);
         $info = $this->dao->getOne($where);
-//        var_dump($info);
         if (!$info) return [];
         $info = $info->toArray();
         switch ($type) {

@@ -14,6 +14,8 @@ namespace app\services\wechat;
 
 use app\services\BaseServices;
 use app\dao\wechat\WechatUserDao;
+use app\services\message\SystemNotificationServices;
+use app\services\message\TemplateMessageServices;
 use app\services\other\QrcodeServices;
 use app\services\user\LoginServices;
 use app\services\user\UserServices;
@@ -190,18 +192,23 @@ class RoutineServices extends BaseServices
      * 获取小程序订阅消息id
      * @return mixed
      */
-    public function temlIds()
+    public function tempIds()
     {
-        $temlIdsName = Config::get('template.stores.subscribe.template_id', []);
-        $temlIdsList = Cache::get('TEML_IDS_LIST', function () use ($temlIdsName) {
-            $temlId = [];
-            $templdata = new Template('subscribe');
-            foreach ($temlIdsName as $key => $item) {
-                $temlId[strtolower($key)] = $templdata->getTempId($item);
+        return Cache::get('TEMP_IDS_LIST', function () {
+            /** @var SystemNotificationServices $sysNotify */
+            $sysNotify = app()->make(SystemNotificationServices::class);
+            $marks = $sysNotify->getColumn([['routine_id', '>', 0]], 'routine_id', 'mark');
+            $ids = array_values($marks);
+            /** @var TemplateMessageServices $tempMsgServices */
+            $tempMsgServices = app()->make(TemplateMessageServices::class);
+            $list = $tempMsgServices->getColumn([['id', 'in', $ids]], 'tempid', 'id');
+
+            $tempIdsList = [];
+            foreach ($marks as $key => $item) {
+                $tempIdsList[$key] = $list[$item];
             }
-            return $temlId;
+            return $tempIdsList;
         });
-        return $temlIdsList;
     }
 
     /**

@@ -594,6 +594,15 @@ export default {
       component: () => import('@/pages/setting/setSystem/index'),
     },
     {
+      path: 'other_config/pay/:type?/:tab_id?',
+      name: `${pre}other_pay`,
+      meta: {
+        auth: ['setting-other-pay'],
+        title: '商城支付配置',
+      },
+      component: () => import('@/pages/setting/setSystem/index'),
+    },
+    {
       path: 'agreement',
       name: `${pre}notification`,
       meta: {

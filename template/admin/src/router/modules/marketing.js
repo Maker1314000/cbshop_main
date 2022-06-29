@@ -151,15 +151,6 @@ export default {
       component: () => import('@/pages/marketing/storeSeckill/create'),
     },
     {
-      path: `integral/system_config/:type?/:tab_id?`,
-      name: `${pre}integral`,
-      meta: {
-        auth: ['marketing-integral-system_config'],
-        title: '积分配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
       path: 'store_integral/index',
       name: `${pre}storeIntegral`,
       meta: {
