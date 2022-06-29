@@ -13,6 +13,7 @@ namespace app\services\kefu;
 
 
 use crmeb\exceptions\AuthException;
+use crmeb\services\oauth\OAuth;
 use crmeb\utils\JwtAuth;
 use Firebase\JWT\ExpiredException;
 use think\facade\Cache;
@@ -135,13 +136,9 @@ class LoginServices extends BaseServices
      */
     public function wechatAuth()
     {
-        /** @var WechatOpenService $service */
-        $service = app()->make(WechatOpenService::class);
-        $info = $service->getAuthorizationInfo();
-        if (!$info) {
-            throw new AuthException(410131);
-        }
-        $original = $info->getOriginal();
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class);
+        $original = $oauth->oauth(null, ['open' => true]);
         if (!isset($original['unionid'])) {
             throw new AuthException(410132);
         }

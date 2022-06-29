@@ -22,6 +22,7 @@ use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
 use crmeb\services\CacheService as Cache;
 use crmeb\services\app\MiniProgramService;
+use crmeb\services\oauth\OAuth;
 use crmeb\services\template\Template;
 use think\facade\Config;
 
@@ -55,31 +56,13 @@ class RoutineServices extends BaseServices
      */
     public function mp_auth($code, $post_cache_key, $login_type, $spread_spid, $spread_code, $iv, $encryptedData)
     {
-        $session_key = Cache::get('eb_api_code_' . $post_cache_key);
-        $userInfoCong = [];
-        if (!$code && !$session_key)
-            throw new ApiException(410074);
-        if ($code && !$session_key) {
-            try {
-                $userInfoCong = MiniProgramService::getUserInfo($code);
-                $session_key = $userInfoCong['session_key'];
-                $cache_key = md5(time() . $code);
-                Cache::set('eb_api_code_' . $cache_key, $session_key, 86400);
-                if (!isset($userInfoCong['openid'])) {
-                    throw new ApiException(410075);
-                }
-            } catch (\Exception $e) {
-                throw new ApiException(410076);
-            }
-        }
-        try {
-            //解密获取用户信息
-            $userInfo = MiniProgramService::encryptor($session_key, $iv, $encryptedData);
-        } catch (\Exception $e) {
-            if ($e->getCode() == '-41003') {
-                throw new ApiException(410077);
-            }
-        }
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class, ['mini_program']);
+        [$userInfoCong, $userInfo] = $oauth->oauth($code, [
+            'iv' => $iv,
+            'encryptedData' => $encryptedData
+        ]);
+        $session_key = $userInfoCong['session_key'];
         $userInfo['unionId'] = isset($userInfoCong['unionid']) ? $userInfoCong['unionid'] : '';
         $userInfo['openId'] = $openid = $userInfoCong['openid'];
         $userInfo['spid'] = $spread_spid;
@@ -122,26 +105,17 @@ class RoutineServices extends BaseServices
      */
     public function newAuth($code, $spid, $spread, $iv, $encryptedData)
     {
-        if (!$code)
+        if (!$code) {
             throw new ApiException(100100);
-        $session_key = '';
-        try {
-            $userInfoCong = MiniProgramService::getUserInfo($code);
-            $session_key = $userInfoCong['session_key'];
-        } catch (\Exception $e) {
-            throw new ApiException(410076);
         }
-        try {
-            //解密获取用户信息
-            $userInfo = MiniProgramService::encryptor($session_key, $iv, $encryptedData);
-        } catch (\Exception $e) {
-            if ($e->getCode() == '-41003') {
-                throw new ApiException(410077);
-            }
-        }
-        if (!isset($userInfoCong['openid'])) {
-            throw new ApiException(410075);
-        }
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class, ['mini_program']);
+        [$userInfoCong, $userInfo] = $oauth->oauth($code, [
+            'iv' => $iv,
+            'encryptedData' => $encryptedData
+        ]);
+        $session_key = $userInfoCong['session_key'];
+
         $userInfo['unionId'] = isset($userInfoCong['unionid']) ? $userInfoCong['unionid'] : '';
         $userInfo['openId'] = $openid = $userInfoCong['openid'];
         $userInfo['spid'] = $spid;
@@ -256,7 +230,10 @@ class RoutineServices extends BaseServices
      */
     public function silenceAuth($code, $spread, $spid)
     {
-        $userInfoConfig = MiniProgramService::getUserInfo($code);
+
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class, ['mini_program']);
+        $userInfoConfig = $oauth->oauth($code, ['silence' => true]);
         if (!isset($userInfoConfig['openid'])) {
             throw new ApiException(410078);
         }
@@ -313,7 +290,9 @@ class RoutineServices extends BaseServices
      */
     public function silenceAuthNoLogin($code, $spread, $spid)
     {
-        $userInfoConfig = MiniProgramService::getUserInfo($code);
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class, ['mini_program']);
+        $userInfoConfig = $oauth->oauth($code, ['silence' => true]);
         if (!isset($userInfoConfig['openid'])) {
             throw new ApiException(410078);
         }
@@ -362,7 +341,9 @@ class RoutineServices extends BaseServices
      */
     public function silenceAuthBindingPhone($code, $spread, $spid, $phone)
     {
-        $userInfoConfig = MiniProgramService::getUserInfo($code);
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class, ['mini_program']);
+        $userInfoConfig = $oauth->oauth($code, ['silence' => true]);
         if (!isset($userInfoConfig['openid'])) {
             throw new ApiException(410078);
         }
@@ -408,22 +389,17 @@ class RoutineServices extends BaseServices
         if ($key) {
             [$openid, $wechatInfo, $spreadId, $login_type, $userType] = $createData = CacheService::getTokenBucket($key);
         }
-        try {
-            $userInfoCong = MiniProgramService::getUserInfo($code);
-            $session_key = $userInfoCong['session_key'];
-        } catch (\Exception $e) {
-            throw new ApiException(410076);
-        }
-        try {
-            //解密获取用户信息
-            $userInfo = MiniProgramService::encryptor($session_key, $iv, $encryptedData);
-            if (!$userInfo || !isset($userInfo['purePhoneNumber'])) {
-                throw new ApiException(410079);
-            }
-        } catch (\Exception $e) {
-            if ($e->getCode() == '-41003') {
-                throw new ApiException(410077);
-            }
+
+
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class, ['mini_program']);
+        [$userInfoCong, $userInfo] = $oauth->oauth($code, [
+            'iv' => $iv,
+            'encryptedData' => $encryptedData
+        ]);
+        $session_key = $userInfoCong['session_key'];
+        if (!$userInfo || !isset($userInfo['purePhoneNumber'])) {
+            throw new ApiException(410079);
         }
 
         $spreadId = $spid ?? 0;
