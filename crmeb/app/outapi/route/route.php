@@ -36,6 +36,20 @@ Route::group(function () {
         Route::put('product/:id', 'StoreProduct/update')->option(['real_name' => '修改商品']);
         Route::get('product/:id', 'StoreProduct/read')->option(['real_name' => '获取商品']);
         Route::put('product/set_show/:id/:is_show', 'StoreProduct/set_show')->option(['real_name' => '修改商品状态']);
+
+        //订单
+        Route::get('order/list', 'StoreOrder/lst')->name('StoreOrderList')->option(['real_name' => '订单列表']);
+        Route::get('order/:id', 'StoreOrder/read')->name('StoreOrderInfo')->option(['real_name' => '订单详情']);
+        Route::put('order/remark/:id', 'StoreOrder/remark')->name('StoreOrderRemark')->option(['real_name' => '修改备注信息']);
+        Route::put('order/receive/:id', 'StoreOrder/receive')->name('StoreOrderReceive')->option(['real_name' => '确认收货']);
+        Route::get('order/express_list', 'StoreOrder/express')->name('StoreOrderExpress')->option(['real_name' => '获取物流公司']);
+        Route::put('order/delivery/:id', 'StoreOrder/delivery')->name('StoreOrderDelivery')->option(['real_name' => '订单发送货']);
+        Route::put('order/distribution/:id', 'StoreOrder/updateDistribution')->name('StoreOrderDistribution')->option(['real_name' => '修改配送信息']);
+        Route::get('order/split_cart_info/:id', 'StoreOrder/splitCartInfo')->name('StoreOrderSplitCartInfo')->option(['real_name' => '获取订单可拆分商品列表']);
+        Route::put('order/split_delivery/:id', 'StoreOrder/splitDelivery')->name('StoreOrderSplitDelivery')->option(['real_name' => '拆单发送货']);
+        Route::put('order/invoice/:id', 'StoreOrder/setInvoice')->option(['real_name' => '修改订单发票']);
+        Route::put('order/invoice_status/:id', 'StoreOrder/setInvoiceStatus')->option(['real_name' => '修改订单发票状态']);
+
     })->middleware(AuthTokenMiddleware::class);
 
 })->middleware(AllowOriginMiddleware::class);
