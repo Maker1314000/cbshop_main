@@ -399,6 +399,14 @@ class StoreIntegralOrderServices extends BaseServices
         }
         $type = (int)$data['type'];
         unset($data['type']);
+        if ($type == 1) {
+            // 检测快递公司编码
+            /** @var ExpressServices $expressServices */
+            $expressServices = app()->make(ExpressServices::class);
+            if (!$expressServices->be(['code' => $data['delivery_code']])) {
+                throw new AdminException(410324);
+            }
+        }
         switch ($type) {
             case 1:
                 //发货
@@ -608,10 +616,7 @@ class StoreIntegralOrderServices extends BaseServices
             case 'express':
                 /** @var ExpressServices $expressServices */
                 $expressServices = app()->make(ExpressServices::class);
-                $f[] = Form::select('delivery_name', '快递公司', (string)$orderInfo->getData('delivery_name'))->setOptions(array_map(function ($item) {
-                    $item['value'] = $item['label'];
-                    return $item;
-                }, $expressServices->expressSelectForm(['is_show' => 1])))->required('请选择快递公司');
+                $f[] = Form::select('delivery_code', '快递公司', (string)$orderInfo->getData('delivery_code'))->setOptions($expressServices->expressSelectForm(['is_show' => 1]))->required('请选择快递公司');
                 $f[] = Form::input('delivery_id', '快递单号', $orderInfo->getData('delivery_id'))->required('请填写快递单号');
                 break;
         }
@@ -672,11 +677,13 @@ class StoreIntegralOrderServices extends BaseServices
                 }
                 break;
             case 'express':
-                if (!$data['delivery_name']) {
-                    throw new AdminException(400007);
-                }
-                if (!$data['delivery_id']) {
-                    throw new AdminException(400531);
+                // 检测快递公司编码
+                /** @var ExpressServices $expressServices */
+                $expressServices = app()->make(ExpressServices::class);
+                if ($name = $expressServices->value(['code' => $data['delivery_code']], 'name')) {
+                    $data['delivery_name'] = $name;
+                } else {
+                    throw new AdminException(410324);
                 }
                 break;
             default:
