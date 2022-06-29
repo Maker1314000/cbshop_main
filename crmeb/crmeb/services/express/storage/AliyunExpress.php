@@ -13,13 +13,25 @@ namespace crmeb\services\express\storage;
 
 use crmeb\services\express\BaseExpress;
 
-class AliyunService extends BaseExpress
+/**
+ * Class AliyunExpress
+ * @package crmeb\services\express\storage
+ */
+class AliyunExpress extends BaseExpress
 {
+    /**
+     * @var string[]
+     */
     protected static $api = [
         'query' => 'https://wuliu.market.alicloudapi.com/kdi'
     ];
 
-    public function query(string $no = '',string $type = '')
+    /**
+     * @param string $no
+     * @param string $type
+     * @return bool|mixed
+     */
+    public function query(string $no = '', string $type = '')
     {
         $appCode = sys_config('system_express_app_code');
         if (!$appCode) return false;

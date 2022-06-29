@@ -25,8 +25,6 @@ use crmeb\services\CacheService;
 use crmeb\services\CacheService as Cache;
 use crmeb\services\app\MiniProgramService;
 use crmeb\services\oauth\OAuth;
-use crmeb\services\template\Template;
-use think\facade\Config;
 
 /**
  *

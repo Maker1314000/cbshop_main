@@ -15,6 +15,10 @@ use crmeb\exceptions\AdminException;
 use app\services\other\UploadService;
 use crmeb\services\app\WechatService;
 
+/**
+ * Class WechatQrcodeServices
+ * @package app\services\wechat
+ */
 class WechatQrcodeServices extends BaseServices
 {
     /**

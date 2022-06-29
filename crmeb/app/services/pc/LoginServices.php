@@ -18,8 +18,6 @@ use app\services\user\UserServices;
 use app\services\wechat\WechatUserServices;
 use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
-use crmeb\services\app\WechatOpenService;
-use crmeb\services\app\WechatService as WechatAuthService;
 use crmeb\services\oauth\OAuth;
 use think\facade\Cache;
 
