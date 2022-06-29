@@ -533,7 +533,7 @@ class StoreOrder extends AuthController
      */
     public function update_distribution(StoreOrderDeliveryServices $services, $id)
     {
-        $data = $this->request->postMore([['delivery_name', ''], ['delivery_id', '']]);
+        $data = $this->request->postMore([['delivery_name', ''], ['delivery_code', ''], ['delivery_id', '']]);
         if (!$id) return app('json')->fail(100100);
         $services->updateDistribution($id, $data);
         return app('json')->success(100010);

@@ -241,7 +241,7 @@
 	import titles from './components/titles';
 	import appUpdate from "@/components/update/app-update.vue";
 	import {
-		getTemlIds
+    getTempIds
 	} from '@/api/api.js';
 	import {
 		SUBSCRIBE_MESSAGE,
@@ -406,7 +406,7 @@
 			this.diyData();
 			this.getIndexData();
 			// #ifdef MP
-			this.getTemlIds();
+			this.getTempIds();
 			// #endif
 			// #ifndef APP-PLUS
 			siteConfig().then(res => {
@@ -478,10 +478,10 @@
 			closeModel() {
 				//退出app
 				uni.getSystemInfo({
-					success: function(res) { // 判断为安卓的手机 
-						if (res.platform == 'android') { // 安卓退出app      
+					success: function(res) { // 判断为安卓的手机
+						if (res.platform == 'android') { // 安卓退出app
 							plus.runtime.quit();
-						} else { // 判断为ios的手机，退出App      
+						} else { // 判断为ios的手机，退出App
 							plus.ios.import("UIApplication").sharedApplication().performSelector("exit");
 
 						}
@@ -678,10 +678,10 @@
 			// #endif
 
 			// #ifdef MP
-			getTemlIds() {
+      getTempIds() {
 				let messageTmplIds = wx.getStorageSync(SUBSCRIBE_MESSAGE);
 				if (!messageTmplIds) {
-					getTemlIds().then(res => {
+          getTempIds().then(res => {
 						if (res.data) wx.setStorageSync(SUBSCRIBE_MESSAGE, JSON.stringify(res.data));
 					});
 				}

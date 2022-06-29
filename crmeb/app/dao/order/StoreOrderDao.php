@@ -831,4 +831,24 @@ class StoreOrderDao extends BaseDao
         })->order('refund_reason_time desc')->select()->toArray();
         return compact('list', 'count');
     }
+
+    /**
+     * 订单搜索列表
+     * @param array $where
+     * @param array $field
+     * @param int $page
+     * @param int $limit
+     * @param array $with
+     * @param string $order
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function getOutOrderList(array $where, array $field, int $page = 0, int $limit = 0, array $with = [], string $order = 'add_time DESC,id DESC'): array
+    {
+        return $this->search($where)->field($field)->with(array_merge(['user'], $with))->when($page && $limit, function ($query) use ($page, $limit) {
+            $query->page($page, $limit);
+        })->order($order)->select()->toArray();
+    }
 }

@@ -105,7 +105,7 @@
 	import pictureCube from '@/pages/index/diy/components/pictureCube';
 
 	import {
-		getTemlIds
+    getTempIds
 	} from '@/api/api.js';
 	import {
 		SUBSCRIBE_MESSAGE,
@@ -237,7 +237,7 @@
 			this.setOpenShare();
 			// #endif
 			// #ifdef MP || APP-PLUS
-			this.getTemlIds();
+			this.getTempIds();
 			// #endif
 			getShare().then(res => {
 				this.shareInfo = res.data;
@@ -344,10 +344,10 @@
 			// #endif
 
 			// #ifdef MP || APP-PLUS
-			getTemlIds() {
+      getTempIds() {
 				let messageTmplIds = wx.getStorageSync(SUBSCRIBE_MESSAGE);
 				if (!messageTmplIds) {
-					getTemlIds().then(res => {
+          getTempIds().then(res => {
 						if (res.data) wx.setStorageSync(SUBSCRIBE_MESSAGE, JSON.stringify(res.data));
 					});
 				}

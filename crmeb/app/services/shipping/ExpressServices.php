@@ -172,7 +172,7 @@ class ExpressServices extends BaseServices
         //$list = $this->dao->getExpress($where, 'name', 'id');
         $data = [];
         foreach ($list as $key => $value) {
-            $data[] = ['label' => $value['name'], 'value' => $value['id']];
+            $data[] = ['label' => $value['name'], 'value' => $value['code']];
         }
         return $data;
     }

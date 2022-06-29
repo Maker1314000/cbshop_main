@@ -241,7 +241,7 @@ class StoreIntegralOrder extends AuthController
      */
     public function update_distribution($id)
     {
-        $data = $this->request->postMore([['delivery_name', ''], ['delivery_id', '']]);
+        $data = $this->request->postMore([['delivery_name', ''], ['delivery_code', ''], ['delivery_id', '']]);
         if (!$id) return app('json')->fail(100100);
         $this->services->updateDistribution($id, $data);
         return app('json')->success(100001);
