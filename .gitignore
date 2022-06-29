@@ -20,5 +20,6 @@
 /docker-compose/mysql/data/
 /docker-compose/mysql/log/
 /docker-compose/nginx/log/
+/template/admin/dist/
 /template/admin/node_modules/
 /template/uni-app/node_modules/
