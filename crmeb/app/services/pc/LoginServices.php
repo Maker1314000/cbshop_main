@@ -20,6 +20,7 @@ use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
 use crmeb\services\app\WechatOpenService;
 use crmeb\services\app\WechatService as WechatAuthService;
+use crmeb\services\oauth\OAuth;
 use think\facade\Cache;
 
 class LoginServices extends BaseServices
@@ -98,9 +99,10 @@ class LoginServices extends BaseServices
      */
     public function wechatAuth()
     {
-        /** @var WechatOpenService $service */
-        $service = app()->make(WechatOpenService::class);
-        $info = $service->getAuthorizationInfo();
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class);
+        $info = $oauth->oauth(null, ['open' => true]);
+
         if (!$info) {
             throw new ApiException(410131);
         }
@@ -109,7 +111,7 @@ class LoginServices extends BaseServices
             throw new ApiException(410132);
         }
         if (!isset($wechatInfo['nickname'])) {
-            $wechatInfo = WechatAuthService::oauth2Service()->getUserInfo($wechatInfo['openid'])->toArray();
+            $wechatInfo = $oauth->getUserInfo($wechatInfo['openid']);
             if (!isset($wechatInfo['nickname']))
                 throw new ApiException(410131);
             if (isset($wechatInfo['tagid_list']))

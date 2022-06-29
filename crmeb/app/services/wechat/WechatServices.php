@@ -20,6 +20,7 @@ use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
 use crmeb\services\CacheService as Cache;
 use crmeb\services\app\WechatService as WechatAuthService;
+use crmeb\services\oauth\OAuth;
 use crmeb\utils\Canvas;
 
 /**
@@ -78,13 +79,12 @@ class WechatServices extends BaseServices
      */
     public function auth($spreadId, $login_type)
     {
-        try {
-            $wechatInfo = WechatAuthService::oauth2Service()->oauth();
-        } catch (\Exception $e) {
-            throw new ApiException(410131);
-        }
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class);
+        $wechatInfo = $oauth->oauth();
+
         if (!isset($wechatInfo['nickname'])) {
-            $wechatInfo = WechatAuthService::oauth2Service()->getUserInfo($wechatInfo['openid'])->toArray();
+            $wechatInfo = $oauth->getUserInfo($wechatInfo['openid']);
             if (!isset($wechatInfo['nickname']))
                 throw new ApiException(410131);
             if (isset($wechatInfo['tagid_list']))
@@ -128,13 +128,12 @@ class WechatServices extends BaseServices
      */
     public function newAuth($spreadId, $login_type)
     {
-        try {
-            $wechatInfo = WechatAuthService::oauth2Service()->oauth();
-        } catch (\Exception $e) {
-            throw new ApiException(410131);
-        }
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class);
+        $wechatInfo = $oauth->oauth();
+
         if (!isset($wechatInfo['nickname'])) {
-            $wechatInfo = WechatAuthService::oauth2Service()->getUserInfo($wechatInfo['openid'])->toArray();
+            $wechatInfo = $oauth->getUserInfo($wechatInfo['openid']);
             if (!isset($wechatInfo['nickname']))
                 throw new ApiException(410131);
             if (isset($wechatInfo['tagid_list']))
@@ -210,8 +209,10 @@ class WechatServices extends BaseServices
      */
     public function silenceAuth($spread)
     {
-        $wechatInfoConfig = WechatAuthService::oauth2Service()->oauth();
-        $wechatInfo = WechatAuthService::oauth2Service()->getUserInfo($wechatInfoConfig['openid'])->toArray();
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class);
+        $wechatInfoConfig = $oauth->oauth();
+        $wechatInfo = $oauth->getUserInfo($wechatInfoConfig['openid']);
         $openid = $wechatInfoConfig['openid'];
         /** @var WechatUserServices $wechatUserServices */
         $wechatUserServices = app()->make(WechatUserServices::class);
@@ -258,10 +259,12 @@ class WechatServices extends BaseServices
      */
     public function silenceAuthNoLogin($spread)
     {
-        $wechatInfoConfig = WechatAuthService::oauth2Service()->oauth();
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class);
+        $wechatInfoConfig = $oauth->oauth();
         $openid = $wechatInfoConfig['openid'];
         try {
-            $wechatInfo = WechatAuthService::oauth2Service()->getUserInfo($wechatInfoConfig['openid'])->toArray();
+            $wechatInfo = $oauth->getUserInfo($wechatInfoConfig['openid']);
         } catch (\Throwable $e) {
             $createData = [$openid, [], $spread, '', 'wechat'];
             $userInfoKey = md5($openid . '_' . time() . '_wechat');
