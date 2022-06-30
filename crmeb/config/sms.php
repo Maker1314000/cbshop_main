@@ -20,7 +20,7 @@ return [
     'maxIpCount' => 50,
     //驱动模式
     'stores' => [
-        //云信
+        //一号通
         'yihaotong' => [
             'sms_account' => '',
             'sms_token' => ''
@@ -32,6 +32,7 @@ return [
             'aliyun_AccessKeySecret' => '',
             'aliyun_RegionId' => '',
         ],
+        //腾讯云
         'tencent' => [
             'tencent_sms_app_id' => '',
             'tencent_sms_secret_id' => '',
