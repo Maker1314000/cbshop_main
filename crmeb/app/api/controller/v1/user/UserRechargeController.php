@@ -11,6 +11,7 @@
 namespace app\api\controller\v1\user;
 
 use app\Request;
+use app\services\pay\PayServices;
 use app\services\user\UserRechargeServices;
 
 /**
@@ -46,7 +47,7 @@ class UserRechargeController
         ], true);
         if (!$price || $price <= 0) return app('json')->fail(410122);
         if (!in_array($type, [0, 1])) return app('json')->fail(410123);
-        if (!in_array($from, ['weixin', 'weixinh5', 'routine'])) return app('json')->fail(410123);
+        if (!in_array($from, [PayServices::WEIXIN_PAY, 'weixinh5', 'routine', PayServices::ALIAPY_PAY])) return app('json')->fail(410123);
         $storeMinRecharge = sys_config('store_user_min_recharge');
         if ($price < $storeMinRecharge) return app('json')->fail(410124, null, ['money' => $storeMinRecharge]);
         $uid = (int)$request->uid();

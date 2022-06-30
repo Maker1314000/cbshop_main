@@ -125,7 +125,7 @@
 		<!-- #ifndef MP -->
 		<home></home>
 		<!-- #endif -->
-		<payment :payMode="payMode" :pay_close="pay_close" @onChangeFun="onChangeFun" :order_id="pay_order_id"
+		<payment :hidePay="['offline']" :pay_close="pay_close" @onChangeFun="onChangeFun" :order_id="pay_order_id"
 			:totalPrice="totalPrice"></payment>
 	</view>
 </template>
@@ -177,35 +177,6 @@
 				orderStatus: 0, //订单状态
 				page: 1,
 				limit: 20,
-				payMode: [{
-						name: '微信支付',
-						icon: 'icon-weixinzhifu',
-						value: 'weixin',
-						title: '使用微信快捷支付',
-						payStatus: true
-					},
-					{
-						name: '支付宝支付',
-						icon: 'icon-zhifubao',
-						value: 'alipay',
-						title: '使用线上支付宝支付',
-						payStatus: true
-					},
-					{
-						name: '余额支付',
-						icon: 'icon-yuezhifu',
-						value: 'yue',
-						title: '当前可用余额：',
-						number: 0,
-						payStatus: true
-					}, {
-						"name": "好友代付",
-						"icon": "icon-haoyoudaizhifu",
-						value: 'friend',
-						title: '找微信好友支付',
-						payStatus: 1,
-					}
-				],
 				pay_close: false,
 				pay_order_id: '',
 				totalPrice: '0',

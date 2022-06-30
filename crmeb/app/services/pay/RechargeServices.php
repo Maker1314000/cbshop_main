@@ -13,6 +13,7 @@ declare (strict_types=1);
 namespace app\services\pay;
 
 
+use app\model\user\UserRecharge;
 use app\services\user\UserRechargeServices;
 use app\services\wechat\WechatUserServices;
 use crmeb\exceptions\ApiException;
@@ -35,11 +36,8 @@ class RechargeServices
         $this->pay = $pay;
     }
 
-    public function recharge(int $recharge_id)
+    public function recharge(UserRecharge $recharge)
     {
-        /** @var UserRechargeServices $rechargeServices */
-        $rechargeServices = app()->make(UserRechargeServices::class);
-        $recharge = $rechargeServices->getRecharge($recharge_id);
         if (!$recharge) {
             throw new ApiException(410173);
         }
@@ -55,6 +53,9 @@ class RechargeServices
             case 'routine':
                 $userType = 'routine';
                 break;
+            case PayServices::ALIAPY_PAY:
+                $userType = PayServices::ALIAPY_PAY;
+                break;
         }
         if (!$userType) {
             throw new ApiException(410278);
@@ -62,11 +63,11 @@ class RechargeServices
         /** @var WechatUserServices $wechatUser */
         $wechatUser = app()->make(WechatUserServices::class);
         $openid = $wechatUser->uidToOpenid((int)$recharge['uid'], $userType);
-        if ($recharge['recharge_type'] != 'weixinh5' && !request()->isApp()) {
+        if (in_array($recharge['recharge_type'], ['weixin', 'routine']) && !request()->isApp()) {
             if (!$openid) {
                 throw new ApiException(410275);
             }
-        }else{
+        } else {
             $openid = '';
         }
         return $this->pay->pay($recharge['recharge_type'], $openid, $recharge['order_id'], $recharge['price'], 'user_recharge', '用户充值');

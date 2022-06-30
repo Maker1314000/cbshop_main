@@ -105,7 +105,7 @@
 			</view>
 			<button class="iconfont icon-guanbi2" @click="closePopup"></button>
 		</view>
-		<payment :payMode="payMode" :pay_close="pay_close" :is-call="true" @onChangeFun="onChangeFun"
+		<payment :showPay="['weixin','alipay']" :pay_close="pay_close" :is-call="true" @onChangeFun="onChangeFun"
 			:order_id="pay_order_id" :totalPrice="totalPrice"></payment>
 		<!-- #ifndef MP -->
 		<home></home>

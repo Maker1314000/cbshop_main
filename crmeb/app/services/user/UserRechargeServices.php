@@ -398,7 +398,7 @@ class UserRechargeServices extends BaseServices
                 try {
                     /** @var RechargeServices $recharge */
                     $recharge = app()->make(RechargeServices::class);
-                    $order_info = $recharge->recharge((int)$rechargeOrder->id);
+                    $order_info = $recharge->recharge($rechargeOrder);
                 } catch (\Exception $e) {
                     throw new ApiException($e->getMessage());
                 }

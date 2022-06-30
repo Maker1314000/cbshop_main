@@ -430,3 +430,10 @@ export function getOpenAdv(data) {
 		noAuth: true
 	});
 }
+
+/**
+ * 获取支付配置
+ */
+export function getPayConfig() {
+	return request.get('pay/config');
+}

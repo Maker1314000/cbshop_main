@@ -4,7 +4,7 @@
 			<view class="title acea-row row-center-wrapper">
 				选择付款方式<text class="iconfont icon-guanbi" @click='close'></text>
 			</view>
-			<view class="item acea-row row-between-wrapper" v-for="(item,index) in payMode" :key="index"
+			<view class="item acea-row row-between-wrapper" v-for="(item,index) in payConfig" :key="index"
 				v-if='item.payStatus' @click="payType(item.number || 0 , item.value,index)">
 				<view class="left acea-row row-between-wrapper">
 					<view class="iconfont" :class="item.icon"></view>
@@ -30,15 +30,12 @@
 	import {
 		orderPay
 	} from '@/api/order.js';
+	import {
+		getPayConfig
+	} from '@/api/api.js';
 	import colors from '@/mixins/color.js';
 	export default {
 		props: {
-			payMode: {
-				type: Array,
-				default: function() {
-					return [];
-				}
-			},
 			pay_close: {
 				type: Boolean,
 				default: false,
@@ -58,7 +55,19 @@
 			friendPay: {
 				type: Boolean,
 				default: false
-			}
+			},
+			showPay: {
+				type: Array,
+				default () {
+					return [];
+				},
+			},
+			hidePay: {
+				type: Array,
+				default () {
+					return [];
+				},
+			},
 		},
 		mixins: [colors],
 		data() {
@@ -66,7 +75,8 @@
 				formContent: '',
 				active: 0,
 				paytype: '',
-				number: 0
+				number: 0,
+				payMode: [],
 			};
 		},
 		watch: {
@@ -79,15 +89,48 @@
 							newPayList.push(item)
 						}
 					});
-					this.active = newPayList[0].index;
-					this.paytype = newPayList[0].value;
-					this.number = newPayList[0].number || 0;
+					if (newPayList.length) {
+						this.active = newPayList[0].index;
+						this.paytype = newPayList[0].value;
+						this.number = newPayList[0].number || 0;
+					}
 				},
 				immediate: true,
 				deep: true
 			}
 		},
+		computed: {
+			payConfig() {
+				let config = [];
+
+				this.payMode.map(item => {
+					if (this.hidePay.length) {
+						if (this.hidePay.indexOf(item.value) !== -1) {
+							item.payStatus = false;
+						}
+					}
+					if (this.showPay.length) {
+						if (this.showPay.indexOf(item.value) !== -1 && item.payStatus === true) {
+							item.payStatus = true;
+						} else {
+							item.payStatus = false;
+						}
+					}
+					config.push(item);
+				});
+
+				return config;
+			}
+		},
+		mounted() {
+			this.getPayConfig();
+		},
 		methods: {
+			getPayConfig() {
+				getPayConfig().then(res => {
+					this.payMode = res.data;
+				})
+			},
 			payType(number, paytype, index) {
 				this.active = index;
 				this.paytype = paytype;
@@ -220,7 +263,7 @@
 											});
 										});
 									})
-									.catch(()=> {
+									.catch(() => {
 										return that.$util.Tips({
 											title: '支付失败'
 										}, () => {

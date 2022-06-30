@@ -9,19 +9,23 @@
 			</view>
 			<view class="payment">
 				<view class="nav acea-row row-around row-middle">
-					<view class="item" :class="active==index?'on':''" v-for="(item,index) in navRecharge" :key="index" @click="navRecharges(index)">{{item}}</view>
+					<view class="item" :class="active==index?'on':''" v-for="(item,index) in navRecharge" :key="index"
+						@click="navRecharges(index)">{{item}}</view>
 				</view>
-				<view class='tip picList' v-if='!active' >
-					<view class="pic-box pic-box-color acea-row row-center-wrapper row-column" :class="activePic == index ? 'pic-box-color-active' : ''"
-					 v-for="(item, index) in picList" :key="index" @click="picCharge(index, item)" v-if="item.price">
+				<view class='tip picList' v-if='!active'>
+					<view class="pic-box pic-box-color acea-row row-center-wrapper row-column"
+						:class="activePic == index ? 'pic-box-color-active' : ''" v-for="(item, index) in picList"
+						:key="index" @click="picCharge(index, item)" v-if="item.price">
 						<view class="pic-number-pic">
 							{{ item.price }}<span class="pic-number"> 元</span>
 						</view>
 						<view class="pic-number">赠送：{{ item.give_money }} 元</view>
 					</view>
-					<view class="pic-box pic-box-color acea-row row-center-wrapper" :class="activePic == picList.length ? 'pic-box-color-active' : ''"
-					 @click="picCharge(picList.length)">
-						<input type="number" placeholder="其他" v-model="money" class="pic-box-money pic-number-pic" :class="activePic == picList.length ? 'pic-box-color-active' : ''" />
+					<view class="pic-box pic-box-color acea-row row-center-wrapper"
+						:class="activePic == picList.length ? 'pic-box-color-active' : ''"
+						@click="picCharge(picList.length)">
+						<input type="number" placeholder="其他" v-model="money" class="pic-box-money pic-number-pic"
+							:class="activePic == picList.length ? 'pic-box-color-active' : ''" />
 					</view>
 					<view class="tips-box">
 						<view class="tips mt-30">注意事项：</view>
@@ -32,10 +36,13 @@
 
 				</view>
 				<view class="tip" v-else>
-					<view class='input'><text>￥</text><input placeholder="0.00" type='number' placeholder-class='placeholder' :value="number" name="number"></input></view>
+					<view class='input'><text>￥</text><input placeholder="0.00" type='number'
+							placeholder-class='placeholder' :value="number" name="number"></input></view>
 					<view class="tips-title">
 						<view style="font-weight: bold; font-size: 26rpx;">提示：</view>
-						<view style="margin-top: 10rpx;">当前可转入佣金为 <text class='font-color'>￥{{userinfo.commissionCount || 0}}</text>,冻结佣金为<text class='font-color'>￥{{userinfo.broken_commission}}</text></view>
+						<view style="margin-top: 10rpx;">当前可转入佣金为 <text
+								class='font-color'>￥{{userinfo.commissionCount || 0}}</text>,冻结佣金为<text
+								class='font-color'>￥{{userinfo.broken_commission}}</text></view>
 					</view>
 					<view class="tips-box">
 						<view class="tips mt-30">注意事项：</view>
@@ -81,7 +88,7 @@
 			// #endif
 			home
 		},
-		mixins:[colors],
+		mixins: [colors],
 		data() {
 			let that = this;
 			return {
@@ -97,21 +104,21 @@
 				picList: [],
 				activePic: 0,
 				money: "",
-				numberPic:'',
-				rechar_id:0,
-				rechargeAttention:[]
+				numberPic: '',
+				rechar_id: 0,
+				rechargeAttention: []
 			};
 		},
 		computed: mapGetters(['isLogin']),
-		watch:{
-			isLogin:{
-				handler:function(newV,oldV){
-					if(newV){
+		watch: {
+			isLogin: {
+				handler: function(newV, oldV) {
+					if (newV) {
 						this.getUserInfo();
 						this.getRecharge();
 					}
 				},
-				deep:true
+				deep: true
 			}
 		},
 		onLoad(options) {
@@ -241,17 +248,21 @@
 					})
 					// #ifdef MP || APP-PLUS
 					let money = parseFloat(this.money);
-					if( this.rechar_id == 0){
-						if(Number.isNaN(money)){
-							return that.$util.Tips({title: '充值金额必须为数字'});
+					if (this.rechar_id == 0) {
+						if (Number.isNaN(money)) {
+							return that.$util.Tips({
+								title: '充值金额必须为数字'
+							});
 						}
-						if(money <= 0){
-							return that.$util.Tips({title: '充值金额不能为0'});
+						if (money <= 0) {
+							return that.$util.Tips({
+								title: '充值金额不能为0'
+							});
 						}
-					}else{
+					} else {
 						money = this.numberPic
 					}
-					
+
 					rechargeRoutine({
 						price: money,
 						type: 0,
@@ -272,7 +283,8 @@
 							orderInfo: jsConfig,
 							// #endif
 							success: function(res) {
-								that.$set(that, 'userinfo.now_money', that.$util.$h.Add(value, that.userinfo.now_money));
+								that.$set(that, 'userinfo.now_money', that.$util.$h.Add(value, that
+									.userinfo.now_money));
 								return that.$util.Tips({
 									title: '支付成功',
 									icon: 'success'
@@ -318,7 +330,8 @@
 						} else {
 							that.$wechat.pay(data.data)
 								.finally(() => {
-									that.$set(that, 'userinfo.now_money', that.$util.$h.Add(value, that.userinfo.now_money));
+									that.$set(that, 'userinfo.now_money', that.$util.$h.Add(value, that
+										.userinfo.now_money));
 									return that.$util.Tips({
 										title: '支付成功',
 										icon: 'success'
@@ -333,7 +346,7 @@
 									});
 								});
 						}
-					}).catch(err=>{
+					}).catch(err => {
 						uni.hideLoading();
 						return that.$util.Tips({
 							title: err
@@ -352,9 +365,11 @@
 		height: 100%;
 		background-color: #fff;
 	}
-	.bgcolor{
+
+	.bgcolor {
 		background-color: var(--view-theme)
 	}
+
 	.payment {
 		position: relative;
 		top: -60rpx;
@@ -392,7 +407,7 @@
 		font-size: 56rpx;
 		color: #333333;
 		flex-wrap: nowrap;
-		
+
 	}
 
 	.payment .input text {
@@ -491,24 +506,28 @@
 			color: #fff !important;
 		}
 	}
-	.tips-box{
+
+	.tips-box {
 		.tips {
-		  font-size: 28rpx;
-		  color: #333333;
-		  font-weight: 800;
-		  margin-bottom: 14rpx;
+			font-size: 28rpx;
+			color: #333333;
+			font-weight: 800;
+			margin-bottom: 14rpx;
 			margin-top: 20rpx;
 		}
+
 		.tips-samll {
-		  font-size: 24rpx;
-		  color: #333333;
-		  margin-bottom: 14rpx;
+			font-size: 24rpx;
+			color: #333333;
+			margin-bottom: 14rpx;
 		}
+
 		.tip-box {
-		  margin-top: 30rpx;
+			margin-top: 30rpx;
 		}
 	}
-	.tips-title{
+
+	.tips-title {
 		margin-top: 20rpx;
 		font-size: 24rpx;
 		color: #333;
