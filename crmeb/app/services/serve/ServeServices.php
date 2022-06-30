@@ -59,11 +59,11 @@ class ServeServices extends BaseServices
 
     /**
      * 根据类型获取短信发送配置
-     * @param string $type
+     * @param $type
      * @param array $configDefault
      * @return array
      */
-    protected function getTypeConfig(string $type, array $configDefault = [])
+    protected function getTypeConfig($type, array $configDefault = [])
     {
         if (!$type) {
             $type = Config::get('sms.default', '');
@@ -169,7 +169,7 @@ class ServeServices extends BaseServices
         $field = [
             $this->builder->input('title', '模板名称')->placeholder('模板名称,如：订单支付成功'),
             $this->builder->input('content', '模板内容')->type('textarea')->placeholder('模板内容，如：您购买的商品已支付成功，支付金额{$pay_price}元，订单号{$order_id},感谢您的光临！（注：模板内容不要添加短信签名）'),
-            $this->builder->radio('type', '模板类型', 1)->options([['label' => '验证码', 'value' => 1], ['label' => '通知', 'value' => 2], ['label' => '推广', 'value' => 3]])
+            $this->builder->radio('type', '模板类型', 1)->options([['label' => '验证码', 'value' => 1], ['label' => '通知', 'value' => 2], ['label' => '营销', 'value' => 3]])
         ];
         return $field;
     }
