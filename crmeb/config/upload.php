@@ -41,19 +41,19 @@ return [
         'local' => [],
         //七牛云上传配置
         'qiniu' => [
-            'accessKey' => '', // sys_config('qiniu_accessKey')
-            'secretKey' => '', // sys_config('qiniu_secretKey')
+            'AccessKeyId' => '', // sys_config('qiniu_accessKey')
+            'AccessKeySecret' => '', // sys_config('qiniu_secretKey')
         ],
-        //oss上传配置
+        //oss 阿里云上传配置
         'oss' => [
-            'accessKey' => '', // sys_config('accessKey')
-            'secretKey' => '', // sys_config('secretKey')
+            'AccessKeyId' => '', // sys_config('accessKey')
+            'AccessKeySecret' => '', // sys_config('secretKey')
         ],
-        //cos上传配置
+        //cos 腾讯云上传配置
         'cos' => [
-            'accessKey' => '', //sys_config('tengxun_accessKey')
-            'secretKey' => '', //sys_config('tengxun_secretKey')
-            'appid' => '', //sys_config('tengxun_appid')
+            'AccessKeyId' => '', //sys_config('tengxun_accessKey')
+            'AccessKeySecret' => '', //sys_config('tengxun_secretKey')
+            'APPID' => '', //sys_config('tengxun_appid')
         ],
     ]
 ];
