@@ -69,7 +69,8 @@ Route::group(function () {
 
 //会员授权接口
 Route::group(function () {
-
+    //获取支付方式
+    Route::get('pay/config', 'v1.PayController/config')->name('payConfig');
     //用户修改手机号
     Route::post('user/updatePhone', 'v1.LoginController/update_binding_phone')->name('updateBindingPhone');
     //设置登录code
