@@ -125,7 +125,7 @@
 		<!-- #ifndef MP -->
 		<home></home>
 		<!-- #endif -->
-		<payment :hidePay="['offline']" :pay_close="pay_close" @onChangeFun="onChangeFun" :order_id="pay_order_id"
+		<payment :hidePay="hidePay" :pay_close="pay_close" @onChangeFun="onChangeFun" :order_id="pay_order_id"
 			:totalPrice="totalPrice"></payment>
 	</view>
 </template>
@@ -169,6 +169,7 @@
 		mixins: [colors],
 		data() {
 			return {
+				hidePay:['offline'],
 				loading: false, //是否加载中
 				loadend: false, //是否加载完毕
 				loadTitle: '加载更多', //提示语
@@ -222,8 +223,7 @@
 			getUserInfo: function() {
 				let that = this;
 				getUserInfo().then(res => {
-					that.payMode[2].number = res.data.now_money;
-					that.$set(that, 'payMode', that.payMode);
+
 				});
 			},
 			/**
@@ -247,22 +247,8 @@
 				let that = this;
 				orderData().then(res => {
 					that.$set(that, 'orderData', res.data);
-					that.payMode.map(item => {
-						if (item.value == 'weixin') {
-							item.payStatus = res.data.pay_weixin_open ? true : false;
-						}
-						if (item.value == 'alipay') {
-							item.payStatus = res.data.ali_pay_status ? true : false;
-						}
-						if (item.value == 'yue') {
-							item.payStatus = res.data.yue_pay_status == 1 ? true : false;
-						}
-						if (item.value == 'friend') {
-							item.payStatus = res.data.friend_pay_status == 1 ? true : false;
-						}
-					});
 					//#ifdef MP
-					this.payMode[1].payStatus = false;
+					this.hidePay.push('alipay');
 					//#endif
 				});
 			},

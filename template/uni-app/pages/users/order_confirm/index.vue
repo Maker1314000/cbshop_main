@@ -259,7 +259,7 @@
 		<invoice-picker :inv-show="invShow" :inv-list="invList" :inv-checked="invChecked" :is-special="special_invoice"
 			:url-query="urlQuery" @inv-close="invClose" @inv-change="invChange" @inv-cancel="invCancel">
 		</invoice-picker>
-		<payment :payMode="cartArr" :pay_close="pay_close" :isCall="true" :totalPrice="totalPrice.toString()"
+		<payment :hidePay="hidePay" :pay_close="pay_close" :isCall="true" :totalPrice="totalPrice.toString()"
 			@changePayType="changePayType" @onChangeFun="onChangeFun"></payment>
 		<canvas canvas-id="canvas" v-if="canvasStatus"
 			:style="{width: canvasWidth + 'px', height: canvasHeight + 'px',position: 'absolute',left:'-100000px',top:'-100000px'}"></canvas>
@@ -336,41 +336,7 @@
 
 				textareaStatus: true,
 				//支付方式
-				cartArr: [{
-						"name": "微信支付",
-						"icon": "icon-weixin2",
-						value: 'weixin',
-						title: '使用微信快捷支付',
-						payStatus: 1,
-					},
-					{
-						"name": "支付宝支付",
-						"icon": "icon-zhifubao",
-						value: 'alipay',
-						title: '使用线上支付宝支付',
-						payStatus: 1,
-					},
-					{
-						"name": "余额支付",
-						"icon": "icon-yuezhifu",
-						value: 'yue',
-						title: '可用余额:',
-						payStatus: 1,
-					},
-					{
-						"name": "线下支付",
-						"icon": "icon-yuezhifu1",
-						value: 'offline',
-						title: '选择线下付款方式',
-						payStatus: 2,
-					}, {
-						"name": "好友代付",
-						"icon": "icon-haoyoudaizhifu",
-						value: 'friend',
-						title: '找微信好友支付',
-						payStatus: 1,
-					}
-				],
+				hidePay:[],
 				virtual_type: 0,
 				formContent: '',
 				payType: 'weixin', //支付方式
@@ -840,24 +806,10 @@
 					that.$set(that, 'store_self_mention', res.data.store_self_mention);
 					that.$set(that, 'virtual_type', res.data.virtual_type || 0);
 					//微信支付是否开启
-					that.cartArr[0].payStatus = res.data.pay_weixin_open || 0
-					//支付宝是否开启
-					that.cartArr[1].payStatus = res.data.ali_pay_status || 0;
 					//#ifdef MP
-					that.cartArr[1].payStatus = 0;
+					that.hidePay.push('alipay');
 					//#endif
 					//余额支付是否开启
-					// that.cartArr[2].title = '可用余额:' + res.data.userInfo.now_money;
-					that.cartArr[2].number = res.data.userInfo.now_money;
-					that.cartArr[2].payStatus = res.data.yue_pay_status == 1 ? res.data.yue_pay_status : 0
-					if (res.data.offline_pay_status == 2 || res.data.deduction) {
-						that.cartArr[3].payStatus = 0
-					} else {
-						that.cartArr[3].payStatus = 1
-					}
-					//好友代付是否开启
-					that.cartArr[4].payStatus = res.data.friend_pay_status || 0;
-					// that.$set(that, 'cartArr', that.cartArr);
 					that.$set(that, 'ChangePrice', that.totalPrice);
 					that.getBargainId();
 					that.getCouponList();
@@ -892,10 +844,10 @@
 				that.$set(that, 'combinationId', parseInt(combinationId));
 				that.$set(that, 'discountId', parseInt(discountId));
 				that.$set(that, 'advanceId', parseInt(advanceId));
-				if (that.cartArr.length == 3 && (BargainId || combinationId || that.seckillId || discountId)) {
-					that.cartArr[2].payStatus = 0;
-					that.$set(that, 'cartArr', that.cartArr);
-				}
+				// if (that.cartArr.length == 3 && (BargainId || combinationId || that.seckillId || discountId)) {
+				// 	that.cartArr[2].payStatus = 0;
+				// 	that.$set(that, 'cartArr', that.cartArr);
+				// }
 			},
 			/**
 			 * 获取当前金额可用优惠券
