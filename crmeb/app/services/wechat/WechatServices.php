@@ -140,11 +140,6 @@ class WechatServices extends BaseServices
                 $wechatInfo['tagid_list'] = implode(',', $wechatInfo['tagid_list']);
         } else {
             if (isset($wechatInfo['privilege'])) unset($wechatInfo['privilege']);
-//            /** @var WechatUserServices $wechatUser */
-//            $wechatUser = app()->make(WechatUserServices::class);
-//            if (!$wechatUser->getOne(['openid' => $wechatInfo['openid']])) {
-//                $wechatInfo['subscribe'] = 0;
-//            }
         }
         $wechatInfo['user_type'] = 'wechat';
         $openid = $wechatInfo['openid'];

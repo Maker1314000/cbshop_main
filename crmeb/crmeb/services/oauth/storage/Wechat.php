@@ -55,7 +55,7 @@ class Wechat extends BaseStorage implements OAuthInterface
             $open = true;
         }
 
-        if ($open) {
+        if (!$open) {
             try {
                 $wechatInfo = WechatService::oauth2Service()->oauth();
             } catch (\Throwable $e) {
