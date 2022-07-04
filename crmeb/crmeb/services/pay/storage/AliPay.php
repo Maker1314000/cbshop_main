@@ -74,9 +74,9 @@ class AliPay extends BasePay implements PayInterface
      * @param array $options
      * @return AlipayTradeRefundResponse|mixed
      */
-    public function refund(string $outTradeNo, string $totalAmount, string $refund_id, array $options = [])
+    public function refund(string $outTradeNo, array $options = [])
     {
-        return AliPayService::instance()->refund($outTradeNo, $totalAmount, $refund_id);
+        return AliPayService::instance()->refund($outTradeNo, $options['totalAmount'], $options['refund_id']);
     }
 
     /**

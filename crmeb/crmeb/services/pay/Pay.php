@@ -18,6 +18,7 @@ use crmeb\services\pay\storage\WechatPay;
 use think\facade\Config;
 
 /**
+ * 第三方支付
  * Class Pay
  * @package crmeb\services\pay
  * @mixin AliPay

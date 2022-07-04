@@ -62,7 +62,13 @@ class StoreOrderServices extends BaseServices
      * 发货类型
      * @var string[]
      */
-    public $deliveryType = ['send' => '商家配送', 'express' => '快递配送', 'fictitious' => '虚拟发货', 'delivery_part_split' => '拆分部分发货', 'delivery_split' => '拆分发货完成'];
+    public $deliveryType = [
+        'send' => '商家配送',
+        'express' => '快递配送',
+        'fictitious' => '虚拟发货',
+        'delivery_part_split' => '拆分部分发货',
+        'delivery_split' => '拆分发货完成'
+    ];
 
     /**
      * StoreOrderProductServices constructor.
@@ -1433,6 +1439,7 @@ HTML;
         return $info;
     }
     //TODO
+
     /**
      * 打印订单
      * @param int $id
