@@ -920,7 +920,7 @@ if (!function_exists('getLang')) {
         $request = app()->request;
 
         //获取接口传入的语言类型
-        if (!$range = $request->header('lang')) {
+        if (!$range = $request->getCbLang()) {
             $range = $request->cookie($config['cookie_var']);
         }
 
