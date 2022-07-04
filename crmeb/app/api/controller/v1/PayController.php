@@ -45,6 +45,7 @@ class PayController
     }
 
     /**
+     * 支付配置
      * @param Request $request
      * @return mixed
      */

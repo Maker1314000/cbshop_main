@@ -17,8 +17,14 @@ use app\services\order\StoreOrderServices;
 use app\services\user\UserServices;
 use think\facade\App;
 
+/**
+ * 退款订单
+ * Class RefundOrder
+ * @package app\adminapi\controller\v1\order
+ */
 class RefundOrder extends AuthController
 {
+
     /**
      * RefundOrder constructor.
      * @param App $app
@@ -34,9 +40,6 @@ class RefundOrder extends AuthController
     /**
      * 退款订单列表
      * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
      */
     public function getRefundList()
     {

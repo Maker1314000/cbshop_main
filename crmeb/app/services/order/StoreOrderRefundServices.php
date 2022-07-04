@@ -33,8 +33,7 @@ use crmeb\exceptions\ApiException;
 use crmeb\services\AliPayService;
 use crmeb\services\CacheService;
 use crmeb\services\FormBuilder as Form;
-use crmeb\services\app\MiniProgramService;
-use crmeb\services\app\WechatService;
+use crmeb\services\pay\Pay;
 use crmeb\services\workerman\ChannelService;
 
 
@@ -189,12 +188,15 @@ class StoreOrderRefundServices extends BaseServices
                             $no = $refundOrder['trade_no'];
                             $refundData['type'] = 'trade_no';
                         }
+                        /** @var Pay $pay */
+                        $pay = app()->make(Pay::class);
                         if ($refundOrder['is_channel'] == 1) {
                             //小程序退款
-                            MiniProgramService::payOrderRefund($no, $refundData);//小程序
+                            $pay->refund($no, $refundData);//小程序
                         } else {
                             //微信公众号退款
-                            WechatService::payOrderRefund($no, $refundData);//公众号
+                            $refundData['wechat'] = true;
+                            $pay->refund($no, $refundData);//公众号
                         }
                         break;
                     case PayServices::YUE_PAY:
@@ -341,12 +343,15 @@ class StoreOrderRefundServices extends BaseServices
                             $no = $refundOrder['trade_no'];
                             $refundData['type'] = 'trade_no';
                         }
+                        /** @var Pay $pay */
+                        $pay = app()->make(Pay::class);
                         if ($refundOrder['is_channel'] == 1) {
                             //小程序退款
-                            MiniProgramService::payOrderRefund($no, $refundData);//小程序
+                            $pay->refund($no, $refundData);//小程序
                         } else {
                             //微信公众号退款
-                            WechatService::payOrderRefund($no, $refundData);//公众号
+                            $refundData['wechat'] = true;
+                            $pay->refund($no, $refundData);//公众号
                         }
                         break;
                     case PayServices::YUE_PAY:
@@ -621,7 +626,7 @@ class StoreOrderRefundServices extends BaseServices
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function   refuseRefund(int $id, array $data, $orderRefundInfo = [])
+    public function refuseRefund(int $id, array $data, $orderRefundInfo = [])
     {
         if (!$orderRefundInfo) {
             $orderRefundInfo = $this->dao->get(['id' => $id, 'is_cancel' => 0]);

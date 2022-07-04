@@ -24,5 +24,8 @@
 /docker-compose/mysql/log/
 /docker-compose/nginx/log/
 /template/admin/dist/
+/template/admin/.idea/
 /template/admin/node_modules/
 /template/uni-app/node_modules/
+/template/uni-app/unpackage/
+/template/uni-app/.hbuilderx/

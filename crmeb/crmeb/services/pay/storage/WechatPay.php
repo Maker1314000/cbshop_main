@@ -12,6 +12,7 @@
 namespace crmeb\services\pay\storage;
 
 
+use crmeb\exceptions\AdminException;
 use crmeb\services\pay\BasePay;
 use crmeb\exceptions\PayException;
 use crmeb\services\pay\PayInterface;
@@ -19,6 +20,8 @@ use crmeb\services\app\MiniProgramService;
 use crmeb\services\app\WechatService;
 use EasyWeChat\Payment\API;
 use EasyWeChat\Payment\Order;
+use EasyWeChat\Support\Collection;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * 微信支付
@@ -88,16 +91,28 @@ class WechatPay extends BasePay implements PayInterface
     /**
      * 退款
      * @param string $outTradeNo
-     * @param string $totalAmount
-     * @param string $refund_id
-     * @param array $options
-     * @return \EasyWeChat\Support\Collection|mixed|\Psr\Http\Message\ResponseInterface
+     * @param array $opt
+     * @return Collection|mixed|ResponseInterface
      */
-    public function refund(string $outTradeNo, string $totalAmount, string $refund_id, array $options = [])
+    public function refund(string $outTradeNo, array $opt = [])
     {
-        $totalFee = floatval(bcmul($totalAmount, '100', 0));
-        $refundPrice = floatval(bcmul($options['refund_price'], '100', 0));
-        return WechatService::refund($outTradeNo, $refund_id, $totalFee, $refundPrice);
+        if (!isset($opt['pay_price'])) throw new PayException(400730);
+        $totalFee = floatval(bcmul($opt['pay_price'], 100, 0));
+        $refundFee = isset($opt['refund_price']) ? floatval(bcmul($opt['refund_price'], 100, 0)) : null;
+        $refundReason = $opt['desc'] ?? '';
+        $refundNo = $opt['refund_id'] ?? $outTradeNo;
+        $opUserId = $opt['op_user_id'] ?? null;
+        $type = $opt['type'] ?? 'out_trade_no';
+        /*仅针对老资金流商户使用
+        REFUND_SOURCE_UNSETTLED_FUNDS---未结算资金退款（默认使用未结算资金退款）
+        REFUND_SOURCE_RECHARGE_FUNDS---可用余额退款
+        */
+        $refundAccount = $opt['refund_account'] ?? 'REFUND_SOURCE_UNSETTLED_FUNDS';
+        if (isset($opt['wechat'])) {
+            return WechatService::refund($outTradeNo, $refundNo, $totalFee, $refundFee, $opUserId, $refundReason, $type, $refundAccount);
+        } else {
+            return MiniProgramService::refund($outTradeNo, $refundNo, $totalFee, $refundFee, $opUserId, $refundReason, $type, $refundAccount);
+        }
     }
 
     /**
@@ -105,7 +120,7 @@ class WechatPay extends BasePay implements PayInterface
      * @param string $outTradeNo
      * @param string $outRequestNo
      * @param array $other
-     * @return \EasyWeChat\Support\Collection|mixed|\Psr\Http\Message\ResponseInterface
+     * @return Collection|mixed|ResponseInterface
      */
     public function queryRefund(string $outTradeNo, string $outRequestNo, array $other = [])
     {

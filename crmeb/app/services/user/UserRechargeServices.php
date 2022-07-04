@@ -20,8 +20,7 @@ use app\services\system\config\SystemGroupDataServices;
 use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
 use crmeb\services\FormBuilder as Form;
-use crmeb\services\app\WechatService;
-use crmeb\services\app\MiniProgramService;
+use crmeb\services\pay\Pay;
 use think\facade\Route as Url;
 
 /**
@@ -220,10 +219,13 @@ class UserRechargeServices extends BaseServices
 
         try {
             $recharge_type = $UserRecharge['recharge_type'];
+            /** @var Pay $pay */
+            $pay = app()->make(Pay::class);
             if ($recharge_type == 'weixin') {
-                WechatService::payOrderRefund($UserRecharge['order_id'], $refund_data);
+                $refund_data['wechat'] = true;
+                $pay->refund($UserRecharge['order_id'], $refund_data);
             } else {
-                MiniProgramService::payOrderRefund($UserRecharge['order_id'], $refund_data);
+                $pay->refund($UserRecharge['order_id'], $refund_data);
             }
         } catch (\Exception $e) {
             throw new AdminException($e->getMessage());
