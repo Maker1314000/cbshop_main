@@ -130,6 +130,15 @@ class Request extends \think\Request
     }
 
     /**
+     * 获取前端语言类型
+     * @return string
+     */
+    public function getCbLang()
+    {
+        return (string)$this->header('Cb_lang', 'zh_cn');
+    }
+
+    /**
      * 当前访问端
      * @param string $terminal
      * @return bool
