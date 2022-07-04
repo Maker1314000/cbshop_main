@@ -195,7 +195,7 @@ class StoreCategoryServices extends BaseServices
         }
 
         $parent = $this->dao->getOne(['id' => $data['pid']]);
-        if (!$parent || $parent['pid'] > 0) {
+        if ($data['pid'] && (!$parent || $parent['pid'] > 0)) {
             throw new AdminException(400740);
         }
 
