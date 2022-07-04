@@ -1147,6 +1147,7 @@ return [
     410322 => 'The event has ended',
     410323 => 'You already have this coupon, please do not buy it again',
     410324 => 'Please check the express company code',
+    410325 => 'Please select invoice',
 
     //微信相关错误
     -1 => 'The system is busy, please try again later',

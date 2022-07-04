@@ -113,7 +113,7 @@ class StoreOrderInvoiceServices extends BaseServices
     public function makeUp(int $uid, $order_id, int $invoice_id)
     {
         if (!$order_id) throw new ApiException(100100);
-        if (!$invoice_id) throw new ApiException(100100);
+        if (!$invoice_id) throw new ApiException(410325);
 
         /** @var StoreOrderServices $storeOrderServices */
         $storeOrderServices = app()->make(StoreOrderServices::class);
