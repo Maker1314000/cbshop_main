@@ -13,9 +13,7 @@ namespace app\outapi\controller;
 use app\adminapi\validate\order\StoreOrderValidate;
 use app\services\order\{OutStoreOrderServices,
     StoreOrderDeliveryServices,
-    StoreOrderInvoiceServices,
-    StoreOrderTakeServices
-};
+    StoreOrderInvoiceServices};
 use app\services\shipping\ExpressServices;
 use think\facade\App;
 
@@ -80,6 +78,7 @@ class StoreOrder extends AuthController
      */
     public function delivery($id, StoreOrderDeliveryServices $services)
     {
+        if (!$id) return app('json')->fail(100100);
         $data = $this->request->postMore([
             ['type', 1],
             ['delivery_name', ''],//快递公司名称
@@ -99,9 +98,7 @@ class StoreOrder extends AuthController
      */
     public function splitCartInfo($id)
     {
-        if (!$id) {
-            return app('json')->fail(100100);
-        }
+        if (!$id) return app('json')->fail(100100);
         return app('json')->success($this->services->getCartList((int)$id));
     }
 
@@ -112,6 +109,7 @@ class StoreOrder extends AuthController
      */
     public function splitDelivery($id, StoreOrderDeliveryServices $services)
     {
+        if (!$id) return app('json')->fail(100100);
         $data = $this->request->postMore([
             ['type', 1],
             ['delivery_name', ''],//快递公司名称
@@ -120,9 +118,7 @@ class StoreOrder extends AuthController
             ['fictitious_content', ''],//虚拟发货内容
             ['cart_ids', []]
         ]);
-        if (!$id) {
-            return app('json')->fail(100100);
-        }
+
         if (!$data['cart_ids']) {
             return app('json')->fail(400158);
         }
@@ -170,27 +166,11 @@ class StoreOrder extends AuthController
      * @return mixed
      * @throws \Exception
      */
-    public function receive(StoreOrderTakeServices $services, $id)
+    public function receive($id)
     {
         if (!$id) return app('json')->fail(100100);
-        $order = $this->services->get($id);
-        if (!$order)
-            return app('json')->fail(400118);
-        if ($order['status'] == 2)
-            return app('json')->fail(400114);
-        if ($order['paid'] == 1 && $order['status'] == 1)
-            $data['status'] = 2;
-        else if ($order['pay_type'] == 'offline')
-            $data['status'] = 2;
-        else
-            return app('json')->fail(400115);
-
-        if (!$this->services->update($id, $data)) {
-            return app('json')->fail(400116);
-        } else {
-            $services->storeProductOrderUserTakeDelivery($order);
-            return app('json')->success(400117);
-        }
+        $this->services->receive((int)$id);
+        return app('json')->success(400117);
     }
 
     /**
@@ -254,6 +234,7 @@ class StoreOrder extends AuthController
      */
     public function setInvoiceStatus($id, StoreOrderInvoiceServices $services)
     {
+        if (!$id) return app('json')->fail(100100);
         $data = $this->request->postMore([
             ['is_invoice', 0],
             ['invoice_number', 0],
@@ -278,26 +259,8 @@ class StoreOrder extends AuthController
      */
     public function read($id)
     {
-        $field = ['id', 'pid', 'order_id', 'trade_no', 'uid', 'freight_price', 'real_name', 'user_phone', 'user_address', 'total_num',
-            'total_price', 'total_postage', 'pay_price', 'coupon_price', 'deduction_price', 'paid', 'pay_time', 'pay_type', 'add_time',
-            'shipping_type', 'status', 'refund_status', 'delivery_name', 'delivery_code', 'delivery_id', 'refund_type', 'delivery_type', 'pink_id'];
-        if (!$id || !($orderInfo = $this->services->get($id, $field, ['invoice']))) {
-            return app('json')->fail(400118);
-        }
-
-        if (!$orderInfo['invoice']) {
-            $orderInfo['invoice'] = new \StdClass();
-        } else {
-            $orderInfo['invoice']->hidden(['uid', 'category']);
-        }
-
-        $orderInfo = $this->services->tidyOrder($orderInfo->toArray(), true, true);
-        //核算优惠金额
-        $vipTruePrice = array_column($orderInfo['items'], 'vip_sum_truePrice');
-        $vipTruePrice = round(array_sum($vipTruePrice), 2);
-        $orderInfo['vip_true_price'] = sprintf("%.2f", $vipTruePrice ?: '0.00');
-        $orderInfo['total_price'] = bcadd($orderInfo['total_price'], $orderInfo['vip_true_price'], 2);
-        return app('json')->success($orderInfo);
+        if (!$id) return app('json')->fail(100100);
+        return app('json')->success($this->services->getInfo((int)$id));
     }
 
     /**
@@ -307,11 +270,9 @@ class StoreOrder extends AuthController
      */
     public function remark($id)
     {
+        if (!$id) return app('json')->fail(100100);
         $data = $this->request->postMore([['remark', '']]);
-        if (!$data['remark'])
-            return app('json')->fail(400106);
-        if (!$id)
-            return app('json')->fail(100100);
+        if (!$data['remark']) return app('json')->fail(400106);
 
         if (!$order = $this->services->get($id)) {
             return app('json')->fail(400118);
@@ -330,8 +291,8 @@ class StoreOrder extends AuthController
      */
     public function updateDistribution($id, StoreOrderDeliveryServices $services)
     {
-        $data = $this->request->postMore([['delivery_name', ''], ['delivery_code', ''], ['delivery_id', '']]);
         if (!$id) return app('json')->fail(100100);
+        $data = $this->request->postMore([['delivery_name', ''], ['delivery_code', ''], ['delivery_id', '']]);
         $services->updateDistribution($id, $data);
         return app('json')->success(100010);
     }

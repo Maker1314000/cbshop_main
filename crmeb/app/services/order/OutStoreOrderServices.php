@@ -115,6 +115,35 @@ class OutStoreOrderServices extends BaseServices
     }
 
     /**
+     * 订单详情
+     * @param int $id 订单ID
+     * @return mixed
+     */
+    public function getInfo(int $id)
+    {
+        $field = ['id', 'pid', 'order_id', 'trade_no', 'uid', 'freight_price', 'real_name', 'user_phone', 'user_address', 'total_num',
+            'total_price', 'total_postage', 'pay_price', 'coupon_price', 'deduction_price', 'paid', 'pay_time', 'pay_type', 'add_time',
+            'shipping_type', 'status', 'refund_status', 'delivery_name', 'delivery_code', 'delivery_id', 'refund_type', 'delivery_type', 'pink_id', 'use_integral', 'back_integral'];
+        if (!$id || !($orderInfo = $this->dao->get($id, $field, ['invoice']))) {
+            return app('json')->fail(400118);
+        }
+
+        if (!$orderInfo['invoice']) {
+            $orderInfo['invoice'] = new \StdClass();
+        } else {
+            $orderInfo['invoice']->hidden(['uid', 'category']);
+        }
+
+        $orderInfo = $this->tidyOrder($orderInfo->toArray(), true, true);
+        //核算优惠金额
+        $vipTruePrice = array_column($orderInfo['items'], 'vip_sum_truePrice');
+        $vipTruePrice = round(array_sum($vipTruePrice), 2);
+        $orderInfo['vip_true_price'] = sprintf("%.2f", $vipTruePrice ?: '0.00');
+        $orderInfo['total_price'] = bcadd($orderInfo['total_price'], $orderInfo['vip_true_price'], 2);
+        return $orderInfo;
+    }
+
+    /**
      * 订单详情数据格式化
      * @param $order
      * @param bool $detail 是否需要订单商品详情
@@ -133,6 +162,8 @@ class OutStoreOrderServices extends BaseServices
             }
             $order['items'] = $list;
         }
+
+        $order['pay_type_name'] = PayServices::PAY_TYPE[$order['pay_type']] ?? '其他方式';
 
         if (!$order['paid'] && $order['pay_type'] == 'offline' && !$order['status'] >= 2) {
             $order['status_name'] = '线下付款,未支付';
@@ -209,7 +240,7 @@ class OutStoreOrderServices extends BaseServices
             'cart_id' =>  $cartId,
             'store_name' => $cartInfo['productInfo']['store_name'] ?? '',
             'suk' => $cartInfo['productInfo']['attrInfo']['suk'] ?? '',
-            'image' =>  $cartInfo['productInfo']['image'] ?? '',
+            'image' => $cartInfo['productInfo']['attrInfo']['image'] ?: $cartInfo['productInfo']['image'],
             'price' => sprintf("%.2f", $cartInfo['truePrice'] ?? '0.00'),
             'cart_num' => $cartInfo['cart_num'] ?? 0,
             'surplus_num' => $cartInfo['surplus_num'] ?? 0,
@@ -233,6 +264,43 @@ class OutStoreOrderServices extends BaseServices
             $list = $this->tidyCartList($cart['cart_info'], $list, $key);
         }
         return $list;
+    }
+
+    /**
+     * 订单收货
+     * @param int $id 订单ID
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function receive(int $id): bool
+    {
+        $order = $this->dao->get($id);
+        if (!$order) {
+            throw new ApiException(400118);
+        }
+
+        if ($order['status'] == 2) {
+            throw new ApiException(400114);
+        }
+
+        if (($order['paid'] == 1 && $order['status'] == 1) || $order['pay_type'] == 'offline') {
+            $data['status'] = 2;
+        } else {
+            throw new ApiException(400115);
+        }
+
+        if (!$this->dao->update($id, $data)) {
+            throw new ApiException(400116);
+        }
+
+        /** @var StoreOrderTakeServices $takeServices */
+        $takeServices = app()->make(StoreOrderTakeServices::class);
+        if (!$takeServices->storeProductOrderUserTakeDelivery($order)) {
+            throw new ApiException(400116);
+        }
+        return true;
     }
 
 }
