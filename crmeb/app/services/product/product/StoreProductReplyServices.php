@@ -190,12 +190,12 @@ class StoreProductReplyServices extends BaseServices
         $data['poor_count'] = $this->dao->replyCount($id, 3);
         if ($data['sum_count'] != 0) {
             $data['reply_chance'] = bcdiv($data['good_count'], $data['sum_count'], 2);
-            $data['reply_star'] = bcdiv($this->dao->sum(['product_id' => $id, 'is_del' => 0], 'product_score'), $data['sum_count'], 0);
+            $num = ($this->dao->sum(['product_id' => $id, 'is_del' => 0], 'service_score') + $this->dao->sum(['product_id' => $id, 'is_del' => 0], 'product_score')) / 2;
+            $data['reply_star'] = bcdiv($num, $data['sum_count'], 0);
         } else {
             $data['reply_chance'] = 100;
             $data['reply_star'] = 5;
         }
-//        $data['reply_star'] = bcmul($data['reply_chance'], 5, 0);
         $data['reply_chance'] = $data['sum_count'] == 0 ? 100 : bcmul($data['reply_chance'], 100, 0);
         return $data;
     }
