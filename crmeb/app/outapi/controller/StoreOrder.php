@@ -10,10 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\outapi\controller;
 
-use app\adminapi\validate\order\StoreOrderValidate;
-use app\services\order\{OutStoreOrderServices,
-    StoreOrderDeliveryServices,
-    StoreOrderInvoiceServices};
+use app\services\order\OutStoreOrderServices;
 use app\services\shipping\ExpressServices;
 use think\facade\App;
 
@@ -73,43 +70,43 @@ class StoreOrder extends AuthController
 
     /**
      * 订单发货
-     * @param $id 订单id
+     * @param string $order_id 订单号
      * @return mixed
      */
-    public function delivery($id, StoreOrderDeliveryServices $services)
+    public function delivery(string $order_id)
     {
-        if (!$id) return app('json')->fail(100100);
+        if (!$order_id) return app('json')->fail(100100);
         $data = $this->request->postMore([
             ['type', 1],
             ['delivery_name', ''],//快递公司名称
             ['delivery_id', ''],//快递单号
             ['delivery_code', ''],//快递公司编码
-            ['fictitious_content', '']//虚拟发货内容
         ]);
         $data['express_record_type'] = 1;
-        $services->delivery((int)$id, $data);
+
+       $this->services->delivery($order_id, $data);
         return app('json')->success(100010);
     }
 
     /**
      * 获取订单可拆分发货商品列表
-     * @param $id 订单id
+     * @param string $order_id 订单号
      * @return mixed
      */
-    public function splitCartInfo($id)
+    public function splitCartInfo(string $order_id)
     {
-        if (!$id) return app('json')->fail(100100);
-        return app('json')->success($this->services->getCartList((int)$id));
+        if (!$order_id) return app('json')->fail(100100);
+        return app('json')->success($this->services->getCartList($order_id));
     }
 
     /**
      * 订单拆单发送货
-     * @param $id 订单id
+     * @param string $order_id 订单号
      * @return mixed
      */
-    public function splitDelivery($id, StoreOrderDeliveryServices $services)
+    public function splitDelivery(string $order_id)
     {
-        if (!$id) return app('json')->fail(100100);
+        if (!$order_id) return app('json')->fail(100100);
         $data = $this->request->postMore([
             ['type', 1],
             ['delivery_name', ''],//快递公司名称
@@ -130,58 +127,32 @@ class StoreOrder extends AuthController
             $cart['cart_num'] = (int)$cart['cart_num'];
         }
         $data['express_record_type'] = 1;
-        $services->splitDelivery((int)$id, $data);
+
+        $this->services->splitDelivery($order_id, $data);
         return app('json')->success(100010);
     }
 
     /**
-     * 修改订单支付金额等
-     * @param $id
-     * @return mixed
-     */
-    public function update($id)
-    {
-        if (!$id) return app('json')->fail(100100);
-        $data = $this->request->postMore([
-            ['order_id', ''],
-            ['total_price', 0],
-            ['total_postage', 0],
-            ['pay_price', 0],
-            ['pay_postage', 0],
-            ['gain_integral', 0],
-        ]);
-
-        $this->validate($data, StoreOrderValidate::class);
-
-        if ($data['total_price'] < 0) return app('json')->fail(400155);
-        if ($data['pay_price'] < 0) return app('json')->fail(400155);
-
-        $this->services->updateOrder((int)$id, $data);
-        return app('json')->success(100001);
-    }
-
-    /**
      * 确认收货
-     * @param $id 订单id
+     * @param string $order_id 订单号
      * @return mixed
      * @throws \Exception
      */
-    public function receive($id)
+    public function receive(string $order_id)
     {
-        if (!$id) return app('json')->fail(100100);
-        $this->services->receive((int)$id);
+        if (!$order_id) return app('json')->fail(100100);
+        $this->services->receive($order_id);
         return app('json')->success(400117);
     }
 
     /**
      * 设置发票信息
-     * @param $id
-     * @param StoreOrderInvoiceServices $services
+     * @param string $order_id 订单号
      * @return mixed
      */
-    public function setInvoice($id, StoreOrderInvoiceServices $services)
+    public function setInvoice(string $order_id)
     {
-        if (!$id) return app('json')->fail(100100);
+        if (!$order_id) return app('json')->fail(100100);
         $data = $this->request->postMore([
             [['header_type', 'd'], 1],
             [['type', 'd'], 1],
@@ -218,8 +189,7 @@ class StoreOrder extends AuthController
             return app('json')->fail(410149);
         }
 
-        $re = $services->setInvoice($id, $data);
-        if ($re) {
+        if ($this->services->setInvoice($order_id, $data)) {
             return app('json')->success(100001);
         } else {
             return app('json')->fail(100005);
@@ -228,13 +198,12 @@ class StoreOrder extends AuthController
 
     /**
      * 设置发票状态
-     * @param $id
-     * @param StoreOrderInvoiceServices $services
+     * @param string $order_id 订单号
      * @return mixed
      */
-    public function setInvoiceStatus($id, StoreOrderInvoiceServices $services)
+    public function setInvoiceStatus(string $order_id)
     {
-        if (!$id) return app('json')->fail(100100);
+        if (!$order_id) return app('json')->fail(100100);
         $data = $this->request->postMore([
             ['is_invoice', 0],
             ['invoice_number', 0],
@@ -248,33 +217,33 @@ class StoreOrder extends AuthController
             return app('json')->fail(400167);
         }
 
-        $services->setInvoice((int)$id, $data);
+        $this->services->setInvoice($order_id, $data);
         return app('json')->success(100014);
     }
 
     /**
      * 订单详情
-     * @param $id 订单id
+     * @param string $order_id 订单号
      * @return mixed
      */
-    public function read($id)
+    public function read(string $order_id)
     {
-        if (!$id) return app('json')->fail(100100);
-        return app('json')->success($this->services->getInfo((int)$id));
+        if (!$order_id) return app('json')->fail(100100);
+        return app('json')->success($this->services->getInfo($order_id));
     }
 
     /**
      * 修改备注
-     * @param $id
+    @param string $order_id 订单号
      * @return mixed
      */
-    public function remark($id)
+    public function remark(string $order_id)
     {
-        if (!$id) return app('json')->fail(100100);
+        if (!$order_id) return app('json')->fail(100100);
         $data = $this->request->postMore([['remark', '']]);
         if (!$data['remark']) return app('json')->fail(400106);
 
-        if (!$order = $this->services->get($id)) {
+        if (!$order = $this->services->get(['order_id' => $order_id])) {
             return app('json')->fail(400118);
         }
         $order->remark = $data['remark'];
@@ -286,14 +255,15 @@ class StoreOrder extends AuthController
 
     /**
      * 修改配送信息
-     * @param $id 订单id
+     * @param string $order_id 订单号
      * @return mixed
      */
-    public function updateDistribution($id, StoreOrderDeliveryServices $services)
+    public function updateDistribution(string $order_id)
     {
-        if (!$id) return app('json')->fail(100100);
+        if (!$order_id) return app('json')->fail(100100);
         $data = $this->request->postMore([['delivery_name', ''], ['delivery_code', ''], ['delivery_id', '']]);
-        $services->updateDistribution($id, $data);
+
+        $this->services->updateDistribution($order_id, $data);
         return app('json')->success(100010);
     }
 }
