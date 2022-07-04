@@ -19,6 +19,7 @@ use app\services\BaseServices;
 use app\services\pay\OrderPayServices;
 use app\services\pay\PayServices;
 use app\services\product\product\StoreProductLogServices;
+use app\services\shipping\ExpressServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use app\services\system\store\SystemStoreServices;
 use app\services\user\UserInvoiceServices;
@@ -116,15 +117,15 @@ class OutStoreOrderServices extends BaseServices
 
     /**
      * 订单详情
-     * @param int $id 订单ID
+     * @param string $orderId 订单号
      * @return mixed
      */
-    public function getInfo(int $id)
+    public function getInfo(string $orderId)
     {
         $field = ['id', 'pid', 'order_id', 'trade_no', 'uid', 'freight_price', 'real_name', 'user_phone', 'user_address', 'total_num',
             'total_price', 'total_postage', 'pay_price', 'coupon_price', 'deduction_price', 'paid', 'pay_time', 'pay_type', 'add_time',
             'shipping_type', 'status', 'refund_status', 'delivery_name', 'delivery_code', 'delivery_id', 'refund_type', 'delivery_type', 'pink_id', 'use_integral', 'back_integral'];
-        if (!$id || !($orderInfo = $this->dao->get($id, $field, ['invoice']))) {
+        if (!$orderId || !($orderInfo = $this->dao->get(['order_id' => $orderId], $field, ['invoice']))) {
             return app('json')->fail(400118);
         }
 
@@ -134,7 +135,7 @@ class OutStoreOrderServices extends BaseServices
             $orderInfo['invoice']->hidden(['uid', 'category']);
         }
 
-        $orderInfo = $this->tidyOrder($orderInfo->toArray(), true, true);
+        $orderInfo = $this->tidyOrder($orderInfo->toArray(), true);
         //核算优惠金额
         $vipTruePrice = array_column($orderInfo['items'], 'vip_sum_truePrice');
         $vipTruePrice = round(array_sum($vipTruePrice), 2);
@@ -237,7 +238,7 @@ class OutStoreOrderServices extends BaseServices
     public function tidyCartList(array $cartInfo, array $list, int $cartId = 0): array
     {
         $list[] = [
-            'cart_id' =>  $cartId,
+            'cart_id' => $cartId,
             'store_name' => $cartInfo['productInfo']['store_name'] ?? '',
             'suk' => $cartInfo['productInfo']['attrInfo']['suk'] ?? '',
             'image' => $cartInfo['productInfo']['attrInfo']['image'] ?: $cartInfo['productInfo']['image'],
@@ -251,15 +252,20 @@ class OutStoreOrderServices extends BaseServices
 
     /**
      * 获取订单可以拆分商品信息
-     * @param int $id
+     * @param string $orderId 订单号
      * @return array
      */
-    public function getCartList(int $id): array
+    public function getCartList(string $orderId): array
     {
+        $order = $this->dao->get(['order_id' => $orderId]);
+        if (!$order) {
+            throw new ApiException(400118);
+        }
+
+        $list = [];
         /** @var StoreOrderCartInfoServices $services */
         $services = app()->make(StoreOrderCartInfoServices::class);
-        $list = [];
-        $carts = $services->getSplitCartList($id);
+        $carts = $services->getSplitCartList((int)$order['id']);
         foreach ($carts as $key => $cart) {
             $list = $this->tidyCartList($cart['cart_info'], $list, $key);
         }
@@ -268,15 +274,15 @@ class OutStoreOrderServices extends BaseServices
 
     /**
      * 订单收货
-     * @param int $id 订单ID
+     * @param string $orderId 订单号
      * @return bool
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function receive(int $id): bool
+    public function receive(string $orderId): bool
     {
-        $order = $this->dao->get($id);
+        $order = $this->dao->get(['order_id' => $orderId]);
         if (!$order) {
             throw new ApiException(400118);
         }
@@ -291,7 +297,7 @@ class OutStoreOrderServices extends BaseServices
             throw new ApiException(400115);
         }
 
-        if (!$this->dao->update($id, $data)) {
+        if (!$this->dao->update($order['id'], $data)) {
             throw new ApiException(400116);
         }
 
@@ -301,6 +307,91 @@ class OutStoreOrderServices extends BaseServices
             throw new ApiException(400116);
         }
         return true;
+    }
+
+    /**
+     * 发货
+     * @param string $orderId 订单号
+     * @param array $data
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function delivery(string $orderId, array $data): bool
+    {
+        $orderInfo = $this->dao->get(['order_id' => $orderId]);
+        if (!$orderInfo) {
+            throw new ApiException(400470);
+        }
+
+        /** @var StoreOrderDeliveryServices $deliveryServices */
+        $deliveryServices = app()->make(StoreOrderDeliveryServices::class);
+        return $deliveryServices->delivery((int)$orderInfo['id'], $data);
+    }
+
+    /**
+     * 订单拆单发送货
+     * @param string $orderId 订单号
+     * @param array $data
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function splitDelivery(string $orderId, array $data): bool
+    {
+        $orderInfo = $this->dao->get(['order_id' => $orderId]);
+        if (!$orderInfo) {
+            throw new ApiException(400470);
+        }
+
+        /** @var StoreOrderDeliveryServices $deliveryServices */
+        $deliveryServices = app()->make(StoreOrderDeliveryServices::class);
+        return $deliveryServices->splitDelivery((int)$orderInfo['id'], $data);
+    }
+
+    /**
+     * 设置发票
+     * @param string $orderId 订单号
+     * @param array $data
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function setInvoice(string $orderId, array $data): bool
+    {
+        $orderInfo = $this->dao->get(['order_id' => $orderId], ['id'], ['invoice']);
+        if (!$orderInfo) {
+            throw new AdminException(400118);
+        }
+
+        if (!$orderInfo->invoice || !$invoiceId = $orderInfo->invoice->id) {
+            throw new ApiException(100026);
+        }
+
+        /** @var StoreOrderInvoiceServices $invoiceServices */
+        $invoiceServices = app()->make(StoreOrderInvoiceServices::class);
+        return $invoiceServices->setInvoice($invoiceId, $data);
+    }
+
+    /**
+     * 修改配送信息
+     * @param string $orderId 订单号
+     * @param array $data
+     * @return mixed
+     */
+    public function updateDistribution(string $orderId, array $data)
+    {
+        $orderInfo = $this->dao->get(['order_id' => $orderId]);
+        if (!$orderInfo) {
+            throw new AdminException(400118);
+        }
+
+        /** @var StoreOrderDeliveryServices $deliveryServices */
+        $deliveryServices = app()->make(StoreOrderDeliveryServices::class);
+        return $deliveryServices->updateDistribution($orderInfo['id'], $data);
     }
 
 }
