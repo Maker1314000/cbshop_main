@@ -52,11 +52,11 @@ Route::group(function () {
 
         //售后订单
         Route::get('refund/list', 'RefundOrder/lst')->option(['real_name' => '售后订单列表']);
-        Route::put('refund/remark/:id', 'RefundOrder/remark')->option(['real_name' => '售后订单备注']);
-        Route::put('refund/:id', 'RefundOrder/refundPrice')->option(['real_name' => '售后订单退款']);
-        Route::put('refund/agree/:id', 'RefundOrder/agree')->option(['real_name' => '商家同意退款']);
-        Route::put('refund/refuse/:id', 'RefundOrder/refuse')->option(['real_name' => '商家拒绝退款']);
-        Route::get('refund/:id', 'RefundOrder/read')->option(['real_name' => '售后订单详情']);
+        Route::put('refund/remark/:order_id', 'RefundOrder/remark')->option(['real_name' => '售后订单备注']);
+        Route::put('refund/:order_id', 'RefundOrder/refundPrice')->option(['real_name' => '售后订单退款']);
+        Route::put('refund/agree/:order_id', 'RefundOrder/agree')->option(['real_name' => '商家同意退款']);
+        Route::put('refund/refuse/:order_id', 'RefundOrder/refuse')->option(['real_name' => '商家拒绝退款']);
+        Route::get('refund/:order_id', 'RefundOrder/read')->option(['real_name' => '售后订单详情']);
 
     })->middleware(AuthTokenMiddleware::class);
 

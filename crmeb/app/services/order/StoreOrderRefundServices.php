@@ -268,6 +268,11 @@ class StoreOrderRefundServices extends BaseServices
      */
     public function agreeExpress($id)
     {
+        $order = $this->dao->get($id, ['refund_type']);
+        if (!$order) throw new AdminException(100026);
+        if ($order['refund_type'] == 4) {
+            return true;
+        }
         $this->dao->update($id, ['refund_type' => 4], 'id');
         return true;
     }
