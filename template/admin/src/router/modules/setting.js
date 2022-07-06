@@ -611,5 +611,14 @@ export default {
       },
       component: () => import('@/pages/setting/agreement/index'),
     },
+    {
+      path: 'other_config/out/:type?/:tab_id?',
+      name: `${pre}other_print`,
+      meta: {
+        auth: ['setting-other-out'],
+        title: '对外接口配置',
+      },
+      component: () => import('@/pages/setting/setSystem/index'),
+    },
   ],
 };
