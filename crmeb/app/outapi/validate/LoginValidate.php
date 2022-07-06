@@ -29,8 +29,8 @@ class LoginValidate extends Validate
      * @var string[]
      */
     protected $message = [
-        'appid.require' => '请填写账号',
-        'appid.account' => '请填写正确的账号',
-        'appsecret.regex' => '请填写密码',
+        'appid.require' => 400133,
+        'appid.account' => 400140,
+        'appsecret.regex' => 400134,
     ];
 }

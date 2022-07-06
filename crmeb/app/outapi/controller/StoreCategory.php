@@ -71,7 +71,7 @@ class StoreCategory extends AuthController
         ]);
         $this->validate($data, StoreCategoryValidate::class, 'save');
         $cateId = $this->services->createData($data);
-        return app('json')->success('添加分类成功!', ['id' => $cateId]);
+        return app('json')->success(100000, ['id' => $cateId]);
     }
 
     /**
@@ -91,7 +91,7 @@ class StoreCategory extends AuthController
         ]);
         $this->validate($data, StoreCategoryValidate::class, 'save');
         $this->services->editData($id, $data);
-        return app('json')->success('修改成功!');
+        return app('json')->success(100001);
     }
 
     /**
@@ -102,7 +102,7 @@ class StoreCategory extends AuthController
     public function delete($id)
     {
         $this->services->del((int)$id);
-        return app('json')->success('删除成功!');
+        return app('json')->success(100002);
     }
 
     /**
