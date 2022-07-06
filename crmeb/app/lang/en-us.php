@@ -821,6 +821,8 @@ return [
     400739 => 'Please configure payment certificate',
     400740 => 'Only two-level classification is supported',
     400741 => 'Freight format error',
+    400742 => 'Please check the attribute code or inventory quantity',
+    400743 => 'The number of synchronization entries cannot exceed 100',
 
     410000 => 'Please enter the account number and password',
     410001 => 'Login successful',

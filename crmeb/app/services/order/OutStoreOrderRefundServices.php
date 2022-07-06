@@ -82,16 +82,16 @@ class OutStoreOrderRefundServices extends BaseServices
 
     /**
      * 退款订单详情
-     * @param $id
+     * @param string $orderId 售后单号
      * @return mixed
      */
-    public function getInfo(int $id)
+    public function getInfo(string $orderId)
     {
         $field = ['id', 'store_order_id', 'store_id', 'order_id', 'uid', 'refund_type', 'refund_num', 'refund_price',
             'refunded_price', 'refund_phone', 'refund_express', 'refund_express_name', 'refund_explain',
             'refund_img', 'refund_reason', 'refuse_reason', 'remark', 'refunded_time', 'cart_info', 'is_cancel',
             'is_pink_cancel', 'is_del', 'add_time'];
-        $refund = $this->dao->get($id, $field, ['orderData']);
+        $refund = $this->dao->get(['order_id' => $orderId], $field, ['orderData']);
         if (!$refund) throw new ApiException(410173);
         $refund = $refund->toArray();
 
@@ -133,5 +133,133 @@ class OutStoreOrderRefundServices extends BaseServices
         $refund['refund_status'] = in_array($refund['refund_type'], [1, 2, 4, 5]) ? 1 : 2;
         unset($refund['cart_info']);
         return $refund;
+    }
+
+    /**
+     * 修改售后单备注
+     * @param string $orderId 售后单号
+     * @param string $remark 备注
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function remark(string $orderId, string $remark): bool
+    {
+        $order = $this->dao->get(['order_id' => $orderId]);
+        if (!$order) {
+            throw new ApiException(410173);
+        }
+        /** @var StoreOrderRefundServices $refundServices */
+        $refundServices = app()->make(StoreOrderRefundServices::class);
+        return $refundServices->updateRemark((int)$order['id'], $remark);
+    }
+
+    /**
+     * 订单退款
+     * @param string $orderId 售后单号
+     * @param string $refundPrice 退款金额
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function refundPrice(string $orderId, string $refundPrice): bool
+    {
+        $orderRefund = $this->dao->get(['order_id' => $orderId]);
+        if (!$orderRefund) {
+            throw new ApiException(100026);
+        }
+        if ($orderRefund['is_cancel'] == 1) {
+            throw new ApiException(400118);
+        }
+
+        $order = $this->storeOrderServices->get((int)$orderRefund['store_order_id']);
+        if (!$order) {
+            throw new ApiException(100026);
+        }
+        if (!in_array($orderRefund['refund_type'], [1, 5])) {
+            throw new ApiException(400144);
+        }
+
+        $data['refund_type'] = 6;
+        $data['refunded_time'] = time();
+
+        /** @var StoreOrderRefundServices $refundServices */
+        $refundServices = app()->make(StoreOrderRefundServices::class);
+
+        //0元退款
+        if ($orderRefund['refund_price'] == 0 && in_array($orderRefund['refund_type'], [1, 5])) {
+            $refundPrice = 0;
+        } else {
+            if (!$refundPrice) {
+                throw new ApiException(400146);
+            }
+            if ($orderRefund['refund_price'] == $orderRefund['refunded_price']) {
+                throw new ApiException(400147);
+            }
+
+            $data['refunded_price'] = bcadd($refundPrice, $orderRefund['refunded_price'], 2);
+            $bj = bccomp((string)$orderRefund['refund_price'], $data['refunded_price'], 2);
+            if ($bj < 0) {
+                throw new ApiException(400148);
+            }
+        }
+
+        $refundData['pay_price'] = $order['pay_price'];
+        $refundData['refund_price'] = $refundPrice;
+        if ($order['refund_price'] > 0) {
+            mt_srand();
+            $refundData['refund_id'] = $order['order_id'] . rand(100, 999);
+        }
+        //修改订单退款状态
+        if ($refundServices->agreeRefund((int)$orderRefund['id'], $refundData)) {
+            $refundServices->update((int)$orderRefund['id'], $data);
+            return true;
+        } else {
+            $refundServices->storeProductOrderRefundYFasle((int)$orderRefund['id'], $refundPrice);
+            throw new ApiException(400150);
+        }
+    }
+
+    /**
+     * 同意退款
+     * @param string $orderId 售后单号
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function agree(string $orderId): bool
+    {
+        $orderRefund = $this->dao->get(['order_id' => $orderId]);
+        if (!$orderRefund) {
+            throw new ApiException(100026);
+        }
+
+        /** @var StoreOrderRefundServices $refundServices */
+        $refundServices = app()->make(StoreOrderRefundServices::class);
+        return $refundServices->agreeExpress((int)$orderRefund['id']);
+    }
+
+    /**
+     * @param string $orderId 售后单号
+     * @param string $refundReason 不退款原因
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function refuse(string $orderId, string $refundReason): bool
+    {
+        $orderRefund = $this->dao->get(['order_id' => $orderId]);
+        if (!$orderRefund) {
+            throw new ApiException(100026);
+        }
+
+        /** @var StoreOrderRefundServices $refundServices */
+        $refundServices = app()->make(StoreOrderRefundServices::class);
+        $refundServices->refuse((int)$orderRefund['id'], $refundReason);
+        return true;
     }
 }

@@ -196,4 +196,26 @@ class StoreProduct extends AuthController
         $cartService->changeStatus($id, 0);
         return app('json')->success($res);
     }
+
+    /**
+     * 同步库存
+     * @return void
+     */
+    public function uploadStock()
+    {
+        [$items] = $this->request->postMore([['items', []]], true);
+
+        foreach ($items as $item) {
+            if (!isset($item['bar_code']) || !isset($item['qty'])) {
+                return app('json')->fail(400742);
+            }
+        }
+
+        if (count($items) > 100) {
+            return app('json')->fail(400743);
+        }
+
+        $this->services->syncStock($items);
+        return app('json')->success(100010);
+    }
 }
