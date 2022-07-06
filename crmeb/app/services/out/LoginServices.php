@@ -12,14 +12,11 @@
 namespace app\services\out;
 
 use app\dao\out\OutAccountDao;
-use crmeb\basic\BaseAuth;
 use app\services\BaseServices;
 use crmeb\exceptions\AuthException;
 use crmeb\services\CacheService;
-use crmeb\utils\ApiErrorCode;
 use crmeb\utils\JwtAuth;
 use Firebase\JWT\ExpiredException;
-use think\exception\ValidateException;
 
 /**
  * 获取token
@@ -31,10 +28,8 @@ use think\exception\ValidateException;
  */
 class LoginServices extends BaseServices
 {
-    const FEPAORPL = 'OSeCVa';
-
     /**
-     * OutAccountServices constructor.
+     * LoginServices constructor.
      * @param OutAccountDao $dao
      */
     public function __construct(OutAccountDao $dao)
@@ -55,13 +50,13 @@ class LoginServices extends BaseServices
     {
         $autInfo = $this->dao->get(['appid' => $appid, 'is_del' => 0]);
         if (!$autInfo) {
-            throw new ValidateException('没有此用户');
+            throw new AuthException(410141);
         }
         if ($appsecret && !password_verify($appsecret, $autInfo->appsecret)) {
-            throw new ValidateException('appid或appsecret错误');
+            throw new AuthException(400744);
         }
         if ($autInfo->status == 2) {
-            throw new ValidateException('您已被禁止登录');
+            throw new AuthException(400595);
         }
         $token = $this->createToken($autInfo->id, 'out');
         $data['last_time'] = time();
@@ -122,7 +117,7 @@ class LoginServices extends BaseServices
     {
         [$page, $limit] = $this->getPageValue();
         $where['is_del'] = 0;
-        $list = $this->dao->getList((array)$where, (int)$page, (int)$limit);
+        $list = $this->dao->getList($where, $page, $limit);
         $count = $this->dao->count($where);
         if ($list) {
             foreach ($list as &$item) {
@@ -178,14 +173,14 @@ class LoginServices extends BaseServices
             if (!request()->isCli()) {
                 $cacheService->clearToken($md5Token);
             }
-            throw new AuthException(ApiErrorCode::ERR_LOGIN_STATUS);
+            throw new AuthException(110003);
         }
 
         if ($authInfo->status == 2) {
             if (!request()->isCli()) {
                 $cacheService->clearToken($md5Token);
             }
-            throw new AuthException('您已被禁止登录');
+            throw new AuthException(400595);
         }
         return true;
     }

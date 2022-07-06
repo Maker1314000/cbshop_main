@@ -55,7 +55,7 @@ class Login extends AuthController
 
         $token = $this->services->authLogin($appid, $appsecret);
 
-        return app('json')->success('获取成功', $token);
+        return app('json')->success(100010, $token);
     }
 
     /**
@@ -68,7 +68,7 @@ class Login extends AuthController
             ['access_token', ''],
         ], true);
         $token = $this->services->refresh($token);
-        return app('json')->success('获取成功', $token);
+        return app('json')->success(100010, $token);
     }
 
 }
