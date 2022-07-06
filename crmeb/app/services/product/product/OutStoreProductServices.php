@@ -12,6 +12,7 @@
 namespace app\services\product\product;
 
 use app\dao\product\product\StoreProductDao;
+use app\jobs\ProductStockJob;
 use app\services\BaseServices;
 use app\services\order\StoreCartServices;
 use app\services\product\sku\StoreProductAttrResultServices;
@@ -434,5 +435,70 @@ class OutStoreProductServices extends BaseServices
                 throw new AdminException(400581);
             }
         }
+    }
+
+    /**
+     * 同步库存
+     * @param array $items
+     * @return void
+     */
+    public function syncStock(array $items)
+    {
+        return $this->transaction(function () use ($items) {
+            $goods = $saveData = [];
+            // 同步规格value库存
+            /** @var StoreProductAttrValueServices $storeProductAttrValueServices */
+            $storeProductAttrValueServices = app()->make(StoreProductAttrValueServices::class);
+            $list = $storeProductAttrValueServices->getColumn(['bar_code' => array_column($items, 'bar_code')], 'id, product_id, bar_code, stock', 'bar_code');
+
+            foreach ($items as $item) {
+                $value = $list[$item['bar_code']] ?? [];
+                if (!$value) continue;
+                if (!isset($goods[$value['product_id']])) $goods[$value['product_id']] = 1;
+                $saveData[] = ['id' => $value['id'], 'stock' => $item['qty']];
+            }
+
+            if ($saveData) {
+                $storeProductAttrValueServices->saveAll($saveData);
+            }
+
+            if ($goods) {
+                ProductStockJob::dispatchDo('distribute', [$goods]);
+            }
+            return true;
+        });
+    }
+
+    /**
+     * 计算商品库存
+     * @param int $id
+     * @return void
+     */
+    public function calcStockByAttrValue(int $id)
+    {
+        return $this->transaction(function () use ($id) {
+            /** @var StoreProductAttrValueServices $storeProductAttrValueServices */
+            $storeProductAttrValueServices = app()->make(StoreProductAttrValueServices::class);
+
+            /** @var StoreProductAttrResultServices $storeProductAttrResultServices */
+            $storeProductAttrResultServices = app()->make(StoreProductAttrResultServices::class);
+
+            $stock = $storeProductAttrValueServices->sum(['product_id' => $id], 'stock');
+            $res = $this->dao->update($id, ['stock' => $stock]);
+            if (!$res) throw new AdminException(100007);
+
+            $attrValue = $storeProductAttrValueServices->getColumn(['product_id' => $id], 'stock', 'bar_code');
+            $result = $storeProductAttrResultServices->getResult(['product_id' => $id, 'type' => 0]);
+            if (!$attrValue || !$result) return;
+
+            foreach ($result['value'] as $k => $value) {
+                if (isset($attrValue[$value['bar_code']])) {
+                    $result['value'][$k]['stock'] = $attrValue[$value['bar_code']];
+                }
+            }
+            $storeProductAttrResultServices->del($id, 0);
+            $storeProductAttrResultServices->setResult($result, $id, 0);
+            return true;
+        });
     }
 }

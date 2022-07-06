@@ -36,6 +36,7 @@ Route::group(function () {
         Route::put('product/:id', 'StoreProduct/update')->option(['real_name' => '修改商品']);
         Route::get('product/:id', 'StoreProduct/read')->option(['real_name' => '获取商品']);
         Route::put('product/set_show/:id/:is_show', 'StoreProduct/set_show')->option(['real_name' => '修改商品状态']);
+        Route::put('product/stock/upload', 'StoreProduct/uploadStock')->option(['real_name' => '同步商品库存']);
 
         //订单
         Route::get('order/list', 'StoreOrder/lst')->name('StoreOrderList')->option(['real_name' => '订单列表']);

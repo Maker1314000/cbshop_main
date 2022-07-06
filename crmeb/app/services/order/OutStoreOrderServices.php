@@ -33,6 +33,7 @@ use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
 use crmeb\services\FormBuilder as Form;
+use crmeb\services\HttpService;
 use crmeb\services\printer\Printer;
 use crmeb\services\SystemConfigService;
 use crmeb\services\UtilService;
@@ -118,15 +119,22 @@ class OutStoreOrderServices extends BaseServices
     /**
      * 订单详情
      * @param string $orderId 订单号
+     * @param int $id 订单ID
      * @return mixed
      */
-    public function getInfo(string $orderId)
+    public function getInfo(string $orderId = '', int $id = 0)
     {
         $field = ['id', 'pid', 'order_id', 'trade_no', 'uid', 'freight_price', 'real_name', 'user_phone', 'user_address', 'total_num',
             'total_price', 'total_postage', 'pay_price', 'coupon_price', 'deduction_price', 'paid', 'pay_time', 'pay_type', 'add_time',
             'shipping_type', 'status', 'refund_status', 'delivery_name', 'delivery_code', 'delivery_id', 'refund_type', 'delivery_type', 'pink_id', 'use_integral', 'back_integral'];
-        if (!$orderId || !($orderInfo = $this->dao->get(['order_id' => $orderId], $field, ['invoice']))) {
-            return app('json')->fail(400118);
+
+        if ($id > 0) {
+            $where = $id;
+        } else {
+            $where = ['order_id' => $orderId];
+        }
+        if (!$orderId || !($orderInfo = $this->dao->get($where, $field, ['invoice']))) {
+            throw new ApiException(400118);
         }
 
         if (!$orderInfo['invoice']) {
@@ -392,6 +400,23 @@ class OutStoreOrderServices extends BaseServices
         /** @var StoreOrderDeliveryServices $deliveryServices */
         $deliveryServices = app()->make(StoreOrderDeliveryServices::class);
         return $deliveryServices->updateDistribution($orderInfo['id'], $data);
+    }
+
+    /**
+     * 推送
+     * @param int $id
+     * @return void
+     */
+    public function push(int $id)
+    {
+        $pushUrl = '';
+        $orderInfo = $this->getInfo('', $id);
+        $res = HttpService::request($pushUrl, 'post', $orderInfo);
+        $res = $res ? json_decode($res, true) : [];
+        if ($res['code'] != 0) {
+            \think\facade\Log::error(['msg' => '订单推送失败', 'id' => $id, 'data' => $res]);
+        }
+        return true;
     }
 
 }
