@@ -36,13 +36,13 @@ class ServeValidata extends Validate
      * @var array
      */
     protected $message = [
-        'phone.require' => 400333,
-        'phone.number' => 400019,
-        'phone.mobile' => 400252,
-        'password.require' => 400020,
-        'verify_code.require' => 400137,
-        'verify_code.number' => 400021,
-        'account.require' => 400133,
+        'phone.require' => '400333',
+        'phone.number' => '400019',
+        'phone.mobile' => '400252',
+        'password.require' => '400020',
+        'verify_code.require' => '400137',
+        'verify_code.number' => '400021',
+        'account.require' => '400133',
     ];
 
     protected $scene = [

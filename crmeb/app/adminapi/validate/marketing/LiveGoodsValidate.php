@@ -35,11 +35,11 @@ class LiveGoodsValidate extends Validate
      * @var array
      */
     protected $message = [
-        'id.require' => 400337,
-        'store_name.require' => 400338,
-        'image.require' => 400339,
-        'price.require' => 400340,
-        'price.gt' => 400341,
+        'id.require' => '400337',
+        'store_name.require' => '400338',
+        'image.require' => '400339',
+        'price.require' => '400340',
+        'price.gt' => '400341',
     ];
 
     protected $scene = [

@@ -38,14 +38,14 @@ class ShippingTemplatesValidate extends Validate
      * @var array
      */
     protected $message = [
-        'name.require' => 400025,
-        'region_info.array' => 400026,
-        'appoint_info.array' => 400027,
-        'no_delivery_info.array' => 400028,
-        'type.number' => 400029,
-        'appoint.number' => 400030,
-        'no_delivery.number' => 400031,
-        'sort.number' => 400032,
+        'name.require' => '400025',
+        'region_info.array' => '400026',
+        'appoint_info.array' => '400027',
+        'no_delivery_info.array' => '400028',
+        'type.number' => '400029',
+        'appoint.number' => '400030',
+        'no_delivery.number' => '400031',
+        'sort.number' => '400032',
     ];
 
     protected $scene = [

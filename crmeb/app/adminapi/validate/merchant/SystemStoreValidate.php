@@ -38,16 +38,16 @@ class SystemStoreValidate extends Validate
      * @var array
      */
     protected $message = [
-        'name.require' => 400378,
-        'introduction.require' => 400379,
-        'phone.require' => 400380,
-        'image.require' => 400381,
-        'oblong_image.require' => 400382,
-        'phone.mobile' => 400252,
-        'address.require' => 400383,
-        'detailed_address.require' => 400384,
-        'latlng.require' => 400385,
-        'day_time.require' => 400386,
+        'name.require' => '400378',
+        'introduction.require' => '400379',
+        'phone.require' => '400380',
+        'image.require' => '400381',
+        'oblong_image.require' => '400382',
+        'phone.mobile' => '400252',
+        'address.require' => '400383',
+        'detailed_address.require' => '400384',
+        'latlng.require' => '400385',
+        'day_time.require' => '400386',
     ];
 
     protected $scene = [

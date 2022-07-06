@@ -30,16 +30,16 @@ class StoreOrderValidate extends Validate
     ];
 
     protected $message = [
-        'order_id.require'      => 400389,
-        'order_id.length'       => 400390,
-        'order_id.alphaNum'     => 400391,
-        'total_price.require'   => 400392,
-        'total_price.float'    => 400393,
-        'pay_price.require'     => 400394,
-        'pay_price.float'      => 400395,
-        'pay_postage.require'   => 400396,
-        'pay_postage.float'    => 400397,
-        'gain_integral.float'  => 400398,
+        'order_id.require'      => '400389',
+        'order_id.length'       => '400390',
+        'order_id.alphaNum'     => '400391',
+        'total_price.require'   => '400392',
+        'total_price.float'    => '400393',
+        'pay_price.require'     => '400394',
+        'pay_price.float'      => '400395',
+        'pay_postage.require'   => '400396',
+        'pay_postage.float'    => '400397',
+        'gain_integral.float'  => '400398',
     ];
 
     protected $scene = [

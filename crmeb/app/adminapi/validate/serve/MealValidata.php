@@ -36,12 +36,12 @@ class MealValidata extends Validate
      * @var array
      */
     protected $message = [
-        'meal_id.require' => 400013,
-        'meal_id.number' => 400014,
-        'price.require' => 400015,
-        'num.require' => 400016,
-        'num.number' => 400017,
-        'type.require' => 400018
+        'meal_id.require' => '400013',
+        'meal_id.number' => '400014',
+        'price.require' => '400015',
+        'num.require' => '400016',
+        'num.number' => '400017',
+        'type.require' => '400018'
     ];
 
 }

@@ -34,8 +34,8 @@ class StoreServiceSpeechcraftValidata extends Validate
      * @var array
      */
     protected $message = [
-        'message.require' => 400022,
-        'sort.require' => 400023,
-        'sort.number' => 400024,
+        'message.require' => '400022',
+        'sort.require' => '400023',
+        'sort.number' => '400024',
     ];
 }

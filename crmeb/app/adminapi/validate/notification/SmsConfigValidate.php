@@ -33,7 +33,7 @@ class SmsConfigValidate extends Validate
      * @var array
      */
     protected $message = [
-        'sms_account.require' => 400387,
-        'sms_token.require' => 400388,
+        'sms_account.require' => '400387',
+        'sms_token.require' => '400388',
     ];
 }

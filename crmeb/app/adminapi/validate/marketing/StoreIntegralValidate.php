@@ -40,14 +40,14 @@ class StoreIntegralValidate extends Validate
      * @var array
      */
     protected $message = [
-        'product_id.require' => 400337,
-        'title.require' => 400338,
-        'info.require' => 400347,
-        'unit_name.require' => 400348,
-        'image.require' => 400349,
-        'images.require' => 400349,
-        'description.require' => 400361,
-        'attrs.require' => 400362,
+        'product_id.require' => '400337',
+        'title.require' => '400338',
+        'info.require' => '400347',
+        'unit_name.require' => '400348',
+        'image.require' => '400349',
+        'images.require' => '400349',
+        'description.require' => '400361',
+        'attrs.require' => '400362',
     ];
 
     protected $scene = [

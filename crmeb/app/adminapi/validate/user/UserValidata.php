@@ -35,10 +35,10 @@ class UserValidata extends Validate
      * @var array
      */
     protected $message = [
-        'account.require' => 400254,
-        'account.alphaNum' => 400089,
-        'pwd.require' => 400134,
-        'true_pwd.require' => 400263,
-        'nickname.number' => 400187
+        'account.require' => '400254',
+        'account.alphaNum' => '400089',
+        'pwd.require' => '400134',
+        'true_pwd.require' => '400263',
+        'nickname.number' => '400187'
     ];
 }

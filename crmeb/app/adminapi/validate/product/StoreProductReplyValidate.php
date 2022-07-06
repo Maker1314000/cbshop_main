@@ -25,14 +25,14 @@ class StoreProductReplyValidate extends Validate
          * @var array
          */
         $this->message = [
-            'product_id.require' => 400337,
-            'avatar.require' => 400000,
-            'nickname.require' => 400001,
-            'comment.require' => 400002,
-            'product_score.require' => 400003,
-            'service_score.require' => 400004,
-            'product_score.In' => 400005,
-            'service_score.In' => 400006,
+            'product_id.require' => '400337',
+            'avatar.require' => '400000',
+            'nickname.require' => '400001',
+            'comment.require' => '400002',
+            'product_score.require' => '400003',
+            'service_score.require' => '400004',
+            'product_score.In' => '400005',
+            'service_score.In' => '400006',
         ];
     }
 

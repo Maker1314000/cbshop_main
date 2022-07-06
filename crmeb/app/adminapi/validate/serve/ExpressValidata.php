@@ -38,12 +38,12 @@ class ExpressValidata extends Validate
      * @var array
      */
     protected $message = [
-        'com.require' => 400007,
-        'temp_id.number' => 400360,
-        'to_name.require' => 400008,
-        'to_tel.require' => 400009,
-        'to_tel.mobile' => 400010,
-        'to_address.require' => 400011,
-        'siid.require' => 400012,
+        'com.require' => '400007',
+        'temp_id.number' => '400360',
+        'to_name.require' => '400008',
+        'to_tel.require' => '400009',
+        'to_tel.mobile' => '400010',
+        'to_address.require' => '400011',
+        'siid.require' => '400012',
     ];
 }

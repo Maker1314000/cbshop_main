@@ -25,9 +25,9 @@ class StoreServiceFeedbackValidate extends Validate
     ];
 
     protected $message = [
-        'phone.require' => 410157,
-        'phone.regex' => 410158,
-        'content.require' => 410163,
-        'rela_name.require' => 410155,
+        'phone.require' => '410157',
+        'phone.regex' => '410158',
+        'content.require' => '410163',
+        'rela_name.require' => '410155',
     ];
 }

@@ -38,12 +38,12 @@ class StoreCouponValidate extends Validate
      * @var array
      */
     protected $message = [
-        'title.require' => 400372,
-        'image.require' => 400337,
-        'category_id.require' => 400373,
-        'coupon_price.require' => 400374,
-        'use_min_price.require' => 400375,
-        'coupon_time.require' => 400376,
+        'title.require' => '400372',
+        'image.require' => '400337',
+        'category_id.require' => '400373',
+        'coupon_price.require' => '400374',
+        'use_min_price.require' => '400375',
+        'coupon_time.require' => '400376',
     ];
 
     protected $scene = [

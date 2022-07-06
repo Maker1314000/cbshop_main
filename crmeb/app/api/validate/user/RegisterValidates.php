@@ -30,13 +30,13 @@ class RegisterValidates extends Validate
     ];
 
     protected $message = [
-        'phone.require' => 410015,
-        'phone.regex' => 410018,
-        'account.require' => 410015,
-        'account.regex' => 410018,
-        'captcha.require' => 410004,
-        'captcha.length' => 410010,
-        'password.require' => 410011,
+        'phone.require' => '410015',
+        'phone.regex' => '410018',
+        'account.require' => '410015',
+        'account.regex' => '410018',
+        'captcha.require' => '410004',
+        'captcha.length' => '410010',
+        'password.require' => '410011',
     ];
 
 

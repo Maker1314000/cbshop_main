@@ -44,20 +44,20 @@ class StoreSeckillValidate extends Validate
      * @var array
      */
     protected $message = [
-        'product_id.require' => 400337,
-        'title.require' => 400338,
-        'info.require' => 400347,
-        'unit_name.require' => 400348,
-        'images.require' => 400349,
-        'section_time.require' => 400353,
-        'num.require' => 400354,
-        'num.gt' => 400355,
-        'once_num.require' => 400366,
-        'once_num.gt' => 400367,
-        'time_id.require' => 400377,
-        'temp_id.require' => 400360,
-        'description.require' => 400361,
-        'attrs.require' => 400362,
+        'product_id.require' => '400337',
+        'title.require' => '400338',
+        'info.require' => '400347',
+        'unit_name.require' => '400348',
+        'images.require' => '400349',
+        'section_time.require' => '400353',
+        'num.require' => '400354',
+        'num.gt' => '400355',
+        'once_num.require' => '400366',
+        'once_num.gt' => '400367',
+        'time_id.require' => '400377',
+        'temp_id.require' => '400360',
+        'description.require' => '400361',
+        'attrs.require' => '400362',
     ];
 
     protected $scene = [

@@ -35,13 +35,13 @@ class SystemAdminValidata extends Validate
      * @var array
      */
     protected $message = [
-        'account.require' => 400033,
-        'account.alphaDash' => 400034,
-        'conf_pwd.require' => 400263,
-        'pwd.require' => 400256,
-        'real_name.require' => 400035,
-        'roles.require' => 400036,
-        'roles.array' => 400037,
+        'account.require' => '400033',
+        'account.alphaDash' => '400034',
+        'conf_pwd.require' => '400263',
+        'pwd.require' => '400256',
+        'real_name.require' => '400035',
+        'roles.require' => '400036',
+        'roles.array' => '400037',
     ];
 
     protected $scene = [

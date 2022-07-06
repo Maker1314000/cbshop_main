@@ -34,10 +34,10 @@ class LiveAnchorValidate extends Validate
      * @var array
      */
     protected $message = [
-        'name.require' => 400107,
-        'wechat.require' => 400110,
-        'phone.require' => 400333,
-        'phone.checkPhone' => 400252,
+        'name.require' => '400107',
+        'wechat.require' => '400110',
+        'phone.require' => '400333',
+        'phone.checkPhone' => '400252',
     ];
 
     protected function checkPhone($value): bool

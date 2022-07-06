@@ -33,9 +33,9 @@ class SystemCityValidate extends Validate
      * @var array
      */
     protected $message = [
-        'name.require' => 400038,
-        'level.number' => 400039,
-        'parent_id.number' => 400040,
+        'name.require' => '400038',
+        'level.number' => '400039',
+        'parent_id.number' => '400040',
     ];
 
     protected $scene = [

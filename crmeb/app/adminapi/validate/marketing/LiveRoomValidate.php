@@ -37,14 +37,14 @@ class LiveRoomValidate extends Validate
      * @var array
      */
     protected $message = [
-        'name.require' => 400342,
-        'cover_img.require' => 400343,
-        'share_img.require' => 400344,
-        'anchor_wechat.require' => 400345,
-        'start_time.require' => 400346,
-        'start_time.checkStartTime' => 400346,
-        'phone.require' => 400333,
-        'phone.checkPhone' => 400252,
+        'name.require' => '400342',
+        'cover_img.require' => '400343',
+        'share_img.require' => '400344',
+        'anchor_wechat.require' => '400345',
+        'start_time.require' => '400346',
+        'start_time.checkStartTime' => '400346',
+        'phone.require' => '400333',
+        'phone.checkPhone' => '400252',
     ];
 
     protected function checkPhone($value): bool

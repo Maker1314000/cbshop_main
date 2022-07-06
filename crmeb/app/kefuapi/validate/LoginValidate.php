@@ -29,8 +29,8 @@ class LoginValidate extends Validate
      * @var string[]
      */
     protected $message = [
-        'account.require' => 410000,
-        'account.account' => 410000,
-        'password.regex' => 410000,
+        'account.require' => '410000',
+        'account.account' => '410000',
+        'password.regex' => '410000',
     ];
 }

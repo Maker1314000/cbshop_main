@@ -39,8 +39,8 @@ class UserLabeCateValidata extends Validate
      * @var array
      */
     protected $message = [
-        'name.require' => 400086,
-        'sort.require' => 400087,
-        'sort.number' => 400088
+        'name.require' => '400086',
+        'sort.require' => '400087',
+        'sort.number' => '400088'
     ];
 }

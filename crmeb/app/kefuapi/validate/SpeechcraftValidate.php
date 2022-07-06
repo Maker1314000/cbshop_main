@@ -30,12 +30,12 @@ class SpeechcraftValidate extends Validate
      * @var string[]
      */
     protected $message = [
-        'title.chsAlphaNum' => 410105,
-        'title.length' => 410106,
-        'cate_id.require' => 410107,
-        'cate_id.number' => 410108,
-        'message.require' => 410109,
-        'message.length' => 410110,
-        'sort.number' => 410111,
+        'title.chsAlphaNum' => '410105',
+        'title.length' => '410106',
+        'cate_id.require' => '410107',
+        'cate_id.number' => '410108',
+        'message.require' => '410109',
+        'message.length' => '410110',
+        'sort.number' => '410111',
     ];
 }
