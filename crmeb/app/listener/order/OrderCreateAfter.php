@@ -5,6 +5,7 @@ namespace app\listener\order;
 
 
 use app\jobs\OrderCreateAfterJob;
+use app\jobs\OrderJob;
 use app\jobs\ProductLogJob;
 use app\jobs\UnpaidOrderCancelJob;
 use app\jobs\UnpaidOrderSend;
@@ -52,6 +53,11 @@ class OrderCreateAfter implements ListenerInterface
 
         //下单记录
         ProductLogJob::dispatch(['order', ['uid' => $uid, 'order_id' => $order['id']]]);
+
+        // 推送订单
+        if (sys_config('out_push_switch') && sys_config('out_push_order_url')) {
+            OrderJob::dispatchDo('push', [(int)$order['id']]);
+        }
     }
 
     /**

@@ -17,6 +17,7 @@ use app\services\activity\seckill\StoreSeckillServices;
 use app\services\activity\coupon\StoreCouponUserServices;
 use app\services\message\notice\NoticeSmsService;
 use app\services\kefu\service\StoreServiceServices;
+use app\services\order\OutStoreOrderServices;
 use app\services\order\StoreOrderCartInfoServices;
 use app\services\order\StoreOrderEconomizeServices;
 use app\services\order\StoreOrderServices;
@@ -163,7 +164,6 @@ class OrderJob extends BaseJobs
         }
         return $re;
     }
-
 
 
     /**
@@ -322,5 +322,31 @@ class OrderJob extends BaseJobs
         }
         return false;
 
+    }
+
+    /**
+     * 订单推送
+     * @param int $oid
+     * @param int $step
+     * @return bool
+     */
+    public function push(int $oid, int $step = 0): bool
+    {
+        if ($step > 2) {
+            Log::error(['msg' => '订单' . $oid . '推送失败,失败原因:', 'data' => $oid]);
+            return true;
+        }
+
+        try {
+            /** @var OutStoreOrderServices $services */
+            $services = app()->make(OutStoreOrderServices::class);
+            if (!$services->push($oid)) {
+                OrderJob::dispatchSece(($step + 1) * 5, 'push', [$oid, $step + 1]);
+            }
+        } catch (\Exception $e) {
+            Log::error('订单' . $oid . '推送失败,失败原因:' . $e->getMessage());
+            OrderJob::dispatchSece(($step + 1) * 5, 'push', [$oid, $step + 1]);
+        }
+        return true;
     }
 }

@@ -12,33 +12,14 @@
 namespace app\services\order;
 
 use app\dao\order\StoreOrderDao;
-use app\jobs\AutoCommentJob;
 use app\services\activity\combination\StorePinkServices;
-use app\services\activity\seckill\StoreSeckillServices;
 use app\services\BaseServices;
-use app\services\pay\OrderPayServices;
 use app\services\pay\PayServices;
-use app\services\product\product\StoreProductLogServices;
-use app\services\shipping\ExpressServices;
-use app\services\system\attachment\SystemAttachmentServices;
-use app\services\system\store\SystemStoreServices;
-use app\services\user\UserInvoiceServices;
-use app\services\user\UserServices;
-use app\services\product\product\StoreProductReplyServices;
-use app\services\user\UserAddressServices;
-use app\services\user\UserBillServices;
-use app\services\user\UserLevelServices;
-use app\services\wechat\WechatUserServices;
 use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
-use crmeb\services\CacheService;
-use crmeb\services\FormBuilder as Form;
 use crmeb\services\HttpService;
-use crmeb\services\printer\Printer;
-use crmeb\services\SystemConfigService;
 use crmeb\services\UtilService;
 use crmeb\traits\ServicesTrait;
-use crmeb\utils\Arr;
 use think\facade\Log;
 
 /**
@@ -133,7 +114,8 @@ class OutStoreOrderServices extends BaseServices
         } else {
             $where = ['order_id' => $orderId];
         }
-        if (!$orderId || !($orderInfo = $this->dao->get($where, $field, ['invoice']))) {
+
+        if (!$orderInfo = $this->dao->get($where, $field, ['invoice'])) {
             throw new ApiException(400118);
         }
 
@@ -409,12 +391,16 @@ class OutStoreOrderServices extends BaseServices
      */
     public function push(int $id)
     {
-        $pushUrl = '';
+        $pushUrl = sys_config('out_push_order_url');
+        if (!$pushUrl) {
+            throw new AdminException('请检查推送接口设置');
+        }
         $orderInfo = $this->getInfo('', $id);
-        $res = HttpService::request($pushUrl, 'post', $orderInfo);
+        $res = HttpService::request($pushUrl, 'post', json_encode($orderInfo, JSON_UNESCAPED_UNICODE));
         $res = $res ? json_decode($res, true) : [];
-        if ($res['code'] != 0) {
-            \think\facade\Log::error(['msg' => '订单推送失败', 'id' => $id, 'data' => $res]);
+        if (!$res || !isset($res['code']) || $res['code'] != 0) {
+            Log::error(['msg' => '订单推送失败', 'id' => $id, 'data' => $res]);
+            return false;
         }
         return true;
     }
