@@ -373,8 +373,8 @@ class CopyTaobaoServices extends BaseServices
     {
         //查询附件分类
         /** @var SystemAttachmentCategoryServices $systemAttachmentCategoryService */
-        $attachmentCategoryService = app()->make(SystemAttachmentCategoryServices::class);
-        $AttachmentCategory = $attachmentCategoryService->getOne(['name' => '远程下载']);
+        $systemAttachmentCategoryService = app()->make(SystemAttachmentCategoryServices::class);
+        $AttachmentCategory = $systemAttachmentCategoryService->getOne(['name' => '远程下载']);
         //不存在则创建
         if (!$AttachmentCategory) {
             $AttachmentCategory = $systemAttachmentCategoryService->save(['pid' => '0', 'name' => '远程下载', 'enname' => '']);
