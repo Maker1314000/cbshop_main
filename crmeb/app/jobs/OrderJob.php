@@ -333,7 +333,7 @@ class OrderJob extends BaseJobs
     public function push(int $oid, int $step = 0): bool
     {
         if ($step > 2) {
-            Log::error(['msg' => '订单' . $oid . '推送失败,失败原因:', 'data' => $oid]);
+            Log::error('订单' . $oid . '推送失败');
             return true;
         }
 
