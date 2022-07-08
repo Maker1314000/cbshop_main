@@ -981,7 +981,7 @@ class StoreOrderRefundServices extends BaseServices
         });
         $storeOrderCartInfoServices->clearOrderCartInfo($order['id']);
         //申请退款事件
-        event('order.orderRefund', [$order]);
+        event('order.orderRefundCreateAfter', [$order]);
         return $res;
     }
 
@@ -1228,6 +1228,9 @@ class StoreOrderRefundServices extends BaseServices
             $storeOrderCartInfoServices->update(['oid' => $oid, 'cart_id' => $cart['id']], ['refund_num' => $refund_num]);
         }
         $storeOrderCartInfoServices->clearOrderCartInfo($oid);
+        //售后订单取消后置事件
+        event('order.orderRefundCancelAfter', [$orderRefundInfo]);
+
         return true;
     }
 

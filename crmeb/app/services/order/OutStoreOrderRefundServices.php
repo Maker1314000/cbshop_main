@@ -253,6 +253,7 @@ class OutStoreOrderRefundServices extends BaseServices
     }
 
     /**
+     * 拒绝退款
      * @param string $orderId 售后单号
      * @param string $refundReason 不退款原因
      * @return bool
@@ -274,21 +275,65 @@ class OutStoreOrderRefundServices extends BaseServices
     }
 
     /**
-     * 推送
+     * 售后单生成
      * @param int $id
-     * @return void
+     * @return bool
      */
-    public function push(int $id)
+    public function refundCreatePush(int $id): bool
     {
         $pushUrl = sys_config('out_push_refund_url');
         if (!$pushUrl) {
-            throw new AdminException('请检查推送接口设置');
+            Log::error('请检查售后单推送接口配置');
+            return true;
         }
-        $orderInfo = $this->getInfo('', $id);
-        $res = HttpService::request($pushUrl, 'post', json_encode($orderInfo, JSON_UNESCAPED_UNICODE));
+
+        $refundInfo = $this->getInfo('', $id);
+        /** @var OutStoreOrderServices $orderServices */
+        $orderServices = app()->make(OutStoreOrderServices::class);
+        $orderInfo = $orderServices->get($refundInfo['store_order_id'], ['id', 'order_id']);
+        if (!$orderInfo) {
+            throw new AdminException(400118);
+        }
+        $refundInfo['order'] = $orderInfo->toArray();
+        return $this->push($pushUrl, $refundInfo, $id, '售后单');
+    }
+
+    /**
+     * 售后单取消
+     * @param int $id
+     * @return bool
+     */
+    public function cancelApplyPush(int $id): bool
+    {
+        $pushUrl = sys_config('out_push_refund_cancel_url');
+        if (!$pushUrl) {
+            Log::error('请检查售后单取消推送接口配置');
+            return true;
+        }
+
+        $refundInfo = $this->dao->get($id, ['order_id']);
+        if (!$refundInfo) {
+            throw new AdminException(410173);
+        }
+        $refundInfo = $refundInfo->toArray();
+        return $this->push($pushUrl, $refundInfo, $id, '取消售后单');
+    }
+
+    /**
+     * 发送请求
+     * @param string $pushUrl
+     * @param array $refundInfo
+     * @param int $id
+     * @param string $tip
+     * @return bool
+     */
+    public function push(string $pushUrl, array $refundInfo, int $id, string $tip): bool
+    {
+        $param = json_encode($refundInfo, JSON_UNESCAPED_UNICODE);
+        $res = HttpService::postRequest($pushUrl, $param, ['Content-Type:application/json', 'Content-Length:' . strlen($param)]);
         $res = $res ? json_decode($res, true) : [];
-        if (!$res || !isset($res['status']) || $res['status'] != 0) {
-            Log::error(['msg' => '售后单推送失败', 'id' => $id, 'data' => $res]);
+        if (!$res || !isset($res['code']) || $res['code'] != 0) {
+            Log::error(['msg' => $tip . '推送失败', 'id' => $id, 'data' => $res]);
             return false;
         }
         return true;

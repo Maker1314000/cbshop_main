@@ -387,13 +387,14 @@ class OutStoreOrderServices extends BaseServices
     /**
      * 推送
      * @param int $id
-     * @return void
+     * @return bool
      */
-    public function push(int $id)
+    public function push(int $id): bool
     {
         $pushUrl = sys_config('out_push_order_url');
         if (!$pushUrl) {
-            throw new AdminException('请检查推送接口设置');
+            Log::error('请检查订单推送接口配置');
+            return true;
         }
         $orderInfo = $this->getInfo('', $id);
         $param = json_encode($orderInfo, JSON_UNESCAPED_UNICODE);
