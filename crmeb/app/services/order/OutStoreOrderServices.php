@@ -396,7 +396,8 @@ class OutStoreOrderServices extends BaseServices
             throw new AdminException('请检查推送接口设置');
         }
         $orderInfo = $this->getInfo('', $id);
-        $res = HttpService::request($pushUrl, 'post', json_encode($orderInfo, JSON_UNESCAPED_UNICODE));
+        $param = json_encode($orderInfo, JSON_UNESCAPED_UNICODE);
+        $res = HttpService::postRequest($pushUrl, $param, ['Content-Type:application/json', 'Content-Length:' . strlen($param)]);
         $res = $res ? json_decode($res, true) : [];
         if (!$res || !isset($res['code']) || $res['code'] != 0) {
             Log::error(['msg' => '订单推送失败', 'id' => $id, 'data' => $res]);
