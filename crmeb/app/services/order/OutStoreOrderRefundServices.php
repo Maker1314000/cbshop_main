@@ -13,7 +13,10 @@ namespace app\services\order;
 use app\dao\order\StoreOrderRefundDao;
 use app\services\BaseServices;
 use app\services\pay\PayServices;
+use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
+use crmeb\services\HttpService;
+use think\facade\Log;
 
 /**
  * 售后单
@@ -83,15 +86,22 @@ class OutStoreOrderRefundServices extends BaseServices
     /**
      * 退款订单详情
      * @param string $orderId 售后单号
+     * @param int $id 售后单ID
      * @return mixed
      */
-    public function getInfo(string $orderId)
+    public function getInfo(string $orderId = '', int $id = 0)
     {
         $field = ['id', 'store_order_id', 'store_id', 'order_id', 'uid', 'refund_type', 'refund_num', 'refund_price',
             'refunded_price', 'refund_phone', 'refund_express', 'refund_express_name', 'refund_explain',
             'refund_img', 'refund_reason', 'refuse_reason', 'remark', 'refunded_time', 'cart_info', 'is_cancel',
             'is_pink_cancel', 'is_del', 'add_time'];
-        $refund = $this->dao->get(['order_id' => $orderId], $field, ['orderData']);
+
+        if ($id > 0) {
+            $where = $id;
+        } else {
+            $where = ['order_id' => $orderId];
+        }
+        $refund = $this->dao->get($where, $field, ['orderData']);
         if (!$refund) throw new ApiException(410173);
         $refund = $refund->toArray();
 
@@ -260,6 +270,27 @@ class OutStoreOrderRefundServices extends BaseServices
         /** @var StoreOrderRefundServices $refundServices */
         $refundServices = app()->make(StoreOrderRefundServices::class);
         $refundServices->refuse((int)$orderRefund['id'], $refundReason);
+        return true;
+    }
+
+    /**
+     * 推送
+     * @param int $id
+     * @return void
+     */
+    public function push(int $id)
+    {
+        $pushUrl = sys_config('out_push_refund_url');
+        if (!$pushUrl) {
+            throw new AdminException('请检查推送接口设置');
+        }
+        $orderInfo = $this->getInfo('', $id);
+        $res = HttpService::request($pushUrl, 'post', json_encode($orderInfo, JSON_UNESCAPED_UNICODE));
+        $res = $res ? json_decode($res, true) : [];
+        if (!$res || !isset($res['status']) || $res['status'] != 0) {
+            Log::error(['msg' => '售后单推送失败', 'id' => $id, 'data' => $res]);
+            return false;
+        }
         return true;
     }
 }
