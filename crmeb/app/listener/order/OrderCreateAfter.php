@@ -56,7 +56,7 @@ class OrderCreateAfter implements ListenerInterface
 
         // 推送订单
         if (sys_config('out_push_switch') && sys_config('out_push_order_url')) {
-            OrderJob::dispatchDo('push', [(int)$order['id']]);
+            OrderJob::dispatchDo('orderCreate', [(int)$order['id']]);
         }
     }
 
