@@ -551,13 +551,7 @@ class StoreOrderServices extends BaseServices
                             $img[] = $itemImg;
                     }
                 }
-                $status_name['status_name'] = <<<HTML
-<b style="color:#f124c7">申请退款</b><br/>
-<span>退款原因：{$item['refund_reason_wap']}</span><br/>
-<span>备注说明：{$item['refund_reason_wap_explain']}</span><br/>
-<span>退款时间：{$refundReasonTime}</span><br/>
-<span>退款凭证：</span>
-HTML;
+                $status_name['status_name'] = '退款中';
                 $status_name['pics'] = $img;
             } else if ($item['paid'] == 1 && $item['refund_status'] == 2) {
                 $status_name['status_name'] = '已退款';
