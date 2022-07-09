@@ -105,8 +105,7 @@ class StoreIntegralOrderServices extends BaseServices
     {
         [$page, $limit] = $this->getPageValue();
         $data = $this->dao->getOrderList($where, $field, $page, $limit, $with);
-        $data = $this->tidyOrderList($data);
-        return $data;
+        return $this->tidyOrderList($data);
     }
 
     /**
