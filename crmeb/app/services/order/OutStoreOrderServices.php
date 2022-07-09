@@ -385,11 +385,11 @@ class OutStoreOrderServices extends BaseServices
     }
 
     /**
-     * 推送
+     * 订单推送
      * @param int $id
      * @return bool
      */
-    public function push(int $id): bool
+    public function orderCreatePush(int $id): bool
     {
         $pushUrl = sys_config('out_push_order_url');
         if (!$pushUrl) {
@@ -397,11 +397,44 @@ class OutStoreOrderServices extends BaseServices
             return true;
         }
         $orderInfo = $this->getInfo('', $id);
+        return $this->push($pushUrl, $orderInfo, $id, '订单');
+    }
+
+    /**
+     * 支付推送
+     * @param int $id
+     * @return bool
+     */
+    public function paySuccessPush(int $id): bool
+    {
+        $pushUrl = sys_config('out_push_order_pay_url');
+        if (!$pushUrl) {
+            Log::error('请检查订单支付推送接口配置');
+            return true;
+        }
+        $orderInfo = $this->dao->get($id, ['order_id']);
+        if (!$orderInfo) {
+            throw new AdminException(410173);
+        }
+        $orderInfo = $orderInfo->toArray();
+        return $this->push($pushUrl, $orderInfo, $id, '订单支付');
+    }
+
+    /**
+     * 发送请求
+     * @param string $pushUrl
+     * @param array $orderInfo
+     * @param int $id
+     * @param string $tip
+     * @return bool
+     */
+    public function push(string $pushUrl, array $orderInfo, int $id, string $tip): bool
+    {
         $param = json_encode($orderInfo, JSON_UNESCAPED_UNICODE);
         $res = HttpService::postRequest($pushUrl, $param, ['Content-Type:application/json', 'Content-Length:' . strlen($param)]);
         $res = $res ? json_decode($res, true) : [];
         if (!$res || !isset($res['code']) || $res['code'] != 0) {
-            Log::error(['msg' => '订单推送失败', 'id' => $id, 'data' => $res]);
+            Log::error(['msg' => $tip . '推送失败', 'id' => $id, 'data' => $res]);
             return false;
         }
         return true;
