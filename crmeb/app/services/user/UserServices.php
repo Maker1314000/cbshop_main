@@ -1399,8 +1399,15 @@ class UserServices extends BaseServices
         $user['is_open_member'] = $isOpenMember;
         $user['agent_level_name'] = '';
         if ($user['agent_level']) {
-            $levelInfo = $agentLevelServices->getLevelInfo((int)$user['agent_level'], 'id,name');
-            $user['agent_level_name'] = $levelInfo && $levelInfo['name'] ? $levelInfo['name'] : '';
+            $levelInfo = $agentLevelServices->getLevelInfo((int)$user['agent_level'], 'id,name,status,grade');
+            if (!$levelInfo['status']) {
+                $levelInfo = $agentLevelServices->get([
+                    ['grade', '<', $levelInfo['grade']],
+                    ['is_del', '=', 0],
+                    ['status', '=', 1]
+                ], ['id', 'name', 'status', 'grade']);
+            }
+            $user['agent_level_name'] = $levelInfo && $levelInfo['name'] && $levelInfo['status'] ? $levelInfo['name'] : '';
         }
         //会员领取优惠券
         // $couponService->sendMemberCoupon($uid);
