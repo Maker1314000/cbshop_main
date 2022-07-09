@@ -169,7 +169,7 @@ class AgentLevelTaskServices extends BaseServices
         $field[] = Form::hidden('level_id', $level_id);
         $field[] = Form::select('type', '任务类型')->setOptions(Form::setOptions($setOptionLabel))->filterable(true);
         $field[] = Form::input('name', '任务名称')->col(24);
-        $field[] = Form::number('number', '限定数量', 0);
+        $field[] = Form::number('number', '限定数量', 0)->precision(0);
         $field[] = Form::textarea('desc', '任务描述');
         $field[] = Form::number('sort', '排序', 0)->precision(0);
         $field[] = Form::radio('status', '是否显示', 1)->options([['value' => 1, 'label' => '显示'], ['value' => 0, 'label' => '隐藏']]);
