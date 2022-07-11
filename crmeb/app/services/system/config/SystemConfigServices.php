@@ -389,10 +389,10 @@ class SystemConfigServices extends BaseServices
             foreach ($parameter as $v) {
                 if (strstr($v, $this->cuttingStr) !== false) {
                     $pdata = explode($this->cuttingStr, $v);
-                    $options[] = ['label' => $pdata[1], 'value' => $pdata[0]];
+                    $options[] = ['label' => $pdata[1], 'value' => (int)$pdata[0]];
                 }
             }
-            $formbuider[] = $radio = $this->builder->radio($data['menu_name'], $data['info'], $data['value'])->options($options)->info($data['desc'])->col(13);
+            $formbuider[] = $radio = $this->builder->radio($data['menu_name'], $data['info'], (int)$data['value'])->options($options)->info($data['desc'])->col(13);
             if ($control) {
                 $radio->appendControl($data['show_value'] ?? 1, is_array($control) ? $control : [$control]);
             }
