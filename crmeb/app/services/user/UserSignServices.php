@@ -158,6 +158,14 @@ class UserSignServices extends BaseServices
                 break;
             }
         }
+
+        $user->sign_num += 1;
+        if ($user->sign_num == count($sign_list)) {
+            $title = '连续签到奖励';
+        } else {
+            $title = '签到奖励';
+        }
+
         //会员签到积分会员奖励
         if ($user->is_money_level > 0) {
             //看是否开启签到积分翻倍奖励
@@ -165,16 +173,17 @@ class UserSignServices extends BaseServices
             $memberCardService = app()->make(MemberCardServices::class);
             $sign_rule_number = $memberCardService->isOpenMemberCard('sign');
             if ($sign_rule_number) {
+                $old_num = $sign_num;
                 $sign_num = (int)$sign_rule_number * $sign_num;
+                $up_num = $sign_num - $old_num;
+                if ($user->sign_num == count($sign_list)) {
+                    $title = '连续签到奖励(SVIP+' . $up_num . ')';
+                } else {
+                    $title = '签到奖励(SVIP+' . $up_num . ')';
+                }
             }
+        }
 
-        }
-        $user->sign_num += 1;
-        if ($user->sign_num == count($sign_list)) {
-            $title = '连续签到奖励';
-        } else {
-            $title = '签到奖励';
-        }
         //用户等级是否开启
         $exp_num = 0;
         if (sys_config('member_func_status', 1)) {
