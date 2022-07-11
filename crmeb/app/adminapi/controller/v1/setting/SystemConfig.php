@@ -256,6 +256,9 @@ class SystemConfig extends AuthController
         if (isset($post['upload_type'])) {
             $this->services->checkThumbParam($post);
         }
+        if (isset($post['extract_type']) && !count($post['extract_type'])) {
+            return app('json')->fail(400753);
+        }
         if (isset($post['store_brokerage_binding_status'])) {
             $this->services->checkBrokerageBinding($post);
         }
