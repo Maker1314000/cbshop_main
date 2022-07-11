@@ -30,7 +30,7 @@ return [
         'order.orderDelivery' => [\app\listener\order\OrderDelivery::class], //订单发货后置事件
         'order.orderTake' => [\app\listener\order\OrderTake::class], //订单收货后置事件
         'order.orderRefundCreateAfter' => [\app\listener\order\OrderRefundCreateAfter::class], //售后单生成后置事件
-        'order.orderRefundCancelAfter' => [\app\listener\order\orderRefundCancelAfter::class], //售后单取消后置事件
+        'order.orderRefundCancelAfter' => [\app\listener\order\OrderRefundCancelAfter::class], //售后单取消后置事件
         'user.userLevel' => [\app\listener\user\UserLevel::class], //用户升级事件
         'user.userVisit' => [\app\listener\user\UserVisit::class], //用户访问事件
         'notice.notice' => [\app\listener\notice\Notice::class], //通知->消息事件
