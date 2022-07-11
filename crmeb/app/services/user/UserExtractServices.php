@@ -393,7 +393,7 @@ class UserExtractServices extends BaseServices
 
         /** @var WechatUserServices $wechatServices */
         $wechatServices = app()->make(WechatUserServices::class);
-        if (!$wechatServices->uidToOpenid($uid, 'wechat')) {
+        if ($data['extract_type'] == 'weixin' && sys_config('brokerage_type', 0) && !$wechatServices->uidToOpenid($uid, 'wechat')) {
             throw new ApiException(410024);
         }
 
