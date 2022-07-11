@@ -54,11 +54,11 @@ class Sms extends BaseManager
         $this->getConfigFile();
 
         if (!$this->config) {
-            $this->config = Config::get($this->configFile . '.stores.' . $this->getDefaultDriver(), []);
+            $this->config = Config::get($this->configFile . '.stores.' . $this->name, []);
         }
 
         $handleAccessToken = new AccessTokenServeService($this->config['sms_account'] ?? '', $this->config['sms_token'] ?? '');
-        $handle = Container::getInstance()->invokeClass($class, [$this->getDefaultDriver(), $handleAccessToken, $this->configFile, $this->config]);
+        $handle = Container::getInstance()->invokeClass($class, [$this->name, $handleAccessToken, $this->configFile, $this->config]);
         $this->config = [];
         return $handle;
     }

@@ -29,9 +29,12 @@ class Template extends BaseManager
      */
     protected $namespace = '\\crmeb\\services\\template\\storage\\';
 
-
+    /**
+     * 设置默认扩展
+     * @return mixed|string
+     */
     protected function getDefaultDriver()
     {
-        // TODO: Implement getDefaultDriver() method.
+        return 'wechat';
     }
 }

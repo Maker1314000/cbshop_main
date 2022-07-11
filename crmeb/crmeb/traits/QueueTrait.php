@@ -33,8 +33,8 @@ trait QueueTrait
     /**
      * 加入队列
      * @param array|string|int $action
-     * @param int|null $secs
      * @param array $data
+     * @param string|null $queueName
      * @return mixed
      */
     public static function dispatch($action, array $data = [], string $queueName = null)
@@ -58,6 +58,7 @@ trait QueueTrait
      * @param int $secs
      * @param $action
      * @param array $data
+     * @param string|null $queueName
      * @return mixed
      */
     public static function dispatchSece(int $secs, $action, array $data = [], string $queueName = null)
@@ -81,6 +82,7 @@ trait QueueTrait
      * @param string $do
      * @param array $data
      * @param int|null $secs
+     * @param string|null $queueName
      * @return mixed
      */
     public static function dispatchDo(string $do, array $data = [], int $secs = null, string $queueName = null)
