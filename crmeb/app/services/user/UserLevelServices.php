@@ -220,7 +220,7 @@ class UserLevelServices extends BaseServices
         $field[] = Form::input('name', '等级名称', isset($vipinfo) ? $vipinfo->name : '')->col(24)->required();
 //        $field[] = Form::number('valid_date', '有效时间(天)', isset($vipinfo) ? $vipinfo->valid_date : 0)->min(0)->col(12);
         $field[] = Form::number('grade', '等级', isset($vipinfo) ? $vipinfo->grade : 0)->min(0)->precision(0)->col(8)->required();
-        $field[] = Form::number('discount', '享受折扣', isset($vipinfo) ? $vipinfo->discount : 100)->min(0)->col(8)->placeholder('输入折扣数100，代表原价，90代表9折')->required();
+        $field[] = Form::number('discount', '享受折扣', isset($vipinfo) ? $vipinfo->discount : 100)->min(0)->max(100)->col(8)->placeholder('输入折扣数100，代表原价，90代表9折')->required();
         $field[] = Form::number('exp_num', '解锁需经验值达到', isset($vipinfo) ? $vipinfo->exp_num : 0)->min(0)->precision(0)->col(8)->required();
         $field[] = Form::frameImage('icon', '图标', Url::buildUrl('admin/widget.images/index', array('fodder' => 'icon')), isset($vipinfo) ? $vipinfo->icon : '')->icon('ios-add')->width('950px')->height('505px')->modal(['footer-hide' => true]);
         $field[] = Form::frameImage('image', '用户等级背景', Url::buildUrl('admin/widget.images/index', array('fodder' => 'image')), isset($vipinfo) ? $vipinfo->image : '')->icon('ios-add')->width('950px')->height('505px')->modal(['footer-hide' => true]);
