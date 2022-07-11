@@ -1688,7 +1688,11 @@ class UserServices extends BaseServices
             'totalLevel' => count($spread_two_ids),
             'list' => []
         ];
-        $data['count'] = $data['total'] + $data['totalLevel'];
+        if (sys_config('brokerage_level', 2) == 1) {
+            $data['count'] = $data['total'];
+        } else {
+            $data['count'] = $data['total'] + $data['totalLevel'];
+        }
         /** @var UserStoreOrderServices $userStoreOrder */
         $userStoreOrder = app()->make(UserStoreOrderServices::class);
         $list = [];
