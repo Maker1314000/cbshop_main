@@ -833,6 +833,7 @@ return [
     400751 => 'Status must be an integer between 0 and 1',
     400752 => 'The introduction of rights and interests cannot be longer than 8 words',
     400753 => 'Select at least one withdrawal method',
+    400754 => 'The identity is in use and cannot be deleted',
 
     410000 => 'Please enter the account number and password',
     410001 => 'Login successful',
