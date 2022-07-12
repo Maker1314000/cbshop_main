@@ -11,6 +11,7 @@
 namespace app\adminapi\controller\v1\setting;
 
 use app\adminapi\controller\AuthController;
+use app\services\system\admin\SystemAdminServices;
 use app\services\system\admin\SystemRoleServices;
 use app\services\system\SystemMenusServices;
 use think\facade\App;
@@ -104,12 +105,15 @@ class SystemRole extends AuthController
 
     /**
      * 删除指定资源
-     *
-     * @param int $id
-     * @return \think\Response
+     * @param SystemAdminServices $adminServices
+     * @param $id
+     * @return mixed
      */
-    public function delete($id)
+    public function delete(SystemAdminServices $adminServices, $id)
     {
+        if ($adminServices->checkRoleUse($id)) {
+            return app('json')->fail(400754);
+        }
         if (!$this->services->delete($id))
             return app('json')->fail(100008);
         else {
