@@ -12,6 +12,7 @@ namespace app\outapi\controller;
 
 use app\services\order\OutStoreOrderServices;
 use app\services\shipping\ExpressServices;
+use crmeb\services\CacheService;
 use think\facade\App;
 
 /**
@@ -65,7 +66,10 @@ class StoreOrder extends AuthController
         ], true);
         if ($status != '') $data['status'] = $status;
         $data['is_show'] = 1;
-        return app('json')->success($services->express($data));
+        $list = CacheService::get('EXPRESS_LIST', function () use ($services, $data) {
+            return $services->express($data);
+        }, 86400);
+        return app('json')->success($list);
     }
 
     /**
@@ -84,7 +88,7 @@ class StoreOrder extends AuthController
         ]);
         $data['express_record_type'] = 1;
 
-       $this->services->delivery($order_id, $data);
+        $this->services->delivery($order_id, $data);
         return app('json')->success(100010);
     }
 
@@ -234,7 +238,7 @@ class StoreOrder extends AuthController
 
     /**
      * 修改备注
-    @param string $order_id 订单号
+     * @param string $order_id 订单号
      * @return mixed
      */
     public function remark(string $order_id)

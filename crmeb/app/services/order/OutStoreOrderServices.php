@@ -91,6 +91,7 @@ class OutStoreOrderServices extends BaseServices
             foreach ($carts as $key => $cart) {
                 $list = $this->tidyCartList($cart['cart_info'], $list, $key);
             }
+            $item['pay_type_name'] = PayServices::PAY_TYPE[$item['pay_type']] ?? '其他方式';
             $item['items'] = $list;
             unset($item['refund_status'], $item['shipping_type']);
         }
@@ -122,7 +123,7 @@ class OutStoreOrderServices extends BaseServices
         if (!$orderInfo['invoice']) {
             $orderInfo['invoice'] = new \StdClass();
         } else {
-            $orderInfo['invoice']->hidden(['uid', 'category']);
+            $orderInfo['invoice']->hidden(['uid', 'category', 'id', 'order_id', 'add_time']);
         }
 
         $orderInfo = $this->tidyOrder($orderInfo->toArray(), true);
