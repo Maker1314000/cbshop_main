@@ -102,7 +102,9 @@ class OutStoreProductServices extends BaseServices
 
         $data['is_hot'] = $data['is_benefit'] = $data['is_new'] = $data['is_good'] = $data['is_best'] = 0;
         foreach ($data['recommend'] as $item) {
-            $data[$item] = 1;
+            if (isset($data[$item])) {
+                $data[$item] = 1;
+            }
         }
 
         $data['is_vip'] = intval(in_array($data['is_vip'], [0, 1]) ? $data['is_vip'] : 0);
@@ -228,7 +230,7 @@ class OutStoreProductServices extends BaseServices
      */
     public function setShow(int $id, int $is_show)
     {
-        if (empty($ids)) throw new AdminException(100100);
+        if (empty($id)) throw new AdminException(100100);
         if ($is_show == 0) {
             /** @var StoreProductServices $productServices */
             $productServices = app()->make(StoreProductServices::class);
