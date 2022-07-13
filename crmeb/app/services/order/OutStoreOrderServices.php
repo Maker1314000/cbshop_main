@@ -72,8 +72,8 @@ class OutStoreOrderServices extends BaseServices
             'shipping_type', 'status', 'refund_status', 'delivery_name', 'delivery_code', 'delivery_id'];
         $data = $this->dao->getOutOrderList($where, $field, $page, $limit);
         $count = $this->dao->count($where);
-        $data = $this->tidyOrderList($data);
-        return compact('data', 'count');
+        $list = $this->tidyOrderList($data);
+        return compact('list', 'count');
     }
 
     /**
