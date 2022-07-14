@@ -53,13 +53,14 @@ class OutStoreOrderRefundServices extends BaseServices
         $field = 'id, store_order_id, uid, order_id, refund_type, refund_num, refund_price, refunded_price, refund_phone, refund_express, refund_express_name, 
         refund_explain, refund_img, refund_reason, refuse_reason, remark, refunded_time, cart_info, is_cancel, is_del, is_pink_cancel, add_time';
         $list = $this->dao->getList($where, $page, $limit, $field);
+        $count = $this->dao->count($where);
         foreach ($list as $key => &$item) {
             $item['pay_price'] = $item['refund_price'];
             unset($item['refund_price']);
             $item['items'] = $this->tidyCartList($item['cart_info']);
             unset($list[$key]['cart_info']);
         }
-        return $list;
+        return compact('list', 'count');
     }
 
     /**
@@ -91,7 +92,7 @@ class OutStoreOrderRefundServices extends BaseServices
      */
     public function getInfo(string $orderId = '', int $id = 0)
     {
-        $field = ['id', 'store_order_id', 'store_id', 'order_id', 'uid', 'refund_type', 'refund_num', 'refund_price',
+        $field = ['id', 'store_order_id', 'order_id', 'uid', 'refund_type', 'refund_num', 'refund_price',
             'refunded_price', 'refund_phone', 'refund_express', 'refund_express_name', 'refund_explain',
             'refund_img', 'refund_reason', 'refuse_reason', 'remark', 'refunded_time', 'cart_info', 'is_cancel',
             'is_pink_cancel', 'is_del', 'add_time'];
@@ -123,7 +124,6 @@ class OutStoreOrderRefundServices extends BaseServices
         /** @var StoreOrderRefundServices $refundServices */
         $refundServices = app()->make(StoreOrderRefundServices::class);
         $refund['use_integral'] = $refundServices->getOrderSumPrice($refund['cart_info'], 'use_integral', false);
-        $refund['integral_price'] = $refundServices->getOrderSumPrice($refund['cart_info'], 'integral_price', false);
         $refund['coupon_price'] = $refundServices->getOrderSumPrice($refund['cart_info'], 'coupon_price', false);
         $refund['deduction_price'] = $refundServices->getOrderSumPrice($refund['cart_info'], 'integral_price', false);
         $refund['pay_postage'] = $refundServices->getOrderSumPrice($refund['cart_info'], 'postage_price', false);
@@ -139,8 +139,6 @@ class OutStoreOrderRefundServices extends BaseServices
 
         $refund['refund_type_name'] = $title;
         $refund['pay_type_name'] = PayServices::PAY_TYPE[$refund['pay_type']] ?? '其他方式';
-        $refund['mark'] = $refund['refund_explain'];
-        $refund['refund_status'] = in_array($refund['refund_type'], [1, 2, 4, 5]) ? 1 : 2;
         unset($refund['cart_info']);
         return $refund;
     }

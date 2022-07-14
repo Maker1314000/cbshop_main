@@ -66,6 +66,8 @@ class OutStoreOrderServices extends BaseServices
      */
     public function getOrderList(array $where)
     {
+        $where['order_status'] = $where['status'];
+        unset($where['status']);
         [$page, $limit] = $this->getPageValue();
         $field = ['id', 'pid', 'order_id', 'trade_no', 'uid', 'freight_price', 'real_name', 'user_phone', 'user_address', 'total_num',
             'total_price', 'total_postage', 'pay_price', 'coupon_price', 'deduction_price', 'paid', 'pay_time', 'pay_type', 'add_time',
@@ -93,6 +95,9 @@ class OutStoreOrderServices extends BaseServices
             }
             $item['pay_type_name'] = PayServices::PAY_TYPE[$item['pay_type']] ?? '其他方式';
             $item['items'] = $list;
+            if ($item['status'] == 0 && $item['paid'] == 1){
+                $item['status'] = 1;
+            }
             unset($item['refund_status'], $item['shipping_type']);
         }
         return $data;

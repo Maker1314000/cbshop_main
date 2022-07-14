@@ -49,6 +49,7 @@ class StoreOrder extends AuthController
             ['pay_type', ''],
             ['order', ''],
             ['field_key', ''],
+            ['paid', '']
         ]);
         $where['is_system_del'] = 0;
         $where['pid'] = 0;
@@ -81,12 +82,12 @@ class StoreOrder extends AuthController
     {
         if (!$order_id) return app('json')->fail(100100);
         $data = $this->request->postMore([
-            ['type', 1],
             ['delivery_name', ''],//快递公司名称
             ['delivery_id', ''],//快递单号
             ['delivery_code', ''],//快递公司编码
         ]);
         $data['express_record_type'] = 1;
+        $data['type'] = 1;
 
         $this->services->delivery($order_id, $data);
         return app('json')->success(100010);
@@ -112,7 +113,6 @@ class StoreOrder extends AuthController
     {
         if (!$order_id) return app('json')->fail(100100);
         $data = $this->request->postMore([
-            ['type', 1],
             ['delivery_name', ''],//快递公司名称
             ['delivery_id', ''],//快递单号
             ['delivery_code', ''],//快递公司编码
@@ -131,6 +131,7 @@ class StoreOrder extends AuthController
             $cart['cart_num'] = (int)$cart['cart_num'];
         }
         $data['express_record_type'] = 1;
+        $data['type'] = 1;
 
         $this->services->splitDelivery($order_id, $data);
         return app('json')->success(100010);
@@ -168,7 +169,6 @@ class StoreOrder extends AuthController
             ['address', ''],
             ['bank', ''],
             ['card_number', ''],
-            ['is_default', 0]
         ]);
 
         if (!$data['drawer_phone']) return app('json')->fail(410144);

@@ -93,6 +93,30 @@ class StoreOrderDao extends BaseDao
                     $query->where('is_del', 1);
                     break;
             }
+        })->when(isset($where['paid']) && $where['paid'] !== '', function ($query) use ($where) {
+            if (in_array($where['paid'], [0, 1])) {
+                $query->where('paid', $where['paid']);
+            }
+        })->when(isset($where['order_status']) && $where['order_status'] !== '', function ($query) use ($where) {
+            switch ((int)$where['order_status']) {
+                case 0://未发货
+                    $query->where('status', 0)->where('refund_status', 0)->where('is_del', 0);
+                    break;
+                case 1://已发货
+                    $query->where('paid', 1)->whereIn('status', [0, 4])->whereIn('refund_status', [0, 3])->when(isset($where['shipping_type']), function ($query) {
+                        $query->where('shipping_type', 1);
+                    })->where('is_del', 0);
+                    break;
+                case 2://已收货
+                    $query->where('paid', 1)->where('status', 2)->whereIn('refund_status', [0, 3])->where('is_del', 0);
+                    break;
+                case 3://已完成
+                    $query->where('paid', 1)->where('status', 3)->whereIn('refund_status', [0, 3])->where('is_del', 0);
+                    break;
+                case -2://已退款
+                    $query->where('paid', 1)->where('status', -2)->where('is_del', 0);
+                    break;
+            }
         })->when(isset($where['type']), function ($query) use ($where) {
             switch ($where['type']) {
                 case 1:
