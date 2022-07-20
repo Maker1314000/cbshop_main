@@ -19,7 +19,7 @@ use think\facade\Config;
 
 /**
  * Class AuthTokenMiddleware
- * @package app\kefu\middleware
+ * @package app\outapi\middleware
  */
 class AuthTokenMiddleware implements MiddlewareInterface
 {
@@ -37,7 +37,7 @@ class AuthTokenMiddleware implements MiddlewareInterface
         $token = trim(ltrim($request->header(Config::get('cookie.token_name', 'Authori-zation')), 'Bearer'));
         /** @var LoginServices $services */
         $services = app()->make(LoginServices::class);
-        $kefuInfo = $services->parseToken($token);
+        $outInfo = $services->parseToken($token);
         Request::macro('outId', function () use (&$outInfo) {
             return (int)$outInfo['id'];
         });
