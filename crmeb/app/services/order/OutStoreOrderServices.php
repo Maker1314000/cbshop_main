@@ -68,6 +68,9 @@ class OutStoreOrderServices extends BaseServices
     {
         $where['order_status'] = $where['status'];
         unset($where['status']);
+        if (!is_numeric($where['paid'])) {
+            $where['paid'] = -1;
+        }
         [$page, $limit] = $this->getPageValue();
         $field = ['id', 'pid', 'order_id', 'trade_no', 'uid', 'freight_price', 'real_name', 'user_phone', 'user_address', 'total_num',
             'total_price', 'total_postage', 'pay_price', 'coupon_price', 'deduction_price', 'paid', 'pay_time', 'pay_type', 'add_time',
