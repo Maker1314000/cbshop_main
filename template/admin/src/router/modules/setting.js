@@ -620,5 +620,14 @@ export default {
       },
       component: () => import('@/pages/setting/setSystem/index'),
     },
+    {
+      path: 'system_out_account/index',
+      name: `${pre}systemOutAccount`,
+      meta: {
+        auth: ['setting-system-out-account-index'],
+        title: '账号列表',
+      },
+      component: () => import('@/pages/setting/systemOutAccount/index'),
+    },
   ],
 };
