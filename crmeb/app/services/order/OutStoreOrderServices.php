@@ -98,9 +98,6 @@ class OutStoreOrderServices extends BaseServices
             }
             $item['pay_type_name'] = PayServices::PAY_TYPE[$item['pay_type']] ?? '其他方式';
             $item['items'] = $list;
-            if ($item['status'] == 0 && $item['paid'] == 1){
-                $item['status'] = 1;
-            }
             unset($item['refund_status'], $item['shipping_type']);
         }
         return $data;

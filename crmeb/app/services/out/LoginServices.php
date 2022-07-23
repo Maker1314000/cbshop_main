@@ -55,7 +55,7 @@ class LoginServices extends BaseServices
         if ($appsecret && !password_verify($appsecret, $autInfo->appsecret)) {
             throw new AuthException(400744);
         }
-        if ($autInfo->status == 2) {
+        if ($autInfo->status == 0) {
             throw new AuthException(400595);
         }
         $token = $this->createToken($autInfo->id, 'out');

@@ -97,6 +97,6 @@ class AliPay extends BasePay implements PayInterface
      */
     public static function handleNotify()
     {
-        return AliPayService::instance()->handleNotify();
+        return AliPayService::handleNotify();
     }
 }

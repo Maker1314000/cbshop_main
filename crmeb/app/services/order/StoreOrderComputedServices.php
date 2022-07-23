@@ -327,6 +327,7 @@ class StoreOrderComputedServices extends BaseServices
                 $item['postage_price'] = 0;
             } elseif ($item['productInfo']['freight'] == 2) {
                 $item['postage_price'] = bcmul((string)$item['productInfo']['postage'], (string)$item['cart_num'], 2);
+                $item['origin_postage_price'] = bcmul((string)$item['productInfo']['postage'], (string)$item['cart_num'], 2);
                 $storePostage = bcadd((string)$storePostage, (string)$item['postage_price'], 2);
             }
         }
@@ -462,6 +463,7 @@ class StoreOrderComputedServices extends BaseServices
                 $express_rule_number = $memberCardService->isOpenMemberCard('express');
                 $express_rule_number = $express_rule_number <= 0 ? 0 : $express_rule_number;
             }
+            $discountRate = bcdiv($express_rule_number, 100, 4);
             $truePostageArr = [];
             foreach ($postageArr as $postitem) {
                 if ($postitem['sum'] == ($maxStorePostage ?? 0)) {
@@ -472,6 +474,9 @@ class StoreOrderComputedServices extends BaseServices
             $cartAlready = [];
             foreach ($cartInfo as &$item) {
                 if (isset($item['productInfo']['freight']) && in_array($item['productInfo']['freight'], [1, 2])) {
+                    if ($item['productInfo']['freight'] == 2) {
+                        $item['postage_price'] = sprintf("%.2f", bcmul($item['postage_price'], $discountRate, 6));
+                    }
                     continue;
                 }
                 $tempId = $item['productInfo']['temp_id'] ?? 0;
@@ -489,7 +494,7 @@ class StoreOrderComputedServices extends BaseServices
                 $cartAlready[$tempId]['price'] = bcadd((string)($cartNumber[$tempId]['price'] ?? 0.00), (string)$price, 4);
 
                 if ($express_rule_number && $express_rule_number < 100) {
-                    $price = bcmul($price, bcdiv($express_rule_number, 100, 4), 4);
+                    $price = bcmul($price, $discountRate, 4);
                 }
                 if ($type == 2) {
                     $price = bcmul($price, $item['productInfo']['attrInfo']['weight'], 6);

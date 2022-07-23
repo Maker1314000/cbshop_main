@@ -1719,12 +1719,12 @@ class UserServices extends BaseServices
      */
     public function getUserSpredadUids(int $uid, int $type = 0)
     {
-        $uids = $this->dao->getColumn(['spread_uid' => $uid], 'uid');
+        $uids = $this->dao->getColumn(['spread_uid' => $uid, 'is_del' => 0], 'uid');
         if ($type === 1) {
             return $uids;
         }
         if ($uids) {
-            $uidsTwo = $this->dao->getColumn([['spread_uid', 'in', $uids]], 'uid');
+            $uidsTwo = $this->dao->getColumn([['spread_uid', 'in', $uids], ['is_del', '=', 0]], 'uid');
             if ($type === 2) {
                 return $uidsTwo;
             }

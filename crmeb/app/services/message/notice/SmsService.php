@@ -40,6 +40,12 @@ class SmsService extends NoticeService
     private $isopend = true;
 
     /**
+     * 短信类型
+     * @var string[]
+     */
+    private $smsType = ['yihaotong', 'aliyun', 'tencent'];
+
+    /**
      * 是否开启权限
      * @param string $mark
      * @return $this
@@ -94,7 +100,7 @@ class SmsService extends NoticeService
             }
 
             //获取发送短信驱动类型
-            $type = sys_config('sms_type', null);
+            $type = $this->smsType[sys_config('sms_type', 0)];
             $smsMake = $services->sms($type);
             //发送短信
             $res = $smsMake->send($phone, $templateId, $data);

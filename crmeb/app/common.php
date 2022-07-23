@@ -920,16 +920,17 @@ if (!function_exists('getLang')) {
         $request = app()->request;
 
         //获取接口传入的语言类型
-        if (!$range = $request->getCbLang()) {
+        if (!$range = $request->header('cb-lang')) {
             $range = $request->cookie($config['cookie_var']);
         }
 
         //如果找到当前语言类型，默认中文
         $langData = array_values($config['accept_language']);
         if (!in_array($range, $langData)) {
-            $range = 'zh-cn';
+            $range = 'zh_cn';
         }
 
+        CacheService::redisHandler()->delete('lang_' . $range);
         //读取当前语言的语言包
         $lang = CacheService::redisHandler()->remember('lang_' . $range, function () use ($config, $range) {
             return include $config['extend_list'][$range];

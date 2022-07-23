@@ -215,10 +215,11 @@ class StoreCombinationServices extends BaseServices
             foreach ($combinationAttr as &$sv) {
                 if ($pv['detail'] == $sv['detail']) {
                     $productAttr[$pk] = $sv;
+                    $productAttr[$pk]['r_price'] = $pv['price'];
                 }
             }
             $productAttr[$pk]['detail'] = json_decode($productAttr[$pk]['detail']);
-            $productAttr[$pk]['r_price'] = $productAttr[$pk]['price'];
+            $productAttr[$pk]['r_price'] = $productAttr[$pk]['r_price'] ?? $productAttr[$pk]['price'];
         }
         $attrs['items'] = $items;
         $attrs['value'] = $productAttr;
@@ -579,6 +580,11 @@ class StoreCombinationServices extends BaseServices
         }
         $data['store_combination']['productAttr'] = $productAttr;
         $data['store_combination']['productValue'] = $productValue;
+
+        /** @var StoreOrderServices $orderServices */
+        $orderServices = app()->make(StoreOrderServices::class);
+        $data['order_pid'] = $orderServices->value(['order_id'=>$data['current_pink_order']],'pid');
+
         return $data;
     }
 

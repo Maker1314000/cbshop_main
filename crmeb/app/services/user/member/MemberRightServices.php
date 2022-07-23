@@ -60,6 +60,7 @@ class MemberRightServices extends BaseServices
         if (!$id) throw new AdminException(100100);
         if (!$data['title'] || !$data['show_title']) throw new AdminException(400631);
         if (!$data['image']) throw new AdminException(400632);
+        if (mb_strlen($data['show_title']) > 6) throw new AdminException(400755);
         if (mb_strlen($data['explain']) > 8) throw new AdminException(400752);
         switch ($data['right_type']) {
             case "integral":

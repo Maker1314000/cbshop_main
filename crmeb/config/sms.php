@@ -27,7 +27,7 @@ return [
         ],
         //阿里云
         'aliyun' => [
-            'sign_name' => '',
+            'aliyun_SignName' => '',
             'aliyun_AccessKeyId' => '',
             'aliyun_AccessKeySecret' => '',
             'aliyun_RegionId' => '',

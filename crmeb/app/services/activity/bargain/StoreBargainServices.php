@@ -497,6 +497,8 @@ class StoreBargainServices extends BaseServices
             && $request->uid() == $bargainUid //是自己砍价
             && $userBargainInfo['status'] != 3) { //未生成订单
             $userBargainInfo['bargainType'] = 6; //立即支付
+        } else{
+            $userBargainInfo['bargainType'] = 1; //立即支付
         }
         $data['userBargainInfo'] = $userBargainInfo;
 

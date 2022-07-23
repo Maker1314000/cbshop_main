@@ -179,7 +179,7 @@ class User extends AuthController
         Cache::set('start_uploads_' . $request->kefuId(), $start_uploads, 86400);
         $res['dir'] = path_to_url($res['dir']);
         if (strpos($res['dir'], 'http') === false) $res['dir'] = $request->domain() . $res['dir'];
-        return app('json')->success(410091, null, ['name' => $res['name'], 'url' => $res['dir']]);
+        return app('json')->success(410091, ['name' => $res['name'], 'url' => $res['dir']]);
     }
 
 }

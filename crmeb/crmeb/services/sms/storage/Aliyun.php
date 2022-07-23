@@ -11,8 +11,14 @@
 
 namespace crmeb\services\sms\storage;
 
+use AlibabaCloud\SDK\Dysmsapi\V20170525\Dysmsapi;
+use AlibabaCloud\SDK\Dysmsapi\V20170525\Models\SendSmsRequest;
+use AlibabaCloud\Tea\Exception\TeaError;
+use AlibabaCloud\Tea\Utils\Utils\RuntimeOptions;
+use crmeb\exceptions\ApiException;
 use crmeb\services\sms\BaseSms;
-use crmeb\services\HttpService;
+use Darabonba\OpenApi\Models\Config as AliConfig;
+use think\exception\ValidateException;
 use think\facade\Config;
 
 
@@ -22,27 +28,9 @@ use think\facade\Config;
  */
 class Aliyun extends BaseSms
 {
-    protected $apiUrl = 'https://dysmsapi.aliyuncs.com/';
-
-    protected $header = ['x-sdk-client' => 'php/2.0.0'];
-
+    protected $AccessKeyId = '';
     protected $AccessKeySecret = '';
-
-    protected $templates = [];
-
-    protected $param = [
-        'AccessKeyId' => '',
-        'Action' => 'SendSms',
-        'Format' => 'JSON',
-        'PhoneNumbers' => '',
-        'RegionId' => 'cn-hangzhou',
-        'SignName' => '',
-        'SignatureMethod' => 'HMAC-SHA1',
-        'SignatureNonce' => '',
-        'SignatureVersion' => '1.0',
-        'Timestamp' => '',
-        'Version' => '2017-05-25',
-    ];
+    protected $SignName = '';
 
     /**
      * @param array $config
@@ -51,96 +39,55 @@ class Aliyun extends BaseSms
     protected function initialize(array $config = [])
     {
         parent::initialize($config);
-        $this->param['SignName'] = $config['sign_name'] ?? '';
-        $this->param['AccessKeyId'] = $config['aliyun_AccessKeyId'] ?? '';
+        $this->SignName = $config['aliyun_SignName'] ?? '';
+        $this->AccessKeyId = $config['aliyun_AccessKeyId'] ?? '';
         $this->AccessKeySecret = $config['aliyun_AccessKeySecret'] ?? '';
-        $this->param['RegionId'] = $config['aliyun_RegionId'] ?? '';
-        $this->param['SignatureNonce'] = uniqid(mt_rand(0, 0xffff), true);
-        $this->param['Timestamp'] = gmdate('Y-m-d\TH:i:s\Z');
-        $this->templates = Config::get($this->configFile . '.stores.' . $this->name . '.template_id', []);
     }
 
     /**
+     * 发送短信
      * @param string $phone
      * @param string $templateId
      * @param array $data
-     * @return array[]|bool|mixed
+     * @return array|bool|mixed
      */
     public function send(string $phone, string $templateId, array $data = [])
     {
         if (empty($phone)) {
             return $this->setError('电话号码不能为空');
         }
-        $param = $this->param;
-        if (!$param['SignName'] || !$param['AccessKeyId'] || $param['RegionId'] || !$this->AccessKeySecret) {
-            return $this->setError('请先配置短信秘钥');
-        }
 
-        $param['TemplateCode'] = $this->templates[$templateId];
-        $param['TemplateParam'] = $data;
-        $body = $this->rpc($param, 'post');
-        $result = HttpService::request($this->apiUrl, 'POST', $body, $this->header);
-        if ($result === false) {
-            return $this->setError(HttpService::getCurlError());
-        }
-        $json = json_decode($result);
-        if ($json === false) {
-            return $this->setError(json_last_error_msg());
-        }
-        if ($json['Code'] != 'OK') {
-            return $this->setError($json->Message);
-        }
-        return [
-            'data' => [
-                'id' => $json['RequestId'],
-                'content' => $param['TemplateParam'],
-                'template' => $param['TemplateCode'],
-            ]
-        ];
-    }
+        $config = new AliConfig([
+            "accessKeyId" => $this->AccessKeyId,
+            "accessKeySecret" => $this->AccessKeySecret
+        ]);
+        // 访问的域名
+        $config->endpoint = "dysmsapi.aliyuncs.com";
+        $client = new Dysmsapi($config);
 
-    /**
-     * @param array $params
-     * @param string $method
-     * @return string
-     */
-    private function rpc(array $params = [], string $method = 'POST'): string
-    {
-        if (isset($params['TemplateParam']) && is_array($params['TemplateParam'])) {
-            $params['TemplateParam'] = json_encode($params['TemplateParam'], JSON_UNESCAPED_UNICODE);
-        }
-        $sortedQuery = $this->toString($params);
-        $signature = $method . '&%2F&' . $this->percentEncode($sortedQuery);
-        $signature = base64_encode(hash_hmac('sha1', $signature, $this->AccessKeySecret . '&', true));
-        return 'Signature=' . $signature . '&' . $sortedQuery;
-    }
+        if (!$templateId) throw new ApiException('模板不存在：' . $templateId);
 
-    /**
-     * @param $data
-     * @return false|string
-     */
-    private function toString($data)
-    {
-        ksort($data);
-        $string = '';
-        foreach ($data as $key => $value) {
-            if ($value === '' || $value === null) {
-                continue;
+        $sendSmsRequest = new SendSmsRequest([
+            "phoneNumbers" => $phone,
+            "signName" => $this->SignName,
+            "templateCode" => $templateId,
+            "templateParam" => json_encode($data),
+        ]);
+        $runtime = new RuntimeOptions([]);
+        try {
+            // 复制代码运行请自行打印 API 的返回值
+            $resp = $client->sendSmsWithOptions($sendSmsRequest, $runtime);
+            if (isset($resp) && $resp->body->code !== 'OK') {
+                throw new ApiException('【阿里云平台错误提示】：' . $resp->body->message);
             }
-            $string .= '&' . $this->percentEncode($key) . '=' . $this->percentEncode($value);
+            return [
+                'id' => $resp->body->requestId,
+                'content' => json_encode($data),
+                'template' => $templateId,
+            ];
+        } catch (\Exception $e) {
+            throw new ApiException('【阿里云平台错误提示】：' . $e->getMessage());
         }
-        return substr($string, 1);
-    }
-
-    /**
-     * @param $string
-     * @return array|string|string[]|null
-     */
-    private function percentEncode($string)
-    {
-        $result = urlencode($string);
-        $result = str_replace(['+', '*'], ['%20', '%2A'], $result);
-        return preg_replace('/%7E/', '~', $result);
     }
 
     public function open()
