@@ -20,6 +20,7 @@ use app\services\product\sku\StoreProductAttrValueServices;
 use app\services\system\SystemMenusServices;
 use app\services\user\UserServices;
 use crmeb\services\HttpService;
+use think\facade\Cache;
 
 /**
  * 公共接口基类 主要存放公共接口
@@ -42,6 +43,7 @@ class Common extends AuthController
     }
 
     /**
+     * 获取授权信息
      * @return mixed
      */
     public function auth()
@@ -126,7 +128,7 @@ class Common extends AuthController
                 } catch (\Throwable $e) {
                     return app('json')->fail(400330);
                 }
-                return app('json')->success(['status' => 1, 'authCode' => $authCode, 'day' => 0]);
+                return app('json')->success(['status' => 1, 'copyright' => $this->copyright(), 'authCode' => $authCode, 'day' => 0]);
             default:
                 return app('json')->success(['status' => -9]);
         }
@@ -380,6 +382,90 @@ class Common extends AuthController
             }
         }
         return app('json')->success(sort_list_tier($data));
+    }
+
+    /**
+     * 查询购买版权
+     * @return mixed
+     */
+    public function copyright()
+    {
+        try {
+            if (Cache::has('nncnL_crmeb_copyright')) {
+                $copyrightContext = Cache::get('nncnL_crmeb_copyright');
+            } else {
+                /** @var SystemConfigServices $services */
+                $services = app()->make(SystemConfigServices::class);
+                $copyrightContext = $services->value(['menu_name' => 'nncnL_crmeb_copyright'], 'value');
+                $copyrightContext = $copyrightContext ? json_decode($copyrightContext, true) : null;
+                Cache::set('nncnL_crmeb_copyright', $copyrightContext, 3600);
+            }
+
+            if (Cache::has('nncnL_crmeb_copyright_image')) {
+                $copyrightImage = Cache::get('nncnL_crmeb_copyright_image');
+            } else {
+                /** @var SystemConfigServices $services */
+                $services = app()->make(SystemConfigServices::class);
+                $copyrightImage = $services->value(['menu_name' => 'nncnL_crmeb_copyright_image'], 'value');
+                $copyrightImage = $copyrightImage ? json_decode($copyrightImage, true) : null;
+                Cache::set('nncnL_crmeb_copyright_image', $copyrightImage, 3600);
+            }
+        } catch (\Throwable $e) {
+            $copyrightContext = '';
+            $copyrightImage = '';
+        }
+        return app('json')->success(compact('copyrightContext', 'copyrightImage'));
+    }
+
+    /**
+     * 保存版权
+     * @return mixed
+     */
+    public function saveCopyright()
+    {
+        [$copyright, $copyrightImg] = $this->request->postMore(['copyright', 'copyright_img',], true);
+
+        /** @var SystemConfigServices $services */
+        $services = app()->make(SystemConfigServices::class);
+        if ($services->count(['menu_name' => 'nncnL_crmeb_copyright'])) {
+            $services->update([
+                'menu_name' => 'nncnL_crmeb_copyright'
+            ], [
+                'value' => json_encode($copyright)
+            ]);
+        } else {
+            $services->save([
+                'menu_name' => 'nncnL_crmeb_copyright',
+                'type' => 'text',
+                'input_type' => 'input',
+                'config_tab_id' => 1,
+                'value' => json_encode($copyright),
+                'status' => 2,
+                'info' => ''
+            ]);
+        }
+
+        if ($services->count(['menu_name' => 'nncnL_crmeb_copyright_image'])) {
+            $services->update([
+                'menu_name' => 'nncnL_crmeb_copyright_imge'
+            ], [
+                'value' => json_encode($copyrightImg)
+            ]);
+        } else {
+            $services->save([
+                'menu_name' => 'nncnL_crmeb_copyright_image',
+                'type' => 'text',
+                'input_type' => 'input',
+                'config_tab_id' => 1,
+                'value' => json_encode($copyrightImg),
+                'status' => 2,
+                'info' => ''
+            ]);
+        }
+
+        Cache::set('nncnL_crmeb_copyright', $copyright, 3600);
+        Cache::set('nncnL_crmeb_copyright_image', $copyrightImg, 3600);
+        return app('json')->success(100000);
     }
 
 

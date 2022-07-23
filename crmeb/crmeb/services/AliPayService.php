@@ -199,7 +199,16 @@ class AliPayService
     public static function handleNotify()
     {
         return self::instance()->notify(function ($notify) {
-            return Event::until('pay.notify', ['aliyun', $notify]);
+            if (isset($notify->out_trade_no)) {
+                if (isset($notify->attach) && $notify->attach) {
+                    if (($count = strpos($notify->out_trade_no, '_')) !== false) {
+                        $notify->trade_no = $notify->out_trade_no;
+                        $notify->out_trade_no = substr($notify->out_trade_no, $count + 1);
+                    }
+                    return (new Hook(PayNotifyServices::class, 'aliyun'))->listen($notify->attach, $notify->out_trade_no, $notify->trade_no);
+                }
+                return false;
+            }
         });
     }
 
@@ -254,6 +263,7 @@ class AliPayService
                     return 'success';
                 }
             } catch (\Exception $e) {
+                Log::error($e->getMessage());
                 Log::error('支付宝异步会回调成功,执行函数错误。错误单号：' . $postOrder['out_trade_no']);
             }
         }

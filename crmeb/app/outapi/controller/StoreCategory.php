@@ -51,6 +51,7 @@ class StoreCategory extends AuthController
             ['pid', ''],
             ['cate_name', ''],
         ]);
+        $where['pid'] = -2;
         $data = $this->services->getCategoryList($where);
         return app('json')->success($data);
     }

@@ -181,6 +181,9 @@ class StoreOrderTakeServices extends BaseServices
         }
         $give_integral = $order_integral + $order['gain_integral'];
         if ($give_integral > 0 && $res1 && $res2 && $res3) {
+            /** @var StoreOrderServices $orderServices */
+            $orderServices = app()->make(StoreOrderServices::class);
+            $orderServices->update($order['id'], ['gain_integral' => $give_integral], 'id');
             event('notice.notice', [['order' => $order, 'storeTitle' => $storeTitle, 'give_integral' => $give_integral, 'integral' => $integral], 'integral_accout']);
             return true;
         }

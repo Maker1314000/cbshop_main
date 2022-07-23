@@ -15,8 +15,8 @@ use app\services\activity\bargain\StoreBargainServices;
 use app\services\activity\combination\StoreCombinationServices;
 use app\services\activity\seckill\StoreSeckillServices;
 use app\services\activity\coupon\StoreCouponUserServices;
-use app\services\message\notice\NoticeSmsService;
 use app\services\kefu\service\StoreServiceServices;
+use app\services\message\notice\SmsService;
 use app\services\order\OutStoreOrderServices;
 use app\services\order\StoreOrderCartInfoServices;
 use app\services\order\StoreOrderEconomizeServices;
@@ -190,12 +190,7 @@ class OrderJob extends BaseJobs
             $bargainServices = app()->make(StoreBargainServices::class);
             /** @var StoreOrderCartInfoServices $cartInfoServices */
             $cartInfoServices = app()->make(StoreOrderCartInfoServices::class);
-            /** @var NoticeSmsService $smsServices */
-            $smsServices = app()->make(NoticeSmsService::class);
-            $switch = (bool)sys_config('admin_pay_success_switch');
-            foreach ($serviceOrderNotice as $key => $item) {
-                $admin_name = $item['nickname'];
-                $order_id = $order['order_id'];
+            foreach ($serviceOrderNotice as $item) {
                 $userInfo = $wechatUserServices->getOne(['uid' => $item['uid'], 'user_type' => 'wechat']);
                 if ($userInfo) {
                     $userInfo = $userInfo->toArray();
@@ -259,8 +254,8 @@ class OrderJob extends BaseJobs
         //模板变量
         $pay_price = $order['pay_price'];
         $order_id = $order['order_id'];
-        /** @var NoticeSmsService $smsServices */
-        $smsServices = app()->make(NoticeSmsService::class);
+        /** @var SmsService $smsServices */
+        $smsServices = app()->make(SmsService::class);
         $smsServices->send($switch, $order['user_phone'], compact('order_id', 'pay_price'), 'order_pay_success');
     }
 

@@ -303,7 +303,7 @@ class StoreCategoryServices extends BaseServices
     public function getCategoryList(array $where)
     {
         return CacheService::get('CATEGORY_LIST', function () use ($where) {
-            return $this->dao->getALlByIndex($where, 'id,cate_name,pid,pic,big_pic,sort,is_show');
+            return $this->dao->getALlByIndex($where, 'id, cate_name, pid, pic, big_pic, sort, is_show, add_time');
         }, 86400);
     }
 }

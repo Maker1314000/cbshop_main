@@ -1093,6 +1093,7 @@ class StoreOrderRefundServices extends BaseServices
         $orderData = $order;
         $orderData['store_order_sn'] = $orderInfo['order_id'];
         $orderData['cartInfo'] = $orderData['cart_info'];
+        $orderData['_pay_time'] = date('Y-m-d H:i:s', $orderInfo['pay_time']);
         //核算优惠金额
         $vipTruePrice = 0;
         $total_price = 0;
@@ -1115,7 +1116,7 @@ class StoreOrderRefundServices extends BaseServices
         $total_price = bcadd((string)$total_price, (string)bcadd((string)$orderData['deduction_price'], (string)$orderData['coupon_price'], 2), 2);
         $orderData['vip_true_price'] = $vipTruePrice;
         $orderData['postage_price'] = 0;
-        $orderData['pay_postage'] = $this->getOrderSumPrice($orderData['cart_info'], 'postage_price', false);
+        $orderData['pay_postage'] = $this->getOrderSumPrice($orderData['cart_info'], 'origin_postage_price', false);
         $orderData['member_price'] = 0;
         $orderData['routine_contact_type'] = sys_config('routine_contact_type', 0);
 

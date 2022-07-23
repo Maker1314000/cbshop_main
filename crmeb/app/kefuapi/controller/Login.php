@@ -57,7 +57,7 @@ class Login extends BaseController
         validate(LoginValidate::class)->check(['account' => $account, 'password' => $password]);
         $token = $this->services->authLogin($account, $password);
 
-        return app('json')->success(410001, null, $token);
+        return app('json')->success(410001, $token);
     }
 
     /**

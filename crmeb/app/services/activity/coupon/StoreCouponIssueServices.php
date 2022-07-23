@@ -93,6 +93,18 @@ class StoreCouponIssueServices extends BaseServices
             }
         }
 
+        if (!in_array((int)$data['receive_type'], [1, 2, 3, 4])) {
+            throw new AdminException(400758);
+        }
+
+        if (!in_array((int)$data['is_permanent'], [0, 1])) {
+            throw new AdminException(400758);
+        }
+
+        if (empty($data['coupon_title'])) {
+            throw new AdminException(400759);
+        }
+
         if ($data['end_time'] && $data['end_use_time']) {
             if ($data['end_use_time'] < $data['end_time']) {
                 throw new AdminException(400514);
@@ -122,7 +134,7 @@ class StoreCouponIssueServices extends BaseServices
             $storeCouponProductService->saveAll($couponData);
         }
         if (!$res) throw new AdminException(100022);
-        return true;
+        return (int)$res->id;
     }
 
 
@@ -609,5 +621,23 @@ class StoreCouponIssueServices extends BaseServices
             $item['use_min_price'] = floatval($item['use_min_price']);
         }
         return $list;
+    }
+
+    /**
+     * 获取列表
+     * @param array $where
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function getCouponList(array $where)
+    {
+        [$page, $limit] = $this->getPageValue();
+        $where['is_del'] = 0;
+        $field = 'id, coupon_title, type, coupon_price, use_min_price, receive_type, is_permanent, add_time, start_time, end_time, start_use_time, end_use_time, coupon_time, status, total_count, remain_count';
+        $list = $this->dao->getList($where, $page, $limit, $field);
+        $count = $this->dao->count($where);
+        return compact('list', 'count');
     }
 }

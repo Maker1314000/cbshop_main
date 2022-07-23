@@ -28,13 +28,13 @@ return [
     'cookie_var'      => 'cb_lang',
     // 扩展语言包
     'extend_list'     => [
-        'zh-cn'       => app()->getBasePath() . 'lang/zh-cn.php',
-        'en-us'       => app()->getBasePath() . 'lang/en-us.php',
+        'zh_cn'       => app()->getBasePath() . 'lang/zh_cn.php',
+        'en_us'       => app()->getBasePath() . 'lang/en_us.php',
     ],
     // Accept-Language转义为对应语言包名称
     'accept_language' => [
-        'zh-hans-cn'  => 'zh-cn',
-        'en-hans-us'  => 'en-us',
+        'zh-hans-cn'  => 'zh_cn',
+        'en-hans-us'  => 'en_us',
     ],
     // 是否支持语言分组
     'allow_group'     => true,

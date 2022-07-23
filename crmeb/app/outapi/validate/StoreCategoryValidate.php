@@ -36,15 +36,15 @@ class StoreCategoryValidate extends Validate
      * @var array
      */
     protected $message = [
-        'pid.number' => 400745,
-        'pid.egt' => 400745,
-        'cate_name.require' => 410095,
-        'cate_name.max' => 400746,
-        'pic.max' => 400747,
-        'big_pic.max' => 400748,
-        'sort.number' => 400749,
-        'sort.egt' => 400750,
-        'is_show.in' => 400751,
+        'pid.number' => '400745',
+        'pid.egt' => '400745',
+        'cate_name.require' => '410095',
+        'cate_name.max' => '400746',
+        'pic.max' => '400747',
+        'big_pic.max' => '400748',
+        'sort.number' => '400749',
+        'sort.egt' => '400750',
+        'is_show.in' => '400751',
     ];
 
     protected $scene = [

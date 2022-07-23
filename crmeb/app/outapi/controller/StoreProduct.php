@@ -44,7 +44,6 @@ class StoreProduct extends AuthController
             ['is_virtual', -1],
             ['is_presale', -1]
         ]);
-        $where['is_show'] = 1;
         $where['is_del'] = 0;
         /** @var StoreCategoryServices $storeCategoryServices */
         $storeCategoryServices = app()->make(StoreCategoryServices::class);

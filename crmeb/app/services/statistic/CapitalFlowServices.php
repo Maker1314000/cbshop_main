@@ -115,7 +115,7 @@ class CapitalFlowServices extends BaseServices
         foreach ($list as &$item) {
             $item['add_time'] = date('Y-m-d H:i:s', $item['add_time']);
             $item['trading_type'] = $status[$item['trading_type']];
-            $item['pay_type_name'] = PayServices::PAY_TYPE[$item['pay_type']];
+            $item['pay_type_name'] = PayServices::PAY_TYPE[$item['pay_type'] != 'routine' ? $item['pay_type'] : 'weixin'];
         }
         $count = $this->dao->count($where);
         if ($export) {

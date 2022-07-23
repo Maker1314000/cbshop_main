@@ -59,6 +59,21 @@ Route::group(function () {
         Route::put('refund/refuse/:order_id', 'RefundOrder/refuse')->option(['real_name' => '商家拒绝退款']);
         Route::get('refund/:order_id', 'RefundOrder/read')->option(['real_name' => '售后订单详情']);
 
+        //优惠券
+        Route::get('coupon/list', 'StoreCoupon/lst')->option(['real_name' => '优惠券列表']);
+        Route::post('coupon', 'StoreCoupon/save')->option(['real_name' => '新增优惠券']);
+        Route::put('coupon/status/:id/:status', 'StoreCoupon/status')->option(['real_name' => '修改优惠券状态']);
+        Route::delete('coupon/:id', 'StoreCoupon/delete')->option(['real_name' => '删除优惠券']);
+
+        //用户等级
+        Route::get('user_level/list', 'UserLevel/lst')->option(['real_name' => '用户等级列表']);
+
+        //用户
+        Route::get('user/list', 'User/lst')->option(['real_name' => '用户列表']);
+        Route::post('user', 'User/save')->option(['real_name' => '新增用户']);
+        Route::put('user/:uid', 'User/update')->option(['real_name' => '修改用户']);
+        Route::put('user/give/:uid', 'User/give')->option(['real_name' => '赠送积分/金额']);
+
     })->middleware(AuthTokenMiddleware::class);
 
 })->middleware(AllowOriginMiddleware::class);

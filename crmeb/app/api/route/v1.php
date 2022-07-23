@@ -40,6 +40,8 @@ Route::group(function () {
     Route::post('binding', 'v1.LoginController/binding_phone')->name('bindingPhone');
     // 支付宝复制链接支付
     Route::get('ali_pay', 'v1.order.StoreOrderController/aliPay')->name('aliPay');
+    //查询版权
+    Route::get('copyright', 'v1.PublicController/copyright')->option(['real_name' => '申请版权']);
 
 })->middleware(\app\http\middleware\AllowOriginMiddleware::class)->middleware(\app\api\middleware\StationOpenMiddleware::class);
 
