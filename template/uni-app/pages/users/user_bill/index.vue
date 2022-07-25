@@ -2,9 +2,9 @@
 	<view :style="colorStyle">
 		<view class='bill-details'>
 			<view class='nav acea-row'>
-				<view class='item' :class='type==0 ? "on":""' @click='changeType(0)'>全部</view>
-				<view class='item' :class='type==1 ? "on":""' @click='changeType(1)'>消费</view>
-				<view class='item' :class='type==2 ? "on":""' @click='changeType(2)'>充值</view>
+				<view class='item' :class='type==0 ? "on":""' @click='changeType(0)'>{{$t(`all`)}}</view>
+				<view class='item' :class='type==1 ? "on":""' @click='changeType(1)'>{{$t(`Consumption`)}}</view>
+				<view class='item' :class='type==2 ? "on":""' @click='changeType(2)'>{{$t(`recharge`)}}</view>
 			</view>
 			<view class='sign-record'>
 				<view class='list' v-for="(item,index) in userBillList" :key="index">
@@ -26,7 +26,7 @@
 					<text class='loading iconfont icon-jiazai' :hidden='loading==false'></text>{{loadTitle}}
 				</view>
 				<view v-if="userBillList.length == 0">
-					<emptyPage title="暂无账单的记录哦～"></emptyPage>
+					<emptyPage :title="$t(`no_bill_record`)"></emptyPage>
 				</view>
 			</view>
 		</view>
@@ -64,7 +64,7 @@
 		mixins: [colors],
 		data() {
 			return {
-				loadTitle: '加载更多',
+				loadTitle: this.$t(`loading_more`),
 				loading: false,
 				loadend: false,
 				page: 1,
@@ -142,12 +142,12 @@
 					}
 					let loadend = res.data.list.length < that.limit;
 					that.loadend = loadend;
-					that.loadTitle = loadend ? '没有更多内容啦~' : '加载更多';
+					that.loadTitle = loadend ? this.$t(`no_more`) : this.$t(`loading_more`);
 					that.page += 1;
 					that.loading = false;
 				}).catch(err=>{
 					that.loading = false;
-					that.loadTitle = '加载更多';
+					that.loadTitle = this.$t(`loading_more`);
 				})
 			},
 			// getUserBillList: function() {

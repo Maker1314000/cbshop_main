@@ -2,21 +2,21 @@
 	<view class="login-wrapper" :style="colorStyle">
 		<view class="shading">
 			<image :src="logoUrl" v-if="logoUrl" />
-			<image src="/static/images/logo2.png" v-else />
+			<image src="../static/logo2.png" v-else />
 		</view>
 		<view class="whiteBg" v-if="formItem === 1">
 			<view class="list" v-if="current !== 1">
 				<form @submit.prevent="submit">
 					<view class="item">
 						<view class="acea-row row-middle">
-							<image src="/static/images/phone_1.png" style="width: 24rpx; height: 34rpx;"></image>
-							<input type="text" placeholder="输入手机号码" v-model="account" maxlength="11" required />
+							<image src="../static/phone_1.png" style="width: 24rpx; height: 34rpx;"></image>
+							<input type="text" :placeholder="$t(`input_phone`)" v-model="account" maxlength="11" required />
 						</view>
 					</view>
 					<view class="item">
 						<view class="acea-row row-middle">
-							<image src="/static/images/code_1.png" style="width: 28rpx; height: 32rpx;"></image>
-							<input type="password" placeholder="填写登录密码" v-model="password" required />
+							<image src="../static/code_1.png" style="width: 28rpx; height: 32rpx;"></image>
+							<input type="password" :placeholder="$t(`fill_login_psw`)" v-model="password" required />
 						</view>
 					</view>
 				</form>
@@ -27,14 +27,14 @@
 			<view class="list" v-if="current !== 0 || appLoginStatus || appleLoginStatus">
 				<view class="item">
 					<view class="acea-row row-middle">
-						<image src="/static/images/phone_1.png" style="width: 24rpx; height: 34rpx;"></image>
-						<input type="text" placeholder="输入手机号码" v-model="account" maxlength="11" />
+						<image src="../static/phone_1.png" style="width: 24rpx; height: 34rpx;"></image>
+						<input type="text" :placeholder="$t(`input_phone`)" v-model="account" maxlength="11" />
 					</view>
 				</view>
 				<view class="item">
 					<view class="acea-row row-middle">
-						<image src="/static/images/code_2.png" style="width: 28rpx; height: 32rpx;"></image>
-						<input type="text" placeholder="填写验证码" maxlength="6" class="codeIput" v-model="captcha" />
+						<image src="../static/code_2.png" style="width: 28rpx; height: 32rpx;"></image>
+						<input type="text" :placeholder="$t(`enter_code`)" maxlength="6" class="codeIput" v-model="captcha" />
 						<button class="code" :disabled="disabled" :class="disabled === true ? 'on' : ''" @click="code">
 							{{ text }}
 						</button>
@@ -42,25 +42,25 @@
 				</view>
 				<view class="item" v-if="isShowCode">
 					<view class="acea-row row-middle">
-						<image src="/static/images/code_2.png" style="width: 28rpx; height: 32rpx;"></image>
-						<input type="text" placeholder="填写验证码" class="codeIput" v-model="codeVal" />
+						<image src="../static/code_2.png" style="width: 28rpx; height: 32rpx;"></image>
+						<input type="text" :placeholder="$t(`enter_code`)" class="codeIput" v-model="codeVal" />
 						<view class="code" @click="again"><img :src="codeUrl" /></view>
 					</view>
 				</view>
 			</view>
-			<view class="logon" @click="loginMobile" v-if="current !== 0">登录</view>
-			<view class="logon" @click="submit" v-if="current === 0">登录</view>
+			<view class="logon" @click="loginMobile" v-if="current !== 0">{{$t(`login`)}}</view>
+			<view class="logon" @click="submit" v-if="current === 0">{{$t(`login`)}}</view>
 			<!-- #ifndef APP-PLUS -->
 			<view class="tips">
-				<view v-if="current==0" @click="current = 1">快速登录</view>
-				<view v-if="current==1" @click="current = 0">账号登录</view>
+				<view v-if="current==0" @click="current = 1">{{$t(`quick_login`)}}</view>
+				<view v-if="current==1" @click="current = 0">{{$t(`account_login`)}}</view>
 			</view>
 			<!-- #endif -->
 			<!-- #ifdef APP-PLUS -->
 			<view class="appLogin" v-if="!appLoginStatus && !appleLoginStatus">
 				<view class="hds">
 					<span class="line"></span>
-					<p>其他方式登录</p>
+					<p>{{$t(`other_ways_login`)}}</p>
 					<span class="line"></span>
 				</view>
 				<view class="btn-wrapper">
@@ -119,7 +119,7 @@
 		mixins: [sendVerifyCode, colors],
 		data: function() {
 			return {
-				navList: ["快速登录", "账号登录"],
+				navList: [this.$t(`quick_login`),this.$t(`account_login`)],
 				current: 1,
 				account: "",
 				password: "",
@@ -177,7 +177,7 @@
 				this.account = ''
 				this.captcha = ''
 				uni.showLoading({
-					title: '登录中'
+					title: this.$t(`logging_in`)
 				})
 				uni.login({
 					provider: 'apple',
@@ -191,7 +191,7 @@
 							},
 							fail() {
 								uni.showToast({
-									title: '获取用户信息失败',
+									title: this.$t(`get_user_failed`),
 									icon: 'none',
 									duration: 2000
 								})
@@ -219,8 +219,8 @@
 				}) => {
 					if (data.isbind) {
 						uni.showModal({
-							title: '提示',
-							content: '请绑定手机号后，继续操作',
+							title: this.$t(`hint`),
+							content: this.$t(`bind_phone`),
 							showCancel: false,
 							success: function(res) {
 								if (res.confirm) {
@@ -243,13 +243,13 @@
 					}
 				}).catch(error => {
 					uni.showModal({
-						title: '提示',
-						content: `错误信息${error}`,
+						title: this.$t(`hint`),
+						content: this.$t(`error_message`) + `${error}`,
 						success: function(res) {
 							if (res.confirm) {
-								console.log('用户点击确定');
+								console.log(this.$t(`user_clicks_ok`));
 							} else if (res.cancel) {
-								console.log('用户点击取消');
+								console.log(this.$t(`user_clicks_cancel`));
 							}
 						}
 					});
@@ -261,7 +261,7 @@
 				this.account = ''
 				this.captcha = ''
 				uni.showLoading({
-					title: '登录中'
+					title: this.$t(`logging_in`)
 				})
 				uni.login({
 					provider: 'weixin',
@@ -275,7 +275,7 @@
 							},
 							fail() {
 								uni.showToast({
-									title: '获取用户信息失败',
+									title: this.$t(`get_user_failed`),
 									icon: 'none',
 									duration: 2000
 								})
@@ -287,7 +287,7 @@
 					},
 					fail() {
 						uni.showToast({
-							title: '登录失败',
+							title: this.$t(`login_failed`),
 							icon: 'none',
 							duration: 2000
 						})
@@ -306,8 +306,8 @@
 				}) => {
 					if (data.isbind) {
 						uni.showModal({
-							title: '提示',
-							content: '请绑定手机号后，继续操作',
+							title: this.$t(`hint`),
+							content: this.$t(`bind_phone`),
 							showCancel: false,
 							success: function(res) {
 								if (res.confirm) {
@@ -330,13 +330,13 @@
 					}
 				}).catch(error => {
 					uni.showModal({
-						title: '提示',
-						content: `错误信息${error}`,
+						title: this.$t(`hint`),
+						content: this.$t(`error_message`) + `${error}`,
 						success: function(res) {
 							if (res.confirm) {
-								console.log('用户点击确定');
+								console.log(this.$t(`user_clicks_ok`));
 							} else if (res.cancel) {
-								console.log('用户点击取消');
+								console.log(this.$t(`user_clicks_cancel`));
 							}
 						}
 					});
@@ -372,16 +372,16 @@
 			async loginMobile() {
 				let that = this;
 				if (!that.account) return that.$util.Tips({
-					title: '请填写手机号码'
+					title: that.$t(`input_phone`)
 				});
 				if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(that.account)) return that.$util.Tips({
-					title: '请输入正确的手机号码'
+					title: that.$t(`input_correct_phone`)
 				});
 				if (!that.captcha) return that.$util.Tips({
-					title: '请填写验证码'
+					title: that.$t(`enter_code`)
 				});
 				if (!/^[\w\d]+$/i.test(that.captcha)) return that.$util.Tips({
-					title: '请输入正确的验证码'
+					title: that.$t(`fill_correct_code`)
 				});
 				if (that.appLoginStatus) {
 					that.wxLoginApi()
@@ -392,7 +392,7 @@
 						this.keyLock = !this.keyLock
 					} else {
 						return that.$util.Tips({
-							title: '请勿重复点击'
+							title: that.$t(`not_click_repeat`)
 						});
 					}
 					loginMobile({
@@ -431,22 +431,22 @@
 			async register() {
 				let that = this;
 				if (!that.account) return that.$util.Tips({
-					title: '请填写手机号码'
+					title: that.$t(`input_phone`)
 				});
 				if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(that.account)) return that.$util.Tips({
-					title: '请输入正确的手机号码'
+					title: that.$t(`input_correct_phone`)
 				});
 				if (!that.captcha) return that.$util.Tips({
-					title: '请填写验证码'
+					title: that.$t(`enter_code`)
 				});
 				if (!/^[\w\d]+$/i.test(that.captcha)) return that.$util.Tips({
-					title: '请输入正确的验证码'
+					title: that.$t(`enter_correct_code`)
 				});
 				if (!that.password) return that.$util.Tips({
-					title: '请填写密码'
+					title: that.$t(`fill_password`)
 				});
 				if (/^([0-9]|[a-z]|[A-Z]){0,6}$/i.test(that.password)) return that.$util.Tips({
-					title: '您输入的密码过于简单'
+					title: that.$t(`psw_too_simple`)
 				});
 				register({
 						account: that.account,
@@ -469,10 +469,10 @@
 			async getCode() {
 				let that = this;
 				if (!that.account) return that.$util.Tips({
-					title: '请填写手机号码'
+					title: that.$t(`input_phone`)
 				});
 				if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(that.account)) return that.$util.Tips({
-					title: '请输入正确的手机号码'
+					title: that.$t(`input_correct_phone`)
 				});
 				if (that.formItem == 2) that.type = "register";
 
@@ -500,19 +500,19 @@
 			async submit() {
 				let that = this;
 				if (!that.account) return that.$util.Tips({
-					title: '请填写账号'
+					title: that.$t(`fill_account`)
 				});
 				if (!/^[\w\d]{5,16}$/i.test(that.account)) return that.$util.Tips({
-					title: '请输入正确的账号'
+					title: that.$t(`enter_correct_account`)
 				});
 				if (!that.password) return that.$util.Tips({
-					title: '请填写密码'
+					title: that.$t(`fill_password`)
 				});
 				if (this.keyLock) {
 					this.keyLock = !this.keyLock
 				} else {
 					return that.$util.Tips({
-						title: '请勿重复点击'
+						title: that.$t(`not_click_repeat`)
 					});
 				}
 				loginH5({

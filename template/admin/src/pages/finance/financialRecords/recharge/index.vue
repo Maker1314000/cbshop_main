@@ -246,7 +246,7 @@ export default {
       this.$modalSure(delfromData)
         .then((res) => {
           this.$Message.success(res.msg);
-          this.tabList.splice(this.delfromData.num, 1);
+          this.tabList.splice(delfromData.num, 1);
         })
         .catch((res) => {
           this.$Message.error(res.msg);

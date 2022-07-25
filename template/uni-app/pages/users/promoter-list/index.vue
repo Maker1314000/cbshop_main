@@ -4,51 +4,51 @@
 			<view class='promoterHeader bg-color'>
 				<view class='headerCon acea-row row-between-wrapper'>
 					<view>
-						<view class='name'>推广人数</view>
-						<view><text class='num'>{{teamCount}}</text>人</view>
+						<view class='name'>{{$t(`promote_people`)}}</view>
+						<view><text class='num'>{{teamCount}}</text>{{$t('people')}}</view>
 					</view>
 					<view class='iconfont icon-tuandui'></view>
 				</view>
 			</view>
 			<view class='nav acea-row row-around' v-if="brokerage_level == 2">
-				<view :class="grade == 0 ? 'item on' : 'item'" @click='setType(0)'>一级({{total}})</view>
-				<view :class="grade == 1 ? 'item on' : 'item'" @click='setType(1)'>二级({{totalLevel}})</view>
+				<view :class="grade == 0 ? 'item on' : 'item'" @click='setType(0)'>{{$t(`level_1`)}}({{total}})</view>
+				<view :class="grade == 1 ? 'item on' : 'item'" @click='setType(1)'>{{$t(`level_2`)}}({{totalLevel}})</view>
 			</view>
 		<!-- 	<form @submit.prevent="submitForm">
 				
 			</form> -->
 			<view class='search acea-row row-between-wrapper'>
-				<view class='input'><input placeholder='点击搜索会员名称' placeholder-class='placeholder' v-model="keyword" @confirm="submitForm" confirm-type='search' name="search"></input></view>
+				<view class='input'><input :placeholder='$t(`search_vip`)' placeholder-class='placeholder' v-model="keyword" @confirm="submitForm" confirm-type='search' name="search"></input></view>
 				<button class='iconfont icon-sousuo2' @click="submitForm"></button>
 			</view>
 			<view class='list'>
 				<view class="sortNav acea-row row-middle">
-					<view class="sortItem" @click='setSort("childCount ASC")' v-if="sort == 'childCount DESC'">团队排序
-						<image src='/static/images/sort1.png'></image>
+					<view class="sortItem" @click='setSort("childCount ASC")' v-if="sort == 'childCount DESC'">{{$t(`team_sorting`)}}
+						<image src='../static/sort1.png'></image>
 					</view>
-					<view class="sortItem" @click='setSort("")' v-else-if="sort == 'childCount ASC'">团队排序
-						<image src='/static/images/sort3.png'></image>
+					<view class="sortItem" @click='setSort("")' v-else-if="sort == 'childCount ASC'">{{$t(`team_sorting`)}}
+						<image src='../static/sort3.png'></image>
 					</view>
-					<view class="sortItem" @click='setSort("childCount DESC")' v-else>团队排序
-						<image src='/static/images/sort2.png'></image>
+					<view class="sortItem" @click='setSort("childCount DESC")' v-else>{{$t(`team_sorting`)}}
+						<image src='../static/sort2.png'></image>
 					</view>
-					<view class="sortItem" @click='setSort("numberCount ASC")' v-if="sort == 'numberCount DESC'">金额排序
-						<image src='/static/images/sort1.png'></image>
+					<view class="sortItem" @click='setSort("numberCount ASC")' v-if="sort == 'numberCount DESC'">{{$t(`sort_amount`)}}
+						<image src='../static/sort1.png'></image>
 					</view>
-					<view class="sortItem" @click='setSort("")' v-else-if="sort == 'numberCount ASC'">金额排序
-						<image src='/static/images/sort3.png'></image>
+					<view class="sortItem" @click='setSort("")' v-else-if="sort == 'numberCount ASC'">{{$t(`sort_amount`)}}
+						<image src='../static/sort3.png'></image>
 					</view>
-					<view class="sortItem" @click='setSort("numberCount DESC")' v-else>金额排序
-						<image src='/static/images/sort2.png'></image>
+					<view class="sortItem" @click='setSort("numberCount DESC")' v-else>{{$t(`sort_amount`)}}
+						<image src='../static/sort2.png'></image>
 					</view>
-					<view class="sortItem" @click='setSort("orderCount ASC")' v-if="sort == 'orderCount DESC'">订单排序
-						<image src='/static/images/sort1.png'></image>
+					<view class="sortItem" @click='setSort("orderCount ASC")' v-if="sort == 'orderCount DESC'">{{$t(`order_sort`)}}
+						<image src='../static/sort1.png'></image>
 					</view>
-					<view class="sortItem" @click='setSort("")' v-else-if="sort == 'orderCount ASC'">订单排序
-						<image src='/static/images/sort3.png'></image>
+					<view class="sortItem" @click='setSort("")' v-else-if="sort == 'orderCount ASC'">{{$t(`order_sort`)}}
+						<image src='../static/sort3.png'></image>
 					</view>
-					<view class="sortItem" @click='setSort("orderCount DESC")' v-else>订单排序
-						<image src='/static/images/sort2.png'></image>
+					<view class="sortItem" @click='setSort("orderCount DESC")' v-else>{{$t(`order_sort`)}}
+						<image src='../static/sort2.png'></image>
 					</view>
 				</view>
 				<block v-for="(item,index) in recordList" :key="index">
@@ -59,13 +59,13 @@
 							</view>
 							<view class='text'>
 								<view class='name line1'>{{item.nickname}}</view>
-								<view>加入时间: {{item.time}}</view>
+								<view>{{$t(`join_time`)}}: {{item.time}}</view>
 							</view>
 						</view>
 						<view class="right">
-							<view><text class='num font-num'>{{item.childCount ? item.childCount : 0}}</text>人</view>
-							<view><text class="num">{{item.orderCount ? item.orderCount : 0}}</text>单</view>
-							<view><text class="num">{{item.numberCount ? item.numberCount : 0}}</text>元</view>
+							<view><text class='num font-num'>{{item.childCount ? item.childCount : 0}}</text>{{$t(`people`)}}</view>
+							<view><text class="num">{{item.orderCount ? item.orderCount : 0}}</text>{{$t(`order_count`)}}</view>
+							<view><text class="num">{{item.numberCount ? item.numberCount : 0}}</text>{{$t(`Yuan`)}}</view>
 						</view>
 					</view>
 				</block>

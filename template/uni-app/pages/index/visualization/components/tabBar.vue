@@ -22,7 +22,7 @@
 				</view>
 			</view>
 		</view>
-		<view v-if="isIframe && !tabbar.length" class="empty-img uni-tabbar acea-row row-around row-middle">暂无数据，请设置
+		<view v-if="isIframe && !tabbar.length" class="empty-img uni-tabbar acea-row row-around row-middle">{{$t(`no_data_set`)}}
 		</view>
 	</view>
 </template>

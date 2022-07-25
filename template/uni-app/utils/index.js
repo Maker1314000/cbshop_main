@@ -66,7 +66,7 @@ export function getCustomer(url) {
 		let type = res.data.customer_type
 		if (type == '0') {
 			uni.navigateTo({
-				url: url || '/pages/customer_list/chat'
+				url: url || '/pages/extension/customer_list/chat'
 			})
 		} else if (type == '1') {
 			uni.makePhoneCall({

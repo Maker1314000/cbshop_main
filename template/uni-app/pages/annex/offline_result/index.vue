@@ -1,10 +1,10 @@
 <template>
 	<view>
 		<view class="result">
-			<view class="image-wrap"><image class="image" src="@/static/images/offline-result.png"></image></view>
-			<view class="text">支付成功</view>
+			<view class="image-wrap"><image class="image" src="../static/offline-result.png"></image></view>
+			<view class="text">{{$t(`pay_success`)}}</view>
 		</view>
-		<navigator class="link"  url="/pages/index/index" open-type="switchTab">进入商城</navigator>
+		<navigator class="link"  url="/pages/index/index" open-type="switchTab">{{$t(`enter_mall`)}}</navigator>
 	</view>
 </template>
 

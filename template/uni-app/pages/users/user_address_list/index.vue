@@ -7,23 +7,23 @@
 			<radio-group class="radio-group" @change="radioChange" v-if="addressList.length">
 				<view class='item' v-for="(item,index) in addressList" :key="index">
 					<view class='address' @click='goOrder(item.id)'>
-						<view class='consignee'>收货人：{{item.real_name}}<text class='phone'>{{item.phone}}</text></view>
-						<view>收货地址：{{item.province}}{{item.city}}{{item.district}}{{item.detail}}</view>
+						<view class='consignee'>{{$t(`receiver`)}}：{{item.real_name}}<text class='phone'>{{item.phone}}</text></view>
+						<view>{{$t(`shipping_address`)}}：{{item.province}}{{item.city}}{{item.district}}{{item.detail}}</view>
 					</view>
 					<view class='operation acea-row row-between-wrapper'>
 						<!-- #ifndef MP -->
 						<radio class="radio" :value="index.toString()" :checked="item.is_default ? true : false">
-							<text>设为默认</text>
+							<text>{{$t(`set_as_default`)}}</text>
 						</radio>
 						<!-- #endif -->
 						<!-- #ifdef MP -->
 						<radio class="radio" :value="index" :checked="item.is_default ? true : false">
-							<text>设为默认</text>
+							<text>{{$t(`set_as_default`)}}</text>
 						</radio>
 						<!-- #endif -->
 						<view class='acea-row row-middle'>
-							<view @click='editAddress(item.id)'><text class='iconfont icon-bianji'></text>编辑</view>
-							<view @click='delAddress(index)'><text class='iconfont icon-shanchu'></text>删除</view>
+							<view @click='editAddress(item.id)'><text class='iconfont icon-bianji'></text>{{$t(`edit`)}}</view>
+							<view @click='delAddress(index)'><text class='iconfont icon-shanchu'></text>{{$t(`delete`)}}</view>
 						</view>
 					</view>
 				</view>
@@ -33,27 +33,27 @@
 			</view>
 			<view class='noCommodity' v-if="addressList.length < 1 && page > 1">
 				<view class='pictrue'>
-					<image src='../../../static/images/noAddress.png'></image>
+					<image :src="imgHost + '/statics/images/noAddress.png'"></image>
 				</view>
 			</view>
 			<view style='height:120rpx;'></view>
 			<view class='footer acea-row row-between-wrapper'>
 				<!-- #ifdef APP-PLUS -->
 				<view class='addressBnt on' @click='addAddress'><text
-						class='iconfont icon-tianjiadizhi'></text>添加新地址</view>
+						class='iconfont icon-tianjiadizhi'></text>{{$t(`add_new_address`)}}</view>
 				<!-- #endif -->
 				<!-- #ifdef MP-->
 				<view class='addressBnt wxbnt' @click='addAddress'><text
-						class='iconfont icon-tianjiadizhi'></text>添加新地址</view>
-				<view class='addressBnt' @click='getWxAddress'><text class='iconfont icon-weixin2'></text>导入微信地址
+						class='iconfont icon-tianjiadizhi'></text>{{$t(`add_new_address`)}}</view>
+				<view class='addressBnt' @click='getWxAddress'><text class='iconfont icon-weixin2'></text>{{$t(`import_wechat_address`)}}
 				</view>
 				<!-- #endif -->
 				<!-- #ifdef H5-->
 				<view class='addressBnt' :class="this.$wechat.isWeixin()?'wxbnt':'on'" @click='addAddress'><text
-						class='iconfont icon-tianjiadizhi'></text>添加新地址</view>
+						class='iconfont icon-tianjiadizhi'></text>{{$t(`add_new_address`)}}</view>
 				<view class=""></view>		
 				<view class='addressBnt' @click='getAddress' v-if="this.$wechat.isWeixin()"><text
-						class='iconfont icon-weixin2'></text>导入微信地址</view>
+						class='iconfont icon-weixin2'></text>{{$t(`import_wechat_address`)}}</view>
 				<!-- #endif -->
 			</view>
 		</view>
@@ -85,6 +85,7 @@
 	// #endif
 	import home from '@/components/home';
 	import colors from '@/mixins/color.js';
+	import {HTTP_REQUEST_URL} from '@/config/app';
 	export default {
 		components: {
 			// #ifdef MP
@@ -95,13 +96,14 @@
 		mixins:[colors],
 		data() {
 			return {
+				imgHost:HTTP_REQUEST_URL,
 				addressList: [],
 				cartId: '',
 				pinkId: 0,
 				couponId: 0,
 				loading: false,
 				loadend: false,
-				loadTitle: '加载更多',
+				loadTitle: this.$t(`loading_more`),
 				page: 1,
 				limit: 20,
 				isAuto: false, //没有授权的不会自动授权
@@ -160,7 +162,7 @@
 									type: 1
 								}).then(res => {
 									that.$util.Tips({
-										title: "添加成功",
+										title: this.$t(`added_successfully`),
 										icon: 'success'
 									}, function() {
 										that.getAddressList(true);
@@ -174,15 +176,15 @@
 							fail: function(res) {
 								if (res.errMsg == 'chooseAddress:cancel') return that.$util
 									.Tips({
-										title: '取消选择'
+										title: this.$t(`cancel_selection`)
 									});
 							},
 						})
 					},
 					fail: function(res) {
 						uni.showModal({
-							title: '您已拒绝导入微信地址权限',
-							content: '是否进入权限管理，调整授权？',
+							title: this.$t(`deny_wechat`),
+							content: this.$t(`enter_permission`),
 							success(res) {
 								if (res.confirm) {
 									uni.openSetting({
@@ -190,7 +192,7 @@
 									});
 								} else if (res.cancel) {
 									return that.$util.Tips({
-										title: '已取消！'
+										title: this.$t(`cancelled`)
 									});
 								}
 							}
@@ -220,7 +222,7 @@
 						})
 						.then(() => {
 							that.$util.Tips({
-								title: "添加成功",
+								title: this.$t(`added_successfully`),
 								icon: 'success'
 							}, function() {
 								// close();
@@ -230,7 +232,7 @@
 						.catch(err => {
 							// close();
 							return that.$util.Tips({
-								title: err || "添加失败"
+								title: err || this.$t(`add_failed`)
 							});
 						});
 				});
@@ -259,12 +261,12 @@
 					that.addressList = that.$util.SplitArray(list, that.addressList);
 					that.$set(that, 'addressList', that.addressList);
 					that.loadend = loadend;
-					that.loadTitle = loadend ? '我也是有底线的' : '加载更多';
+					that.loadTitle = loadend ? this.$t(`bottom_line`) : this.$t(`loading_more`);
 					that.page = that.page + 1;
 					that.loading = false;
 				}).catch(err => {
 					that.loading = false;
-					that.loadTitle = '加载更多';
+					that.loadTitle = this.$t(`loading_more`);
 				});
 			},
 			/**
@@ -275,7 +277,7 @@
 					that = this;
 				let address = this.addressList[index];
 				if (address == undefined) return that.$util.Tips({
-					title: '您设置的默认地址不存在!'
+					title: this.$t(`address_not_exisr`)
 				});
 				setAddressDefault(address.id).then(res => {
 					for (let i = 0, len = that.addressList.length; i < len; i++) {
@@ -283,7 +285,7 @@
 						else that.addressList[i].is_default = false;
 					}
 					that.$util.Tips({
-						title: '设置成功',
+						title: this.$t(`set_successfully`),
 						icon: 'success'
 					}, function() {
 						that.$set(that, 'addressList', that.addressList);
@@ -317,11 +319,11 @@
 				let that = this,
 					address = this.addressList[index];
 				if (address == undefined) return that.$util.Tips({
-					title: '您删除的地址不存在!'
+					title: this.$t(`deleted_not_exist`)
 				});
 				delAddress(address.id).then(res => {
 					that.$util.Tips({
-						title: '删除成功',
+						title: this.$t(`success_deleted`),
 						icon: 'success'
 					}, function() {
 						that.addressList.splice(index, 1);
@@ -360,7 +362,7 @@
 					this.pinkId = '';
 					this.couponId = '';
 					uni.redirectTo({
-						url: '/pages/users/order_confirm/index?is_address=1&new=' + this.news + '&cartId=' +
+						url: '/pages/goods/order_confirm/index?is_address=1&new=' + this.news + '&cartId=' +
 							cartId + '&addressId=' + id + '&pinkId=' +
 							pinkId + '&couponId=' + couponId +
 							'&noCoupon=' + this.noCoupon

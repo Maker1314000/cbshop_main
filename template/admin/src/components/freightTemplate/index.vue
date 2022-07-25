@@ -1,6 +1,13 @@
 <template>
   <div>
-    <Modal v-model="isTemplate" title="运费模版" width="70%" if="isTemplate" @on-cancel="cancel">
+    <Modal
+      v-model="isTemplate"
+      title="运费模版"
+      width="70%"
+      if="isTemplate"
+      @on-cancel="cancel"
+      @on-visible-change="close"
+    >
       <div class="Modals">
         <Form class="form" ref="formData" :label-width="120" label-position="right">
           <Row :gutter="24" type="flex">
@@ -358,6 +365,11 @@ export default {
   },
   computed: {},
   methods: {
+    close(status) {
+      if (!status) {
+        this.$emit('close');
+      }
+    },
     editFrom(id) {
       this.id = id;
       shipTemplatesApi(id).then((res) => {
@@ -576,8 +588,7 @@ export default {
       this.activeCity = null;
     },
   },
-  mounted() {
-  },
+  mounted() {},
 };
 </script>
 <style lang="stylus" scoped>

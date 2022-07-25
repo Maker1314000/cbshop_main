@@ -22,8 +22,8 @@
 		</div>
 		<view class="wrapper">
 			<GoodList :bastList="goodsList" :is-sort="false"></GoodList>
-			<view class="txt-bar" v-if="goodsList.length > 0 && !isScroll">我是有底线的~</view>
-			<emptyPage v-if="goodsList.length == 0 && !isScroll" title="暂无数据~"></emptyPage>
+			<view class="txt-bar" v-if="goodsList.length > 0 && !isScroll">{{$t(`bottom_line`)}}</view>
+			<emptyPage v-if="goodsList.length == 0 && !isScroll" :title="$t(`no_data`)"></emptyPage>
 		</view>
 		<!-- #ifndef MP -->
 		<home></home>
@@ -60,8 +60,8 @@
 				name: '',
 				icon: '',
 				type: 0,
-				typeName: ['', '精品推荐', '热门榜单', '首发新品',
-					'促销单品'
+				typeName: ['', this.$t(`recommended`), this.$t(`popular_list`), this.$t(`first_new_products`),
+					this.$t(`promotional_item`)
 				],
 				autoplay: true,
 				circular: true,
@@ -180,7 +180,7 @@
 			}
 
 			.line {
-				width: 230rpx;
+				width: 190rpx;
 				height: 2rpx;
 				background-color: #e9e9e9;
 			}
@@ -193,5 +193,8 @@
 		font-size: 26rpx;
 		color: #666;
 		background-color: #f5f5f5;
+	}
+	.acea-row {
+		flex-wrap: nowrap !important;
 	}
 </style>

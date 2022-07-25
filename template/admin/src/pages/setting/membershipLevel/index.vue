@@ -10,8 +10,8 @@
         <div class="search">
           <div>
             <span>是否显示：</span>
-            <Select v-model="formValidate.status" style="width: 200px">
-              <Option value="">全部</Option>
+            <Select v-model="formValidate.status" style="width: 200px" clearable>
+              <!-- <Option value="">全部</Option> -->
               <Option :value="1">显示</Option>
               <Option :value="0">不显示</Option>
             </Select>

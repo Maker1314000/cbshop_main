@@ -597,7 +597,7 @@ export default {
       path: 'other_config/pay/:type?/:tab_id?',
       name: `${pre}other_pay`,
       meta: {
-        auth: ['setting-other-pay'],
+        auth: ['setting-other-sms'],
         title: '商城支付配置',
       },
       component: () => import('@/pages/setting/setSystem/index'),

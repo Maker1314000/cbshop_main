@@ -34,7 +34,7 @@
 						<image class="skeleton-rect" :src="logoConfig" mode="heightFix"></image>
 						<view class="swiger">{{titleInfo.length ? titleInfo[0].val : ''}}</view>
 					</view>
-					<navigator url="/pages/goods_search/index" class="input acea-row row-middle fillet"
+					<navigator url="/pages/goods/goods_search/index" class="input acea-row row-middle fillet"
 						hover-class="none"><text class="iconfont icon-sousuo"></text>
 						{{$t('search_product')}}</navigator>
 				</view>
@@ -101,7 +101,7 @@
 			goPage() {
 				goPage().then(res => {
 					uni.navigateTo({
-						url: '/pages/goods_search/index'
+						url: '/pages/goods/goods_search/index'
 					})
 				})
 			}

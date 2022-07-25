@@ -1,25 +1,25 @@
 <template>
 	<view class="orderGoods">
 		<view class='total' v-if="is_behalf"><text>
-				代付金额：
+				{{$t(`pay_amount`)}}：
 				<text class="pay-price">¥{{pay_price}}</text>
 			</text>
 		</view>
-		<view class='total' v-else-if="!split && !is_behalf">共 {{totalNmu}} 件商品</view>
+		<view class='total' v-else-if="!split && !is_behalf">{{$t(`total_of`)}} {{totalNmu}} {{$t(`item`)}}</view>
 		<view class='total' v-else-if="split">
-			<text>订单包裹 {{index + 1}}</text>
+			<text>{{$t(`order_package`)}} {{index + 1}}</text>
 			<!-- <view class="rig-btn" v-if="status_type === 2">
 				<view class="logistics sure" @click="confirmOrder(orderId)">确认收货</view>
 				<view v-if="delivery_type === 'express'" class="logistics" @click="logistics(orderId)">查看物流</view>
 			</view> -->
 			<view class="rig-btn" v-if="status_type === -1">
-				<view class="refund">申请退款中</view>
+				<view class="refund">{{$t(`apply_refund`)}}</view>
 			</view>
 			<view class="rig-btn" v-else-if="status_type === -2">
-				<view class="refund">已退款</view>
+				<view class="refund">{{$t(`refunded`)}}</view>
 			</view>
 			<view class="rig-btn" v-else-if="status_type === 4">
-				<view class="done">已完成</view>
+				<view class="done">{{$t(`completed`)}}</view>
 			</view>
 		</view>
 
@@ -40,33 +40,33 @@
 						</view>
 						<view class='money font-color pic' v-if="item.productInfo.attrInfo">
 							<text>
-								￥{{item.productInfo.attrInfo.price}}
+								{{$t(`money`)}}{{item.productInfo.attrInfo.price}}
 							</text>
 							<view class="refund" v-if="item.refund_num && statusType !=-2">{{item.refund_num}}件退款中
 							</view>
-							<text class="valid" v-if="!item.is_valid && shipping_type === 0">不送达</text>
-							<text class="valid" v-if="!item.productInfo.store_mention && shipping_type === 1">不自提</text>
+							<text class="valid" v-if="!item.is_valid && shipping_type === 0">{{$t(`undelivered`)}}</text>
+							<text class="valid" v-if="!item.productInfo.store_mention && shipping_type === 1">{{$t(`don't_mention`)}}</text>
 						</view>
 						<view class='money font-color pic' v-else>
-							<text>￥{{item.productInfo.price}}</text>
-							<text class="valid" v-if="!item.is_valid && shipping_type === 0">不送达</text>
-							<text class="valid" v-if="!item.productInfo.store_mention && shipping_type === 1">不自提</text>
+							<text>{{$t(`money`)}}{{item.productInfo.price}}</text>
+							<text class="valid" v-if="!item.is_valid && shipping_type === 0">{{$t(`undelivered`)}}</text>
+							<text class="valid" v-if="!item.productInfo.store_mention && shipping_type === 1">{{$t(`don't_mention`)}}</text>
 						</view>
-						<view class='evaluate' v-else-if="item.is_reply==1">已评价</view>
+						<view class='evaluate' v-else-if="item.is_reply==1">{{$t(`evaluated`)}}</view>
 					</view>
 				</view>
 				<view class="botton-btn">
-					<view class='logistics' v-if="item.is_reply==0 && evaluate==3 && pid != -1"
+					<view class='logistics' v-if="item.is_reply==0 && evaluate==3 && pid != -1 && isShow"
 						@click.stop="evaluateTap(item.unique,orderId)">
-						评价</view>
+						{{$t(`assess`)}}</view>
 					<view class='logistics'
-						v-if="paid === 1 && refund_status === 0 && item.refund_num !=item.cart_num && !is_confirm"
+						v-if="paid === 1 && refund_status === 0 && item.refund_num !=item.cart_num && !is_confirm && isShow"
 						@click.stop="openSubcribe(item)">
-						申请退款</view>
+						{{$t(`request_refund`)}}</view>
 					<view class="rig-btn" v-if="status_type === 2 && index === cartInfo.length - 1 || !split">
-						<view v-if="delivery_type === 'express'" class="logistics" @click.stop="logistics(orderId)">查看物流
+						<view v-if="delivery_type === 'express'" class="logistics" @click.stop="logistics(orderId)">{{$t(`view_log`)}}
 						</view>
-						<view class="logistics sure" v-if="status_type === 2" @click.stop="confirmOrder(orderId)">确认收货
+						<view class="logistics sure" v-if="status_type === 2" @click.stop="confirmOrder(orderId)">{{$t(`confirm_goods`)}}
 						</view>
 					</view>
 				</view>
@@ -155,13 +155,17 @@
 			status_type: {
 				type: Number,
 				default: 0,
-			}
+			},
+			isShow: {
+				type: Boolean,
+				default: true,
+			},
 		},
 		data() {
 			return {
 				totalNmu: 0,
 				operationModel: false,
-				status: ""
+				status: "",
 			};
 		},
 		watch: {
@@ -188,7 +192,7 @@
 		methods: {
 			evaluateTap: function(unique, orderId) {
 				uni.navigateTo({
-					url: "/pages/users/goods_comment_con/index?unique=" + unique + "&uni=" + orderId
+					url: "/pages/goods/goods_comment_con/index?unique=" + unique + "&uni=" + orderId
 				})
 			},
 			jumpCon(id) {
@@ -198,13 +202,13 @@
 					})
 				} else if (this.jumpDetail) {
 					uni.navigateTo({
-						url: `/pages/users/order_details/index?order_id=${this.orderId}`
+						url: `/pages/goods/order_details/index?order_id=${this.orderId}`
 					})
 				}
 			},
 			logistics(order_id) {
 				uni.navigateTo({
-					url: '/pages/users/goods_logistics/index?orderId=' + order_id
+					url: '/pages/goods/goods_logistics/index?orderId=' + order_id
 				})
 			},
 			confirmOrder(orderId) {
@@ -221,7 +225,7 @@
 				})
 				let obj = JSON.stringify(cartList);
 				this.$emit('openSubcribe',
-					`/pages/users/goods_return/index?orderId=${this.orderId}&id=${this.oid}&cartIds=${obj}`)
+					`/pages/goods/goods_return/index?orderId=${this.orderId}&id=${this.oid}&cartIds=${obj}`)
 			},
 		}
 	}

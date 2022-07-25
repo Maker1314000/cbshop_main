@@ -6,33 +6,33 @@
 					<view class='headerCon'>
 						<view class='account acea-row row-top row-between'>
 							<view class='assets'>
-								<view>总资产(元)</view>
+								<view>{{$t(`total_assets`)}}</view>
 								<view class='money'>{{userInfo.now_money || 0}}</view>
 							</view>
 							<!-- #ifdef APP-PLUS || H5 -->
 							<navigator url="/pages/users/user_payment/index" hover-class="none"
-								class='recharge'>充值</navigator>
+								class='recharge'>{{$t(`recharge`)}}</navigator>
 							<!-- #endif -->
 							<!-- #ifdef MP -->
 							<view v-if="recharge_switch" @click="openSubscribe('/pages/users/user_payment/index')"
-								class='recharge'>充值</view>
+								class='recharge'>{{$t(`recharge`)}}</view>
 							<!-- #endif -->
 						</view>
 						<view class='cumulative acea-row row-top'>
 							<!-- #ifdef APP-PLUS || H5 -->
 							<view class='item'>
-								<view>累计充值(元)</view>
+								<view>{{$t(`cumulative_recharge`)}}</view>
 								<view class='money'>{{userInfo.recharge || 0}}</view>
 							</view>
 							<!-- #endif -->
 							<!-- #ifdef MP -->
 							<view class='item' v-if="recharge_switch">
-								<view>累计充值(元)</view>
+								<view>{{$t(`cumulative_recharge`)}}</view>
 								<view class='money'>{{userInfo.recharge || 0}}</view>
 							</view>
 							<!-- #endif -->
 							<view class='item'>
-								<view>累计消费(元)</view>
+								<view>{{$t(`cumulative_consumption`)}}</view>
 								<view class='money'>{{userInfo.orderStatusSum || 0}}</view>
 							</view>
 						</view>
@@ -41,40 +41,40 @@
 				<view class='nav acea-row row-middle'>
 					<navigator class='item' hover-class='none' url='/pages/users/user_bill/index'>
 						<view class='iconfont icon-s-zhangdanjilu'></view>
-						<view>账单记录</view>
+						<view>{{$t(`billing_records`)}}</view>
 					</navigator>
 					<navigator class='item' hover-class='none' url='/pages/users/user_bill/index?type=1'>
 						<view class='iconfont icon-s-xiaofeijilu'></view>
-						<view>消费记录</view>
+						<view>{{$t(`expenses_record`)}}</view>
 					</navigator>
 					<navigator class='item' hover-class='none' url='/pages/users/user_bill/index?type=2' v-if="recharge_switch">
 						<view class='iconfont icon-s-chongzhijilu'></view>
-						<view>充值记录</view>
+						<view>{{$t(`recharge_record`)}}</view>
 					</navigator>
 					<navigator class='item' hover-class='none' url='/pages/users/user_integral/index'>
 						<view class='iconfont icon-jifenzhongxin'></view>
-						<view>积分中心</view>
+						<view>{{$t(`points_center`)}}</view>
 					</navigator>
 				</view>
 				<view class='advert acea-row row-between-wrapper'>
 					<navigator class='item acea-row row-between-wrapper' hover-class='none'
 						url='/pages/users/user_sgin/index'>
 						<view class='text'>
-							<view class='name'>签到领积分</view>
-							<view>赚积分抵现金</view>
+							<view class='name'>{{$t(`sign_get_points`)}}</view>
+							<view>{{$t(`earn_cash`)}}</view>
 						</view>
 						<view class='pictrue'>
-							<image src='../../../static/images/gift.png'></image>
+							<image src='../static/gift.png'></image>
 						</view>
 					</navigator>
 					<navigator class='item on acea-row row-between-wrapper' hover-class='none'
 						url='/pages/users/user_get_coupon/index'>
 						<view class='text'>
-							<view class='name'>领取优惠券</view>
-							<view>满减享优惠</view>
+							<view class='name'>{{$t(`get_coupons`)}}</view>
+							<view>{{$t(`full_discount`)}}</view>
 						</view>
 						<view class='pictrue'>
-							<image src='../../../static/images/money.png'></image>
+							<image src='../static/money.png'></image>
 						</view>
 					</navigator>
 				</view>
@@ -83,37 +83,37 @@
 						<view class='picTxt acea-row row-between-wrapper'>
 							<view class='iconfont icon-hebingxingzhuang'></view>
 							<view class='text'>
-								<view class='line1'>最新拼团活动</view>
-								<view class='infor line1'>最新的优惠商品上架拼团</view>
+								<view class='line1'>{{$t(`group_activities`)}}</view>
+								<view class='infor line1'>{{$t(`put_group`)}}</view>
 							</view>
 						</view>
 						<navigator hover-class='none' url='/pages/activity/goods_combination/index' class='bnt'
-							v-if="activity.is_pink">立即参与</navigator>
-						<view class='bnt end' v-else>已结束</view>
+							v-if="activity.is_pink">{{$t(`get_involved_now`)}}</navigator>
+						<view class='bnt end' v-else>{{$t(`over`)}}</view>
 					</view>
 					<view class='item acea-row row-between-wrapper'>
 						<view class='picTxt acea-row row-between-wrapper'>
 							<view class='iconfont icon-miaosha yellow'></view>
 							<view class='text'>
-								<view class='line1'>当前限时秒杀</view>
-								<view class='infor line1'>最新商品秒杀进行中</view>
+								<view class='line1'>{{$t(`current_spike`)}}</view>
+								<view class='infor line1'>{{$t(`latest_product_spike`)}}</view>
 							</view>
 						</view>
 						<navigator hover-class='none' url='/pages/activity/goods_seckill/index' class='bnt'
-							v-if="activity.is_seckill">立即参与</navigator>
-						<view class='bnt end' v-else>已结束</view>
+							v-if="activity.is_seckill">{{$t(`get_involved_now`)}}</navigator>
+						<view class='bnt end' v-else>{{$t(`over`)}}</view>
 					</view>
 					<view class='item acea-row row-between-wrapper'>
 						<view class='picTxt acea-row row-between-wrapper'>
 							<view class='iconfont icon-kanjia1 green'></view>
 							<view class='text'>
-								<view class='line1'>砍价活动</view>
-								<view class='infor line1'>呼朋唤友来砍价</view>
+								<view class='line1'>{{$t(`haggling`)}}</view>
+								<view class='infor line1'>{{$t(`to_haggle`)}}</view>
 							</view>
 						</view>
 						<navigator hover-class='none' url='/pages/activity/goods_bargain/index' class='bnt'
-							v-if="activity.is_bargin">立即参与</navigator>
-						<view class='bnt end' v-else>已结束</view>
+							v-if="activity.is_bargin">{{$t(`get_involved_now`)}}</navigator>
+						<view class='bnt end' v-else>{{$t(`over`)}}</view>
 					</view>
 				</view>
 			</view>
@@ -209,7 +209,7 @@
 			// #ifdef MP
 			openSubscribe: function(page) {
 				uni.showLoading({
-					title: '正在加载',
+					title: this.$t(`Loading`),
 				})
 				openRechargeSubscribe().then(res => {
 					uni.hideLoading();

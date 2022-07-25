@@ -20,7 +20,7 @@
 				<view class="pictrue" v-for="(item,index) in pinkPeople" :key="index" v-if="index<6">
 					<image :src="item"></image>
 				</view>
-				<text style="margin-left: 10rpx;">{{pinkCount}}人参与</text>
+				<text style="margin-left: 10rpx;">{{pinkCount}}{{$t(`people_involved`)}}</text>
 				<view class="pictrue" v-if="pinkPeople.length>5">
 					<image :src="pinkPeople[pinkPeople.length-1]"></image>
 					<view class="iconfont icon-gengduo1"></view>
@@ -40,17 +40,17 @@
 					<view class="name line2">{{item.title}}</view>
 					<view class="bottom acea-row row-between row-bottom">
 						<view class="y_money">
-							<view class="price">￥{{item.product_price}}</view>
-							<view class="money">￥<text class="num">{{item.price}}</text></view>
+							<view class="price">{{$t(`money`)}}{{item.product_price}}</view>
+							<view class="money">{{$t(`money`)}}<text class="num">{{item.price}}</text></view>
 						</view>
 						<view class="bnt acea-row row-center-wrapper" v-if="item.stock>0&&item.quota>0">
 							<view class="light">
 								<image src="../static/lightning.png"></image>
 							</view>
-							<view class="num">{{item.people}}人团</view>
-							<view class="go">去拼团</view>
+							<view class="num">{{item.people}}{{$t(`group_of_people`)}}</view>
+							<view class="go">{{$t(`in_the_group`)}}</view>
 						</view>
-						<view class="bnt gray acea-row row-center-wrapper" v-else>已售罄</view>
+						<view class="bnt gray acea-row row-center-wrapper" v-else>{{$t(`sold_out`)}}</view>
 					</view>
 				</view>
 			</view>
@@ -96,7 +96,7 @@
 		},
 		onLoad() {
 			uni.setNavigationBarTitle({
-				title: "拼团列表"
+				title: this.$t(`group_list`)
 			})
 			this.getCombinationList();
 			this.getBannerList();
@@ -144,7 +144,7 @@
 				// #endif
 				// #ifdef MP
 				uni.showLoading({
-					title: '正在加载',
+					title: this.$t(`Loading`),
 				})
 				openPinkSubscribe().then(res => {
 					uni.hideLoading();

@@ -4,8 +4,8 @@
 			<view class="card-list" v-for="item in listData" :key="item.mer_intention_id">
 				<view class="card-top">
 					<view class="title">{{item.mer_name}}</view>
-					<view class="time">提交时间：{{item.create_time}}</view>
-					<view v-if="item.fail_msg" class="reason">原因：{{item.fail_msg}}</view>
+					<view class="time">{{$t(`create_time`)}}：{{item.create_time}}</view>
+					<view v-if="item.fail_msg" class="reason">{{$t(`reason`)}}：{{item.fail_msg}}</view>
 				</view>
 				<view class="line"></view>
 				<view class="card-bottom">
@@ -22,7 +22,7 @@
 		<view class='no-shop' v-if="!listData.length && !loading">
 			<view class='pictrue' style="margin: 0 auto;">
 				<image src='/static/images/no-shop.png'></image>
-				<text>暂无申请记录，快去申请吧!</text>
+				<text>{{$t(`apply_now`)}}</text>
 			</view>
 		</view>
 	</view>
@@ -50,7 +50,7 @@
 		onReachBottom() {
 			if (this.count == this.listData.length) {
 				uni.showToast({
-					title: '没有更多啦',
+					title: this.$t(`no_more`),
 					icon: 'none',
 					duration: 1000
 				});
@@ -63,7 +63,7 @@
 			getListData() {
 				this.loading = true
 				uni.showLoading({
-					title: '数据加载中',
+					title: this.$t(`Loading`),
 				});
 				getApplicationRecordList(this.pageData).then(res => {
 					console.log(res)
@@ -90,9 +90,9 @@
 			statusText(number) {
 				// 使用对象
 				let statusData = {
-					0: "待审核",
-					1: "审核通过",
-					2: "审核未通过",
+					0: this.$t(`pending_review`),
+					1: this.$t(`examination_passed`),
+					2: this.$t(`review_failed`),
 				};
 				return statusData[number]
 			},
@@ -100,9 +100,9 @@
 			statusBtn(number) {
 				// 使用对象
 				let statusData = {
-					0: "编辑",
-					1: "查看",
-					2: "重新提交",
+					0: this.$t(`edit`),
+					1: this.$t(`check`),
+					2: this.$t(`resubmit`),
 				};
 				return statusData[number]
 			},

@@ -8,7 +8,7 @@
 			{{msgData.content}}
 		</view>
 		<view class="add-time">
-			通知于{{msgData.add_time}}
+			{{$t(`notified_on`)}}{{msgData.add_time}}
 		</view>
 		<!-- #ifndef MP -->
 		<home></home>
@@ -36,7 +36,7 @@
 		methods: {
 			getMsgDetails(id) {
 				uni.showLoading({
-					title: '获取详情中'
+					title: this.$t(`get_details`)
 				});
 				getMsgDetails(id).then(res => {
 					uni.hideLoading();

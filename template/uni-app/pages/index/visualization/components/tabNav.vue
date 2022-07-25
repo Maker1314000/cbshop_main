@@ -8,7 +8,7 @@
 				<view class="longTab">
 					<scroll-view scroll-x="true" style="white-space: nowrap; display: flex;  align-items: center; height: 50rpx;" scroll-with-animation
 						:scroll-left="tabLeft" show-scrollbar="true">
-						<view :url="'/pages/goods_list/index?cid='+item.id+'&title='+item.cate_name" class="longItem"
+						<view :url="'/pages/goods/goods_list/index?cid='+item.id+'&title='+item.cate_name" class="longItem"
 							:style='"width:"+"max-content"' :data-index="index" :class="index===tabClick?'click':''"
 							v-for="(item,index) in tabTitle" :key="index" :id="'id'+index"
 							@click="longClick(item,index)">
@@ -30,7 +30,7 @@
 					<scroll-view scroll-x="true" style="white-space: nowrap; display: flex; align-items: center;" scroll-with-animation
 						:scroll-left="tabLeft" show-scrollbar="true">
 						
-						<view :url="'/pages/goods_list/index?cid='+item.id+'&title='+item.cate_name" class="longItem"
+						<view :url="'/pages/goods/goods_list/index?cid='+item.id+'&title='+item.cate_name" class="longItem"
 							:style='"width:"+isWidth+"px"' :data-index="index" :class="index===tabClick?'click':''"
 							v-for="(item,index) in tabTitle" :key="index" :id="'id'+index"
 							@click="longClick(item,index)">
@@ -45,7 +45,7 @@
 		</view>
 		<view class='index-wrapper' v-else-if="isIframe && !tabTitle.length">
 			<view class='scroll-product'>
-				<view class="empty-img">暂无数据，请先添加分类</view>
+				<view class="empty-img">{{$t(`no_data_add`)}}</view>
 			</view>
 		</view>
 	</view>

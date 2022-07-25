@@ -1,19 +1,19 @@
 <template>
 	<view>
 		<view class='coupon-list' v-if="couponsList.length">
-			<view class='item acea-row row-center-wrapper' :class="{gray: item.is_fail || item.status === '已使用'}" v-for='(item,index) in couponsList'
+			<view class='item acea-row row-center-wrapper' :class="{gray: item.is_fail || item.status === $t(`Used`)}" v-for='(item,index) in couponsList'
 			 :key="index">
 				<view class='money' :class='item.is_fail ? "moneyGray" : ""'>
-					<view>￥<text class='num'>{{item.coupon_price | money}}</text></view>
-					<view class="pic-num" v-if="item.use_min_price > 0">满{{ item.use_min_price | money }}元可用</view>
-					<view class="pic-num" v-else>无门槛券</view>
+					<view>{{$t(`money`)}}<text class='num'>{{item.coupon_price | money}}</text></view>
+					<view class="pic-num" v-if="item.use_min_price > 0">{{$t(`full`)}}{{ item.use_min_price | money }}{{$t(`meta_available`)}}</view>
+					<view class="pic-num" v-else>{{$t(`no_spend`)}}</view>
 				</view>
 				<view class='text'>
 					<view class='condition'>
 						<view class="name line2">
-							<view class="line-title" :class="item.is_fail? 'bg-color-huic' : 'bg-color-check'" v-if="item.applicable_type === 0">通用劵</view>
-							<view class="line-title" :class="item.is_fail? 'bg-color-huic' : 'bg-color-check'" v-else-if="item.applicable_type === 1">品类券</view>
-							<view class="line-title" :class="item.is_fail? 'bg-color-huic' : 'bg-color-check'" v-else>商品券</view>
+							<view class="line-title" :class="item.is_fail? 'bg-color-huic' : 'bg-color-check'" v-if="item.applicable_type === 0">{{$t(`universal_coupon`)}}</view>
+							<view class="line-title" :class="item.is_fail? 'bg-color-huic' : 'bg-color-check'" v-else-if="item.applicable_type === 1">{{$t(`category_coupons`)}}</view>
+							<view class="line-title" :class="item.is_fail? 'bg-color-huic' : 'bg-color-check'" v-else>{{$t(`commodity_voucher`)}}</view>
 							<text>{{item.coupon_title}}</text>
 						</view>
 					</view>
@@ -29,7 +29,7 @@
 		</view>
 		<view class='noCommodity' v-if="!couponsList.length && loading==true">
 			<view class='pictrue'>
-				<image src='../../../static/images/noCoupon.png'></image>
+				<image :src="imgHost + '/statics/images/noCoupon.png'"></image>
 			</view>
 		</view>
 		<!-- #ifdef MP -->
@@ -56,6 +56,7 @@
 	import authorize from '@/components/Authorize';
 	// #endif
 	import home from '@/components/home';
+	import {HTTP_REQUEST_URL} from '@/config/app';
 	export default {
 		components: {
 			// #ifdef MP
@@ -65,6 +66,7 @@
 		},
 		data() {
 			return {
+				imgHost:HTTP_REQUEST_URL,
 				couponsList: [],
 				loading: false,
 				isAuto: false, //没有授权的不会自动授权

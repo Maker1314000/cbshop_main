@@ -5,8 +5,8 @@
 				<view class='headerCon acea-row row-between-wrapper'>
 					<view>
 						<view class='name'>{{name}}</view>
-						<view class='money' v-if="recordType == 4">￥<text class='num'>{{extractCount}}</text></view>
-						<view class='money' v-else>￥<text class='num'>{{recordCount}}</text></view>
+						<view class='money' v-if="recordType == 4">{{$t(`money`)}}<text class='num'>{{extractCount}}</text></view>
+						<view class='money' v-else>{{$t(`money`)}}<text class='num'>{{recordCount}}</text></view>
 					</view>
 					<view class='iconfont icon-jinbi1'></view>
 				</view>
@@ -23,7 +23,7 @@
 											<view class='name line1'>{{child.title}}</view>
 											<view>{{child.add_time}}</view>
 											<view class="fail-msg" v-if="child.fail_msg">
-												原因：{{child.fail_msg}}
+												{{$t(`reason`)}}：{{child.fail_msg}}
 											</view>
 										</view>
 										<view class='num font-color' v-if="child.pm == 1">+{{child.number}}</view>
@@ -39,7 +39,7 @@
 					<text class='loading iconfont icon-jiazai' :hidden='loading==false'></text>{{loadTitle}}
 				</view>
 				<view v-if="recordList.length < 1 && page > 1">
-					<emptyPage title='暂无数据~'></emptyPage>
+					<emptyPage :title='$t(`no_data`)'></emptyPage>
 				</view>
 			</view>
 		</view>
@@ -83,7 +83,7 @@
 				limit: 15,
 				loading: false,
 				loadend: false,
-				loadTitle: '加载更多',
+				loadTitle: this.$t(`loading_more`),
 				recordList: [],
 				recordType: 0,
 				recordCount: 0,
@@ -103,23 +103,23 @@
 			let type = this.type;
 			if (type == 1) {
 				uni.setNavigationBarTitle({
-					title: "提现记录"
+					title: this.$t(`withdrawals_record`)
 				});
-				this.name = '提现总额';
+				this.name = this.$t(`total_withdrawal`);
 				this.recordType = 4;
 				this.getRecordList();
 				this.getRecordListCount();
 			} else if (type == 2) {
 				uni.setNavigationBarTitle({
-					title: "佣金记录"
+					title: this.$t(`commission_record`)
 				});
-				this.name = '佣金明细';
+				this.name = this.$t(`commission_details`);
 				this.recordType = 3;
 				this.getRecordList();
 				this.getRecordListCount();
 			} else {
 				uni.showToast({
-					title: '参数错误',
+					title: this.$t(`parameter_error`),
 					icon: 'none',
 					duration: 1000,
 					mask: true,
@@ -171,12 +171,12 @@
 					}
 					let loadend = res.data.list.length < that.limit;
 					that.loadend = loadend;
-					that.loadTitle = loadend ? '没有更多内容啦~' : '加载更多';
+					that.loadTitle = loadend ? that.$t(`no_more`) : that.$t(`loading_more`);
 					that.page += 1;
 					that.loading = false;
 				}).catch(err => {
 					that.loading = false;
-					that.loadTitle = '加载更多';
+					that.loadTitle = that.$t(`loading_more`);
 				})
 			},
 			getRecordListCount: function() {

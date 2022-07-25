@@ -2,15 +2,15 @@
 	<view>
 		<view class="Popup" v-if="isShowAuth">
 			<image :src="logoUrl"></image>
-			<view class="title">授权提醒</view>
-			<view class="tip">请授权头像等信息，以便为您提供更好的服务</view>
+			<view class="title">{{$t(`auth_reminder`)}}</view>
+			<view class="tip">{{$t(`auth_tip`)}}</view>
 			<view class="bottom flex">
-				<view class="item" @click="close">随便逛逛</view>
+				<view class="item" @click="close">{{$t(`look_around`)}}</view>
 				<!-- #ifdef APP-PLUS -->
-				<button class="item grant" @click="setUserInfo">去授权</button>
+				<button class="item grant" @click="setUserInfo">{{$t(`to_auth`)}}</button>
 				<!-- #endif -->
 				<!-- #ifdef MP -->
-				<button class="item grant" type="primary" open-type="getPhoneNumber" lang="zh_CN" @getphonenumber="setUserInfo">去授权</button>
+				<button class="item grant" type="primary" open-type="getPhoneNumber" lang="zh_CN" @getphonenumber="setUserInfo">{{$t(`to_auth`)}}</button>
 				<!-- #endif -->
 			</view>
 		</view>

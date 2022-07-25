@@ -18,7 +18,8 @@
 		getCartCounts,
 	} from '@/api/order.js';
 	import {
-		colorChange
+		colorChange,
+		getCrmebCopyRight
 	} from '@/api/api.js';
 	import {
 		mapGetters
@@ -317,6 +318,9 @@
 			__s.src = `${HTTP_REQUEST_URL}/api/get_script`;
 			document.head.appendChild(__s);
 			// #endif
+			getCrmebCopyRight().then(res => {
+				uni.setStorageSync('copyRight', res.data)
+			})
 		},
 		methods: {
 			// 小程序静默授权

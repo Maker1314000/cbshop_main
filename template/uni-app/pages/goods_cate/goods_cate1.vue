@@ -37,7 +37,7 @@
 							<view class='list acea-row'>
 								<block v-for="(itemn,indexn) in item.children" :key="indexn">
 									<navigator hover-class='none'
-										:url='"/pages/goods_list/index?sid="+itemn.id+"&title="+itemn.cate_name'
+										:url='"/pages/goods/goods_list/index?sid="+itemn.id+"&title="+itemn.cate_name'
 										class='item acea-row row-column row-middle'>
 										<view class='picture'>
 											<image :src='itemn.pic' v-if="itemn.pic"></image>
@@ -232,11 +232,11 @@
 			searchSubmitValue: function(e) {
 				if (this.$util.trim(e.detail.value).length > 0)
 					uni.navigateTo({
-						url: '/pages/goods_list/index?searchValue=' + e.detail.value
+						url: '/pages/goods/goods_list/index?searchValue=' + e.detail.value
 					})
 				else
 					return this.$util.Tips({
-						title: '请填写要搜索的产品信息'
+						title: this.$t(`fill_product`)
 					});
 			},
 		}

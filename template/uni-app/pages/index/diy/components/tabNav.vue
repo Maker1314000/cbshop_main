@@ -9,7 +9,7 @@
 			<view class="longTab">
 				<scroll-view scroll-x="true" style="white-space: nowrap; display: flex;" scroll-with-animation
 					:scroll-left="tabLeft" show-scrollbar="true">
-					<view :url="'/pages/goods_list/index?cid='+item.id+'&title='+item.cate_name" class="longItem"
+					<view :url="'/pages/goods/goods_list/index?cid='+item.id+'&title='+item.cate_name" class="longItem"
 						:style='"width:"+isWidth+"px"' :data-index="index" :class="index===tabClick?'click':''"
 						v-for="(item,index) in tabTitle" :key="index" :id="'id'+index" @click="longClick(item,index)">
 						{{item.cate_name}}
@@ -80,7 +80,7 @@
 				getCategoryList().then(res => {
 					res.data.unshift({
 						"id": -99,
-						'cate_name': '首页'
+						'cate_name': this.$t(`home`)
 					})
 					that.tabTitle = res.data;
 					setTimeout((e) => {

@@ -65,7 +65,16 @@
       </div>
     </Card>
     <!-- 运费模板-->
-    <freight-template ref="template" @addSuccess="getList"></freight-template>
+    <freight-template
+      v-if="isTemplate"
+      ref="template"
+      @addSuccess="getList"
+      @close="
+        () => {
+          isTemplate = false;
+        }
+      "
+    ></freight-template>
   </div>
 </template>
 
@@ -133,6 +142,7 @@ export default {
       levelLists: [],
       total: 0,
       FromData: null,
+      isTemplate: false,
     };
   },
   created() {
@@ -150,8 +160,11 @@ export default {
   methods: {
     // 添加运费模板
     freight() {
-      this.$refs.template.id = 0;
-      this.$refs.template.isTemplate = true;
+      this.isTemplate = true;
+      this.$nextTick((e) => {
+        this.$refs.template.id = 0;
+        this.$refs.template.isTemplate = true;
+      });
     },
     // 删除
     del(row, tit, num) {
@@ -192,8 +205,11 @@ export default {
     },
     // 编辑
     edit(id) {
-      this.$refs.template.isTemplate = true;
-      this.$refs.template.editFrom(id);
+      this.isTemplate = true;
+      this.$nextTick((e) => {
+        this.$refs.template.isTemplate = true;
+        this.$refs.template.editFrom(id);
+      });
     },
     // 表格搜索
     userSearchs() {

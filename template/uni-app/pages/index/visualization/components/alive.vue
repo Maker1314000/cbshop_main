@@ -80,7 +80,7 @@
 						</view>
 						<view class='line1 txt-btn'>{{$t(`highlights`)}}</view>
 					</view>
-					<navigator hover-class="none" url="/pages/live_list/index" class="more">{{$t(`more`)}}<text
+					<navigator hover-class="none" url="/pages/columnGoods/live_list/index" class="more">{{$t(`more`)}}<text
 							class="iconfont icon-jiantou"></text></navigator>
 				</view>
 				<view class="live-wrapper-a">

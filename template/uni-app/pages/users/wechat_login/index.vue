@@ -9,7 +9,7 @@
 			<view class="icon" @click="home" v-else>
 				<image src="../static/home.png"></image>
 			</view>
-			账户登录
+			{{$t(`account_login`)}}
 		</view>
 		<!-- #endif -->
 		<view class="wechat_login">
@@ -18,15 +18,15 @@
 			</view>
 			<view class="btn-wrapper">
 				<!-- #ifdef H5 -->
-				<button hover-class="none" @click="wechatLogin" class="bg-green btn1">微信登录</button>
+				<button hover-class="none" @click="wechatLogin" class="bg-green btn1">{{$t(`wechat_login`)}}</button>
 				<!-- #endif -->
 				<!-- #ifdef MP -->
 				<button v-if="canUseGetUserProfile && code" hover-class="none" @tap="getUserProfile"
-					class="bg-green btn1">微信登录</button>
+					class="bg-green btn1">{{$t(`wechat_login`)}}</button>
 				<button v-else hover-class="none" open-type="getUserInfo" @getuserinfo="setUserInfo"
-					class="bg-green btn1">微信登录</button>
+					class="bg-green btn1">{{$t(`wechat_login`)}}</button>
 				<!-- #endif -->
-				<button hover-class="none" @click="isUp = true" class="btn2">手机号登录</button>
+				<button hover-class="none" @click="isUp = true" class="btn2">{{$t(`phone_login`)}}</button>
 			</view>
 		</view>
 		<block v-if="isUp">
@@ -42,8 +42,8 @@
 <script>
 	const app = getApp();
 	let statusBarHeight = uni.getSystemInfoSync().statusBarHeight + 'px';
-	import mobileLogin from '@/components/login_mobile/index.vue';
-	import routinePhone from '@/components/login_mobile/routine_phone.vue';
+	import mobileLogin from '../components/login_mobile/index.vue';
+	import routinePhone from '../components/login_mobile/routine_phone.vue';
 	import {
 		getLogo,
 		silenceAuth,
@@ -166,7 +166,7 @@
 				if (data.isStatus) {
 					this.isPhoneBox = false;
 					this.$util.Tips({
-						title: '登录成功',
+						title: this.$t(`login_successful`),
 						icon: 'success'
 					}, {
 						tab: 3
@@ -179,7 +179,7 @@
 			// 小程序获取手机号码
 			getphonenumber(e) {
 				uni.showLoading({
-					title: '正在登录中'
+					title: this.$t(`logging_in`)
 				});
 				Routine.getCode()
 					.then(code => {
@@ -210,7 +210,7 @@
 						this.$store.commit('UPDATE_USERINFO', res.data.userInfo);
 						this.$Cache.clear('snsapiKey');
 						this.$util.Tips({
-							title: '登录成功',
+							title: this.$t(`login_successful`),
 							icon: 'success'
 						}, {
 							tab: 3
@@ -231,7 +231,7 @@
 					that.$store.commit('SETUID', res.data.uid);
 					that.$store.commit('UPDATE_USERINFO', res.data);
 					that.$util.Tips({
-						title: '登录成功',
+						title: this.$t(`login_successful`),
 						icon: 'success'
 					}, {
 						tab: 3
@@ -240,7 +240,7 @@
 			},
 			setUserInfo(e) {
 				uni.showLoading({
-					title: '正在登录中'
+					title: this.$t(`logging_in`)
 				});
 				Routine.getCode()
 					.then(code => {
@@ -253,7 +253,7 @@
 			//小程序授权api替换 getUserInfo
 			getUserProfile() {
 				uni.showLoading({
-					title: '正在登录中'
+					title: this.$t(`logging_in`)
 				});
 				let self = this;
 				Routine.getUserProfile()
@@ -375,7 +375,7 @@
 					let self = this;
 					this.isUp = false;
 					uni.showToast({
-						title: '登录成功',
+						title: this.$t(`login_successful`),
 						icon: 'none'
 					});
 					setTimeout(res => {

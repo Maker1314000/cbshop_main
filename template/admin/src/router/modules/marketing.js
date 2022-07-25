@@ -115,7 +115,7 @@ export default {
     },
     {
       path: 'store_bargain/create/:id?/:copy?',
-      name: `${pre}bargainList`,
+      name: `${pre}bargainCreate`,
       meta: {
         auth: ['marketing-store_bargain-create'],
         title: '添加砍价',
@@ -149,6 +149,15 @@ export default {
         title: '添加秒杀',
       },
       component: () => import('@/pages/marketing/storeSeckill/create'),
+    },
+    {
+      path: `integral/system_config/:type?/:tab_id?`,
+      name: `${pre}integral`,
+      meta: {
+        auth: ['marketing-integral-system_config'],
+        title: '积分配置',
+      },
+      component: () => import('@/pages/setting/setSystem/index'),
     },
     {
       path: 'store_integral/index',

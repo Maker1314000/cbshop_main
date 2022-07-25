@@ -61,7 +61,7 @@
 					{
 						name: '搜索',
 						iconName: "icon-sousuo6",
-						path: '/pages/goods_search/index',
+						path: '/pages/goods/goods_search/index',
 						jumpType: 0
 					},
 					{

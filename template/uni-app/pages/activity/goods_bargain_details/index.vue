@@ -7,10 +7,10 @@
 			<view :style="'background-image: url('+(bargainUid != userInfo.uid ?picUrl.support:picUrl.barga)+');'"
 				class="header">
 				<view class="people">
-					{{ peopleCount.lookCount || 0 }}人查看 丨 {{ peopleCount.shareCount || 0 }}人分享 丨
-					{{ peopleCount.userCount || 0 }}人参与
+					{{ peopleCount.lookCount || 0 }}{{$t(`viewed`)}} 丨 {{ peopleCount.shareCount || 0 }}{{$t(`shared`)}} 丨
+					{{ peopleCount.userCount || 0 }}{{$t(`participated`)}}
 				</view>
-				<countDown :tipText="'倒计时'" :dayText="'天'" :hourText="'时'" :minuteText="'分'" :secondText="'秒'"
+				<countDown :tipText="$t(`countdown`)" :dayText="$t(`day`)" :hourText="$t(`hour`)" :minuteText="$t(`minute`)" :secondText="$t(`second`)"
 					:datatime="datatime" :isDay="true" v-if="bargainUid == userInfo.uid"></countDown>
 				<view v-if="bargainUid != userInfo.uid" class="pictxt acea-row row-center-wrapper">
 					<view class="pictrue">
@@ -18,7 +18,7 @@
 					</view>
 					<view class="text">
 						{{ bargainUserInfo.nickname || '' }}
-						<text>邀请您帮忙砍价</text>
+						<text>{{$t(`help_haggle`)}}</text>
 					</view>
 				</view>
 			</view>
@@ -27,17 +27,17 @@
 					<view class="pictrue">
 						<image :src="bargainInfo.image"></image>
 						<view class="bargain_view">
-							查看商品
+							{{$t(`view_items`)}}
 							<text class="iconfont icon-jiantou iconfonts"></text>
 						</view>
 					</view>
 					<view class="text acea-row row-column-around">
 						<view class="line2">{{ bargainInfo.title }}</view>
 						<view class="money">
-							当前: ￥
+							{{$t(`current`)}}: {{$t(`money`)}}
 							<text class="num">{{ bargainInfo.price }}</text>
 						</view>
-						<view class="successNum">最低:￥{{ bargainInfo.min_price }}</view>
+						<view class="successNum">{{$t(`lowest`)}}:{{$t(`money`)}}{{ bargainInfo.min_price }}</view>
 					</view>
 				</view>
 				<!-- 进度条 -->
@@ -47,52 +47,52 @@
 							:style="'width:' + userBargainInfo.pricePercent + '%;'"></view>
 					</view>
 					<view class="money acea-row row-between-wrapper">
-						<view>已砍{{ userBargainInfo.alreadyPrice }}元</view>
-						<view>还剩{{ userBargainInfo.price }}元</view>
+						<view>{{$t(`chopped`)}}{{ userBargainInfo.alreadyPrice }}</view>
+						<view>{{$t(`left`)}}{{ userBargainInfo.price }}</view>
 					</view>
 				</block>
 				<!-- 自己砍价 -->
 				<view
 					v-if="userBargainInfo.bargainType == 1">
-					<view class="bargainBnt" @tap="userBargain" v-if="productStock > 0 && quota > 0">立即参与砍价</view>
-					<view class="bargainBnt grey" v-if="productStock <= 0 || quota <= 0">商品暂无库存</view>
+					<view class="bargainBnt" @tap="userBargain" v-if="productStock > 0 && quota > 0">{{$t(`bargain_now`)}}</view>
+					<view class="bargainBnt grey" v-if="productStock <= 0 || quota <= 0">{{$t(`out_stock`)}}</view>
 				</view>
 				<!-- 帮助砍价、帮砍成功： -->
 				<view
 					v-if="userBargainInfo.bargainType == 2">
-					<view class="bargainBnt" @tap="getBargainUserBargainPricePoster">邀请好友帮砍价</view>
+					<view class="bargainBnt" @tap="getBargainUserBargainPricePoster">{{$t(`friends_haggle`)}}</view>
 					<view class="tip">
-						已有
+						{{$t(`already_had`)}}
 						<text class="num">{{ bargainUserHelpInfo.count }}</text>
-						位好友成功砍价
+						{{$t(`people_success_bargain`)}}
 					</view>
 				</view>
 
 				<view v-if="userBargainInfo.bargainType == 3">
-					<view class="bargainBnt" @tap="setBargainHelp">帮好友砍一刀</view>
+					<view class="bargainBnt" @tap="setBargainHelp">{{$t(`knife_friend`)}}</view>
 				</view>
 				<view v-if="userBargainInfo.bargainType == 4">
 					<view class="bargainSuccess">
 						<text class="iconfont icon-xiaolian"></text>
-						好友已砍价成功
+						{{$t(`Friends_success`)}}
 					</view>
-					<view class="bargainBnt" @tap="currentBargainUser">我也要参与</view>
+					<view class="bargainBnt" @tap="currentBargainUser">{{$t(`participate`)}}</view>
 				</view>
 
 				<view v-if="userBargainInfo.bargainType == 5">
 					<view class="bargainSuccess">
 						<text class="iconfont icon-xiaolian"></text>
-						已成功帮助好友砍价
+						{{$t(`success_friend_bargain`)}}
 					</view>
-					<view class="bargainBnt" @tap="currentBargainUser">我也要参与</view>
+					<view class="bargainBnt" @tap="currentBargainUser">{{$t(`participate`)}}</view>
 				</view>
 				<view v-if="userBargainInfo.bargainType == 6">
 					<view class="bargainSuccess">
 						<text class="iconfont icon-xiaolian"></text>
-						恭喜您砍价成功，快去支付
+						{{$t(`success_bargain_pay`)}}
 					</view>
-					<view class="bargainBnt" @tap="goPay">立即支付</view>
-					<view class="bargainBnt on" @tap="goBargainList">抢更多商品</view>
+					<view class="bargainBnt" @tap="goPay">{{$t(`pay_now`)}}</view>
+					<view class="bargainBnt on" @tap="goBargainList">{{$t(`grab_more`)}}</view>
 				</view>
 
 				<view class="lock" :style="'background-image: url('+picUrl.lock+');'"></view>
@@ -102,7 +102,7 @@
 					<view class="pictrue">
 						<image :src="picUrl.lace"></image>
 					</view>
-					<view class="titleCon">砍价帮</view>
+					<view class="titleCon">{{$t(`bargain_gang`)}}</view>
 					<view class="pictrue on">
 						<image :src="picUrl.lace"></image>
 					</view>
@@ -121,18 +121,18 @@
 							</view>
 							<view class="money">
 								<text class="iconfont icon-kanjia"></text>
-								砍掉{{ item.price }}元
+								{{$t(`chop_off`)}}{{ item.price }}{{$t(`svip_tip2`)}}
 							</view>
 						</view>
 					</block>
 					<view class="open acea-row row-center-wrapper" @click="openTap"
 						v-if="bargainUserHelpList.length > 3">
-						{{ couponsHidden ? '展开更多' : '关闭展开' }}
+						{{ couponsHidden ? $t(`expand_more`) : $t(`close_expand`) }}
 						<text class="iconfont"
 							:class="couponsHidden == true ? 'icon-xiangxia' : 'icon-xiangshang'"></text>
 					</view>
 				</view>
-				<view class="load" v-if="!limitStatus" @tap="getBargainUser">点击加载更多</view>
+				<view class="load" v-if="!limitStatus" @tap="getBargainUser">{{$t(`click_load_more`)}}</view>
 				<view class="lock" :style="'background-image: url('+picUrl.lock+');'"></view>
 			</view>
 			<view class="goodsDetails">
@@ -140,13 +140,13 @@
 					<view class="pictrue">
 						<image src="/images/left.png"></image>
 					</view>
-					<view class="titleCon">商品详情</view>
+					<view class="titleCon">{{$t(`product_details`)}}</view>
 					<view class="pictrue on">
 						<image src="/images/left.png"></image>
 					</view>
 				</view>
 				<view class="conter">
-					<jyf-parser :content="bargainInfo.description" ref="article" :tag-style="tagStyle"></jyf-parser>
+					<jyf-parser :html="bargainInfo.description" ref="article" :tag-style="tagStyle"></jyf-parser>
 				</view>
 				<view class="lock" :style="'background-image: url('+picUrl.lock+');'"></view>
 			</view>
@@ -155,13 +155,13 @@
 					<view class="pictrue">
 						<image src="/images/left.png"></image>
 					</view>
-					<view class="titleCon">砍价规则</view>
+					<view class="titleCon">{{$t(`haggling_rules`)}}</view>
 					<view class="pictrue on">
 						<image src="/images/left.png"></image>
 					</view>
 				</view>
 				<view class="conter">
-					<jyf-parser :content="bargainInfo.rule" ref="article" :tag-style="tagStyle"></jyf-parser>
+					<jyf-parser :html="bargainInfo.rule" ref="article" :tag-style="tagStyle"></jyf-parser>
 				</view>
 			</view>
 			<view class="bargainTip" :class="active == true ? 'on' : ''">
@@ -170,21 +170,21 @@
 				</view>
 				<view v-if="bargainUid == userInfo.uid">
 					<view class="cutOff">
-						您已砍掉
+						{{$t(`have_cut`)}}
 						<text style="color: var(--view-theme);">{{ userBargainPrice }}</text>
-						元，听说分享次数越多砍价成功的机会越大哦！
+						{{$t(`share_success`)}}
 					</view>
 					<!-- #ifdef MP -->
-					<button class="tipBnt" @tap="getBargainUserBargainPricePoster">邀请好友帮砍价</button>
+					<button class="tipBnt" @tap="getBargainUserBargainPricePoster">{{$t(`friends_haggle`)}}</button>
 					<!-- #endif -->
 					<!-- #ifdef H5 -->
-					<view class="tipBnt" @tap="getBargainUserBargainPricePoster">邀请好友帮砍价</view>
+					<view class="tipBnt" @tap="getBargainUserBargainPricePoster">{{$t(`friends_haggle`)}}</view>
 					<!-- #endif -->
 				</view>
 				<view v-else>
-					<view class="help" style="color: #fc4141;">成功帮砍{{ userBargainPrice }}元</view>
-					<view class="cutOff on">您也可以砍价低价拿哦，快去挑选心仪的商品吧~</view>
-					<view @tap="currentBargainUser" class="tipBnt">我也要参与</view>
+					<view class="help" style="color: #fc4141;">{{$t(`success_cut`)}}{{ userBargainPrice }}{{$t(`svip_tip2`)}}</view>
+					<view class="cutOff on">{{$t(`choose_favorite`)}}</view>
+					<view @tap="currentBargainUser" class="tipBnt">{{$t(`participate`)}}</view>
 				</view>
 			</view>
 			<view class="mask" catchtouchmove="true" v-show="active == true" @tap="close"></view>
@@ -194,36 +194,36 @@
 			<!-- #ifndef MP -->
 			<button class="item" hover-class='none' v-if="weixinStatus === true" @click="H5ShareBox = true">
 				<view class="iconfont icon-weixin3"></view>
-				<view class="">发送给朋友</view>
+				<view class="">{{$t(`send_friends`)}}</view>
 			</button>
 			<!-- #endif -->
 			<!-- #ifdef MP -->
 			<button class="item" open-type="share" hover-class='none' @click="goFriend">
 				<view class="iconfont icon-weixin3"></view>
-				<view class="">发送给朋友</view>
+				<view class="">{{$t(`send_friends`)}}</view>
 			</button>
 			<!-- #endif -->
 			<!-- #ifdef APP-PLUS -->
 			<view class="item" @click="appShare('WXSceneSession')">
 				<view class="iconfont icon-weixin3"></view>
-				<view class="">微信好友</view>
+				<view class="">{{$t(`wechat_friends`)}}</view>
 			</view>
 			<view class="item" @click="appShare('WXSenceTimeline')">
 				<view class="iconfont icon-pengyouquan"></view>
-				<view class="">微信朋友圈</view>
+				<view class="">{{$t(`wechat_moments`)}}</view>
 			</view>
 			<!-- #endif -->
 			<!-- #ifndef APP-PLUS -->
 			<button class="item" hover-class='none' @tap="getBargainUserBargainPricePoster">
 				<view class="iconfont icon-haibao"></view>
-				<view class="">生成海报</view>
+				<view class="">{{$t(`generate_poster`)}}</view>
 			</button>
 			<!-- #endif -->
 		</view>
 		<view class="mask" v-if="posters" @click="listenerActionClose"></view>
 		<!-- 发送给朋友图片 -->
 		<view class="share-box" v-if="H5ShareBox">
-			<image src="/static/images/share-info.png" @click="H5ShareBox = false"></image>
+			<image :src="imgHost + '/statics/images/share-info.png'" @click="H5ShareBox = false"></image>
 		</view>
 		<!-- #ifndef MP -->
 		<home></home>
@@ -270,13 +270,18 @@
 	// #endif
 	import countDown from '@/components/countDown';
 	import home from '@/components/home';
-	import parser from '@/components/mp-html/mp-html';
+	import parser from '@/components/jyf-parser/jyf-parser';
 	import {
 		silenceBindingSpread
 	} from '@/utils';
 	// #ifdef APP-PLUS
 	import {
 		TOKENNAME,
+		HTTP_REQUEST_URL
+	} from '@/config/app.js';
+	// #endif
+	// #ifdef H5 || MP
+	import {
 		HTTP_REQUEST_URL
 	} from '@/config/app.js';
 	// #endif
@@ -297,6 +302,7 @@
 		mixins: [colors],
 		data() {
 			return {
+				imgHost:HTTP_REQUEST_URL,
 				countDownDay: '00',
 				countDownHour: '00',
 				countDownMinute: '00',
@@ -476,7 +482,7 @@
 
 			this.isLogin && silenceBindingSpread();
 			uni.setNavigationBarTitle({
-				title: '砍价详情'
+				title: this.$t(`bargain_details`)
 			});
 		},
 		methods: {
@@ -518,14 +524,14 @@
 					imageUrl: that.bargainInfo.small_image,
 					success: function(res) {
 						uni.showToast({
-							title: '分享成功',
+							title: this.$t(`success_share`),
 							icon: 'success'
 						})
 						that.posters = false;
 					},
 					fail: function(err) {
 						uni.showToast({
-							title: '分享失败',
+							title: this.$t(`failed_share`),
 							icon: 'none',
 							duration: 2000
 						})
@@ -586,7 +592,7 @@
 				if (that.userInfo.uid == that.bargainUid) {
 					if (that.userBargainInfo.bargainOrderCount >= that.bargainInfo.num) {
 						return that.$util.Tips({
-							title: `该商品每人限购${that.bargainInfo.num}${that.bargainInfo.unit_name}`
+							title: that.$t(`product_limited`)+`${that.bargainInfo.num}${that.bargainInfo.unit_name}`
 						});
 					} else {
 						that.setBargain();
@@ -626,7 +632,7 @@
 				postCartAdd(data)
 					.then(res => {
 						uni.navigateTo({
-							url: '/pages/users/order_confirm/index?new=1&cartId=' + res.data.cartId
+							url: '/pages/goods/order_confirm/index?new=1&cartId=' + res.data.cartId
 						});
 					})
 					.catch(err => {
@@ -755,7 +761,7 @@
 			setOpenShare() {
 				let that = this;
 				let configTimeline = {
-					title: '您的好友' + that.userInfo.nickname + '邀请您砍价' + that.bargainInfo.title,
+					title: that.$t(`your_friends`) + that.userInfo.nickname + that.$t(`invite_haggle`) + that.bargainInfo.title,
 					desc: that.bargainInfo.info,
 					link: window.location.protocol + '//' + window.location.host +
 						'/pages/activity/goods_bargain_details/index?id=' +
@@ -805,7 +811,7 @@
 		onShareAppMessage: function() {
 			let that = this,
 				share = {
-					title: '您的好友' + that.userInfo.nickname + '邀请您帮他砍' + that.bargainInfo.title + ' 快去帮忙吧！',
+					title: that.$t(`your_friends`) + that.userInfo.nickname + this.$t(`invite_haggle`) + that.bargainInfo.title + this.$t(`go_help`),
 					path: '/pages/activity/goods_bargain_details/index?id=' + this.id + '&bargain=' + this.bargainUid +
 						'&spid=' +
 						this.userInfo.uid,

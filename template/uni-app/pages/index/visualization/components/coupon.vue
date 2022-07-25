@@ -30,8 +30,8 @@
 							<view class="cir"></view>
 							<view class="cir2"></view>
 							<view class="text">
-								<view class="money line1">¥<text class="num">{{item.coupon_price}}</text></view>
-								<view class="man line1">{{$t(`full`)}} {{item.use_min_price}} {{$t(`available`)}}</view>
+								<view class="money line1">{{$t(`money`)}}<text class="num">{{item.coupon_price}}</text></view>
+								<view class="man line1">{{$t(`full`)}} {{item.use_min_price}}</view>
 							</view>
 							<view class="bnt" v-if="item.is_use===true"><text>{{$t(`received`)}}</text></view>
 							<view class="bnt" v-else-if="item.is_use===false" @click="receiveCoupon(item)">
@@ -63,8 +63,8 @@
 							<view class="cir"></view>
 							<view class="cir2"></view>
 							<view class="text">
-								<view class="money line1">¥<text class="num">{{item.coupon_price}}</text></view>
-								<view class="man line1">{{$t(`full`)}} {{item.use_min_price}} {{$t(`available`)}}</view>
+								<view class="money line1">{{$t(`money`)}}<text class="num">{{item.coupon_price}}</text></view>
+								<view class="man line1">{{$t(`full`)}} {{item.use_min_price}}</view>
 							</view>
 							<view class="bnt" v-if="item.is_use===true"><text>{{$t(`received`)}}</text></view>
 							<view class="bnt" v-else-if="item.is_use===false" @click="receiveCoupon(item)">
@@ -157,7 +157,7 @@
 							item.is_use = true;
 							that.$set(that, 'couponList', that.couponList);
 							that.$util.Tips({
-								title: "领取成功"
+								title: this.$t(`receive_success`)
 							});
 						})
 						.catch(function(err) {

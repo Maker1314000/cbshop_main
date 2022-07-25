@@ -2,7 +2,7 @@
 	<view class="deliver-goods">
 		<header>
 			<view class="order-num acea-row row-between-wrapper">
-				<view class="num line1">订单号：{{ order_id }}</view>
+				<view class="num line1">{{$t(`order_number`)}}：{{ order_id }}</view>
 				<view class="name line1">
 					<span class="iconfont icon-yonghu2"></span>{{ delivery.nickname }}
 				</view>
@@ -20,7 +20,7 @@
 		</header>
 		<view class="wrapper">
 			<view class="item acea-row row-between-wrapper">
-				<view>发货方式</view>
+				<view>{{$t(`shipping_method`)}}</view>
 				<view class="mode acea-row row-middle row-right">
 					<view class="goods" :class="active === index ? 'on' : ''" v-for="(item, index) in types"
 						:key="index" @click="changeType(item, index)">
@@ -31,7 +31,7 @@
 			<block v-if="logistics.length>0">
 				<view class="list" v-show="active === 0">
 					<view class="item acea-row row-between-wrapper" v-if="delivery.config_export_open == 1">
-						<view>发货类型</view>
+						<view>{{$t(`shipping_type`)}}</view>
 						<view class="mode acea-row row-middle row-right">
 							<view class="goods" :class="curExpress === item.key ? 'on' : ''"
 								v-for="(item, index) in expressType" :key="index" @click="changeExpTpe(item, index)">
@@ -41,7 +41,7 @@
 					</view>
 					<block v-if="curExpress == 1">
 						<view class="item acea-row row-between-wrapper">
-							<view>快递公司</view>
+							<view>{{$t(`courier_company`)}}</view>
 							<view class="select-box">
 								<picker class="pickerBox" @change="bindPickerChange" :value="seIndex" :range="logistics"
 									range-key="name">
@@ -51,21 +51,21 @@
 							</view>
 						</view>
 						<view class="item acea-row row-between-wrapper">
-							<view>快递单号</view>
-							<input type="text" placeholder="填写快递单号" v-model="delivery_id" class="mode" />
+							<view>{{$t(`tracking_number`)}}</view>
+							<input type="text" :placeholder="$t(`fill_tracking_number`)" v-model="delivery_id" class="mode" />
 							<!-- #ifdef MP -->
 							<text class="iconfont icon-xiangji" @click="scanCode"></text>
 							<!-- #endif -->
 							<!-- #ifdef H5 -->
 							<text v-if="isWeixin" class="iconfont icon-xiangji" @click="scanCode"></text>
 							<!-- #endif -->
-							<text class="trip" v-if="curExpress == 1">顺丰请输入单号 :收件人或寄件人手机号后四位</text>
-							<text class="trip" v-if="curExpress == 1">例如：SF000000000000:3941</text>
+							<text class="trip" v-if="curExpress == 1">{{$t(`sf`)}}</text>
+							<text class="trip" v-if="curExpress == 1">{{$t(`for_example`)}}</text>
 						</view>
 					</block>
 					<block v-if="curExpress == 2">
 						<view class="item acea-row row-between-wrapper">
-							<view>快递公司</view>
+							<view>{{$t(`courier_company`)}}</view>
 							<view class="select-box">
 								<picker class="pickerBox" @change="bindPickerChange" :value="seIndex" :range="logistics"
 									range-key="name">
@@ -75,27 +75,27 @@
 							</view>
 						</view>
 						<view class="item acea-row row-between-wrapper" v-if="expTemp.length>0">
-							<view>电子面单</view>
+							<view>{{$t(`ele_face_sheet`)}}</view>
 							<div style="display: flex;align-items: center;">
 								<picker class="pickerBox" @change="bindTempChange" :value="expIndex" :range="expTemp"
 									range-key="title">
 									<view class="uni-input">{{expTemp[expIndex].title}}</view>
 								</picker>
-								<div class="look" @click="previewImage">预览</div>
+								<div class="look" @click="previewImage">{{$t(`preview`)}}</div>
 							</div>
 
 						</view>
 						<view class="item acea-row row-between-wrapper">
-							<view>寄件人姓名：</view>
-							<input type="text" placeholder="填写寄件人姓名" v-model="to_name" class="mode" />
+							<view>{{$t(`sender_name`)}}：</view>
+							<input type="text" :placeholder="$t(`fill_sender_name`)" v-model="to_name" class="mode" />
 						</view>
 						<view class="item acea-row row-between-wrapper">
-							<view>寄件人电话：</view>
-							<input type="text" placeholder="填写寄件人电话" v-model="to_tel" class="mode" />
+							<view>{{$t(`sender_phone`)}}：</view>
+							<input type="text" :placeholder="$t(`fill_sender_phone`)" v-model="to_tel" class="mode" />
 						</view>
 						<view class="item acea-row row-between-wrapper">
-							<view>寄件人地址：</view>
-							<input type="text" placeholder="填写寄件人地址" v-model="to_addr" class="mode" />
+							<view>{{$t(`sender_address`)}}：</view>
+							<input type="text" :placeholder="$t(`fill_sender_address`)" v-model="to_addr" class="mode" />
 						</view>
 					</block>
 				</view>
@@ -103,7 +103,7 @@
 
 			<view class="list" v-show="active === 1">
 				<view class="item acea-row row-between-wrapper">
-					<view>送货人</view>
+					<view>{{$t(`delivery_man`)}}</view>
 					<view class="select-box" v-if="postPeople.length>0">
 						<picker class="pickerBox" @change="bindPostChange" :value="postIndex" :range="postPeople"
 							range-key="wx_name">
@@ -114,10 +114,10 @@
 				</view>
 			</view>
 			<textarea v-show="active === 2" v-model="fictitious_content" class="textarea" @blur="bindTextAreaBlur"
-				placeholder="备注" :maxlength="500" auto-height />
+				:placeholder="$t(`remark`)" :maxlength="500" auto-height />
 		</view>
 		<view style="height:1.2rem;"></view>
-		<view class="confirm" @click="saveInfo">确认提交</view>
+		<view class="confirm" @click="saveInfo">{{$t(`confirm_sub`)}}</view>
 	</view>
 </template>
 <script>
@@ -140,26 +140,26 @@
 			return {
 				types: [{
 						type: "express",
-						title: "发货",
+						title: this.$t(`ship`),
 						key: 1
 					},
 					{
 						type: "send",
-						title: "送货",
+						title: this.$t(`deliver_goods`),
 						key: 2
 					},
 					{
 						type: "fictitious",
-						title: "无需物流",
+						title: this.$t(`without_logistics`),
 						key: 3
 					}
 				],
 				expressType: [{
-						title: '手动填写',
+						title: this.$t(`fill_manually`),
 						key: 1
 					},
 					{
-						title: '电子面单打印',
+						title: this.$t(`ele_sheet`),
 						key: 2
 					},
 				],
@@ -298,7 +298,7 @@
 				if (delivery_type == 1 && this.curExpress == 1) {
 					if (!delivery_id) {
 						return this.$util.Tips({
-							title: '请填写快递单号'
+							title: this.$t(`fill_courier`)
 						})
 					}
 					save.express_record_type = that.curExpress
@@ -309,27 +309,27 @@
 				if (delivery_type == 1 && this.curExpress == 2) {
 					if (!that.to_name) {
 						return this.$util.Tips({
-							title: '请填写寄件人姓名'
+							title: this.$t(`fill_sender_name`)
 						})
 					}
 					if (!that.to_tel) {
 						return this.$util.Tips({
-							title: '请填写寄件人手机号码'
+							title: this.$t(`fill_sender_phone`)
 						})
 					}
 					if (!(/^1[3456789]\d{9}$/.test(that.to_tel))) {
 						return this.$util.Tips({
-							title: '请填写寄件人手机号码'
+							title: this.$t(`fill_sender_phone`)
 						})
 					}
 					if (!that.to_addr) {
 						return this.$util.Tips({
-							title: '请填写寄件人地址'
+							title: this.$t(`fill_sender_address`) 
 						})
 					}
 					if (that.expTemp.length == 0) {
 						return this.$util.Tips({
-							title: '请选择电子面单'
+							title: this.$t(`select_ele_receipt`)
 						})
 					}
 					save.express_record_type = that.curExpress

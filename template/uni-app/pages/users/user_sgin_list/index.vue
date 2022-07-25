@@ -18,7 +18,7 @@
 		    <view class='loadingicon acea-row row-center-wrapper' v-if="signList.length > 0">
 		        <text class='loading iconfont icon-jiazai' :hidden='loading==false'></text>{{loadtitle}}
 		    </view>
-			<view v-if="signList.length == 0"><emptyPage title="暂无签到记录~"></emptyPage></view>
+			<view v-if="signList.length == 0"><emptyPage :title="$t(`No sign-in record`)"></emptyPage></view>
 		</view>
 		<!-- #ifdef MP -->
 		<!-- <authorize @onLoadFun="onLoadFun" :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse"></authorize> -->
@@ -45,7 +45,7 @@
 			return {
 				loading:false,
 				    loadend:false,
-				    loadtitle:'加载更多',
+				    loadtitle: this.$t(`loading_more`),
 				    page:1,
 				    limit:8,
 				    signList:[],
@@ -102,10 +102,10 @@
 					that.$set(that,'signList',that.signList);
 					that.loadend = loadend;
 					that.loading = false;
-					that.loadtitle = loadend ? "哼😕~我也是有底线的~" : "加载更多"
+					that.loadtitle = loadend ? this.$t(`hum_bottom_line`) : this.$t(`loading_more`)
 			      }).catch(err=>{
 					that.loading = false;
-					that.loadtitle = '加载更多';
+					that.loadtitle = this.$t(`loading_more`);
 			      });
 			    },
 		}

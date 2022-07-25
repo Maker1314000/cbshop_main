@@ -134,7 +134,7 @@ export default {
                 },
                 {
                   title: '链接',
-                  value: '/pages/news_list/index',
+                  value: '/pages/extension/news_list/index',
                   maxlength: 999,
                   tips: '请填写链接',
                 },

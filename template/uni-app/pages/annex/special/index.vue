@@ -105,7 +105,7 @@
 	import pictureCube from '@/pages/index/diy/components/pictureCube';
 
 	import {
-    getTempIds
+		getTempIds
 	} from '@/api/api.js';
 	import {
 		SUBSCRIBE_MESSAGE,
@@ -344,10 +344,10 @@
 			// #endif
 
 			// #ifdef MP || APP-PLUS
-      getTempIds() {
+			getTempIds() {
 				let messageTmplIds = wx.getStorageSync(SUBSCRIBE_MESSAGE);
 				if (!messageTmplIds) {
-          getTempIds().then(res => {
+					getTempIds().then(res => {
 						if (res.data) wx.setStorageSync(SUBSCRIBE_MESSAGE, JSON.stringify(res.data));
 					});
 				}

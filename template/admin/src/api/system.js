@@ -527,3 +527,45 @@ export function setAgreements(data, type) {
     data,
   });
 }
+
+/**
+* @description 获取授权产品
+*/
+export function crmebProduct(params) {
+  return request({
+      url: 'crmeb_product',
+      method: 'get',
+      params
+  });
+}
+
+/**
+ * @description 获取授权订单
+ */
+ export function getVersion() {
+  return request({
+      url: `setting/get_version`,
+      method: 'get',
+  });
+}
+
+/**
+* @description 获取版权
+*/
+export function getCrmebCopyRight() {
+  return request({
+      url: `copyright`,
+      method: 'get'
+  });
+}
+
+/**
+* @description 保存版权
+*/
+export function saveCrmebCopyRight(data) {
+  return request({
+      url: `copyright`,
+      method: 'post',
+      data
+  });
+}

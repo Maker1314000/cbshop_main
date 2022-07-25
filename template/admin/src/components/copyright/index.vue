@@ -7,6 +7,7 @@
   </div>
 </template>
 <script>
+import { getCrmebCopyRight } from '@/api/system'
 export default {
   name: 'i-copyright',
   data() {
@@ -31,13 +32,16 @@ export default {
       copyright: 'Copyright © 2022 | 西安众邦网络科技有限公司',
     };
   },
-  mounted() {
+  created(){
     this.getVersion();
+    
   },
   methods: {
     getVersion() {
       let version = this.$store.state.userInfo.version;
-      this.copyright += version ? '  |  ' + version : '';
+      getCrmebCopyRight().then((res) => {
+         this.copyright = res.data.copyrightContext || (this.copyright += version ? '  |  ' + version : '')
+      })
     },
   },
 };

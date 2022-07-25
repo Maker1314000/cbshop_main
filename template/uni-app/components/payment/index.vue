@@ -2,24 +2,24 @@
 	<view :style="colorStyle">
 		<view class="payment" :class="pay_close ? 'on' : ''">
 			<view class="title acea-row row-center-wrapper">
-				选择付款方式<text class="iconfont icon-guanbi" @click='close'></text>
+				{{$t(`choose_payment`)}}<text class="iconfont icon-guanbi" @click='close'></text>
 			</view>
-			<view class="item acea-row row-between-wrapper" v-for="(item,index) in payConfig" :key="index"
+			<view class="item acea-row row-between-wrapper" v-for="(item,index) in payMode" :key="index"
 				v-if='item.payStatus' @click="payType(item.number || 0 , item.value,index)">
 				<view class="left acea-row row-between-wrapper">
 					<view class="iconfont" :class="item.icon"></view>
 					<view class="text">
 						<view class="name">{{item.name}}</view>
 						<view class="info" v-if="item.value == 'yue'">
-							{{item.title}} <span class="money">￥{{ item.number }}</span>
+							{{item.title}} <span class="money">{{$t(`money`)}}{{ item.number }}</span>
 						</view>
 						<view class="info" v-else>{{item.title}}</view>
 					</view>
 				</view>
 				<view class="iconfont" :class="active==index?'icon-xuanzhong11 font-num':'icon-weixuan'"></view>
 			</view>
-			<view class="payMoney">支付<span class="font-color">¥<span class="money">{{totalPrice}}</span></span></view>
-			<view class="button bg-color acea-row row-center-wrapper" @click='goPay(number, paytype)'>去付款</view>
+			<view class="payMoney">{{$t(`pay`)}}<span class="font-color">{{$t(`money`)}}<span class="money">{{totalPrice}}</span></span></view>
+			<view class="button bg-color acea-row row-center-wrapper" @click='goPay(number, paytype)'>{{$t(`to_pay`)}}</view>
 		</view>
 		<view class="mask" @click='close' v-if="pay_close"></view>
 		<view v-show="false" v-html="formContent"></view>
@@ -30,12 +30,15 @@
 	import {
 		orderPay
 	} from '@/api/order.js';
-	import {
-		getPayConfig
-	} from '@/api/api.js';
 	import colors from '@/mixins/color.js';
 	export default {
 		props: {
+			payMode: {
+				type: Array,
+				default: function() {
+					return [];
+				}
+			},
 			pay_close: {
 				type: Boolean,
 				default: false,
@@ -55,19 +58,7 @@
 			friendPay: {
 				type: Boolean,
 				default: false
-			},
-			showPay: {
-				type: Array,
-				default () {
-					return [];
-				},
-			},
-			hidePay: {
-				type: Array,
-				default () {
-					return [];
-				},
-			},
+			}
 		},
 		mixins: [colors],
 		data() {
@@ -75,8 +66,7 @@
 				formContent: '',
 				active: 0,
 				paytype: '',
-				number: 0,
-				payMode: [],
+				number: 0
 			};
 		},
 		watch: {
@@ -89,48 +79,15 @@
 							newPayList.push(item)
 						}
 					});
-					if (newPayList.length) {
-						this.active = newPayList[0].index;
-						this.paytype = newPayList[0].value;
-						this.number = newPayList[0].number || 0;
-					}
+					this.active = newPayList[0].index;
+					this.paytype = newPayList[0].value;
+					this.number = newPayList[0].number || 0;
 				},
 				immediate: true,
 				deep: true
 			}
 		},
-		computed: {
-			payConfig() {
-				let config = [];
-
-				this.payMode.map(item => {
-					if (this.hidePay.length) {
-						if (this.hidePay.indexOf(item.value) !== -1) {
-							item.payStatus = false;
-						}
-					}
-					if (this.showPay.length) {
-						if (this.showPay.indexOf(item.value) !== -1 && item.payStatus === true) {
-							item.payStatus = true;
-						} else {
-							item.payStatus = false;
-						}
-					}
-					config.push(item);
-				});
-
-				return config;
-			}
-		},
-		mounted() {
-			this.getPayConfig();
-		},
 		methods: {
-			getPayConfig() {
-				getPayConfig().then(res => {
-					this.payMode = res.data;
-				})
-			},
 			payType(number, paytype, index) {
 				this.active = index;
 				this.paytype = paytype;
@@ -181,12 +138,12 @@
 					// #ifdef H5
 					quitUrl: location.port ? location.protocol + '//' + location.hostname + ':' + location
 						.port +
-						'/pages/users/order_details/index?order_id=' + this.order_id : location.protocol +
+						'/pages/goods/order_details/index?order_id=' + this.order_id : location.protocol +
 						'//' + location.hostname +
-						'/pages/users/order_details/index?order_id=' + this.order_id
+						'/pages/goods/order_details/index?order_id=' + this.order_id
 					// #endif
 					// #ifdef APP-PLUS
-					quitUrl: '/pages/users/order_details/index?order_id=' + this.order_id
+					quitUrl: '/pages/goods/order_details/index?order_id=' + this.order_id
 					// #endif
 				}).then(res => {
 					let jsConfig = res.data.result.jsConfig;
@@ -263,7 +220,7 @@
 											});
 										});
 									})
-									.catch(() => {
+									.catch(()=> {
 										return that.$util.Tips({
 											title: '支付失败'
 										}, () => {
@@ -279,7 +236,7 @@
 								provider: 'wxpay',
 								orderInfo: jsConfig,
 								success: (e) => {
-									let url = '/pages/order_pay_status/index?order_id=' + orderId +
+									let url = '/pages/goods/order_pay_status/index?order_id=' + orderId +
 										'&msg=支付成功';
 									uni.showToast({
 										title: "支付成功"

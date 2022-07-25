@@ -4,7 +4,7 @@
       <div class="nav acea-row row-around row-middle">
         <div class="item" :class="where.type === '' ? 'on' : ''" @click="changeStatus('')">全部</div>
         <div class="item" :class="where.type === 0 ? 'on' : ''" @click="changeStatus(0)">未支付</div>
-        <div class="item" :class="where.type === 2 ? 'on' : ''" @click="changeStatus(2)">未收货</div>
+        <div class="item" :class="where.type === 1 ? 'on' : ''" @click="changeStatus(1)">未发货</div>
         <div class="item" :class="where.type === -1 ? 'on' : ''" @click="changeStatus(-1)">退款中</div>
       </div>
       <div class="input-box">

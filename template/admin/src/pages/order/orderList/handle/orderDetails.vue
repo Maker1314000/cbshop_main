@@ -40,6 +40,9 @@
           <Col span="12" class="fontColor3 mb10" v-if="parseFloat(orderDatalist.orderInfo.back_integral)"
             >退回积分：{{ parseFloat(orderDatalist.orderInfo.back_integral) }}</Col
           >
+          <Col span="12" class="fontColor3 mb10" v-if="parseFloat(orderDatalist.orderInfo.gain_integral)"
+            >赠送积分：{{ parseFloat(orderDatalist.orderInfo.gain_integral) }}</Col
+          >
           <Col span="12" class="mb10">创建时间：{{ orderDatalist.orderInfo._add_time }}</Col>
           <Col span="12" class="mb10">支付时间：{{ orderDatalist.orderInfo._pay_time }}</Col>
           <Col span="12" class="mb10">支付方式：{{ orderDatalist.orderInfo._status._payType }}</Col>

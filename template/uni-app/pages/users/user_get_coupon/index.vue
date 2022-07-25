@@ -10,7 +10,7 @@
 			<view class='item acea-row row-center-wrapper' v-for="(item,index) in couponsList" :key="index" :class="{svip: item.receive_type === 4}">
 				<view class="moneyCon acea-row row-center-wrapper">
 					<view class='money' :class='item.is_use ? "moneyGray" : "" '>
-						<view>￥<text class='num'>{{item.coupon_price}}</text></view>
+						<view>{{$t(`money`)}}<text class='num'>{{item.coupon_price}}</text></view>
 						<view class="pic-num" v-if="item.use_min_price > 0">{{$t(`full`)}} {{item.use_min_price}} {{$t(`available`)}}</view>
 						<view class="pic-num" v-else>{{$t(`no_spend`)}}</view>
 					</view>
@@ -40,7 +40,7 @@
 		</view>
 		<view class='noCommodity' v-else-if="!couponsList.length && page === 2">
 			<view class='pictrue'>
-				<image src='/static/images/noCoupon.png'></image>
+				<image :src="imgHost + '/statics/images/noCoupon.png'"></image>
 			</view>
 		</view>
 		<!-- #ifdef MP -->
@@ -68,6 +68,7 @@
 	// #endif
 	import home from '@/components/home';
 	import colors from '@/mixins/color.js';
+	import {HTTP_REQUEST_URL} from '@/config/app';
 	export default {
 		components: {
 			// #ifdef MP
@@ -78,10 +79,11 @@
 		mixins:[colors],
 		data() {
 			return {
+				imgHost:HTTP_REQUEST_URL,
 				couponsList: [],
 				loading: false,
 				loadend: false,
-				loadTitle: '加载更多', //提示语
+				loadTitle: this.$t(`loading_more`), //提示语
 				page: 1,
 				limit: 20,
 				isAuto: false, //没有授权的不会自动授权
@@ -89,17 +91,17 @@
 				type: 0,
 				navList: [{
 						type: 0,
-						name: '通用券',
+						name: this.$t(`universal_coupon`),
 						count: 0
 					},
 					{
 						type: 1,
-						name: '品类券',
+						name: this.$t(`category_coupons`),
 						count: 0
 					},
 					{
 						type: 2,
-						name: '商品券',
+						name: this.$t(`commodity_voucher`),
 						count: 0
 					},
 				],
@@ -148,7 +150,7 @@
 					list[index].is_use = true;
 					that.$set(that, 'couponsList', list);
 					that.$util.Tips({
-						title: '领取成功'
+						title: this.$t(`receive_success`)
 					});
 				}).catch(error => {
 					return that.$util.Tips({
@@ -164,7 +166,7 @@
 				if (this.loadend) return false;
 				if (this.loading) return false;
 				that.loading = true;
-				that.loadTitle = '加载更多';
+				that.loadTitle = this.$t(`loading_more`);
 				getCoupons({
 					type: that.type,
 					page: that.page,
@@ -182,11 +184,11 @@
 					that.$set(that, 'couponsList', couponsList);
 					that.loadend = loadend;
 					that.loading = false;
-					that.loadTitle = loadend ? '我也是有底线的' : '加载更多';
+					that.loadTitle = loadend ? this.$t(`bottom_line`) : this.$t(`loading_more`);
 					that.page = that.page + 1;
 				}).catch(err => {
 					that.loading = false;
-					that.loadTitle = '加载更多';
+					that.loadTitle = this.$t(`loading_more`);
 				});
 			},
 			setType: function(type) {

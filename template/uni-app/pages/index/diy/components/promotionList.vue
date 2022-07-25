@@ -10,9 +10,9 @@
 		<view class="list-box animated" :class='tempArr.length > 0?"fadeIn on":""'>
 			<view class="item" v-for="(item,index) in tempArr" :key="index" @click="goDetail(item)">
 				<view class="pictrue">
-					<span class="pictrue_log pictrue_log_class" :style="'background-color:'+labelColor" v-if="item.activity && item.activity.type === '1'">秒杀</span>
-					<span class="pictrue_log pictrue_log_class" :style="'background-color:'+labelColor" v-if="item.activity && item.activity.type === '2'">砍价</span>
-					<span class="pictrue_log pictrue_log_class" :style="'background-color:'+labelColor" v-if="item.activity && item.activity.type === '3'">拼团</span>
+					<span class="pictrue_log pictrue_log_class" :style="'background-color:'+labelColor" v-if="item.activity && item.activity.type === '1'">{{$t(`seckill`)}}</span>
+					<span class="pictrue_log pictrue_log_class" :style="'background-color:'+labelColor" v-if="item.activity && item.activity.type === '2'">{{$t(`haggle`)}}</span>
+					<span class="pictrue_log pictrue_log_class" :style="'background-color:'+labelColor" v-if="item.activity && item.activity.type === '3'">{{$t(`group`)}}</span>
 					<image :src="item.image" mode="aspectFit"></image>
 				</view>
 				<view class="text-info">
@@ -20,7 +20,7 @@
 					<view class="old-price" v-if="opriceShow"><text>¥</text>{{item.ot_price}}</view>
 					<view class="price" :style="{color:fontColor}">
 						<view v-if="priceShow">
-							<text>￥</text>{{item.price}}
+							<text>{{$t(`money`)}}</text>{{item.price}}
 						</view>
 						<view class="txt" :style="'border:1px solid '+labelColor+';color:'+labelColor" :class="priceShow?'':'on'" v-if="item.checkCoupon && couponShow">券</view>
 					</view>

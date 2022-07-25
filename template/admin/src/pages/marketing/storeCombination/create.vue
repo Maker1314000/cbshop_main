@@ -124,15 +124,15 @@
                   </div>
                 </FormItem>
               </Col>
-              <Col span="24">
+              <Col span="24" v-if="formValidate.virtual_type == 0">
                 <FormItem label="物流方式：" prop="logistics">
                   <CheckboxGroup v-model="formValidate.logistics">
-                    <Checkbox label="1" disabled>快递</Checkbox>
+                    <Checkbox label="1">快递</Checkbox>
                     <Checkbox label="2">到店核销</Checkbox>
                   </CheckboxGroup>
                 </FormItem>
               </Col>
-              <Col span="24">
+              <Col span="24" v-if="formValidate.virtual_type == 0">
                 <FormItem label="运费设置：" :prop="formValidate.freight != 1 ? 'freight' : ''">
                   <RadioGroup v-model="formValidate.freight">
                     <Radio :label="2">固定邮费</Radio>
@@ -140,7 +140,7 @@
                   </RadioGroup>
                 </FormItem>
               </Col>
-              <Col span="24" v-if="formValidate.freight != 3 && formValidate.freight != 1">
+              <Col span="24" v-if="formValidate.freight != 3 && formValidate.freight != 1 && formValidate.virtual_type == 0">
                 <FormItem label="">
                   <div class="acea-row">
                     <InputNumber
@@ -152,7 +152,7 @@
                   </div>
                 </FormItem>
               </Col>
-              <Col span="24" v-if="formValidate.freight == 3">
+              <Col span="24" v-if="formValidate.freight == 3 && formValidate.virtual_type == 0">
                 <FormItem label="" prop="temp_id">
                   <div class="acea-row">
                     <Select v-model="formValidate.temp_id" clearable placeholder="请选择运费模板" class="perW20 maxW">

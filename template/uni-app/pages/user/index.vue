@@ -83,13 +83,8 @@
 										<image src="/static/images/edit.png" mode=""></image>
 									</view> -->
 								</view>
-								<view class="phone" v-if="!userInfo.phone && isLogin" @tap="bindPhone">{{$t('bind_mobile')}}</view>
-							</view>
-							<view class="message">
-								<view hover-class="none" @click="locale()">
-									<view v-if="$i18n.locale == 'zh-Hans'" class="iconfont icon-jinbi_o"></view>
-									<view v-if="$i18n.locale == 'en'" class="iconfont icon-yue"></view>
-								</view>
+								<view class="phone" v-if="!userInfo.phone && isLogin" @tap="bindPhone">
+									{{$t('bind_mobile')}}</view>
 							</view>
 							<view class="message">
 								<navigator url="/pages/users/user_info/index" hover-class="none">
@@ -138,7 +133,8 @@
 									{{ userInfo.overdue_time | dateFormat }}
 								</view>
 								<view v-else-if="userInfo.vip_status == -1" class="small">{{$t('expired')}}</view>
-								<view v-else-if="userInfo.vip_status == 2" class="small">{{$t('unregistered_member')}}</view>
+								<view v-else-if="userInfo.vip_status == 2" class="small">{{$t('unregistered_member')}}
+								</view>
 							</view>
 							<view class="acea-row row-middle">
 								<navigator v-if="userInfo.vip_status == 1" url="/pages/annex/vip_paid/index"
@@ -159,7 +155,8 @@
 									{{ userInfo.overdue_time | dateFormat }}
 								</view>
 								<view v-else-if="userInfo.vip_status == -1" class="small">{{$t('expired')}}</view>
-								<view v-else-if="userInfo.vip_status == 2" class="small">{{$t('unregistered_member')}}</view>
+								<view v-else-if="userInfo.vip_status == 2" class="small">{{$t('unregistered_member')}}
+								</view>
 							</view>
 							<view class="acea-row">
 								<navigator v-if="userInfo.vip_status == 1" url="/pages/annex/vip_paid/index"
@@ -179,7 +176,8 @@
 								{{ userInfo.overdue_time | dateFormat }}
 							</view>
 							<view v-else-if="userInfo.vip_status == -1" class="small">{{$t('expired')}}</view>
-							<view v-else-if="userInfo.vip_status == 2" class="small">{{$t('unregistered_member')}}</view>
+							<view v-else-if="userInfo.vip_status == 2" class="small">{{$t('unregistered_member')}}
+							</view>
 						</view>
 						<navigator v-if="userInfo.vip_status == 1" url="/pages/annex/vip_paid/index" hover-class="none"
 							class="btn">{{$t('view_benefits')}}</navigator>
@@ -190,7 +188,7 @@
 					<view class="order-wrapper" :class="userInfo.svip_open?'':'height'">
 						<view class="order-hd flex">
 							<view class="left">{{$t('my_order')}}</view>
-							<navigator class="right flex" hover-class="none" url="/pages/users/order_list/index"
+							<navigator class="right flex" hover-class="none" url="/pages/goods/order_list/index"
 								open-type="navigate">
 								{{$t('view_all')}}
 								<text class="iconfont icon-xiangyou"></text>
@@ -216,10 +214,10 @@
 						:duration="duration" indicator-color="rgba(255,255,255,0.6)" indicator-active-color="#fff">
 						<block v-for="(item,index) in imgUrls" :key="index">
 							<swiper-item>
-								<navigator @click="goMenuPage(item.url)"
+								<view @click="goMenuPage(item.url)"
 									class='slide-navigator acea-row row-between-wrapper' hover-class='none'>
 									<image :src="item.pic" class="slide-image"></image>
-								</navigator>
+								</view>
 							</swiper-item>
 						</block>
 					</swiper>
@@ -241,8 +239,9 @@
 						<block v-for="(item,index) in MyMenus" :key="index">
 							<view class="item" v-if="item.url!='#' 
 								&& item.url!='/pages/service/index' 
-								&& item.url!='/pages/customer_list/chat' 
-								|| (item.url=='/pages/customer_list/chat' && routineContact == 0)" @click="goMenuPage(item.url, item.name)">
+								&& item.url!='/pages/extension/customer_list/chat' 
+								|| (item.url=='/pages/extension/customer_list/chat' && routineContact == 0)"
+								@click="goMenuPage(item.url, item.name)">
 								<image :src="item.pic"></image>
 								<text>{{item.name}}</text>
 							</view>
@@ -274,7 +273,7 @@
 						</block>
 					</view>
 				</view>
-				<image src="/static/images/support.png" alt="" class='support'></image>
+				<image :src="copyRightPic" alt="" class='support'></image>
 				<view class="uni-p-b-98"></view>
 			</scroll-view>
 		</view>
@@ -360,22 +359,22 @@
 				orderMenu: [{
 						img: 'icon-daifukuan',
 						title: 'to_pay',
-						url: '/pages/users/order_list/index?status=0'
+						url: '/pages/goods/order_list/index?status=0'
 					},
 					{
 						img: 'icon-daifahuo',
 						title: 'to_ship',
-						url: '/pages/users/order_list/index?status=1'
+						url: '/pages/goods/order_list/index?status=1'
 					},
 					{
 						img: 'icon-daishouhuo',
 						title: 'to_receive',
-						url: '/pages/users/order_list/index?status=2'
+						url: '/pages/goods/order_list/index?status=2'
 					},
 					{
 						img: 'icon-daipingjia',
 						title: 'to_rate',
-						url: '/pages/users/order_list/index?status=3'
+						url: '/pages/goods/order_list/index?status=3'
 					},
 					{
 						img: 'icon-a-shouhoutuikuan',
@@ -412,6 +411,7 @@
 				member_style: 1,
 				my_banner_status: 1,
 				is_diy: uni.getStorageSync('is_diy'),
+				copyRightPic: '/static/images/support.png', //版权图片
 			}
 		},
 		onLoad(option) {
@@ -466,7 +466,7 @@
 			let routes = getCurrentPages(); // 获取当前打开过的页面路由数组
 			let curRoute = routes[routes.length - 1].route //获取当前页面路由
 			this.activeRouter = '/' + curRoute
-
+			this.getCopyRight();
 		},
 		onReady() {
 			let self = this
@@ -491,18 +491,12 @@
 				this.getMyMenus();
 				this.setVisit();
 			};
+			this.getCopyRight();
 		},
 		onPullDownRefresh() {
 			this.onLoadFun();
 		},
 		methods: {
-			locale(){
-				if(this.$i18n.locale=='zh-Hans'){
-					this.$i18n.locale = 'en';
-				}else if(this.$i18n.locale=='en'){
-					this.$i18n.locale = 'zh-Hans';
-				}
-			},
 			getWechatuserinfo() {
 				//#ifdef H5
 				Auth.isWeixin() && Auth.toAuth('snsapi_userinfo', '/pages/user/index');
@@ -617,7 +611,7 @@
 					res.data.routine_my_menus.forEach((el, index, arr) => {
 						if (el.url == '/pages/admin/order/index' || el.url ==
 							'/pages/admin/order_cancellation/index' || el.name ==
-							'客服接待') {
+							this.$t(`service_reception`)) {
 							storeMenu.push(el)
 						} else {
 							myMenu.push(el)
@@ -705,25 +699,25 @@
 				if (this.isLogin) {
 					if (url.indexOf('http') === -1) {
 						// #ifdef H5 || APP-PLUS
-						if (name && name === '客服接待') {
+						if (name && name === this.$t(`service_reception`)) {
 							// return window.location.href = `${location.origin}${url}`
 							return uni.navigateTo({
 								url: `/pages/annex/web_view/index?url=${location.origin}${url}`
 							});
-						} else if (name && name === '联系客服') {
+						} else if (name && name === this.$t(`contact_customer`)) {
 							return getCustomer(url)
 
-						} else if (name === '订单核销') {
+						} else if (name === this.$t(`order_write_off`)) {
 							console.log(`${url}`)
 							return uni.navigateTo({
-								url:url
+								url: url
 							});
 							// return window.location.href = `${location.origin}${url}`
 						}
 						// #endif
 
 						// #ifdef MP
-						if (name && name === '联系客服') {
+						if (name && name === this.$t(`contact_customer`)) {
 							return getCustomer(url)
 						}
 						if (url != '#' && url == '/pages/users/user_info/index') {
@@ -733,7 +727,12 @@
 						}
 						// #endif
 						uni.navigateTo({
-							url: url
+							url: url,
+							fail(err) {
+								uni.switchTab({
+									url: url
+								})
+							}
 						})
 					} else {
 						uni.navigateTo({
@@ -758,6 +757,12 @@
 						})
 					}
 				})
+			},
+			getCopyRight() {
+				const copyRight = uni.getStorageSync('copyRight')
+				if (copyRight.copyrightImage) {
+					this.copyRightPic = copyRight.copyrightImage
+				}
 			}
 		}
 	}
@@ -905,7 +910,6 @@
 				top: 0;
 				width: 100%;
 				height: 100%;
-				// background: url("~@/static/images/user-sys.png") no-repeat;
 				background: var(--view-theme);
 				background-size: 100% auto;
 				background-position: left bottom;
@@ -1324,7 +1328,7 @@
 		.btn {
 			height: 52rpx;
 			line-height: 52rpx;
-			padding: 0 20rpx;
+			padding: 0 10rpx;
 			text-align: center;
 			background: #fff;
 			border-radius: 28rpx;

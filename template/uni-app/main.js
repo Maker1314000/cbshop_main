@@ -29,15 +29,15 @@ Vue.component('pageLoading',pageLoading)
 
 
 
-import en from './locale/en.json'
-import zhHans from './locale/zh-Hans.json'
+import en_us from './lang/en_us.json'
+import zh_cn from './lang/zh_cn.json'
 
 
 let i18nConfig = {
-  locale: uni.getLocale(),// 获取已设置的语言
+  locale: uni.getStorageSync('locale') ? uni.getStorageSync('locale') :'zh_cn',
   messages: {
-	en,
-	'zh-Hans': zhHans,
+	'en_us': en_us,
+	'zh_cn': zh_cn,
   }
 }
 
@@ -79,7 +79,7 @@ if (vconsole !== undefined) {
 	  Cache.clear(cookieName);
 } else vconsole = Cache.get(cookieName);
 
-import VConsole from './components/vconsole.min.js'
+import VConsole from './pages/extension/components/vconsole.min.js'
 
 if (vconsole !== undefined && vconsole === md5Crmeb) {
 	Cache.set(cookieName, md5Crmeb, 3600);

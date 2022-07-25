@@ -564,7 +564,7 @@ export default {
         window.location.protocol +
         '//' +
         window.location.host +
-        '/pages/users/order_details/index?order_id=' +
+        '/pages/goods/order_details/index?order_id=' +
         item.msn;
       window.open(url, '_blank');
     },

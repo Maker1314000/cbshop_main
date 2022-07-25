@@ -223,7 +223,7 @@
                       <InputNumber
                         v-model="row.chance"
                         :max="100"
-                        :min="1"
+                        :min="0"
                         :precision="0"
                         class="priceBox"
                         @on-change="
@@ -528,7 +528,7 @@ export default {
           name: '', //活动名称
           num: 10, //奖品数量
           image: '', //奖品图片
-          chance: 1, //中奖权重
+          chance: 0, //中奖权重
           total: 0, //奖品数量
           prompt: '', //提示语
         },
@@ -751,7 +751,7 @@ export default {
                 name: '', //活动名称
                 num: 10, //奖品数量
                 image: '', //奖品图片
-                chance: 1, //中奖权重
+                chance: 0, //中奖权重
                 total: 0, //奖品数量
                 prompt: '', //提示语
               },

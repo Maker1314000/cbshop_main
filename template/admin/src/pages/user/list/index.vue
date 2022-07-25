@@ -265,7 +265,8 @@
             <Icon type="md-female" v-show="row.sex === '女'" color="#ed4014" size="15" class="mr5" />
             <div v-text="row.nickname"></div>
           </div>
-          <!--                    <div v-show="row.vip_name" class="vipName">{{row.vip_name}}</div>-->
+          <div v-if="row.is_del==1" style="color:red">用户已注销</div>
+                             <!-- <div v-show="row.vip_name" class="vipName">{{row.vip_name}}</div> -->
         </template>
         <template slot-scope="{ row, index }" slot="isMember">
           <div>{{ row.isMember ? '是' : '否' }}</div>

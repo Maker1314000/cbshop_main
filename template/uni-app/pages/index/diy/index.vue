@@ -67,15 +67,15 @@
 						<view class="product-item" v-for="(item, index) in goodList" @click="goGoodsDetail(item)">
 							<image :src="item.image"></image>
 							<span class="pictrue_log_big pictrue_log_class"
-								v-if="item.activity && item.activity.type === '1'">秒杀</span>
+								v-if="item.activity && item.activity.type === '1'">{{$t(`seckill`)}}</span>
 							<span class="pictrue_log_big pictrue_log_class"
-								v-if="item.activity && item.activity.type === '2'">砍价</span>
+								v-if="item.activity && item.activity.type === '2'">{{$t(`haggle`)}}</span>
 							<span class="pictrue_log_big pictrue_log_class"
-								v-if="item.activity && item.activity.type === '3'">拼团</span>
+								v-if="item.activity && item.activity.type === '3'">{{$t(`group`)}}</span>
 							<view class="info">
 								<view class="title line1">{{ item.store_name }}</view>
 								<view class="price-box">
-									<text>￥</text>
+									<text>{{$t(`money`)}}</text>
 									{{ item.price }}
 								</view>
 							</view>
@@ -83,8 +83,9 @@
 					</view>
 					<Loading :loaded="loaded" :loading="loading"></Loading>
 					<view class="" v-if="goodList.length == 0 && loaded">
-						<view class="empty-box">
-							<image src="/static/images/noShopper.png"></image>
+						<view class="emptyBox">
+							<image :src="imgHost + '/statics/images/no-thing.png'"></image>
+							<view class="tips">{{$t(`no_product_see`)}}</view>
 						</view>
 						<recommend :hostProduct="hostProduct"></recommend>
 					</view>
@@ -106,16 +107,16 @@
 						<view class="product-item" v-for="(item, index) in goodList" @click="goGoodsDetail(item)">
 							<image :src="item.image"></image>
 							<span class="pictrue_log_big pictrue_log_class"
-								v-if="item.activity && item.activity.type === '1'">秒杀</span>
+								v-if="item.activity && item.activity.type === '1'">{{$t(`seckill`)}}</span>
 							<span class="pictrue_log_big pictrue_log_class"
-								v-if="item.activity && item.activity.type === '2'">砍价</span>
+								v-if="item.activity && item.activity.type === '2'">{{$t(`haggle`)}}</span>
 							<span class="pictrue_log_big pictrue_log_class"
-								v-if="item.activity && item.activity.type === '3'">拼团</span>
-							<span class="pictrue_log_big pictrue_log_class" v-if="item.checkCoupon">券</span>
+								v-if="item.activity && item.activity.type === '3'">{{$t(`group`)}}</span>
+							<span class="pictrue_log_big pictrue_log_class" v-if="item.checkCoupon">{{$t(`ticket`)}}</span>
 							<view class="info">
 								<view class="title line2">{{ item.store_name }}</view>
 								<view class="price-box">
-									<text>￥</text>
+									<text>{{$t(`money`)}}</text>
 									{{ item.price }}
 								</view>
 							</view>
@@ -123,8 +124,9 @@
 					</view>
 					<Loading :loaded="loaded" :loading="loading"></Loading>
 					<view class="" v-if="goodList.length == 0 && loaded">
-						<view class="empty-box">
-							<image src="/static/images/noShopper.png"></image>
+						<view class="emptyBox">
+							<image :src="imgHost + '/statics/images/no-thing.png'"></image>
+							<view class="tips">{{$t(`no_product_see`)}}</view>
 						</view>
 						<recommend :hostProduct="hostProduct"></recommend>
 					</view>
@@ -166,31 +168,29 @@
 		</view>
 		<view v-else>
 			<view class="error-network">
-				<image src="/static/images/error-network.png"></image>
-				<view class="title">网络连接断开</view>
+				<image :src="imgHost + '/statics/images/error-network.png'"></image>
+				<view class="title">{{$t(`network_lost`)}}</view>
 				<view class="con">
-					<view class="label">请检查情况：</view>
-					<view class="item">· 在设置中是否已开启网络权限</view>
-					<view class="item">· 当前是否处于弱网环境</view>
-					<view class="item">· 版本是否过低，升级试试吧</view>
+					<view class="label">{{$t(`check_situation`)}}：</view>
+					<view class="item">· {{$t(`network_permissions`)}}</view>
+					<view class="item">· {{$t(`weak_network`)}}</view>
+					<view class="item">· {{$t(`upgrade`)}}</view>
 				</view>
-				<view class="btn" @click="reconnect">重新连接</view>
+				<view class="btn" @click="reconnect">{{$t(`reconnect`)}}</view>
 			</view>
 		</view>
 		<!-- #ifdef APP-PLUS -->
 		<app-update v-if="!privacyStatus" ref="appUpdate" :force="true" :tabbar="false"></app-update>
 		<view class="privacy-wrapper" v-if="privacyStatus">
 			<view class="privacy-box">
-				<view class="title">服务协议与隐私政策</view>
+				<view class="title">{{$t(`protocol`)}}</view>
 				<view class="content">
-					请务必审慎阅读、充分理解“服务协议与 隐私政策”各条款，包括但不限于：为了 向你提供即时通讯、内容分享等服务，我 们需要收集你的设备信息、操作日志等个 人信息。你可以在“设置”中查看、变更、
-					删除个人信息并管理你的授权。<br>
-					你可以阅读<navigator url="/pages/users/privacy/index?type=3">《服务协议与隐私政策》</navigator>了解
-					详细信息。如你同意，请点击“我同意”开始接受我们的服务。
+					{{$t(`read_terms`)}}<br>
+					{{$t(`you_can_read`)}}<navigator url="/pages/users/privacy/index?type=3">《{{$t(`protocol`)}}》</navigator>{{$t(`learn_more`)}}
 				</view>
 				<view class="btn-box">
-					<view class="btn-item" @click="confirmApp">我同意</view>
-					<view class="btn" @click="closeModel">残忍拒绝</view>
+					<view class="btn-item" @click="confirmApp">{{$t(`agree`)}}</view>
+					<view class="btn" @click="closeModel">{{$t(`reject`)}}</view>
 				</view>
 			</view>
 		</view>
@@ -241,7 +241,7 @@
 	import titles from './components/titles';
 	import appUpdate from "@/components/update/app-update.vue";
 	import {
-    getTempIds
+		getTempIds
 	} from '@/api/api.js';
 	import {
 		SUBSCRIBE_MESSAGE,
@@ -271,6 +271,7 @@
 	import {
 		toLogin
 	} from '@/libs/login.js';
+	import {HTTP_REQUEST_URL} from '@/config/app';
 	import pageFooter from '@/components/pageFooter/index.vue';
 	import Loading from '@/components/Loading/index.vue';
 	import recommend from '@/components/recommend';
@@ -314,6 +315,7 @@
 		computed: mapGetters(['isLogin', 'cartNum']),
 		data() {
 			return {
+				imgHost:HTTP_REQUEST_URL,
 				showSkeleton: true, //骨架屏显示隐藏
 				isNodes: 0, //控制什么时候开始抓取元素节点,只要数值改变就重新抓取
 				styleConfig: [],
@@ -321,7 +323,7 @@
 				goodType: 3,
 				loading: false,
 				loadend: false,
-				loadTitle: '下拉加载更多', //提示语
+				loadTitle: this.$t(`load_more_down`), //提示语
 				page: 1,
 				limit: this.$config.LIMIT,
 				iSshowH: false,
@@ -478,10 +480,10 @@
 			closeModel() {
 				//退出app
 				uni.getSystemInfo({
-					success: function(res) { // 判断为安卓的手机
-						if (res.platform == 'android') { // 安卓退出app
+					success: function(res) { // 判断为安卓的手机 
+						if (res.platform == 'android') { // 安卓退出app      
 							plus.runtime.quit();
-						} else { // 判断为ios的手机，退出App
+						} else { // 判断为ios的手机，退出App      
 							plus.ios.import("UIApplication").sharedApplication().performSelector("exit");
 
 						}
@@ -492,7 +494,7 @@
 			// 重新链接
 			reconnect() {
 				uni.showLoading({
-					title: '加载中'
+					title: this.$t(`Loading`)
 				})
 				this.diyData();
 				this.getIndexData();
@@ -678,10 +680,10 @@
 			// #endif
 
 			// #ifdef MP
-      getTempIds() {
+			getTempIds() {
 				let messageTmplIds = wx.getStorageSync(SUBSCRIBE_MESSAGE);
 				if (!messageTmplIds) {
-          getTempIds().then(res => {
+					getTempIds().then(res => {
 						if (res.data) wx.setStorageSync(SUBSCRIBE_MESSAGE, JSON.stringify(res.data));
 					});
 				}
@@ -774,7 +776,7 @@
 						uni.hideLoading()
 						if (that.errorNetwork) {
 							uni.showToast({
-								title: '连接失败',
+								title: this.$t(`connect_failed`),
 								icon: 'none',
 								duration: 2000
 							})
@@ -827,13 +829,13 @@
 						let tempArr = that.$util.SplitArray(list, that.tempArr);
 						that.$set(that, 'tempArr', tempArr.slice(0, this.numConfig));
 						that.loadend = loadend;
-						that.loadTitle = loadend ? '没有更多内容啦~' : '加载更多';
+						that.loadTitle = loadend ? this.$t(`no_more`) : this.$t(`loading_more`);
 						that.page = that.page + 1;
 						that.loading = false;
 					})
 					.catch(res => {
 						that.loading = false;
-						that.loadTitle = '加载更多';
+						that.loadTitle = this.$t(`loading_more`);
 					});
 			},
 			goRouter(item) {
@@ -1147,13 +1149,18 @@
 			}
 		}
 	}
-
-	.empty-box {
+	
+	.emptyBox{
 		text-align: center;
-
+		padding-top: 20rpx;
+		.tips{
+			color: #aaa;
+			font-size: 26rpx;
+			padding-bottom: 20rpx;
+		}
 		image {
 			width: 414rpx;
-			height: 336rpx;
+			height: 304rpx;
 		}
 	}
 

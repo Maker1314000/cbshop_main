@@ -7,7 +7,7 @@
 				@click="jumpIndex">
 				<text class="iconfont icon-shouye3"></text>
 			</navigator>
-			<navigator url="/pages/goods_search/index" class="search acea-row row-center-wrapper" hover-class="none">
+			<navigator url="/pages/goods/goods_search/index" class="search acea-row row-center-wrapper" hover-class="none">
 				<text class="iconfont icon-xiazai5"></text>
 				{{$t(`search_product`)}}
 			</navigator>
@@ -69,8 +69,8 @@
 				<view class="iconfont icon-gouwuche-yangshi2"></view>
 			</view>
 			<view class="money acea-row row-middle">
-				<view>￥<text class="num">{{totalPrice}}</text></view>
-				<view class="bnt" @click="subOrder">去结算</view>
+				<view>{{$t(`money`)}}<text class="num">{{totalPrice}}</text></view>
+				<view class="bnt" @click="subOrder">{{$t(`to_settle`)}}</view>
 			</view>
 		</view>
 		<cartList :cartData="cartData" @closeList="closeList" @ChangeCartNumDan="ChangeCartList"
@@ -128,7 +128,7 @@
 				tempArr: [],
 				loading: false,
 				loadend: false,
-				loadTitle: '加载更多',
+				loadTitle: this.$t(`loading_more`),
 				page: 1,
 				limit: 10,
 				cid: 0, //一级分类
@@ -186,12 +186,12 @@
 						ids.push(item.id)
 					});
 					uni.navigateTo({
-						url: '/pages/users/order_confirm/index?cartId=' + ids.join(',')
+						url: '/pages/goods/order_confirm/index?cartId=' + ids.join(',')
 					});
 					that.cartData.iScart = false;
 				} else {
 					return that.$util.Tips({
-						title: '请选择产品'
+						title: this.$t(`select_product`)
 					});
 				}
 			},
@@ -399,11 +399,11 @@
 					that.$set(that, 'tempArr', that.tempArr);
 					that.loading = false;
 					that.loadend = loadend;
-					that.loadTitle = loadend ? "人家是有底线的~" : "加载更多";
+					that.loadTitle = loadend ? this.$t(`bottom_line`) : this.$t(`loading_more`);
 					that.page = that.page + 1;
 				}).catch(err => {
 					that.loading = false,
-						that.loadTitle = '加载更多'
+						that.loadTitle = this.$t(`loading_more`)
 				});
 			},
 
@@ -454,7 +454,7 @@
 							this.$set(this.cartData, 'cartList', this.cartData.cartList);
 						}
 						return this.$util.Tips({
-							title: "该产品没有更多库存了"
+							title: this.$t(`no_more_product`)
 						});
 					} else {
 						if (!isDuo) {
@@ -510,7 +510,7 @@
 						productSelect === undefined
 					)
 						return that.$util.Tips({
-							title: "产品库存不足，请选择其它属性"
+							title: this.$t(`inventory_shortage`)
 						});
 				}
 				let q = {
@@ -524,7 +524,7 @@
 						if (duo) {
 							that.attr.cartAttr = false;
 							that.$util.Tips({
-								title: "添加购物车成功"
+								title: this.$t(`added_successfully`)
 							});
 							// that.page = 1;
 							// that.loadend = false;
@@ -580,7 +580,7 @@
 						return
 					}
 					uni.showLoading({
-						title: '加载中'
+						title: this.$t(`Loading`)
 					});
 					this.storeName = item.store_name;
 					this.getAttrs(item.id);
@@ -631,7 +631,7 @@
 					data.forEach(item => {
 						item.children.unshift({
 							'id': 0,
-							'cate_name': '全部'
+							'cate_name': this.$t(`all`)
 						})
 					})
 					that.categoryTitle = data[0].cate_name;

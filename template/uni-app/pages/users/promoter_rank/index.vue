@@ -81,7 +81,7 @@
 		mixins:[colors],
 		data() {
 			return {
-				navList: ["周榜", "月榜"],
+				navList: [this.$t(`weekly_list`), this.$t(`monthly_list`)],
 				active: 0,
 				page: 1,
 				limit: 10,

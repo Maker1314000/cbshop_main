@@ -10,22 +10,22 @@
 		</view>
 		<view class="footer">
 			<view class="trip">
-				点击【立即注销】即代表您已经同意《用户注销协议》
+				{{$t(`click_cancel_now`)}}
 			</view>
 			<view class="cancellation flex-aj-center" @click="isCancellation = true">
-				立即注销
+				{{$t(`cancel_now`)}}
 			</view>
 		</view>
 		<view class="mark" v-show="isCancellation"></view>
 		<view class="tipaddress" v-show="isCancellation">
 			<view class="top"></view>
 			<view class="bottom">
-				<view class="font1">是否确认注销</view>
-				<view class="font2">注销后无法恢复，请谨慎操作</view>
+				<view class="font1">{{$t(`confirm_logout`)}}</view>
+				<view class="font2">{{$t(`operate_caution`)}}</view>
 				<view class="btn">
-					<view class="cancellation-btn btn-sty flex-aj-center" @tap="cancelUser">注销</view>
+					<view class="cancellation-btn btn-sty flex-aj-center" @tap="cancelUser">{{$t(`log_out`)}}</view>
 					<view class="cancel btn-sty flex-aj-center" @tap="isCancellation = false">
-						取消
+						{{$t(`cancel`)}}
 					</view>
 				</view>
 			</view>

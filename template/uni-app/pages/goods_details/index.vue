@@ -52,7 +52,7 @@
 						<view class="wrapper">
 							<view class="share acea-row row-between row-bottom">
 								<view class="money font-color skeleton-rect">
-									￥
+									{{$t(`money`)}}
 									<text class="num" v-text="storeInfo.price || 0"></text>
 									<text v-if="storeInfo.spec_type">{{$t(`onwards`)}}</text>
 									<text class="vip-money" v-if="
@@ -60,7 +60,7 @@
                       storeInfo.vip_price > 0 &&
                       storeInfo.is_vip == 1 &&
 					  svip_price_open == 1
-                    ">￥{{ storeInfo.vip_price }}</text>
+                    ">{{$t(`money`)}}{{ storeInfo.vip_price }}</text>
 									<image v-if="
                       storeInfo.vip_price &&
                       storeInfo.vip_price > 0 &&
@@ -71,19 +71,13 @@
 								<view class="iconfont icon-fenxiang skeleton-rect" @click="listenerActionSheet"></view>
 							</view>
 							<view class="introduce skeleton-rect" v-text="storeInfo.store_name"></view>
+							<view class="limit_good" v-if="storeInfo.limit_type > 0">{{storeInfo.limit_type == 1 ? $t(`once_limit`) : $t(`all_limit`)}}{{storeInfo.limit_num}}{{storeInfo.unit_name}}</view>
 							<view class="label acea-row row-between-wrapper" style="padding-bottom: 20rpx">
-								<view class="skeleton-rect" v-text="'划线价:￥' + (storeInfo.ot_price || 0)">
+								<view class="skeleton-rect">
+									{{$t(`under_price`)}} : {{$t(`money`)}}{{storeInfo.ot_price || 0}}
 								</view>
-								<view class="skeleton-rect" v-text="
-                    '库存:' +
-                    (storeInfo.stock || 0) +
-                    (storeInfo.unit_name || '')
-                  "></view>
-								<view class="skeleton-rect" v-text="
-                    '销量:' +
-                    (storeInfo.fsales || 0) +
-                    (storeInfo.unit_name || '')
-                  "></view>
+								<view class="skeleton-rect" >{{$t(`stock`)}} : {{storeInfo.stock || 0}}{{storeInfo.unit_name || ''}}</view>
+								<view class="skeleton-rect" >{{$t(`sales`)}} : {{storeInfo.fsales || 0}}{{storeInfo.unit_name || ''}}</view>
 							</view>
 							<view v-if="
                   !is_money_level && storeInfo.vip_price && storeInfo.is_vip
@@ -126,7 +120,7 @@
 							</view>
 							<view class="coupon acea-row row-between-wrapper skeleton-rect" v-if="activity.length">
 								<view class="line1 acea-row">
-									<text>活&nbsp;&nbsp;&nbsp;动：</text>
+									<text>{{$t(`special`)}}&nbsp;&nbsp;&nbsp;{{$t(`move`)}}：</text>
 									<view v-for="(item, index) in activity" :key="index" @click="goActivity(item)">
 										<view v-if="item.type === '1'" :class="
                         index == 0
@@ -172,7 +166,7 @@
 							v-if="attr.productAttr.length">
 							<view class="flex">
 								<view style="display: flex; align-items: center; width: 90%">
-									<view class="attr-txt"> {{ attrTxt }}： </view>
+									<view class="attr-txt"> {{$t(`chosen`)}}： </view>
 									<view class="atterTxt line1" style="width: 82%">{{
                     attrValue
                   }}</view>
@@ -185,7 +179,7 @@
 									<image :src="item.image" v-for="(item, index) in skuArr.slice(0, 4)" :key="index"
 										class="attrImg"></image>
 								</view>
-								<view class="switchTxt">{{$t(`common`)}}{{ skuArr.length }}{{$t(``)}}</view>
+								<view class="switchTxt">{{$t(`total_of`)}}{{ skuArr.length }}{{$t(`specification`)}}</view>
 							</view>
 						</view>
 					</view>
@@ -193,7 +187,7 @@
 						<view class="title acea-row row-between-wrapper">
 							<view>{{$t(`user_review`)}}({{ replyCount }})</view>
 							<navigator class="praise" hover-class="none"
-								:url="'/pages/users/goods_comment_list/index?product_id=' + id">
+								:url="'/pages/goods/goods_comment_list/index?product_id=' + id">
 								<text class="font-num">{{ replyChance }}%</text>
 								{{$t(`praise_rate`)}}
 								<text class="iconfont icon-jiantou"></text>
@@ -206,7 +200,6 @@
 					<!-- 优品推荐 -->
 					<view class="superior" v-if="good_list.length" id="past2">
 						<view class="title acea-row row-center-wrapper">
-							<!-- <image src="../../static/images/ling.png"></image> -->
 							<view class="lingw acea-row row-center-wrapper">
 								<view class="lingn"></view>
 							</view>
@@ -214,7 +207,6 @@
 							<view class="lingw acea-row row-center-wrapper">
 								<view class="lingn"></view>
 							</view>
-							<!--<image src="../../static/images/ling.png"></image> -->
 						</view>
 						<view class="slider-banner banner">
 							<swiper indicator-dots="true" :autoplay="autoplay" :circular="circular" :interval="interval"
@@ -234,7 +226,7 @@
 													v-if="val.activity && val.activity.type === '3'">{{$t(`group`)}}</span>
 											</view>
 											<view class="name line1">{{ val.store_name }}</view>
-											<view class="money font-color">¥{{ val.price }}</view>
+											<view class="money font-color">{{$t(`money`)}}{{ val.price }}</view>
 										</view>
 									</view>
 								</swiper-item>
@@ -319,7 +311,7 @@
 					<view class="presale" v-else>
 						<view class="acea-row" v-if="presale_pay_status === 1 || presale_pay_status === 3">
 							<form class="bnts bg-color-hui"><button class="bnts bg-color-hui"
-									form-type="submit">{{presale_pay_status === 1?'未开始':'已结束'}}</button>
+									form-type="submit">{{presale_pay_status === 1?$t(`has_not_started`):$t(`over`)}}</button>
 							</form>
 						</view>
 						<view class="acea-row"
@@ -414,7 +406,7 @@
 			<canvas class="canvas" canvas-id="myCanvas" v-if="canvasStatus"></canvas>
 			<!-- 发送给朋友图片 -->
 			<view class="share-box" v-if="H5ShareBox">
-				<image src="/static/images/share-info.png" @click="H5ShareBox = false"></image>
+				<image :src="imgHost + '/statics/images/share-info.png'" @click="H5ShareBox = false"></image>
 			</view>
 			<kefuIcon :ids="parseInt(id)" :routineContact="routineContact" :storeInfo="storeInfo" :goodsCon="1">
 			</kefuIcon>
@@ -465,17 +457,16 @@
 		silenceBindingSpread,
 		updateURLParameter
 	} from "@/utils";
-	import mpHtml from "@/components/mp-html/mp-html";
 	import ClipboardJS from "@/plugin/clipboard/clipboard.js";
 	// #ifdef MP
 	import authorize from "@/components/Authorize";
 	// #endif
 	// #ifdef APP-PLUS
 	import {
-		TOKENNAME,
-		HTTP_REQUEST_URL
+		TOKENNAME
 	} from "@/config/app.js";
 	// #endif
+	import {HTTP_REQUEST_URL} from '@/config/app';
 	let app = getApp();
 	import colors from "@/mixins/color";
 	import {
@@ -491,7 +482,6 @@
 			userEvaluation,
 			shareRedPackets,
 			kefuIcon,
-			mpHtml,
 			menuIcon,
 			cusPreviewImg,
 			// #ifdef MP
@@ -511,6 +501,7 @@
 		data() {
 			let that = this;
 			return {
+				imgHost:HTTP_REQUEST_URL,
 				sysHeight: sysHeight,
 				a: false,
 				showSkeleton: true, //骨架屏显示隐藏
@@ -526,7 +517,7 @@
 				},
 				showAnimate: true,
 				showMenuIcon: false,
-				attrTxt: "请选择", //属性页面提示
+				attrTxt: this.$t(`please_choose`), //属性页面提示
 				attrValue: "", //已选属性
 				animated: false, //购物车动画
 				id: 0, //商品id
@@ -654,7 +645,7 @@
 			if (!options.id) {
 				this.showSkeleton = false;
 				return that.$util.Tips({
-					title: "缺少参数无法查看商品",
+					title: this.$t(`missing_parameters`),
 				}, {
 					tab: 3,
 					url: 1,
@@ -696,7 +687,7 @@
 				const clipboard = new ClipboardJS(".copy-data");
 				clipboard.on("success", () => {
 					this.$util.Tips({
-						title: "复制成功",
+						title: this.$t(`copy_success`),
 					});
 				});
 				// #endif
@@ -763,14 +754,14 @@
 					imageUrl: that.storeInfo.small_image,
 					success: function(res) {
 						uni.showToast({
-							title: "分享成功",
+							title: this.$t(`success_share`),
 							icon: "success",
 						});
 						that.posters = false;
 					},
 					fail: function(err) {
 						uni.showToast({
-							title: "分享失败",
+							title: this.$t(`failed_share`),
 							icon: "none",
 							duration: 2000,
 						});
@@ -956,7 +947,7 @@
 				// console.log(productSelect)
 				if (!productSelect) {
 					this.$util.Tips({
-						title: "暂无该产品,重新选择",
+						title: this.$t(`no_product_select`),
 						success: () => {
 							this.a = true
 							this.attr.productSelect.stock = 0
@@ -980,7 +971,7 @@
 						productSelect.vip_price
 					);
 					this.$set(this, "attrValue", res);
-					this.$set(this, "attrTxt", "已选择");
+					this.$set(this, "attrTxt", this.$t(`chosen`));
 				} else {
 					this.$set(this.attr.productSelect, "image", productSelect.image);
 					this.$set(this.attr.productSelect, "price", productSelect.price);
@@ -993,7 +984,7 @@
 						this.storeInfo.vip_price
 					);
 					this.$set(this, "attrValue", "");
-					this.$set(this, "attrTxt", "请选择");
+					this.$set(this, "attrTxt", this.$t(`please_choose`));
 				}
 			},
 			/**
@@ -1094,9 +1085,9 @@
 							"diff",
 							that.$util.$h.Sub(storeInfo.price, storeInfo.vip_price)
 						);
-						var navList = ["商品", "详情"];
+						var navList = [this.$t(`commodity`), this.$t(`Detail`)];
 						if (res.data.replyCount) {
-							navList.splice(1, 0, "评价");
+							navList.splice(1, 0, this.$t(`assess`));
 						}
 						// if (goodArray.length) {
 						// 	navList.splice(-1, 0, '推荐');
@@ -1195,7 +1186,7 @@
 			showMaoLocation: function() {
 				if (!this.systemStore.latitude || !this.systemStore.longitude)
 					return this.$util.Tips({
-						title: "缺少经纬度信息无法查看地图！",
+						title: this.$t(`not_view_map`),
 					});
 				uni.openLocation({
 					latitude: parseFloat(this.systemStore.latitude),
@@ -1241,7 +1232,7 @@
 						"vip_price",
 						productSelect.vip_price
 					);
-					this.$set(this, "attrTxt", "已选择");
+					this.$set(this, "attrTxt", this.$t(`chosen`));
 				} else if (!productSelect && productAttr.length) {
 					this.$set(
 						this.attr.productSelect,
@@ -1259,7 +1250,7 @@
 						this.storeInfo.vip_price
 					);
 					this.$set(this, "attrValue", "");
-					this.$set(this, "attrTxt", "请选择");
+					this.$set(this, "attrTxt", this.$t(`please_choose`));
 				} else if (!productSelect && !productAttr.length) {
 					this.$set(
 						this.attr.productSelect,
@@ -1281,7 +1272,7 @@
 						this.storeInfo.vip_price
 					);
 					this.$set(this, "attrValue", "");
-					this.$set(this, "attrTxt", "请选择");
+					this.$set(this, "attrTxt", this.$t(`please_choose`));
 				}
 			},
 			/**
@@ -1438,13 +1429,13 @@
 					that.isOpen === true
 				)
 					return that.$util.Tips({
-						title: "产品库存不足，请选择其它属性",
+						title: that.$t(`inventory_shortage`),
 					});
 				if (that.attr.productSelect.cart_num <= 0) {
 					that.attr.productSelect.cart_num = 1;
 					that.isOpen = false;
 					return that.$util.Tips({
-						title: "请先选择数量",
+						title: that.$t(`select_quantity`),
 					});
 				}
 				let q = {
@@ -1462,12 +1453,12 @@
 						that.attr.cartAttr = false;
 						if (news) {
 							uni.navigateTo({
-								url: "/pages/users/order_confirm/index?new=1&cartId=" +
+								url: "/pages/goods/order_confirm/index?new=1&cartId=" +
 									res.data.cartId,
 							});
 						} else {
 							that.$util.Tips({
-								title: "添加购物车成功",
+								title: that.$t(`added_successfully`),
 								success: () => {
 									that.getCartCount(true);
 								},
@@ -1560,6 +1551,7 @@
 			// 分享关闭
 			listenerActionClose: function() {
 				this.posters = false;
+				this.posterImageStatus = false;
 			},
 			//隐藏海报
 			posterImageClose: function() {
@@ -1589,13 +1581,13 @@
 										success: function(res) {
 											that.posterImageClose();
 											that.$util.Tips({
-												title: "保存成功",
+												title: that.$t(`success`),
 												icon: "success",
 											});
 										},
 										fail: function(res) {
 											that.$util.Tips({
-												title: "保存失败",
+												title: that.$t(`failed`),
 											});
 										},
 									});
@@ -1607,13 +1599,13 @@
 								success: function(res) {
 									that.posterImageClose();
 									that.$util.Tips({
-										title: "保存成功",
+										title: that.$t(`success`),
 										icon: "success",
 									});
 								},
 								fail: function(res) {
 									that.$util.Tips({
-										title: "保存失败",
+										title: that.$t(`failed`),
 									});
 								},
 							});
@@ -1630,13 +1622,13 @@
 					success: function(res) {
 						that.posterImageClose();
 						that.$util.Tips({
-							title: "保存成功",
+							title: that.$t(`success`),
 							icon: "success",
 						});
 					},
 					fail: function(res) {
 						that.$util.Tips({
-							title: "保存失败",
+							title: that.$t(`failed`),
 						});
 					},
 				});
@@ -1708,7 +1700,7 @@
 					this.$set(this.attr.productSelect, "stock", productSelect.stock);
 					this.$set(this.attr.productSelect, "unique", productSelect.unique);
 					this.$set(this.attr.productSelect, "vipPrice", productSelect.vipPrice);
-					this.$set(this, "attrTxt", "已选择");
+					this.$set(this, "attrTxt", this.$t(`chosen`));
 					this.$set(this, "attrValue", productSelect.suk);
 				}
 			},
@@ -2316,6 +2308,12 @@
 	.introduce {
 		min-height: 44rpx;
 	}
+	
+	.limit_good {
+		font-size: 16rpx;
+		margin: 10rpx 30rpx;
+		color: red;
+	}
 
 	.attrImg {
 		width: 66rpx;
@@ -2327,7 +2325,7 @@
 
 	.switchTxt {
 		height: 60rpx;
-		flex: 1;
+		// flex: 1;
 		line-height: 60rpx;
 		box-sizing: border-box;
 		background: #eeeeee;

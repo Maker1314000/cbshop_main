@@ -25,7 +25,7 @@
 			<!-- #ifndef MP || APP-PLUS -->
 			<div class="preserve acea-row row-center-wrapper">
 				<div class="line"></div>
-				<div class="tip">长按保存图片</div>
+				<div class="tip">{{$t(`long_save_pic`)}}</div>
 				<div class="line"></div>
 			</div>
 			<!-- #endif -->
@@ -174,7 +174,7 @@
 		// #ifdef MP
 		onShareAppMessage() {
 			return {
-				title: this.userInfo.nickname + '-分销海报',
+				title: this.userInfo.nickname + '-' + this.$t(`distribution_poster`),
 				imageUrl: this.spreadList[0],
 				path: '/pages/index/index?spread=' + this.userInfo.uid,
 			};
@@ -203,7 +203,7 @@
 				let mpUrl = await this.downloadFilestoreImage(this.mpUrl)
 				// #endif
 				uni.showLoading({
-					title: '海报生成中',
+					title: this.$t(`poster_generated`),
 					mask: true
 				});
 				// #ifdef H5
@@ -231,7 +231,7 @@
 						// #ifdef MP
 						if(!that.posterImage.length){
 							return that.$util.Tips({
-								title: '小程序二维码需要发布正式版后才能获取到'
+								title: this.$t(`get_qr_code`)
 							});
 						}
 						// #endif
@@ -282,13 +282,13 @@
 										filePath: url,
 										success: function(res) {
 											that.$util.Tips({
-												title: '保存成功',
+												title: this.$t(`success`),
 												icon: 'success'
 											});
 										},
 										fail: function(res) {
 											that.$util.Tips({
-												title: '保存失败'
+												title: this.$t(`failed`),
 											});
 										}
 									});
@@ -299,13 +299,13 @@
 								filePath: url,
 								success: function(res) {
 									that.$util.Tips({
-										title: '保存成功',
+										title: this.$t(`success`),
 										icon: 'success'
 									});
 								},
 								fail: function(res) {
 									that.$util.Tips({
-										title: '保存失败'
+										title: this.$t(`failed`),
 									});
 								}
 							});
@@ -321,13 +321,13 @@
 					filePath: url,
 					success: function(res) {
 						that.$util.Tips({
-							title: '保存成功',
+							title: this.$t(`success`),
 							icon: 'success'
 						});
 					},
 					fail: function(res) {
 						that.$util.Tips({
-							title: '保存失败'
+							title: this.$t(`failed`),
 						});
 					}
 				});
@@ -355,8 +355,8 @@
 					if (this.isLogin) {
 						getUserInfo().then(res => {
 							let configAppMessage = {
-								desc: '分销海报',
-								title: res.data.nickname + '-分销海报',
+								desc: this.$t(`distribution_poster`),
+								title: res.data.nickname + '-' + this.$t(`distribution_poster`),
 								link: '/pages/index/index?spread=' + res.data.uid,
 								imgUrl: this.spreadList[0]
 							};
@@ -372,7 +372,7 @@
 			userSpreadBannerList: function() {
 				let that = this;
 				uni.showLoading({
-					title: '获取中',
+					title: this.$t(`getting`),
 					mask: true,
 				})
 				spreadBanner().then(res => {

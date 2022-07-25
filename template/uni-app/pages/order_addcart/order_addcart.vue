@@ -9,7 +9,7 @@
 			<view class='nav acea-row row-between-wrapper'>
 				<view>{{$t(`number_of_purchases`)}} <text class='num font-num'>{{cartCount}}</text></view>
 				<view v-if="cartList.valid.length > 0 || cartList.invalid.length > 0"
-					class='administrate acea-row row-center-wrapper' @click='manage'>{{ footerswitch ? '管理' : '取消'}}
+					class='administrate acea-row row-center-wrapper' @click='manage'>{{ footerswitch ? $t(`manage`) : $t(`cancel`)}}
 				</view>
 			</view>
 			<view v-if="(cartList.valid.length > 0 || cartList.invalid.length > 0) && canShow ">
@@ -39,7 +39,7 @@
 										</view>
 										<view class='infor line1' v-if="item.productInfo.attrInfo">
 											{{$t(`attributes`)}}：{{item.productInfo.attrInfo.suk}}</view>
-										<view class='money' v-if="item.attrStatus">￥{{item.truePrice}}</view>
+										<view class='money' v-if="item.attrStatus">{{$t(`money`)}}{{item.truePrice}}</view>
 										<view class="reElection acea-row row-between-wrapper" v-else>
 											<view class="title">{{$t(`re_select_product_specification`)}}</view>
 											<view class="reBnt cart-color acea-row row-center-wrapper"
@@ -99,8 +99,9 @@
 				</view>
 			</view>
 			<view class='noCart' v-if="cartList.valid.length == 0 && cartList.invalid.length == 0 && canShow">
-				<view class='pictrue'>
-					<image src='../../static/images/noCart.png'></image>
+				<view class='emptyBox'>
+					<image :src="imgHost + '/statics/images/no-thing.png'"></image>
+					<view class="tips">{{$t(`no_product_see`)}}</view>
 				</view>
 				<recommend :hostProduct='hostProduct'></recommend>
 			</view>
@@ -114,7 +115,7 @@
 					</checkbox-group>
 				</view>
 				<view class='money acea-row row-middle' v-if="footerswitch==true">
-					<text class='font-color'>￥{{selectCountPrice}}</text>
+					<text class='font-color'>{{$t(`money`)}}{{selectCountPrice}}</text>
 					<form @submit="subOrder">
 						<button class='placeOrder bg-color' formType="submit">{{$t(`order_now`)}}</button>
 					</form>
@@ -192,6 +193,7 @@
 	// #endif
 	import pageFooter from '@/components/pageFooter/index.vue'
 	import colors from "@/mixins/color";
+	import {HTTP_REQUEST_URL} from '@/config/app';
 	import {
 		getNavigation
 	} from '@/api/public.js'
@@ -208,6 +210,7 @@
 		mixins: [colors],
 		data() {
 			return {
+				imgHost:HTTP_REQUEST_URL,
 				is_diy: uni.getStorageSync('is_diy'),
 				canShow: false,
 				cartCount: 0,
@@ -228,12 +231,12 @@
 				hotLimit: 10,
 				loading: false,
 				loadend: false,
-				loadTitle: '我也是有底线的', //提示语
+				loadTitle: this.$t(`bottom_line`), //提示语
 				page: 1,
 				limit: 20,
 				loadingInvalid: false,
 				loadendInvalid: false,
-				loadTitleInvalid: '加载更多', //提示语
+				loadTitleInvalid: this.$t(`loading_more`), //提示语
 				pageInvalid: 1,
 				limitInvalid: 20,
 				attr: {
@@ -244,7 +247,7 @@
 				productValue: [], //系统属性
 				storeInfo: {},
 				attrValue: '', //已选属性
-				attrTxt: '请选择', //属性页面提示
+				attrTxt: this.$t(`please_choose`), //属性页面提示
 				cartId: 0,
 				product_id: 0,
 				sysHeight: sysHeight,
@@ -328,7 +331,7 @@
 					productSelect === undefined
 				)
 					return that.$util.Tips({
-						title: "产品库存不足，请选择其它"
+						title: this.$t(`inventory_shortage`)
 					});
 
 				let q = {
@@ -342,7 +345,7 @@
 					.then(function(res) {
 						that.attr.cartAttr = false;
 						that.$util.Tips({
-							title: "添加购物车成功",
+							title: this.$t(`added_successfully`),
 							success: () => {
 								that.loadend = false;
 								that.page = 1;
@@ -370,7 +373,7 @@
 			 */
 			getGoodsDetails: function(item) {
 				uni.showLoading({
-					title: '加载中',
+					title: this.$t(`Loading`),
 					mask: true
 				});
 				let that = this;
@@ -442,7 +445,7 @@
 					this.$set(this.attr.productSelect, "unique", productSelect.unique);
 					this.$set(this.attr.productSelect, "cart_num", 1);
 					this.$set(this, "attrValue", value.sort().join(","));
-					this.$set(this, "attrTxt", "已选择");
+					this.$set(this, "attrTxt", this.$t(`chosen`));
 				} else if (!productSelect && productAttr.length) {
 					this.$set(
 						this.attr.productSelect,
@@ -455,7 +458,7 @@
 					this.$set(this.attr.productSelect, "unique", "");
 					this.$set(this.attr.productSelect, "cart_num", 0);
 					this.$set(this, "attrValue", "");
-					this.$set(this, "attrTxt", "请选择");
+					this.$set(this, "attrTxt", this.$t(`please_choose`));
 				} else if (!productSelect && !productAttr.length) {
 					this.$set(
 						this.attr.productSelect,
@@ -472,7 +475,7 @@
 					);
 					this.$set(this.attr.productSelect, "cart_num", 1);
 					this.$set(this, "attrValue", "");
-					this.$set(this, "attrTxt", "请选择");
+					this.$set(this, "attrTxt", this.$t(`please_choose`));
 				}
 			},
 			attrVal(val) {
@@ -528,7 +531,7 @@
 					});
 				else
 					return that.$util.Tips({
-						title: '请选择产品'
+						title: this.$t(`select_product`)
 					});
 			},
 			getSelectValueProductId: function() {
@@ -562,7 +565,7 @@
 					});
 				} else {
 					return that.$util.Tips({
-						title: '请选择产品'
+						title: this.$t(`select_product`)
 					});
 				}
 			},
@@ -572,11 +575,11 @@
 					selectValue = that.selectValue;
 				if (selectValue.length > 0) {
 					uni.navigateTo({
-						url: '/pages/users/order_confirm/index?cartId=' + selectValue.join(',')
+						url: '/pages/goods/order_confirm/index?cartId=' + selectValue.join(',')
 					});
 				} else {
 					return that.$util.Tips({
-						title: '请选择产品'
+						title: this.$t(`select_product`)
 					});
 				}
 			},
@@ -794,7 +797,7 @@
 			},
 			async getCartList() {
 				uni.showLoading({
-					title: '加载中',
+					title: this.$t(`Loading`),
 					mask: true
 				});
 				let that = this;
@@ -876,12 +879,12 @@
 					let invalidList = that.$util.SplitArray(invalid, that.cartList.invalid);
 					that.$set(that.cartList, 'invalid', invalidList);
 					that.loadendInvalid = loadendInvalid;
-					that.loadTitleInvalid = loadendInvalid ? '我也是有底线的' : '加载更多';
+					that.loadTitleInvalid = loadendInvalid ? this.$t(`bottom_line`) : this.$t(`loading_more`);
 					that.pageInvalid = that.pageInvalid + 1;
 					that.loadingInvalid = false;
 				}).catch(res => {
 					that.loadingInvalid = false;
-					that.loadTitleInvalid = '加载更多';
+					that.loadTitleInvalid = this.$t(`loading_more`);
 				})
 
 			},
@@ -953,7 +956,7 @@
 				}
 				cartDel(ids).then(res => {
 					that.$util.Tips({
-						title: '清除成功'
+						title: this.$t(`clear_success`)
 					});
 					that.$set(that.cartList, 'invalid', []);
 					that.getCartNum();
@@ -1079,11 +1082,11 @@
 
 	.shoppingCart .nav .administrate {
 		font-size: 26rpx;
-		color: var(--view-theme);
+		color: #282828;
 		width: 110rpx;
 		height: 46rpx;
 		border-radius: 6rpx;
-		border: 1px solid var(--view-theme);
+		border: 1px solid #a4a4a4;
 	}
 
 	.shoppingCart .noCart {
@@ -1174,13 +1177,13 @@
 	}
 
 	.shoppingCart .list .item .picTxt .carnum view {
-		border: 1rpx solid var(--view-theme);
+		border: 1rpx solid #a4a4a4;
 		width: 66rpx;
 		text-align: center;
 		height: 100%;
 		line-height: 40rpx;
 		font-size: 28rpx;
-		color: var(--view-theme);
+		color: #a4a4a4;
 	}
 
 	.shoppingCart .list .item .picTxt .carnum .reduce {
@@ -1204,7 +1207,7 @@
 	}
 
 	.shoppingCart .list .item .picTxt .carnum .num {
-		color: var(--view-theme);
+		color: #282828;
 	}
 
 	.shoppingCart .invalidGoods {
@@ -1353,12 +1356,17 @@
 		/* 兼容 IOS>11.2 */
 		height: calc(100rpx + env(safe-area-inset-bottom));
 	}
-</style>
-<style>
-	/* 	@supports (bottom: constant(safe-area-inset-bottom)) or (bottom: env(safe-area-inset-bottom)){
-	.shoppingCart .footer{
-	bottom: calc(var(--window-bottom) + constant(safe-area-inset-bottom));
-	bottom: calc(var(--window-bottom) + env(safe-area-inset-bottom));
+	
+	.emptyBox{
+		text-align: center;
+		padding-top: 20rpx;
+		.tips{
+			color: #aaa;
+			font-size: 26rpx;
+		}
+		image {
+			width: 414rpx;
+			height: 304rpx;
+		}
 	}
-	} */
 </style>

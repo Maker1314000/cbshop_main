@@ -29,13 +29,13 @@ export default {
       list: [
         {
           name: '商城首页',
-          url: '/pages/users/order_list/index',
+          url: '/pages/goods/order_list/index',
           parameter: [{}],
           example: '/pages/activity/bargain/index',
         },
         {
           name: '商城首页',
-          url: '/pages/users/order_list/index',
+          url: '/pages/goods/order_list/index',
           parameter: [{}],
           example: '/pages/activity/bargain/index',
         },

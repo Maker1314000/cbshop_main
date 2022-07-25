@@ -20,8 +20,8 @@
 							</view>
 							<view class="name line1">{{item.title}}</view>
 							<view class="money">
-								<view class="x_money">¥<text class="num">{{item.min_price}}</text></view>
-								<view class="y_money">¥{{item.ot_price}}</view>
+								<view class="x_money">{{$t(`money`)}}<text class="num">{{item.min_price}}</text></view>
+								<view class="y_money">{{$t(`money`)}}{{item.ot_price}}</view>
 							</view>
 						</view>
 					</view>

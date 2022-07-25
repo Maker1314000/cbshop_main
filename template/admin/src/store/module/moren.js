@@ -229,7 +229,7 @@ export default {
                   },
                   {
                     title: '链接',
-                    value: '/pages/news_list/index',
+                    value: '/pages/extension/news_list/index',
                     maxlength: 999,
                     tips: '请填写链接',
                   },
@@ -376,7 +376,7 @@ export default {
                   },
                   {
                     title: '链接',
-                    value: '/pages/news_list/index',
+                    value: '/pages/extension/news_list/index',
                     maxlength: 999,
                     tips: '请填写链接',
                   },
@@ -734,7 +734,7 @@ export default {
               },
               {
                 title: '链接',
-                val: '/pages/live_list/index',
+                val: '/pages/columnGoods/live_list/index',
                 max: 999,
                 pla: '选填',
               },
@@ -766,7 +766,7 @@ export default {
               },
               {
                 title: '链接',
-                val: '/pages/live_list/index',
+                val: '/pages/columnGoods/live_list/index',
                 max: 999,
                 pla: '选填',
               },

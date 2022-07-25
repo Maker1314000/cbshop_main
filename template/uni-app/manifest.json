@@ -84,13 +84,13 @@
                     },
                     "weixin" : {
                         "__platform__" : [ "ios", "android" ],
-                        "appid" : "",
+                        "appid" : "wx277a269f3d736d67",
                         "UniversalLinks" : "https://bzapp.crmeb.net/uni-universallinks/__UNI__A3F1ED4/"
                     }
                 },
                 "share" : {
                     "weixin" : {
-                        "appid" : "",
+                        "appid" : "wx277a269f3d736d67",
                         "UniversalLinks" : "https://bzapp.crmeb.net/uni-universallinks/__UNI__A3F1ED4/"
                     }
                 },
@@ -104,8 +104,8 @@
                 "oauth" : {
                     "apple" : {},
                     "weixin" : {
-                        "appid" : "",
-                        "appsecret" : "",
+                        "appid" : "wx277a269f3d736d67",
+                        "appsecret" : "bd08741a055c2ecac5826ff1c048464b",
                         "UniversalLinks" : "https://bzapp.crmeb.net/uni-universallinks/__UNI__A3F1ED4/"
                     }
                 },
@@ -167,7 +167,7 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "wx1234567890",
+        "appid" : "wx3b82801238ca1b57",
         "setting" : {
             "urlCheck" : false,
             "minified" : true,

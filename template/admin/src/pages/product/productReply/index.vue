@@ -277,6 +277,7 @@ export default {
         .then((res) => {
           this.$Message.success(res.msg);
           this.tableList.splice(num, 1);
+          this.total = this.total - 1;
         })
         .catch((res) => {
           this.$Message.error(res.msg);

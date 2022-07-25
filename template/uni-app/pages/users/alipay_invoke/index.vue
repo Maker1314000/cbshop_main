@@ -10,23 +10,23 @@
 		<!-- #endif -->
 		<view v-else>
 			<view class="text-section">
-				<view>点击复制网址去浏览器中打开</view>
+				<view>{{$t(`copy_url_open`)}}</view>
 				<view class="link">{{ link }}</view>
 			</view>
 			<view class="button-section">
 				<!-- #ifdef H5 -->
-				<button class="button copy" :data-clipboard-text="link">点击复制</button>
+				<button class="button copy" :data-clipboard-text="link">{{$t(`click_to_copy`)}}</button>
 				<!-- #endif -->
 				<!-- #ifdef MP -->
-				<button class="button copy" @click="copyLink">点击复制</button>
+				<button class="button copy" @click="copyLink">{{$t(`click_to_copy`)}}</button>
 				<!-- #endif -->
-				<button class="button off" @click="goDetail">完成支付</button>
+				<button class="button off" @click="goDetail">{{$t(`complete_payment`)}}</button>
 			</view>
 		</view>
 		<!-- #ifdef H5 -->
 		<view v-show="hintShow" class="hint" @click="hintShow = false">
-			<view>点击右上角<text class="iconfont icon-gengduo"></text></view>
-			<view>选择 在浏览器 打开，去支付宝支付</view>
+			<view>{{$t(`click_right_corner`)}}<text class="iconfont icon-gengduo"></text></view>
+			<view>{{$t(`click_to_pay`)}}</view>
 		</view>
 		<!-- #endif -->
 		<home></home>
@@ -59,7 +59,7 @@
 				orderId: '',
 				link: '',
 				pay_key: '',
-				content: '正在支付中',
+				content: this.$t(`paying`),
 				formContent: ''
 			};
 		},
@@ -74,9 +74,9 @@
 			if (option.from) this.from = option.from || '';
 			if (!this.$wechat.isWeixin()) {
 				if (!this.payKey) {
-					this.content = '支付订单不存在，页面将在2秒后自动关闭！';
+					this.content = this.$t(`order_not_exist`);
 					uni.showToast({
-						title: '支付订单不存在,页面将在2秒后自动关闭',
+						title: this.$t(`order_not_exist`),
 						icon: 'none'
 					});
 					setTimeout(() => {
@@ -86,7 +86,7 @@
 					}, 2000);
 				}
 				uni.showLoading({
-					title: '正在支付中'
+					title: this.$t(`paying`)
 				});
 				aliPay(this.payKey, location.protocol + '//' + window.location.host + '/pages/index/index')
 					.then(res => {
@@ -116,7 +116,7 @@
 				const clipboard = new ClipboardJS(".copy");
 				clipboard.on("success", () => {
 					uni.showToast({
-						title: '复制成功'
+						title: this.$t(`copy_success`)
 					});
 				});
 				// #endif
@@ -129,13 +129,13 @@
 					data: this.link,
 					success() {
 						uni.showToast({
-							title: '复制成功',
+							title: this.$t(`copy_success`),
 							icon: 'success'
 						});
 					},
 					fail() {
 						uni.showToast({
-							title: '复制失败',
+							title: this.$t(`copy_failed`),
 							icon: 'none'
 						});
 					}
@@ -144,7 +144,7 @@
 			// #endif
 			goDetail() {
 				uni.navigateTo({
-					url: this.from === 'member' ? '/pages/annex/vip_paid/index' : `/pages/users/order_details/index?order_id=${this.orderId}`
+					url: this.from === 'member' ? '/pages/annex/vip_paid/index' : `/pages/goods/order_details/index?order_id=${this.orderId}`
 				});
 			}
 		}

@@ -637,7 +637,7 @@ export default {
           .then(async (res) => {
             let data = res.data;
             data.list.forEach((e) => {
-              e.url = `/pages/news_details/index?id=${e.id}`;
+              e.url = `/pages/extension/news_details/index?id=${e.id}`;
             });
             this.tableList = data.list;
             this.total = data.count;
@@ -733,10 +733,10 @@ export default {
               data.forEach((e) => {
                 if (e.hasOwnProperty('children')) {
                   e.children.forEach((j) => {
-                    j.url = `/pages/goods_list/index?sid=${j.id}&title=${j.cate_name}`;
+                    j.url = `/pages/goods/goods_list/index?sid=${j.id}&title=${j.cate_name}`;
                   });
                 }
-                e.url = `/pages/goods_list/index?cid=${e.id}&title=${e.cate_name}`;
+                e.url = `/pages/goods/goods_list/index?cid=${e.id}&title=${e.cate_name}`;
               });
               this.tableList = data;
             }

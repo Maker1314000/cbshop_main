@@ -3,70 +3,70 @@
 		<form @submit="formSubmit">
 			<view class="panel">
 				<view class="acea-row row-middle">
-					<view>抬头类型</view>
+					<view>{{$t(`type_of_header`)}}</view>
 					<radio-group name="header_type" @change="changeTitleType">
 						<label>
-							<radio class="disabled" value="1" :checked="header_type === '1'" /><text>个人</text>
+							<radio class="disabled" value="1" :checked="header_type === '1'" /><text>{{$t(`personal`)}}</text>
 						</label>
 						<label>
-							<radio value="2" :checked="header_type === '2'" /><text>企业</text>
+							<radio value="2" :checked="header_type === '2'" /><text>{{$t(`enterprise`)}}</text>
 						</label>
 					</radio-group>
 				</view>
 				<view class="acea-row row-middle">
-					<view>发票类型</view>
-					<input name="type" :value="type === '2' && header_type === '2' ? '增值税电子专用发票' : '增值税电子普通发票'" disabled
+					<view>{{$t(`invoice_type`)}}</view>
+					<input name="type" :value="type === '2' && header_type === '2' ? $t(`special_invoice`) : $t(`general_invoice`)" disabled
 						@click="callType" />
 					<text class="iconfont icon-xiangyou"></text>
 				</view>
 				<view class="acea-row row-middle">
-					<view>发票抬头</view>
-					<input name="name" :value="name" :placeholder="header_type === '1' ? '需要开具发票的姓名' : '需要开具发票的企业名称'" />
+					<view>{{$t(`invoice_head`)}}</view>
+					<input name="name" :value="name" :placeholder="header_type === '1' ? $t(`name_invoiced`) : $t(`needs_invoiced`)" />
 				</view>
 				<view v-show="header_type === '2'" class="acea-row row-middle">
-					<view>税号</view>
-					<input name="duty_number" :value="duty_number" placeholder="纳税人识别号" />
+					<view>{{$t(`tax_id`)}}</view>
+					<input name="duty_number" :value="duty_number" :placeholder="$t(`taxpayer_number`)" />
 				</view>
 				<view class="acea-row row-middle">
-					<view>手机号</view>
-					<input name="drawer_phone" :value="drawer_phone" placeholder="您的手机号" />
+					<view>{{$t(`cellphone_number`)}}</view>
+					<input name="drawer_phone" :value="drawer_phone" :placeholder="$t(`input_phone`)" />
 				</view>
 				<view class="acea-row row-middle">
-					<view>邮箱</view>
-					<input name="email" :value="email" placeholder="您的联系邮箱" />
+					<view>{{$t(`email`)}}</view>
+					<input name="email" :value="email" :placeholder="$t(`contact_email`)" />
 				</view>
 			</view>
 			<view v-show="type === '2'" class="panel">
 				<view class="acea-row row-middle">
-					<view>开户银行</view>
-					<input name="bank" :value="bank" placeholder="您的开户银行" />
+					<view>{{$t(`depositary_bank`)}}</view>
+					<input name="bank" :value="bank" :placeholder="$t(`your_bank`)" />
 				</view>
 				<view class="acea-row row-middle">
-					<view>银行账号</view>
-					<input name="card_number" :value="card_number" placeholder="您的银行账号" />
+					<view>{{$t(`bank_account`)}}</view>
+					<input name="card_number" :value="card_number" :placeholder="$t(`your_bank_account`)" />
 				</view>
 				<view class="acea-row row-middle">
-					<view>企业地址</view>
-					<input name="address" :value="address" placeholder="您所在的企业地址" />
+					<view>{{$t(`company_address`)}}</view>
+					<input name="address" :value="address" :placeholder="$t(`Your_business_address`)" />
 				</view>
 				<view class="acea-row row-middle">
-					<view>企业电话</view>
-					<input name="tell" :value="tell" placeholder="您的企业电话" />
+					<view>{{$t(`business_phone`)}}</view>
+					<input name="tell" :value="tell" :placeholder="$t(`your_business_phone`)" />
 				</view>
 			</view>
 			<checkbox-group class="acea-row row-middle panel" name="is_default">
 				<label>
-					<checkbox :checked="is_default.length !== 0" /><text>设置为默认抬头</text>
+					<checkbox :checked="is_default.length !== 0" /><text>{{$t(`set_default_header`)}}</text>
 				</label>
 			</checkbox-group>
 			<view class="button-section">
-				<button class="button" form-type="submit">保存</button>
-				<navigator class="navigator" :url="backUrl" hover-class="none">取消</navigator>
+				<button class="button" form-type="submit">{{$t(`save`)}}</button>
+				<navigator class="navigator" :url="backUrl" hover-class="none">{{$t(`cancel`)}}</navigator>
 			</view>
 		</form>
 		<view :class="{ mask: popupType }"></view>
 		<view class="popup" :class="{ on: popupType }">
-			<view class="title">发票类型选择<text class="iconfont icon-guanbi" @click="closeType"></text></view>
+			<view class="title">{{$t(`invoice_type_selection`)}}<text class="iconfont icon-guanbi" @click="closeType"></text></view>
 			<scroll-view scroll-y="true">
 				<radio-group name="invoice-type" @change="changeType">
 					<template v-for="item in invoiceTypeList">
@@ -103,14 +103,14 @@
 		data() {
 			return {
 				invoiceTypeList: [{
-						name: '增值税电子普通发票',
+						name: this.$t(`general_invoice`),
 						value: '1',
-						info: '纸质发票开出后将以邮寄形式交付'
+						info: this.$t(`paper_invoices`)
 					},
 					{
-						name: '增值税电子专用发票',
+						name: this.$t(`special_invoice`),
 						value: '2',
-						info: '纸质发票开出后将以邮寄形式交付'
+						info: this.$t(`paper_invoices`)
 					}
 				],
 				id: '', // 修改时为必须参数
@@ -137,7 +137,7 @@
 			backUrl() {
 				switch (this.from) {
 					case 'order_confirm':
-						return `/pages/users/order_confirm/index${this.urlQuery}`;
+						return `/pages/goods/order_confirm/index${this.urlQuery}`;
 						break;
 					default:
 						return '/pages/users/user_invoice_list/index?from=invoice_form';
@@ -183,7 +183,7 @@
 			// 获取发票数据
 			getInvoiceDetail() {
 				uni.showLoading({
-					title: '加载中'
+					title: this.$t(`Loading`)
 				});
 				invoiceDetail(this.id).then(res => {
 					uni.hideLoading();
@@ -214,31 +214,31 @@
 				if (formData.header_type === '1') {
 					if (!formData.name) {
 						return uni.showToast({
-							title: '请输入需要开具发票的姓名',
+							title: this.$t(`enter_name_invoiced`),
 							icon: 'none'
 						});
 					}
 					if (!formData.drawer_phone) {
 						return uni.showToast({
-							title: '请输入您的手机号',
+							title: this.$t(`enter_your_mobile`),
 							icon: 'none'
 						});
 					}
 					if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(formData.drawer_phone)) {
 						return uni.showToast({
-							title: '请正确输入您的手机号',
+							title: this.$t(`input_correct_phone`),
 							icon: 'none'
 						});
 					}
 					if (!formData.email) {
 						return uni.showToast({
-							title: '请输入您的联系邮箱',
+							title: this.$t(`enter_your_email`),
 							icon: 'none'
 						});
 					}
 					if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(formData.email)) {
 						return uni.showToast({
-							title: '请正确输入您的联系邮箱',
+							title: this.$t(`enter_correct_email`),
 							icon: 'none'
 						});
 					}
@@ -247,43 +247,43 @@
 					if (formData.type === '1') {
 						if (!formData.name) {
 							return uni.showToast({
-								title: '请输入需要开具发票的企业名称',
+								title: this.$t(`enter_need_invoiced`),
 								icon: 'none'
 							});
 						}
 						if (!formData.duty_number) {
 							return uni.showToast({
-								title: '请输入纳税人识别号',
+								title: this.$t(`enter_taxpayer_num`),
 								icon: 'none'
 							});
 						}
 						if (!/[0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}/.test(formData.duty_number)) {
 							return uni.showToast({
-								title: '请正确输入纳税人识别号',
+								title: this.$t(`enter_correct_taxpayer`),
 								icon: 'none'
 							});
 						}
 						if (!formData.drawer_phone) {
 							return uni.showToast({
-								title: '请输入您的手机号',
+								title: this.$t(`enter_your_mobile`),
 								icon: 'none'
 							});
 						}
 						if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(formData.drawer_phone)) {
 							return uni.showToast({
-								title: '请正确输入您的手机号',
+								title: this.$t(`input_correct_phone`),
 								icon: 'none'
 							});
 						}
 						if (!formData.email) {
 							return uni.showToast({
-								title: '请输入您的联系邮箱',
+								title: this.$t(`enter_your_email`),
 								icon: 'none'
 							});
 						}
 						if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(formData.email)) {
 							return uni.showToast({
-								title: '请正确输入您的联系邮箱',
+								title: this.$t(`enter_correct_email`),
 								icon: 'none'
 							});
 						}
@@ -291,73 +291,73 @@
 					if (formData.type === '2') {
 						if (!formData.name) {
 							return uni.showToast({
-								title: '请输入需要开具发票的企业名称',
+								title: this.$t(`enter_need_invoiced`),
 								icon: 'none'
 							});
 						}
 						if (!formData.duty_number) {
 							return uni.showToast({
-								title: '请输入纳税人识别号',
+								title: this.$t(`enter_taxpayer_num`),
 								icon: 'none'
 							});
 						}
 						if (!/[0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}/.test(formData.duty_number)) {
 							return uni.showToast({
-								title: '请正确输入纳税人识别号',
+								title: this.$t(`enter_correct_taxpayer`),
 								icon: 'none'
 							});
 						}
 						if (!formData.drawer_phone) {
 							return uni.showToast({
-								title: '请输入您的手机号',
+								title: this.$t(`enter_your_mobile`),
 								icon: 'none'
 							});
 						}
 						if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(formData.drawer_phone)) {
 							return uni.showToast({
-								title: '请正确输入您的手机号',
+								title: this.$t(`input_correct_phone`),
 								icon: 'none'
 							});
 						}
 						if (!formData.email) {
 							return uni.showToast({
-								title: '请输入您的联系邮箱',
+								title: this.$t(`enter_your_email`),
 								icon: 'none'
 							});
 						}
 						if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(formData.email)) {
 							return uni.showToast({
-								title: '请正确输入您的联系邮箱',
+								title: this.$t(`enter_correct_email`),
 								icon: 'none'
 							});
 						}
 						if (!formData.bank) {
 							return uni.showToast({
-								title: '请输入您的开户银行',
+								title: this.$t(`enter_account_bank`),
 								icon: 'none'
 							});
 						}
 						if (!formData.card_number) {
 							return uni.showToast({
-								title: '请输入您的银行账号',
+								title: this.$t(`enter_bank_num`),
 								icon: 'none'
 							});
 						}
 						if (!/^\d{16}|\d{19}$/.test(formData.card_number)) {
 							return uni.showToast({
-								title: '请正确输入您的银行账号',
+								title: this.$t(`enter_correct_bank`),
 								icon: 'none'
 							});
 						}
 						if (!formData.address) {
 							return uni.showToast({
-								title: '请输入您所在的企业地址',
+								title: this.$t(`enter_business_address`),
 								icon: 'none'
 							});
 						}
 						if (!formData.tell) {
 							return uni.showToast({
-								title: '请输入您的企业电话',
+								title: this.$t(`enter_business_phone`),
 								icon: 'none'
 							});
 						}
@@ -366,7 +366,7 @@
 				formData.is_default = formData.is_default.length;
 				formData.id = this.id;
 				uni.showLoading({
-					title: '保存中'
+					title: this.$t(`saving`)
 				});
 				invoiceSave(formData).then(res => {
 					let that = this;
@@ -378,22 +378,22 @@
 								case 'order_confirm':
 									if (that.id) {
 										uni.navigateTo({
-											url: `/pages/users/order_confirm/index${that.urlQuery}&invoice_id=${that.id}&invoice_type=${formData.type}`
+											url: `/pages/goods/order_confirm/index${that.urlQuery}&invoice_id=${that.id}&invoice_type=${formData.type}`
 										})
 									} else {
 										uni.navigateTo({
-											url: `/pages/users/order_confirm/index${that.urlQuery}&invoice_id=${res.data.id}&invoice_type=${formData.type}`
+											url: `/pages/goods/order_confirm/index${that.urlQuery}&invoice_id=${res.data.id}&invoice_type=${formData.type}`
 										})
 									}
 									break;
 								case 'order_details':
 									if (that.id) {
 										uni.navigateTo({
-											url: `/pages/users/order_details/index?order_id=${that.order_id}&invoice_id=${that.id}`
+											url: `/pages/goods/order_details/index?order_id=${that.order_id}&invoice_id=${that.id}`
 										})
 									} else {
 										uni.navigateTo({
-											url: `/pages/users/order_details/index?order_id=${that.order_id}&invoice_id=${res.data.id}`
+											url: `/pages/goods/order_details/index?order_id=${that.order_id}&invoice_id=${res.data.id}`
 										})
 									}
 									break;
