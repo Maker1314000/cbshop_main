@@ -35,9 +35,7 @@
         <div>{{ row.extract_price }}</div>
       </template>
       <template slot-scope="{ row }" slot="pay_type">
-        <div v-for="item in payment" :key="item.value">
-          <span v-if="row.pay_type == item.value"> {{ item.title }} </span>
-        </div>
+          <span > {{ row.pay_type_name }} </span>
       </template>
       <template slot-scope="{ row }" slot="price">
         <div v-if="row.price >= 0" class="z-price">+{{ row.price }}</div>

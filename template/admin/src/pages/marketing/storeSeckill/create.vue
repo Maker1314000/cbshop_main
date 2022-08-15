@@ -712,7 +712,7 @@ export default {
           id: 0,
           product_id: row.id,
           temp_id: row.temp_id,
-          logistics: row.temp_id, //选择物流方式
+          logistics: row.logistics, //选择物流方式
           freight: row.freight, //运费设置
           postage: row.postage, //设置运费金额
           custom_form: row.custom_form, //自定义表单数据

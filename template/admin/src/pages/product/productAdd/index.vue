@@ -2542,6 +2542,7 @@ export default {
       }
       productGetTempKeysApi()
         .then((res) => {
+          console.log(res,'??')
           that.$videoCloud
             .videoUpload({
               type: res.data.type,

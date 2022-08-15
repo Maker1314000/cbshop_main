@@ -43,15 +43,6 @@ export default {
       component: () => import('@/pages/system/clear/index'),
     },
     {
-      path: 'system_upgradeclient/index',
-      name: `${pre}systemUpgradeclient`,
-      meta: {
-        auth: ['system-system-upgradeclient'],
-        title: '在线升级',
-      },
-      component: () => import('@/pages/system/systemUpgradeclient/index'),
-    },
-    {
       path: 'maintain/system_log/index',
       name: `${pre}systemLog`,
       meta: {
@@ -140,6 +131,15 @@ export default {
         title: '商业授权',
       },
       component: () => import('@/pages/system/auth/index'),
+    },
+    {
+      path: 'onlineUpgrade/index',
+      name: `${pre}upgradeclient`,
+      meta: {
+        auth: ['system-onlineUpgrade-index'],
+        title: '在线升级'
+      },
+      component: () => import('@/pages/system/onlineUpgrade/index')
     },
   ],
 };

@@ -93,6 +93,8 @@
           <a @click="copy(row)">复制</a>
           <Divider type="vertical" />
           <a @click="del(row, '删除砍价商品', index)">删除</a>
+          <Divider type="vertical" />
+          <a @click="viewInfo(row)">统计</a>
         </template>
       </Table>
       <div class="acea-row row-right page">
@@ -283,6 +285,11 @@ export default {
         .catch((res) => {
           this.$Message.error(res.msg);
         });
+    },
+    viewInfo(row) {
+      this.$router.push({
+        path: '/admin/marketing/store_bargain/statistics/' + row.id,
+      });
     },
     // 列表
     getList() {

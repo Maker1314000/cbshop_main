@@ -569,3 +569,90 @@ export function saveCrmebCopyRight(data) {
       data
   });
 }
+
+/**
+ * @description 升级包 -- 列表
+ * @param data
+ */
+ export function upgradeListApi (params) {
+  return request({
+      url: '/system/upgrade/list',
+      method: 'get',
+      params
+  })
+}
+
+/**
+* @description 升级进度
+*/
+export function upgradeProgressApi() {
+  return request({
+      url: `/system/upgrade_progress`,
+      method: 'get'
+  });
+}
+
+/**
+* @description 升级协议
+*/
+export function upgradeAgreementApi() {
+  return request({
+      url: `/system/upgrade/agreement`,
+      method: 'get'
+  });
+}
+
+/**
+* @description 升级状态
+*/
+export function upgradeStatusApi() {
+  return request({
+      url: `/system/upgrade_status`,
+      method: 'get'
+  });
+}
+
+/**
+ * @description 升级包 -- 升级记录
+ * @param data
+ */
+ export function upgradeLogListApi (params) {
+  return request({
+      url: '/system/upgrade_log/list',
+      method: 'get',
+      params
+  })
+}
+
+/**
+ * 导出备份文件
+ */
+ export function upgradeExportApi(id) {
+  return request({
+    url: `system/upgrade_export/${id}`,
+    method: 'get',
+    responseType: 'blob'
+  });
+}
+
+/**
+ * @description 下载升级包
+ */
+ export function downloadApi(params) {
+  return request({
+    url: '/system/upgrade_download/'+params,
+    method: 'POST',
+  });
+}
+
+/**
+ * @description 升级包 -- 可升级列表
+ * @param data
+ */
+ export function upgradeableListApi (params) {
+  return request({
+      url: '/system/upgradeable/list',
+      method: 'get',
+      params
+  })
+}

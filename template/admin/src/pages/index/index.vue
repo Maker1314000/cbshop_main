@@ -8,6 +8,8 @@
     <visit-chart ref="visitChart" />
     <!--用户-->
     <user-chart ref="userChart" />
+    <!--版本升级-->
+    <upgrade v-if="force_reminder == 1"/>
   </div>
 </template>
 
@@ -22,6 +24,8 @@ import { checkAuth } from '@/api/index';
 import { auth } from '@/api/system';
 import { Notice } from 'iview';
 import { getCookies, setCookies } from '@/libs/util';
+import { upgradeStatusApi } from '@/api/system';
+
 
 export default {
   name: 'index',
@@ -37,6 +41,7 @@ export default {
     return {
       visitType: 'day', // day, month, year
       visitDate: [new Date(), new Date()],
+      force_reminder: null,
     };
   },
   mounted() {
@@ -70,6 +75,7 @@ export default {
     getAuth() {
       auth()
         .then((res) => {
+          this.force_reminder = res.data.force_reminder
           let data = res.data || {};
           if (data.auth_code && data.auth) {
             this.authCode = data.auth_code;

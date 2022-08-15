@@ -48,11 +48,22 @@ service.interceptors.request.use(
 // response interceptor
 service.interceptors.response.use(
   (response) => {
-    let status = response.data ? response.data.status : 0;
+    console.log(response,'response');
+    let obj = {}
+    if (!!response.data){
+      if(typeof response.data == 'string'){
+         obj = JSON.parse(response.data)
+      }else{
+         obj = response.data
+      }
+     }
+     console.log('obj:',obj);
+    let status = response.data ? obj.status : 0;
+    // let status = response.data ? response.data.status : 0;
     const code = status;
     switch (code) {
       case 200:
-        return response.data;
+        return obj;
       case 110002:
       case 110003:
       case 110004:
@@ -72,7 +83,7 @@ service.interceptors.response.use(
         router.replace({ path: '/kefu' });
         break;
       default:
-        return Promise.reject(response.data || { msg: '未知错误' });
+        return Promise.reject(obj || { msg: '未知错误' });
     }
   },
   (error) => {

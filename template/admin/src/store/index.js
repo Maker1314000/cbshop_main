@@ -26,6 +26,7 @@ import fresh from './module/fresh';
 import kefu from './module/kefu';
 import integralOrder from './module/integralOrder';
 import mobildConfig from './module/mobildConfig';
+import upgrade from "./module/upgrade"
 
 Vue.use(Vuex);
 // 持久化储存
@@ -76,5 +77,6 @@ export default new Vuex.Store({
     kefu,
     mobildConfig,
     integralOrder,
+    upgrade
   },
 });

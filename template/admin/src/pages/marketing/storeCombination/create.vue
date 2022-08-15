@@ -245,6 +245,24 @@
                 </FormItem>
               </Col>
               <Col span="24">
+                <FormItem label="团长返佣比例" prop="head_commission">
+                  <div class="acea-row row-middle">
+                    <InputNumber
+                      :min="0"
+                      :max="100"
+                      placeholder="团长返佣比例"
+                      :precision="0"
+                      element-id="head_commission"
+                      v-model="formValidate.head_commission"
+                      class="perW20"
+                    />
+                    <div class="ml10 grey">
+                      拼团成功后，团长收货时会给团长返佣金，0-100整数，0为不返团长佣金，100为返回全部实际支付金额
+                    </div>
+                  </div>
+                </FormItem>
+              </Col>
+              <Col span="24">
                 <FormItem label="单位：" prop="unit_name" label-for="unit_name">
                   <Input
                     placeholder="请输入单位"
@@ -254,14 +272,6 @@
                   />
                 </FormItem>
               </Col>
-              <!--                            <Col span="24">-->
-              <!--                                <FormItem label="虚拟成团比例(%)：" prop="virtual">-->
-              <!--                                    <div class="acea-row row-middle">-->
-              <!--                                        <InputNumber :min="0" placeholder="请输入虚拟成团比例" :precision="0" :max="100" element-id="virtual"  v-model="formValidate.virtual" class="perW10" :formatter="value => `${value}%`" :parser="value => value.replace('%', '')"/>-->
-              <!--                                        <div class="ml10 grey">拼团结束前若用户发起的活动未成团，并且现有人数比例大于设置比例，自动补齐人数，拼团成功</div>-->
-              <!--                                    </div>-->
-              <!--                                </FormItem>-->
-              <!--                            </Col>-->
               <Col span="24">
                 <FormItem label="排序：">
                   <InputNumber
@@ -271,6 +281,14 @@
                     v-model="formValidate.sort"
                     class="perW10"
                   />
+                </FormItem>
+              </Col>
+              <Col span="24">
+                <FormItem label="是否返佣：" props="is_commission" label-for="is_commission">
+                  <RadioGroup element-id="is_commission" v-model="formValidate.is_commission">
+                    <Radio :label="1" class="radio">开启</Radio>
+                    <Radio :label="0">关闭</Radio>
+                  </RadioGroup>
                 </FormItem>
               </Col>
               <Col span="24">
@@ -473,6 +491,7 @@ export default {
         sort: 0,
         postage: 0,
         is_postage: 0,
+        is_commission: 0,
         is_host: 0,
         is_show: 0,
         section_time: [],
@@ -487,6 +506,7 @@ export default {
         items: [],
         virtual: 100,
         virtualPeople: 0,
+        head_commission: 0,
         logistics: ['1'], //选择物流方式
         freight: 2, //运费设置
         postage: 1, //设置运费金额
@@ -734,6 +754,7 @@ export default {
           sort: row.sort,
           postage: row.postage,
           is_postage: row.is_postage,
+          is_commission: 0,
           is_host: row.is_hot,
           is_show: 0,
           section_time: [],
@@ -746,11 +767,12 @@ export default {
           temp_id: row.temp_id,
           virtual: 100,
           virtualPeople: 0,
-          logistics: row.temp_id, //选择物流方式
+          logistics: row.logistics, //选择物流方式
           freight: row.freight, //运费设置
           postage: row.postage, //设置运费金额
           custom_form: row.custom_form, //自定义表单数据
           virtual_type: row.virtual_type, //虚拟商品类型
+          head_commission: 0
         };
         this.productAttrs(row);
       }, 500);

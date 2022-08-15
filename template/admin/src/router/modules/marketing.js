@@ -49,6 +49,14 @@ export default {
       component: () => import('@/pages/marketing/storeCombination/create'),
     },
     {
+      path: 'store_combination/statistics/:id?',
+      name: `${pre}storeCombinationStatistics`,
+      meta: {
+        title: '拼团统计',
+      },
+      component: () => import('@/pages/marketing/storeCombination/statistics'),
+    },
+    {
       path: 'store_coupon/index',
       name: `${pre}storeCoupon`,
       meta: {
@@ -123,6 +131,14 @@ export default {
       component: () => import('@/pages/marketing/storeBargain/create'),
     },
     {
+      path: 'store_bargain/statistics/:id?',
+      name: `${pre}storeBargainStatistics`,
+      meta: {
+        title: '砍价统计',
+      },
+      component: () => import('@/pages/marketing/storeBargain/statistics'),
+    },
+    {
       path: 'store_seckill/index',
       name: `${pre}storeSeckill`,
       meta: {
@@ -149,6 +165,14 @@ export default {
         title: '添加秒杀',
       },
       component: () => import('@/pages/marketing/storeSeckill/create'),
+    },
+    {
+      path: 'store_seckill/statistics/:id?',
+      name: `${pre}storeSeckillStatistics`,
+      meta: {
+        title: '秒杀统计',
+      },
+      component: () => import('@/pages/marketing/storeSeckill/statistics'),
     },
     {
       path: `integral/system_config/:type?/:tab_id?`,

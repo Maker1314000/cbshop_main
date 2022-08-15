@@ -59,7 +59,7 @@
         </Row>
         <Row type="flex" class="mb20">
           <Col>
-            <Button v-auth="['marketing-store_seckill-create']" type="primary" icon="md-add" @click="add" class="mr10"
+            <Button v-auth="['marketing-store_integral-create']" type="primary" icon="md-add" @click="add" class="mr10"
               >添加积分商品</Button
             >
             <!-- <Button
