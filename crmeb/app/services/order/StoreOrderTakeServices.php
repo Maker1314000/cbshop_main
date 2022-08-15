@@ -13,6 +13,8 @@ namespace app\services\order;
 
 
 use app\dao\order\StoreOrderDao;
+use app\services\activity\combination\StoreCombinationServices;
+use app\services\activity\combination\StorePinkServices;
 use app\services\BaseServices;
 use app\services\user\member\MemberCardServices;
 use app\services\user\UserBillServices;
@@ -204,7 +206,13 @@ class StoreOrderTakeServices extends BaseServices
         }
         // 营销产品不返佣金
         if (isset($orderInfo['combination_id']) && $orderInfo['combination_id']) {
-            return true;
+            //检测拼团是否参与返佣
+            /** @var StoreCombinationServices $combinationServices */
+            $combinationServices = app()->make(StoreCombinationServices::class);
+            $isCommission = $combinationServices->value(['id' => $orderInfo['combination_id']], 'is_commission');
+            if (!$isCommission) {
+                return true;
+            }
         }
         if (isset($orderInfo['seckill_id']) && $orderInfo['seckill_id']) {
             return true;
@@ -276,6 +284,8 @@ class StoreOrderTakeServices extends BaseServices
      */
     public function backOrderBrokerage($orderInfo, $userInfo)
     {
+        /** @var UserServices $userServices */
+        $userServices = app()->make(UserServices::class);
         // 当前订单｜用户不存在  直接返回
         if (!$orderInfo || !$userInfo) {
             return true;
@@ -285,7 +295,33 @@ class StoreOrderTakeServices extends BaseServices
 
         // 营销产品不返佣金
         if (isset($orderInfo['combination_id']) && $orderInfo['combination_id']) {
-            return true;
+            //检测拼团是否参与返佣
+            /** @var StoreCombinationServices $combinationServices */
+            $combinationServices = app()->make(StoreCombinationServices::class);
+            $combinationInfo = $combinationServices->getOne(['id' => $orderInfo['combination_id']], 'is_commission,head_commission');
+            if ($combinationInfo['head_commission']) {
+                /** @var StorePinkServices $pinkServices */
+                $pinkServices = app()->make(StorePinkServices::class);
+                $pinkMasterUid = $pinkServices->value(['id' => $orderInfo['pink_id']], 'uid');
+                if ($orderInfo['uid'] == $pinkMasterUid && $userServices->checkUserPromoter($pinkMasterUid)) {
+                    $pinkMasterPrice = bcmul((string)$orderInfo['pay_price'], bcdiv((string)$combinationInfo['head_commission'], 100, 2), 2);
+                    $userServices->bcInc($pinkMasterUid, 'brokerage_price', $pinkMasterPrice, 'uid');
+                    //冻结时间
+                    $broken_time = intval(sys_config('extract_time'));
+                    $frozen_time = time() + $broken_time * 86400;
+                    // 添加佣金记录
+                    /** @var UserBrokerageServices $userBrokerageServices */
+                    $userBrokerageServices = app()->make(UserBrokerageServices::class);
+                    //团长返佣
+                    $userBrokerageServices->income('get_pink_master_brokerage', $pinkMasterUid, [
+                        'number' => floatval($pinkMasterPrice),
+                        'frozen_time' => $frozen_time
+                    ], bcadd((string)$userInfo['brokerage_price'],$pinkMasterPrice,2), $orderInfo['id']);
+                }
+            }
+            if (!$combinationInfo['is_commission']) {
+                return true;
+            }
         }
         if (isset($orderInfo['seckill_id']) && $orderInfo['seckill_id']) {
             return true;
@@ -309,8 +345,6 @@ class StoreOrderTakeServices extends BaseServices
             $one_spread_uid = $orderInfo['spread_uid'];
         }
         //检测是否是分销员
-        /** @var UserServices $userServices */
-        $userServices = app()->make(UserServices::class);
         if (!$userServices->checkUserPromoter($one_spread_uid)) {
             return $this->backOrderBrokerageTwo($orderInfo, $userInfo, $isSelfBrokerage);
         }

@@ -2427,7 +2427,7 @@ HTML;
      */
     public function autoComment()
     {
-        //自动收货天数
+        //自动评价天数
         $systemCommentTime = (int)sys_config('system_comment_time', 0);
         //0为取消自动默认好评功能
         if ($systemCommentTime == 0) {

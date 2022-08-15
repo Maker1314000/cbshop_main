@@ -65,13 +65,13 @@ class OrderPayServices
         }
         $site_name = sys_config('site_name');
         if (isset($orderInfo['member_type'])) {
-            $body = Str::substrUTf8($site_name . '--' . $orderInfo['member_type'], 30);
+            $body = Str::substrUTf8($site_name . '--' . $orderInfo['member_type'], 20);
             $successAction = "member";
         } else {
             /** @var StoreOrderCartInfoServices $orderInfoServices */
             $orderInfoServices = app()->make(StoreOrderCartInfoServices::class);
             $body = $orderInfoServices->getCarIdByProductTitle((int)$orderInfo['id'], $orderInfo['cart_id']);
-            $body = Str::substrUTf8($site_name . '--' . $body, 30);
+            $body = Str::substrUTf8($site_name . '--' . $body, 20);
             $successAction = "product";
         }
 

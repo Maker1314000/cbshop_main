@@ -583,7 +583,7 @@ class StoreCombinationServices extends BaseServices
 
         /** @var StoreOrderServices $orderServices */
         $orderServices = app()->make(StoreOrderServices::class);
-        $data['order_pid'] = $orderServices->value(['order_id'=>$data['current_pink_order']],'pid');
+        $data['order_pid'] = $orderServices->value(['order_id' => $data['current_pink_order']], 'pid');
 
         return $data;
     }
@@ -628,5 +628,63 @@ class StoreCombinationServices extends BaseServices
             throw new ApiException(410296);
         }
         return [$attrInfo, $unique, $productInfo];
+    }
+
+    /**
+     * 拼团统计
+     * @param $id
+     * @return array
+     */
+    public function combinationStatistics($id)
+    {
+        /** @var StorePinkServices $pinkServices */
+        $pinkServices = app()->make(StorePinkServices::class);
+        /** @var StoreOrderServices $orderServices */
+        $orderServices = app()->make(StoreOrderServices::class);
+        $people_count = $pinkServices->getDistinctCount([['cid', '=', $id]], 'uid', false);
+        $spread_count = $pinkServices->getDistinctCount([['cid', '=', $id], ['k_id', '>', 0]], 'uid', false);
+        $start_count = $pinkServices->count(['cid' => $id, 'k_id' => 0]);
+        $success_count = $pinkServices->count(['cid' => $id, 'k_id' => 0, 'status' => 2]);
+        $pay_price = $orderServices->sum(['combination_id' => $id, 'paid' => 1], 'pay_price', true);
+        $pay_count = $orderServices->count(['combination_id' => $id, 'paid' => 1]);
+        return compact('people_count', 'spread_count', 'start_count', 'success_count', 'pay_price', 'pay_count');
+    }
+
+    /**
+     * 拼团订单
+     * @param $id
+     * @param array $where
+     * @return array
+     */
+    public function combinationStatisticsOrder($id, $where = [])
+    {
+        /** @var StoreOrderServices $orderServices */
+        $orderServices = app()->make(StoreOrderServices::class);
+        [$page, $limit] = $this->getPageValue();
+        $list = $orderServices->combinationStatisticsOrder($id, $where, $page, $limit);
+        $where['combination_id'] = $id;
+        $count = $orderServices->count($where);
+        foreach ($list as &$item) {
+            if ($item['status'] == 0) {
+                if ($item['paid'] == 0) {
+                    $item['status'] = '未支付';
+                } else {
+                    $item['status'] = '未发货';
+                }
+            } elseif ($item['status'] == 1) {
+                $item['status'] = '待收货';
+            } elseif ($item['status'] == 2) {
+                $item['status'] = '待评价';
+            } elseif ($item['status'] == 3) {
+                $item['status'] = '已完成';
+            } elseif ($item['status'] == -2) {
+                $item['status'] = '已退款';
+            } else {
+                $item['status'] = '未知';
+            }
+            $item['add_time'] = date('Y-m-d H:i:s', $item['add_time']);
+            $item['pay_time'] = date('Y-m-d H:i:s', $item['pay_time']);
+        }
+        return compact('list', 'count');
     }
 }

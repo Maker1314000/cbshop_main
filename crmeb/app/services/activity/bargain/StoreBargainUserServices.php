@@ -239,6 +239,7 @@ class StoreBargainUserServices extends BaseServices
         $nums = $bargainUserHelpService->getNums();
         foreach ($list as &$item) {
             $item['num'] = $item['people_num'] - ($nums[$item['id']] ?? 0);
+            $item['already_num'] = $nums[$item['id']] ?? 0;
             $item['now_price'] = bcsub((string)$item['bargain_price'], (string)$item['price'], 2);
             $item['add_time'] = $item['add_time'] ? date('Y-m-d H:i:s', (int)$item['add_time']) : '';
             $item['datatime'] = $item['datatime'] ? date('Y-m-d H:i:s', (int)$item['datatime']) : '';

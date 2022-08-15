@@ -408,7 +408,8 @@ class StoreOrderController
                     break;
                 case 'routine':
                     if ($type == 1 || in_array($order['is_channel'], [0, 2, 3, 4])) {
-                        $order['order_id'] = mt_rand(100, 999) . '_' . $order['order_id'];
+                        $order['order_id'] = app()->make(StoreOrderCreateServices::class)->getNewOrderId('cp');
+                        $this->services->update($order['id'],['order_id'=>$order['order_id']],'id');
                     }
                     break;
                 case 'app':

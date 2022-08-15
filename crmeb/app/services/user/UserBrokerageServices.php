@@ -105,6 +105,13 @@ class UserBrokerageServices extends BaseServices
             'status' => 1,
             'pm' => 1
         ],
+        'get_pink_master_brokerage' => [
+            'title' => '获得拼团团长佣金',
+            'type' => 'pink_master_brokerage',
+            'mark' => '开团成功，奖励团长佣金{%number%}',
+            'status' => 1,
+            'pm' => 1
+        ],
     ];
 
 
@@ -181,7 +188,7 @@ class UserBrokerageServices extends BaseServices
         $id = (int)$order['id'];
         $where = [
             'uid' => [$order['spread_uid'], $order['spread_two_uid'], $order['staff_id'], $order['agent_id'], $order['division_id']],
-            'type' => ['self_brokerage', 'one_brokerage', 'two_brokerage', 'staff_brokerage', 'agent_brokerage', 'division_brokerage'],
+            'type' => ['self_brokerage', 'one_brokerage', 'two_brokerage', 'staff_brokerage', 'agent_brokerage', 'division_brokerage', 'pink_master_brokerage'],
             'link_id' => $id,
             'pm' => 1
         ];

@@ -285,7 +285,7 @@ class StoreBargainServices extends BaseServices
                 foreach ($detail as $k => $v) {
                     $valueNew[$count]['value' . ($k + 1)] = $v;
                 }
-                $valueNew[$count]['detail'] = json_encode(array_combine($head,$detail));
+                $valueNew[$count]['detail'] = json_encode(array_combine($head, $detail));
                 $valueNew[$count]['pic'] = $sukValue[$suk]['pic'] ?? '';
                 $valueNew[$count]['price'] = $sukValue[$suk]['price'] ? floatval($sukValue[$suk]['price']) : 0;
                 $valueNew[$count]['min_price'] = $min_price ? floatval($min_price) : 0;
@@ -497,7 +497,7 @@ class StoreBargainServices extends BaseServices
             && $request->uid() == $bargainUid //是自己砍价
             && $userBargainInfo['status'] != 3) { //未生成订单
             $userBargainInfo['bargainType'] = 6; //立即支付
-        } else{
+        } else {
             $userBargainInfo['bargainType'] = 1; //立即支付
         }
         $data['userBargainInfo'] = $userBargainInfo;
@@ -975,5 +975,80 @@ class StoreBargainServices extends BaseServices
             throw new ApiException(410296);
         }
         return [$attrInfo, $unique, $productInfo, $bargainUserInfo];
+    }
+
+    /**
+     * 砍价统计
+     * @param $id
+     * @return array
+     */
+    public function bargainStatistics($id)
+    {
+        /** @var StoreBargainUserServices $bargainUser */
+        $bargainUser = app()->make(StoreBargainUserServices::class);
+        /** @var StoreBargainUserHelpServices $bargainUserHelp */
+        $bargainUserHelp = app()->make(StoreBargainUserHelpServices::class);
+        /** @var StoreOrderServices $orderServices */
+        $orderServices = app()->make(StoreOrderServices::class);
+        $people_count = $bargainUserHelp->count(['bargain_id' => $id]);
+        $spread_count = $bargainUserHelp->count(['bargain_id' => $id, 'type' => 0]);
+        $start_count = $bargainUser->count(['bargain_id' => $id]);
+        $success_count = $bargainUser->count(['bargain_id' => $id, 'status' => 3]);
+        $pay_price = $orderServices->sum(['bargain_id' => $id, 'paid' => 1], 'pay_price', true);
+        $pay_count = $orderServices->count(['bargain_id' => $id, 'paid' => 1]);
+        $pay_rate = $start_count > 0 ? bcmul(bcdiv((string)$pay_count, (string)$start_count, 2), '100', 2) : 0;
+        return compact('people_count', 'spread_count', 'start_count', 'success_count', 'pay_price', 'pay_count', 'pay_rate');
+    }
+
+    /**
+     * 砍价列表
+     * @param $id
+     * @param array $where
+     * @return array
+     */
+    public function bargainStatisticsList($id, $where = [])
+    {
+        /** @var StoreBargainUserServices $bargainUser */
+        $bargainUser = app()->make(StoreBargainUserServices::class);
+        $where['bargain_id'] = $id;
+        return $bargainUser->bargainUserList($where);
+    }
+
+    /**
+     * 砍价订单
+     * @param $id
+     * @param array $where
+     * @return array
+     */
+    public function bargainStatisticsOrder($id, $where = [])
+    {
+        /** @var StoreOrderServices $orderServices */
+        $orderServices = app()->make(StoreOrderServices::class);
+        [$page, $limit] = $this->getPageValue();
+        $list = $orderServices->bargainStatisticsOrder($id, $where, $page, $limit);
+        $where['bargain_id'] = $id;
+        $count = $orderServices->count($where);
+        foreach ($list as &$item) {
+            if ($item['status'] == 0) {
+                if ($item['paid'] == 0) {
+                    $item['status'] = '未支付';
+                } else {
+                    $item['status'] = '未发货';
+                }
+            } elseif ($item['status'] == 1) {
+                $item['status'] = '待收货';
+            } elseif ($item['status'] == 2) {
+                $item['status'] = '待评价';
+            } elseif ($item['status'] == 3) {
+                $item['status'] = '已完成';
+            } elseif ($item['status'] == -2) {
+                $item['status'] = '已退款';
+            } else {
+                $item['status'] = '未知';
+            }
+            $item['add_time'] = date('Y-m-d H:i:s', $item['add_time']);
+            $item['pay_time'] = date('Y-m-d H:i:s', $item['pay_time']);
+        }
+        return compact('list', 'count');
     }
 }

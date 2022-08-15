@@ -183,7 +183,7 @@ class StoreOrderCreateServices extends BaseServices
 
         $orderInfo = [
             'uid' => $uid,
-            'order_id' => $this->getNewOrderId(),
+            'order_id' => $this->getNewOrderId('cp'),
             'real_name' => $addressInfo['real_name'],
             'user_phone' => $addressInfo['phone'],
             'user_address' => $addressInfo['province'] . ' ' . $addressInfo['city'] . ' ' . $addressInfo['district'] . ' ' . $addressInfo['detail'],

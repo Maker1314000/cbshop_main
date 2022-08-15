@@ -63,6 +63,8 @@ class StorePinkServices extends BaseServices
         $list = $this->dao->getList($where, $page, $limit);
         foreach ($list as &$item) {
             $item['count_people'] = $this->dao->count(['k_id' => $item['id']]) + 1;
+            $item['_add_time'] = $item['add_time'] ? date('Y-m-d H:i:s', (int)$item['add_time']) : '';
+            $item['_stop_time'] = $item['stop_time'] ? date('Y-m-d H:i:s', (int)$item['stop_time']) : '';
         }
         $count = $this->dao->count($where);
         return compact('list', 'count');

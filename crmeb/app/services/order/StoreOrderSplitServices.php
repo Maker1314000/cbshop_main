@@ -95,7 +95,7 @@ class StoreOrderSplitServices extends BaseServices
                     $order_data = $key == 'other' ? $orderInfoOld : $orderInfo;
                     $order_data['pid'] = $orderInfo['pid'] > 0 ? $orderInfo['pid'] : $id;
                     mt_srand();
-                    $order_data['order_id'] = $storeOrderCreateServices->getNewOrderId();
+                    $order_data['order_id'] = $storeOrderCreateServices->getNewOrderId('cp');
                     $order_data['cart_id'] = [];
                     $order_data['unique'] = $storeOrderCreateServices->getNewOrderId('');
                     $order_data['add_time'] = time();

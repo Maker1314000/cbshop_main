@@ -135,4 +135,41 @@ class StoreSeckill extends AuthController
         $list['data'] = sys_data('routine_seckill_time');
         return app('json')->success(compact('list'));
     }
+
+    /**
+     * 秒杀统计
+     * @return mixed
+     */
+    public function seckillStatistics($id)
+    {
+        $data = $this->services->seckillStatistics($id);
+        return app('json')->success($data);
+    }
+
+    /**
+     * 秒杀参与人统计
+     * @param $id
+     * @return mixed
+     */
+    public function seckillPeople($id)
+    {
+        [$keyword] = $this->request->getMore([
+            ['keyword', '']
+        ], true);
+        return app('json')->success($this->services->seckillPeople($id, $keyword));
+    }
+
+    /**
+     * 秒杀订单统计
+     * @param $id
+     * @return mixed
+     */
+    public function seckillOrder($id)
+    {
+        $where = $this->request->getMore([
+            ['real_name', ''],
+            ['status', '']
+        ]);
+        return app('json')->success($this->services->seckillOrder($id, $where));
+    }
 }

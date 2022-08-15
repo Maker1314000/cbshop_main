@@ -855,5 +855,75 @@ class StoreSeckillServices extends BaseServices
         return $this->dao->validProduct($id, $field);
     }
 
+    /**
+     * 秒杀统计
+     * @return array
+     */
+    public function seckillStatistics($id)
+    {
+        /** @var StoreOrderServices $orderServices */
+        $orderServices = app()->make(StoreOrderServices::class);
+        $pay_count = $orderServices->getDistinctCount([['seckill_id', '=', $id], ['paid', '=', 1]], 'uid', false);
+        $order_count = $orderServices->getDistinctCount([['seckill_id', '=', $id]], 'uid', false);
+        $all_price = $orderServices->sum([['seckill_id', '=', $id], ['refund_type', 'in', [0, 3]]], 'pay_price');
+        $pay_rate = $order_count > 0 ? bcmul(bcdiv((string)$pay_count, (string)$order_count, 2), '100', 2) : 0;
+        return compact('pay_count', 'order_count', 'all_price', 'pay_rate');
+    }
 
+    /**
+     * 秒杀参与人统计
+     * @param $id
+     * @param string $keyword
+     * @return array
+     */
+    public function seckillPeople($id, $keyword = '')
+    {
+        /** @var StoreOrderServices $orderServices */
+        $orderServices = app()->make(StoreOrderServices::class);
+        [$page, $limit] = $this->getPageValue();
+        $list = $orderServices->seckillPeople($id, $keyword, $page, $limit);
+        $count = $orderServices->getDistinctCount([['seckill_id', '=', $id], ['real_name|uid|user_phone', 'like', '%' . $keyword . '%']], 'uid', false);
+        foreach ($list as &$item) {
+            $item['add_time'] = date('Y-m-d H:i:s', $item['add_time']);
+        }
+        return compact('list', 'count');
+    }
+
+    /**
+     * 秒杀订单统计
+     * @param $id
+     * @param array $where
+     * @return array
+     */
+    public function seckillOrder($id, $where = [])
+    {
+        /** @var StoreOrderServices $orderServices */
+        $orderServices = app()->make(StoreOrderServices::class);
+        [$page, $limit] = $this->getPageValue();
+        $list = $orderServices->seckillOrder($id, $where, $page, $limit);
+        $where['seckill_id'] = $id;
+        $count = $orderServices->count($where);
+        foreach ($list as &$item) {
+            if ($item['status'] == 0) {
+                if ($item['paid'] == 0) {
+                    $item['status'] = '未支付';
+                } else {
+                    $item['status'] = '未发货';
+                }
+            } elseif ($item['status'] == 1) {
+                $item['status'] = '待收货';
+            } elseif ($item['status'] == 2) {
+                $item['status'] = '待评价';
+            } elseif ($item['status'] == 3) {
+                $item['status'] = '已完成';
+            } elseif ($item['status'] == -2) {
+                $item['status'] = '已退款';
+            } else {
+                $item['status'] = '未知';
+            }
+            $item['add_time'] = date('Y-m-d H:i:s', $item['add_time']);
+            $item['pay_time'] = date('Y-m-d H:i:s', $item['pay_time']);
+        }
+        return compact('list', 'count');
+    }
 }

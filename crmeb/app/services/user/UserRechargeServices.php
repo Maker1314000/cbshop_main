@@ -14,9 +14,11 @@ namespace app\services\user;
 
 use app\dao\user\UserRechargeDao;
 use app\services\BaseServices;
+use app\services\order\StoreOrderCreateServices;
 use app\services\pay\RechargeServices;
 use app\services\statistic\CapitalFlowServices;
 use app\services\system\config\SystemGroupDataServices;
+use app\services\wechat\WechatUserServices;
 use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
 use crmeb\services\FormBuilder as Form;
@@ -225,6 +227,15 @@ class UserRechargeServices extends BaseServices
                 $refund_data['wechat'] = true;
                 $pay->refund($UserRecharge['order_id'], $refund_data);
             } else {
+                $refund_data['trade_no'] = $UserRecharge['trade_no'];
+                $refund_data['order_id'] = $UserRecharge['order_id'];
+                /** @var WechatUserServices $wechatUserServices */
+                $wechatUserServices = app()->make(WechatUserServices::class);
+                $refund_data['open_id'] = $wechatUserServices->uidToOpenid((int)$UserRecharge['uid'],'routine') ?? '';
+                $refund_data['pay_new_weixin_open'] = sys_config('pay_new_weixin_open');
+                /** @var StoreOrderCreateServices $storeOrderCreateServices  */
+                $storeOrderCreateServices = app()->make(StoreOrderCreateServices::class);
+                $refund_data['refund_no'] = $storeOrderCreateServices->getNewOrderId('tk');
                 $pay->refund($UserRecharge['order_id'], $refund_data);
             }
         } catch (\Exception $e) {
@@ -386,7 +397,7 @@ class UserRechargeServices extends BaseServices
                     }
                 }
                 $recharge_data = [];
-                $recharge_data['order_id'] = $this->getOrderId();
+                $recharge_data['order_id'] = app()->make(StoreOrderCreateServices::class)->getNewOrderId('cz');
                 $recharge_data['uid'] = $uid;
                 $recharge_data['price'] = $price;
                 $recharge_data['recharge_type'] = $from;
@@ -417,7 +428,7 @@ class UserRechargeServices extends BaseServices
      * //TODO用户充值成功后
      * @param $orderId
      */
-    public function rechargeSuccess($orderId)
+    public function rechargeSuccess($orderId,array $other = [])
     {
         $order = $this->dao->getOne(['order_id' => $orderId, 'paid' => 0]);
         if (!$order) {
@@ -430,7 +441,7 @@ class UserRechargeServices extends BaseServices
             throw new ApiException(410032);
         }
         $price = bcadd((string)$order['price'], (string)$order['give_price'], 2);
-        if (!$this->dao->update($order['id'], ['paid' => 1, 'pay_time' => time()], 'id')) {
+        if (!$this->dao->update($order['id'], ['paid' => 1, 'pay_time' => time() ,'trade_no'=> $other['trade_no'] ?? ''], 'id')) {
             throw new ApiException(410286);
         }
         $now_money = bcadd((string)$user['now_money'], (string)$price, 2);

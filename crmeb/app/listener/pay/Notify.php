@@ -23,30 +23,28 @@ use crmeb\utils\Hook;
  */
 class Notify
 {
-
     /**
-     * @param $type
-     * @param $notify
+     * @param $event
      * @return bool
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function handle($type, $notify)
+    public function handle($event)
     {
-        if (isset($notify->out_trade_no)) {
-            if (isset($notify->attach) && $notify->attach) {
-                if (($count = strpos($notify->out_trade_no, '_')) !== false) {
-                    $notify->trade_no = $notify->out_trade_no;
-                    $notify->out_trade_no = substr($notify->out_trade_no, $count + 1);
-                }
-                return (new Hook(PayNotifyServices::class, $type))->listen($notify->attach, $notify->out_trade_no, $type == 'wechat' ? $notify->transaction_id : $notify->trade_no);
+        [$notify] = $event;
+
+        if (isset($notify['attach']) && $notify['attach']) {
+            if (($count = strpos($notify['out_trade_no'], '_')) !== false) {
+                $notify['out_trade_no'] = substr($notify['out_trade_no'], $count + 1);
             }
+            return (new Hook(PayNotifyServices::class, 'wechat'))->listen($notify['attach'], $notify['out_trade_no'], $notify['transaction_id']);
         }
 
-        if ($type === 'wechat' && isset($notify->out_trade_no)) {
+        if($notify['attach'] === 'wechat' && isset($notify['out_trade_no']))
+        {
             /** @var WechatMessageServices $wechatMessageService */
             $wechatMessageService = app()->make(WechatMessageServices::class);
-            $wechatMessageService->setOnceMessage($notify, $notify->openid, 'payment_success', $notify->out_trade_no);
+            $wechatMessageService->setOnceMessage($notify, $notify['openid'], 'payment_success', $notify['out_trade_no']);
         }
-
         return false;
     }
 }

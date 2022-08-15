@@ -842,6 +842,7 @@ return [
     400760 => 'Please enter your real name',
     400761 => 'The description cannot exceed 120 words',
     400762 => 'The account password must be between 6 and 32 bits',
+    400763 => 'Merchant number cannot be empty',
 
     410000 => 'Please enter the account number and password',
     410001 => 'Login successful',

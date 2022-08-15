@@ -15,6 +15,7 @@ use app\services\system\SystemAuthServices;
 use app\services\order\StoreOrderServices;
 use app\services\product\product\StoreProductServices;
 use app\services\product\product\StoreProductReplyServices;
+use app\services\system\UpgradeServices;
 use app\services\user\UserExtractServices;
 use app\services\product\sku\StoreProductAttrValueServices;
 use app\services\system\SystemMenusServices;
@@ -49,65 +50,47 @@ class Common extends AuthController
     public function auth()
     {
         $version = get_crmeb_version();
-
+        $host = $this->request->host();
+        // 正常域名
         $res = HttpService::request('http://authorize.crmeb.net/api/auth_cert_query', 'post', [
-            'domain_name' => $this->request->host(),
+            'domain_name' => $host,
             'label' => 19,
             'version' => $version
         ]);
         $res = $res ? json_decode($res, true) : [];
+
+        //兼容test.
         if ($res['data']['status'] !== 1) {
-            $host = $this->request->host();
-            $data = explode('.', $host);
-            $n = count($data);
-            $preg = '/[\w].+\.(com|net|org|gov|edu)\.cn$/';
-            if (($n > 2) && preg_match($preg, $host)) {
-                //双后缀取后3位
-                $url = $data[$n - 3] . '.' . $data[$n - 2] . '.' . $data[$n - 1];
-            } else {
-                //非双后缀取后两位
-                $url = $data[$n - 2] . '.' . $data[$n - 1];
-            }
+            $host = str_replace('test.', '', $host);
             $res = HttpService::request('http://authorize.crmeb.net/api/auth_cert_query', 'post', [
-                'domain_name' => $url,
+                'domain_name' => $host,
                 'label' => 19,
                 'version' => $version
             ]);
             $res = $res ? json_decode($res, true) : [];
         }
+
+        //如果是主域名兼容www.
         if ($res['data']['status'] !== 1) {
+            $host = str_replace('www.', '', $host);
             $res = HttpService::request('http://authorize.crmeb.net/api/auth_cert_query', 'post', [
-                'domain_name' => $this->request->host(),
-                'label' => 1,
+                'domain_name' => $host,
+                'label' => 19,
                 'version' => $version
             ]);
             $res = $res ? json_decode($res, true) : [];
         }
-        if ($res['data']['status'] !== 1) {
-            $host = $this->request->host();
-            $data = explode('.', $host);
-            $n = count($data);
-            $preg = '/[\w].+\.(com|net|org|gov|edu)\.cn$/';
-            if (($n > 2) && preg_match($preg, $host)) {
-                //双后缀取后3位
-                $url = $data[$n - 3] . '.' . $data[$n - 2] . '.' . $data[$n - 1];
-            } else {
-                //非双后缀取后两位
-                $url = $data[$n - 2] . '.' . $data[$n - 1];
-            }
-            $res = HttpService::request('http://authorize.crmeb.net/api/auth_cert_query', 'post', [
-                'domain_name' => $url,
-                'label' => 1,
-                'version' => $version
-            ]);
-            $res = $res ? json_decode($res, true) : [];
-        }
+
+        //升级状态
+        /** @var UpgradeServices $upgradeServices */
+        $upgradeServices = app()->make(UpgradeServices::class);
+        $upgradeStatus = $upgradeServices->getUpgradeStatus();
+
         $status = $res['data']['status'] ?? -9;
-        $defaultRecordCode = '00000000';
         switch ((int)$status) {
             case 1:
                 //审核成功
-                $authCode = $res['data']['auth_code'] ?? $defaultRecordCode;
+                $authCode = $res['data']['auth_code'] ?? '';
                 $autoContent = $res['data']['auto_content'] ?? '';
                 try {
                     /** @var SystemConfigServices $services */
@@ -128,9 +111,9 @@ class Common extends AuthController
                 } catch (\Throwable $e) {
                     return app('json')->fail(400330);
                 }
-                return app('json')->success(['status' => 1, 'copyright' => $this->copyright(), 'authCode' => $authCode, 'day' => 0]);
+                return app('json')->success(['status' => 1, 'copyright' => $this->copyright(), 'authCode' => $authCode, 'day' => 0, 'force_reminder' => $upgradeStatus['force_reminder'] ?? 0]);
             default:
-                return app('json')->success(['status' => -9]);
+                return app('json')->success(['status' => -9, 'force_reminder' => $upgradeStatus['force_reminder'] ?? 0]);
         }
     }
 
@@ -140,7 +123,6 @@ class Common extends AuthController
      */
     public function auth_apply(SystemAuthServices $services)
     {
-        $version = get_crmeb_version();
         $data = $this->request->postMore([
             ['company_name', ''],
             ['domain_name', ''],
@@ -165,17 +147,6 @@ class Common extends AuthController
         if (!$data['captcha']) {
             return app('json')->fail(400137);
         }
-        $datas = explode('.', $data['domain_name']);
-        $n = count($datas);
-        $preg = '/[\w].+\.(com|net|org|gov|edu)\.cn$/';
-        if (($n > 2) && preg_match($preg, $data['domain_name'])) {
-            //双后缀取后3位
-            $domain_name = $datas[$n - 3] . '.' . $datas[$n - 2] . '.' . $datas[$n - 1];
-        } else {
-            //非双后缀取后两位
-            $domain_name = $datas[$n - 2] . '.' . $datas[$n - 1];
-        }
-        $data['domain_name'] = $domain_name;
         $services->authApply($data);
         return app('json')->success(400335);
 

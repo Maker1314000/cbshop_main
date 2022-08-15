@@ -217,7 +217,7 @@ class OtherOrderServices extends BaseServices
         $storeOrderCreateService = app()->make(StoreOrderCreateServices::class);
         $orderInfo = [
             'uid' => $uid,
-            'order_id' => $storeOrderCreateService->getNewOrderId(),
+            'order_id' => $storeOrderCreateService->getNewOrderId('hy'),
             'pay_price' => $payPrice,
             'pay_type' => $payType,
             'channel_type' => $channelType,

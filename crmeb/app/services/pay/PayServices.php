@@ -85,7 +85,7 @@ class PayServices
             /** @var Pay $pay */
             $pay = app()->make(Pay::class, [$payType]);
 
-            return $pay->create($orderId, $price, $successAction, $body, '', ['openid' => $openid, 'isCode' => $isCode]);
+            return $pay->create($orderId, $price, $successAction, $body, '', ['openid' => $openid, 'isCode' => $isCode,'pay_new_weixin_open' => (bool)sys_config('pay_new_weixin_open')]);
 
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage());

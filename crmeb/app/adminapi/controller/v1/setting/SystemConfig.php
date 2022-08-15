@@ -301,6 +301,13 @@ class SystemConfig extends AuthController
         if (isset($post['day_brokerage_price_upper']) && $post['day_brokerage_price_upper'] < -1) {
             return app('json')->fail(400757);
         }
+        if( isset($post['pay_new_weixin_open']) && (bool)$post['pay_new_weixin_open'])
+        {
+            if(empty($post['pay_new_weixin_mchid']))
+            {
+                return  app('json')->fail(400763);
+            }
+        }
         if (isset($post['weixin_ckeck_file'])) {
             $from = public_path() . $post['weixin_ckeck_file'];
             $to = public_path() . array_reverse(explode('/', $post['weixin_ckeck_file']))[0];

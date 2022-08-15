@@ -107,6 +107,8 @@ class StoreCombination extends AuthController
             ['postage', 0],//邮费
             ['custom_form', ''],
             ['virtual_type', 0],
+            ['is_commission', 0],
+            ['head_commission', 0],
         ]);
         $this->validate($data, \app\adminapi\validate\marketing\StoreCombinationValidate::class, 'save');
         if ($data['section_time']) {
@@ -128,7 +130,7 @@ class StoreCombination extends AuthController
                 return app('json')->fail(400508);
             }
         }
-        if($data['num'] < $data['once_num']){
+        if ($data['num'] < $data['once_num']) {
             return app('json')->fail(400500);
         }
         if ($data['copy'] == 1) {
@@ -190,4 +192,36 @@ class StoreCombination extends AuthController
         return app('json')->success(compact('list'));
     }
 
+    /**
+     * 拼团统计
+     * @param $id
+     * @return mixed
+     */
+    public function combinationStatistics($id)
+    {
+        $data = $this->services->combinationStatistics($id);
+        return app('json')->success($data);
+    }
+
+    public function combinationStatisticsList($id)
+    {
+        /** @var StorePinkServices $storePinkServices */
+        $storePinkServices = app()->make(StorePinkServices::class);
+        $list = $storePinkServices->systemPage(['cid' => $id]);
+        return app('json')->success($list);
+    }
+
+    /**
+     * 砍价订单
+     * @param $id
+     * @return mixed
+     */
+    public function combinationStatisticsOrder($id)
+    {
+        $where = $this->request->getMore([
+            ['real_name', ''],
+            ['status', '']
+        ]);
+        return app('json')->success($this->services->combinationStatisticsOrder($id, $where));
+    }
 }

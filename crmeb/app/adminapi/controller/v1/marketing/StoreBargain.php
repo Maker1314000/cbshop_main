@@ -184,4 +184,43 @@ class StoreBargain extends AuthController
         $list = $bargainUserHelpService->getHelpList($id);
         return app('json')->success(compact('list'));
     }
+
+    /**
+     * 砍价统计
+     * @param $id
+     * @return mixed
+     */
+    public function bargainStatistics($id)
+    {
+        $data = $this->services->bargainStatistics($id);
+        return app('json')->success($data);
+    }
+
+    /**
+     * 砍价列表
+     * @param $id
+     * @return mixed
+     */
+    public function bargainStatisticsList($id)
+    {
+        $where = $this->request->getMore([
+            ['real_name', ''],
+        ]);
+        $data = $this->services->bargainStatisticsList($id, $where);
+        return app('json')->success($data);
+    }
+
+    /**
+     * 砍价订单
+     * @param $id
+     * @return mixed
+     */
+    public function bargainStatisticsOrder($id)
+    {
+        $where = $this->request->getMore([
+            ['real_name', ''],
+            ['status', '']
+        ]);
+        return app('json')->success($this->services->bargainStatisticsOrder($id, $where));
+    }
 }

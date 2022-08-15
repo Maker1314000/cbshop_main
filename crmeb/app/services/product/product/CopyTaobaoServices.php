@@ -17,7 +17,7 @@ use app\services\serve\ServeServices;
 use app\services\system\attachment\SystemAttachmentCategoryServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use crmeb\exceptions\AdminException;
-use crmeb\services\UploadService;
+use app\services\other\UploadService;
 
 /**
  *

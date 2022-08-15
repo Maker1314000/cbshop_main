@@ -17,7 +17,7 @@ use app\services\BaseServices;
 use app\services\serve\ServeServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\CacheService;
-use crmeb\services\express\storage\AliyunService;
+use crmeb\services\express\storage\AliyunExpress;
 use crmeb\services\FormBuilder as Form;
 
 /**
@@ -195,7 +195,6 @@ class ExpressServices extends BaseServices
         $resultData = CacheService::get($cacheName, null);
         if ($resultData === null || !is_array($resultData)) {
             $data = [];
-            $com = $this->express_code[$com] ?? '';
             $cacheTime = 0;
             switch ((int)sys_config('logistics_type')) {
                 case 1:
@@ -212,8 +211,8 @@ class ExpressServices extends BaseServices
                     }
                     break;
                 case 2:
-                    /** @var AliyunService $services */
-                    $services = app()->make(AliyunService::class);
+                    /** @var AliyunExpress $services */
+                    $services = app()->make(AliyunExpress::class);
                     $result = $services->query($expressNum, $com);
                     if (is_array($result) &&
                         isset($result['result']) &&

@@ -184,6 +184,12 @@ class SystemConfigServices extends BaseServices
             ],
             'show_value' => 2
         ],
+        'pay_new_weixin_open' => [
+            'son_type' => [
+                'pay_new_weixin_mchid' => ''
+            ],
+            'show_value' => 1
+        ]
     ];
 
     /**
