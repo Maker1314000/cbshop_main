@@ -2330,6 +2330,8 @@ CREATE TABLE IF NOT EXISTS `eb_store_combination` (
   `freight` tinyint(1) NOT NULL DEFAULT '2' COMMENT '运费设置',
   `custom_form` varchar(2000) NOT NULL DEFAULT '' COMMENT '自定义表单',
   `virtual_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '商品类型',
+  `is_commission` tinyint(1) NOT NULL DEFAULT '0' COMMENT '拼团是否返佣',
+  `head_commission` int(11) NOT NULL DEFAULT '0' COMMENT '团长佣金比例',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='拼团商品表';
 
@@ -7668,11 +7670,14 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (400, 'tencent_sms_secret_key', 'text', 'input', 99, '', 1, '', 100, 0, '\"\"', 'AccessKeySecret', '腾讯云AccessKeySecret', 0, 1),
 (401, 'tencent_sms_sign_name', 'text', '', 99, '', 1, '', 100, 0, '\"\"', '腾讯云短信签名', '腾讯云短信签名', 0, 1),
 (402, 'tencent_sms_region', 'text', 'input', 99, '', 1, '', 100, 0, '\"\"', '短信区域', '短信区域ap-beijing、ap-guangzhou、ap-nanjing任选其一填写', 0, 1),
-(403, 'out_push_switch', 'radio', 'input', 103, '1=>开\n0=>关', 1, '', 0, 0, '\"0\"', '推送开关', '推送数据至第三方平台', 0, 1),
-(404, 'out_push_order_pay_url', 'text', 'input', 104, '', 1, '', 0, 0, '\"\"', '订单支付推送接口', '订单支付成功将会推送至第三方', 0, 1),
-(405, 'out_push_refund_cancel_url', 'text', 'input', 104, '', 1, '', 0, 0, '\"\"', '售后单取消推送接口', '用户取消退货申请将会推送售后单至第三方', 0, 1),
-(406, 'out_push_refund_url', 'text', 'input', 104, '', 1, '', 0, 0, '\"\"', '售后单推送接口', '用户申请退款将会推送售后单至第三方', 0, 1),
-(407, 'out_push_order_url', 'text', 'input', 104, '', 1, '', 0, 0, '\"\"', '订单推送接口', '订单创建后将会推送至第三方', 0, 1);
+(404, 'out_push_switch', 'radio', 'input', 103, '1=>开\n0=>关', 1, '', 0, 0, '\"0\"', '推送开关', '推送数据至第三方平台', 0, 1),
+(405, 'out_push_order_pay_url', 'text', 'input', 104, '', 1, '', 0, 0, '\"\"', '订单支付推送接口', '订单支付成功将会推送至第三方', 0, 1),
+(406, 'out_push_refund_cancel_url', 'text', 'input', 104, '', 1, '', 0, 0, '\"\"', '售后单取消推送接口', '用户取消退货申请将会推送售后单至第三方', 0, 1),
+(407, 'out_push_refund_url', 'text', 'input', 104, '', 1, '', 0, 0, '\"\"', '售后单推送接口', '用户申请退款将会推送售后单至第三方', 0, 1),
+(408, 'out_push_order_url', 'text', 'input', 104, '', 1, '', 0, 0, '\"\"', '订单推送接口', '订单创建后将会推送至第三方', 0, 1),
+(409, 'pay_new_weixin_open', 'radio', 'input', 4, '0=>关闭\n1=>打开', 1, '', 0, 0, '0', '是否开启新微信支付', '小程序开发后台有支付管理的请打开此开关', 0, 1),
+(410, 'pay_new_weixin_mchid', 'text', 'input', 4, '', 1, '', 100, 0, '\"\"', '商户号', '商户号', 0, 1),
+(411, 'system_comment_time', 'text', 'number', 27, '', 1, '', 100, 0, '\"0\"', '自动评价时间', '自动评价时间（天），0为不开启自动评价', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -8479,7 +8484,7 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (640, 462, '', '修改配置分类状态', 'admin', '', '', 'setting/config_class/set_status/<id>/<status>', 'PUT', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (641, 462, '', '编辑配置分类', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, 'system/config/system_config_tab/edit', '', 1, '', 0, '', 0),
 (642, 641, '', '获取编辑配置分类表单', 'admin', '', '', 'setting/config_class/<id>/edit', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(655, 65, '', '在线升级', 'admin', '', '', '', '', '[]', 0, 0, 1, 1, '/admin/system/system_upgradeclient/index', '', 1, '', 0, 'system-system-upgradeclient', 0),
+(655, 25, '', '在线升级', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/system/onlineUpgrade/index', '25', 1, '', 0, 'system-onlineUpgrade-index', 0),
 (656, 12, '', '页面管理', 'admin', '', '', '', '', '[]', 1, 1, 0, 1, '/admin/setting/pages', '', 1, '', 0, 'admin-setting-pages', 0),
 (657, 656, '', '页面设计', 'admin', '', '', '', '', '[]', 3, 1, 0, 1, '/admin/setting/pages/devise', '12/656', 1, '', 0, 'admin-setting-pages-devise', 0),
 (658, 656, '', '页面编辑', 'admin', '', '', '', '', '[]', 3, 1, 1, 1, '/admin/setting/pages/diy', '12/656', 1, '', 0, 'admin-setting-pages-diy', 0),
@@ -8631,6 +8636,8 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (834, 95, '', '短信记录列表', 'admin', '', '', 'notify/sms/record', 'GET', '[]', 0, 0, 0, 1, 'notify/sms/record', '', 2, '', 0, '', 0),
 (835, 28, '', '分销设置表单', 'admin', '', '', 'agent/config/edit_basics', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (836, 28, '', '分销设置表单提交', 'admin', '', '', 'agent/config/save_basics', 'POST', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
+(837, 79, '', '积分配置表单', 'admin', '', '', 'marketing/integral_config/edit_basics', 'GET', '[]', 0, 1, 0, 1, '', '', 2, '', 0, '', 0),
+(838, 79, '', '积分配置表单提交', 'admin', '', '', 'marketing/integral_config/save_basics', 'POST', '[]', 0, 1, 0, 1, '', '', 2, '', 0, '', 0),
 (843, 154, '', '签到天数头部数据', 'admin', '', '', 'setting/sign_data/header', 'GET', '[]', 0, 1, 0, 1, '', '', 2, '', 0, '', 0),
 (844, 154, '', '设置签到数据状态', 'admin', '', '', 'setting/sign_data/set_status/<id>/<status>', 'PUT', '[]', 0, 1, 0, 1, '', '', 2, '', 0, '', 0),
 (845, 154, '', '签到天数列表', 'admin', '', '', 'setting/sign_data', 'GET', '[]', 0, 1, 0, 1, '', '', 2, '', 0, '', 0),
@@ -8788,7 +8795,9 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (1061, 12, '', '协议设置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/agreement', '12', 1, '', 0, 'setting-agreement', 0),
 (1062, 1056, '', '短信接口配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_config/sms/2/96', '12/1056', 1, '', 0, 'setting-other-sms', 0),
 (1063, 1056, '', '商城支付配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_config/pay/2/23', '12/1056', 1, '', 0, 'setting-other-pay', 0),
-(1064, 1056, '', '对外接口配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_config/out/2/102', '12/1056', 1, '', 0, 'setting-other-out', 0);
+(1064, 12, '', '对外接口', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_out_config', '12', 1, '', 0, 'setting-other-out', 0),
+(1065, 1064, '', '基础配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_config/out/2/102', '12/1064', 1, '', 0, 'setting-other-config-out', 0),
+(1066, 1064, '', '对外账号列表', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/system_out_account/index', '12/1064', 1, '', 0, 'setting-system-out-account-index', 0);
 
 -- --------------------------------------------------------
 
@@ -9077,6 +9086,27 @@ INSERT INTO `eb_template_message` (`id`, `notification_id`, `type`, `tempkey`, `
 (39, 15, 1, 'OPENTM408529050', '提现失败提醒发送', '', '{{first.DATA}}\r\n提现金额：{{keyword1.DATA}}\r\n提现时间：{{keyword2.DATA}}\r\n失败原因：{{keyword3.DATA}}\r\n{{remark.DATA}}', '', '', '1632305076', 1),
 (40, 26, 1, 'OPENTM413741318', '提醒付款通知', '', '{{first.DATA}}\r\n订单编号：{{keyword1.DATA}}\r\n订单金额：{{keyword2.DATA}}\r\n下单时间：{{keyword3.DATA}}\r\n{{remark.DATA}}', '', '', '1632305076', 1),
 (41, 8, 1, 'OPENTM418252271', '积分到账提醒发送', '', '{{first.DATA}}\r\n会员ID：{{keyword1.DATA}}\r\n消费金额：{{keyword2.DATA}}\r\n使用积分：{{keyword3.DATA}}\r\n获得积分：{{keyword4.DATA}}\r\n时间：{{keyword5.DATA}}\r\n{{remark.DATA}}', '', '', '1632305076', 1);
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `eb_upgrade_log`
+--
+
+CREATE TABLE IF NOT EXISTS `eb_upgrade_log` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `title` varchar(120) NOT NULL DEFAULT '' COMMENT '标题说明',
+  `content` text NOT NULL COMMENT '更新内容',
+  `first_version` char(3) NOT NULL DEFAULT '' COMMENT '版本号第一位',
+  `second_version` char(3) NOT NULL DEFAULT '' COMMENT '版本号第二位',
+  `third_version` char(3) NOT NULL DEFAULT '' COMMENT '版本号第三位',
+  `fourth_version` char(3) NOT NULL DEFAULT '' COMMENT '版本号第四位',
+  `error_data` text NOT NULL COMMENT '错误内容',
+  `upgrade_time` int(10) NOT NULL DEFAULT '0' COMMENT '升级时间',
+  `package_link` varchar(255) NOT NULL DEFAULT '' COMMENT '文件备份地址',
+  `data_link` varchar(255) NOT NULL DEFAULT '' COMMENT '数据备份地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='升级记录';
 
 -- --------------------------------------------------------
 
@@ -9544,6 +9574,7 @@ CREATE TABLE IF NOT EXISTS `eb_user_recharge` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `uid` int(10) NOT NULL DEFAULT '0' COMMENT '充值用户UID',
   `order_id` varchar(32) NOT NULL DEFAULT '' COMMENT '订单号',
+  `trade_no` varchar(100) NOT NULL DEFAULT '' COMMENT '微信订单号',
   `price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '充值金额',
   `give_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '购买赠送金额',
   `recharge_type` varchar(32) NOT NULL DEFAULT '' COMMENT '充值类型',
