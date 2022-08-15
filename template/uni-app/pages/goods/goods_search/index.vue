@@ -4,14 +4,14 @@
 			<view class='search acea-row row-between-wrapper'>
 				<view class='input acea-row row-between-wrapper'>
 					<text class='iconfont icon-sousuo'></text>
-					<input type='text' v-model='searchValue' @confirm="inputConfirm" focus :placeholder='$t(`search_product`)'
+					<input type='text' v-model='searchValue' @confirm="inputConfirm" focus :placeholder='$t(`搜索商品名称`)'
 						placeholder-class='placeholder' @input="setValue"></input>
 				</view>
-				<view class='bnt' @tap='searchBut'>{{$t(`search`)}}</view>
+				<view class='bnt' @tap='searchBut'>{{$t(`搜索`)}}</view>
 			</view>
 			<template v-if="history.length">
 				<view class='title acea-row row-between-wrapper'>
-					<view>{{$t(`search_history`)}}</view>
+					<view>{{$t(`搜索历史`)}}</view>
 					<view class="iconfont icon-shanchu" @click="clear"></view>
 				</view>
 				<view class='list acea-row'>
@@ -21,7 +21,7 @@
 					</block>
 				</view>
 			</template>
-			<view class='title'>{{$t(`hot_search`)}}</view>
+			<view class='title'>{{$t(`热门搜索`)}}</view>
 			<view class='list acea-row'>
 				<block v-for="(item,index) in hotSearchList" :key="index">
 					<view class='item line1' @tap='setHotSearchValue(item.val)' v-if="item.val">{{item.val}}</view>
@@ -75,7 +75,7 @@
 				page: 1,
 				loading: false,
 				loadend: false,
-				loadTitle: this.$t(`loading_more`),
+				loadTitle: this.$t(`加载更多`),
 				hotPage: 1,
 				isScroll: true,
 				history: []
@@ -146,11 +146,11 @@
 					that.$set(that, 'bastList', that.bastList);
 					that.loading = false;
 					that.loadend = loadend;
-					that.loadTitle = loadend ? that.$t(`bottom_line`) : that.$t(`loading_more`);
+					that.loadTitle = loadend ? that.$t(`没有更多内容啦~`) : that.$t(`加载更多`);
 					that.page = that.page + 1;
 				}).catch(err => {
 					that.loading = false,
-						that.loadTitle = that.$t(`loading_more`)
+						that.loadTitle = that.$t(`加载更多`)
 				});
 			},
 			getHostProduct: function() {
@@ -175,7 +175,7 @@
 			searchBut: function() {
 				let that = this;
 				if (!that.searchValue.trim()) return this.$util.Tips({
-					title: this.$t(`enter_want_search`)
+					title: that.$t(`请输入要搜索的商品`)
 				});
 				that.focus = false;
 				// if (that.searchValue.length > 0) {
@@ -183,7 +183,7 @@
 				that.loadend = false;
 				that.$set(that, 'bastList', []);
 				uni.showLoading({
-					title: this.$t(`searching`)
+					title: that.$t(`正在搜索中`)
 				});
 				that.getProductList();
 				uni.hideLoading();

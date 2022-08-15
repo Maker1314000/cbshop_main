@@ -1,15 +1,15 @@
 <template>
 	<view :style="colorStyle">
 		<view class="default" v-if="isIframe && !couponList.length">
-			<text>{{$t(`coupon`)}}{{$t(`no_data`)}}</text>
+			<text>{{$t(`优惠券，暂无数据`)}}</text>
 		</view>
 		<view class="index-wrapper coupon" v-if="couponList.length&&isShow&&!isIframe">
 			<view class='title acea-row row-between-wrapper skeleton-rect'>
 				<view class='text'>
-					<view class='name line1'>{{$t(`coupon`)}}</view>
-					<view class='line1 txt-btn'>{{$t(`get_coupon`)}}</view>
+					<view class='name line1'>{{$t(`优惠券`)}}</view>
+					<view class='line1 txt-btn'>{{$t(`领取今日好券`)}}</view>
 				</view>
-				<view class='more' @click="gopage('/pages/users/user_get_coupon/index')">{{$t(`more`)}}<text
+				<view class='more' @click="gopage('/pages/users/user_get_coupon/index')">{{$t(`更多`)}}<text
 						class='iconfont icon-jiantou'></text>
 				</view>
 			</view>
@@ -30,14 +30,14 @@
 							<view class="cir"></view>
 							<view class="cir2"></view>
 							<view class="text">
-								<view class="money line1">{{$t(`money`)}}<text class="num">{{item.coupon_price}}</text></view>
-								<view class="man line1">{{$t(`full`)}} {{item.use_min_price}}</view>
+								<view class="money line1">{{$t(`￥`)}}<text class="num">{{item.coupon_price}}</text></view>
+								<view class="man line1">{{$t(`满`)}}{{item.use_min_price}}{{$t(`可用`)}}</view>
 							</view>
-							<view class="bnt" v-if="item.is_use===true"><text>{{$t(`received`)}}</text></view>
+							<view class="bnt" v-if="item.is_use===true"><text>{{$t(`已领取`)}}</text></view>
 							<view class="bnt" v-else-if="item.is_use===false" @click="receiveCoupon(item)">
-								<text>{{$t(`receive`)}}</text>
+								<text>{{$t(`领取`)}}</text>
 							</view>
-							<view class="bnt" v-else-if="item.is_use===2"><text>{{$t(`expired`)}}</text></view>
+							<view class="bnt" v-else-if="item.is_use===2"><text>{{$t(`已过期`)}}</text></view>
 						</view>
 					</view>
 				</scroll-view>
@@ -46,10 +46,10 @@
 		<view class="index-wrapper coupon" v-if="couponList.length && isIframe">
 			<view class='title acea-row row-between-wrapper'>
 				<view class='text'>
-					<view class='name line1'>{{$t(`coupon`)}}</view>
-					<view class='line1 txt-btn'>{{$t(`get_coupon`)}}</view>
+					<view class='name line1'>{{$t(`优惠券`)}}</view>
+					<view class='line1 txt-btn'>{{$t(`领取今日好券`)}}</view>
 				</view>
-				<view class='more' @click="gopage('/pages/users/user_get_coupon/index')">{{$t(`more`)}}<text
+				<view class='more' @click="gopage('/pages/users/user_get_coupon/index')">{{$t(`更多`)}}<text
 						class='iconfont icon-jiantou'></text>
 				</view>
 			</view>
@@ -63,14 +63,14 @@
 							<view class="cir"></view>
 							<view class="cir2"></view>
 							<view class="text">
-								<view class="money line1">{{$t(`money`)}}<text class="num">{{item.coupon_price}}</text></view>
-								<view class="man line1">{{$t(`full`)}} {{item.use_min_price}}</view>
+								<view class="money line1">{{$t(`￥`)}}<text class="num">{{item.coupon_price}}</text></view>
+								<view class="man line1">{{$t(`满`)}}{{item.use_min_price}}{{$t(`可用`)}}</view>
 							</view>
-							<view class="bnt" v-if="item.is_use===true"><text>{{$t(`received`)}}</text></view>
+							<view class="bnt" v-if="item.is_use===true"><text>{{$t(`已领取`)}}</text></view>
 							<view class="bnt" v-else-if="item.is_use===false" @click="receiveCoupon(item)">
-								<text>{{$t(`receive`)}}</text>
+								<text>{{$t(`领取`)}}</text>
 							</view>
-							<view class="bnt" v-else-if="item.is_use===2"><text>{{$t(`expired`)}}</text></view>
+							<view class="bnt" v-else-if="item.is_use===2"><text>{{$t(`已过期`)}}</text></view>
 						</view>
 					</view>
 				</scroll-view>
@@ -157,7 +157,7 @@
 							item.is_use = true;
 							that.$set(that, 'couponList', that.couponList);
 							that.$util.Tips({
-								title: this.$t(`receive_success`)
+								title: that.$t(`领取成功`)
 							});
 						})
 						.catch(function(err) {

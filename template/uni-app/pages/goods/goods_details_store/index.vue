@@ -21,34 +21,14 @@
 						<!-- #endif -->
 					</div>
 					<div class="store-distance" @click.stop="showMaoLocation(item)">
-						<span class="addressTxt" v-if="item.range">{{$t(`distance`)}}{{ item.range }}{{$t(`km`)}}</span>
-						<span class="addressTxt" v-else>{{$t(`check_map`)}}</span>
+						<span class="addressTxt" v-if="item.range">{{ item.range }}{{$t(`千米距离`)}}</span>
+						<span class="addressTxt" v-else>{{$t(`查看地图`)}}</span>
 						<span class="iconfont icon-youjian"></span>
 					</div>
 				</div>
 			</div>
 			<Loading :loaded="loaded" :loading="loading"></Loading>
 		</div>
-		<div>
-			<!-- <iframe v-if="locationShow && !isWeixin" ref="geoPage" width="0" height="0" frameborder="0" style="display:none;"
-			 scrolling="no" :src="
-          'https://apis.map.qq.com/tools/geolocation?key=' +
-            mapKey +
-            '&referer=myapp'
-        ">
-			</iframe> -->
-		</div>
-		<!-- <div class="geoPage" v-if="mapShow">
-			<iframe width="100%" height="100%" frameborder="0" scrolling="no" :src="
-          'https://apis.map.qq.com/uri/v1/geocoder?coord=' +
-            system_store.latitude +
-            ',' +
-            system_store.longitude +
-            '&referer=' +
-            mapKey
-        ">
-			</iframe>
-		</div> -->
 	</div>
 </template>
 

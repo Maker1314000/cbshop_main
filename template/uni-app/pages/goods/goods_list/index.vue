@@ -3,29 +3,29 @@
 		<view class='productList'>
 			<view class='search bg-color acea-row row-between-wrapper'>
 				<view class='input acea-row row-between-wrapper'><text class='iconfont icon-sousuo'></text>
-					<input :placeholder='$t(`search_product`)' placeholder-class='placeholder' confirm-type='search' name="search"
+					<input :placeholder='$t(`搜索商品名称`)' placeholder-class='placeholder' confirm-type='search' name="search"
 						:value='where.keyword' @confirm="searchSubmit"></input>
 				</view>
 				<view class='iconfont' :class='is_switch==true?"icon-pailie":"icon-tupianpailie"' @click='Changswitch'>
 				</view>
 			</view>
 			<view class='nav acea-row row-middle'>
-				<view class='item line1' :class='title ? "font-num":""' @click='set_where(1)'>{{title ? title: $t(`default`)}}
+				<view class='item line1' :class='title ? "font-num":""' @click='set_where(1)'>{{title ? $t(title) : $t(`默认`)}}
 				</view>
 				<view class='item' @click='set_where(2)'>
-					{{$t(`price`)}}
+					{{$t(`价格`)}}
 					<image v-if="price==1" src='../../../static/images/up.png'></image>
 					<image v-else-if="price==2" src='../../../static/images/down.png'></image>
 					<image v-else src='../../../static/images/horn.png'></image>
 				</view>
 				<view class='item' @click='set_where(3)'>
-					{{$t(`sales`)}}
+					{{$t(`销量`)}}
 					<image v-if="stock==1" src='../../../static/images/up.png'></image>
 					<image v-else-if="stock==2" src='../../../static/images/down.png'></image>
 					<image v-else src='../../../static/images/horn.png'></image>
 				</view>
 				<!-- down -->
-				<view class='item' :class='nows ? "font-color":""' @click='set_where(4)'>{{$t(`new_product`)}}</view>
+				<view class='item' :class='nows ? "font-color":""' @click='set_where(4)'>{{$t(`新品`)}}</view>
 			</view>
 			<view class='list acea-row row-between-wrapper' :class='is_switch==true?"":"on"'>
 				<view class='item' :class='is_switch==true?"":"on"' hover-class='none'
@@ -33,21 +33,21 @@
 					<view class='pictrue' :class='is_switch==true?"":"on"'>
 						<image :src='item.image' :class='is_switch==true?"":"on"'></image>
 						<span class="pictrue_log_class" :class="is_switch === true ? 'pictrue_log_big' : 'pictrue_log'"
-							v-if="item.activity && item.activity.type === '1'">{{$t(`seckill`)}}</span>
+							v-if="item.activity && item.activity.type === '1'">{{$t(`秒杀`)}}</span>
 						<span class="pictrue_log_class" :class="is_switch === true ? 'pictrue_log_big' : 'pictrue_log'"
-							v-if="item.activity && item.activity.type === '2'">{{$t(`haggle`)}}</span>
+							v-if="item.activity && item.activity.type === '2'">{{$t(`砍价`)}}</span>
 						<span class="pictrue_log_class" :class="is_switch === true ? 'pictrue_log_big' : 'pictrue_log'"
-							v-if="item.activity && item.activity.type === '3'">{{$t(`group`)}}</span>
+							v-if="item.activity && item.activity.type === '3'">{{$t(`拼团`)}}</span>
 					</view>
 					<view class='text' :class='is_switch==true?"":"on"'>
 						<view class='name line1'>{{item.store_name}}</view>
-						<view class='money font-color' :class='is_switch==true?"":"on"'>{{$t(`money`)}}<text
+						<view class='money font-color' :class='is_switch==true?"":"on"'>{{$t(`￥`)}}<text
 								class='num'>{{item.price}}</text></view>
 						<view class='vip acea-row row-between-wrapper' :class='is_switch==true?"":"on"'>
-							<view class='vip-money' v-if="item.vip_price && item.vip_price > 0">{{$t(`money`)}}{{item.vip_price}}
+							<view class='vip-money' v-if="item.vip_price && item.vip_price > 0">{{$t(`￥`)}}{{item.vip_price}}
 								<image src='../../../static/images/vip.png'></image>
 							</view>
-							<view>{{$t(`sold`)}} {{item.sales}}{{item.unit_name || $t(`piece`)}}</view>
+							<view>{{$t(`已售`)}} {{item.sales}}{{$t(item.unit_name) || $t(`件`)}}</view>
 						</view>
 					</view>
 				</view>
@@ -59,7 +59,6 @@
 		<view class='noCommodity' v-if="productList.length==0 && where.page > 1">
 			<view class='emptyBox'>
 				<image :src="imgHost + '/statics/images/no-thing.png'"></image>
-				<view class="tips">{{$t(`no_product_see`)}}</view>
 			</view>
 			<recommend :hostProduct="hostProduct"></recommend>
 		</view>
@@ -111,7 +110,7 @@
 				nows: false,
 				loadend: false,
 				loading: false,
-				loadTitle: this.$t(`loading_more`),
+				loadTitle: this.$t(`加载更多`),
 				title: '',
 				hostProduct: [],
 				hotPage: 1,
@@ -221,13 +220,13 @@
 					let loadend = list.length < that.where.limit;
 					that.loadend = loadend;
 					that.loading = false;
-					that.loadTitle = loadend ? this.$t(`all_loaded`) : this.$t(`loading_more`);
+					that.loadTitle = loadend ? that.$t(`没有更多内容啦~`) : that.$t(`加载更多`);
 					that.$set(that, 'productList', productList);
 					that.$set(that.where, 'page', that.where.page + 1);
 					if (!that.productList.length) this.get_host_product();
 				}).catch(err => {
 					that.loading = false;
-					that.loadTitle = this.$t(`loading_more`);
+					that.loadTitle = that.$t(`加载更多`);
 				});
 			},
 		},

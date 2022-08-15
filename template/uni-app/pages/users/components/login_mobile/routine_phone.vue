@@ -4,10 +4,10 @@
 		<view class="mobile-mask animated" :class="{slideInUp:isUp}">
 			<view class="info-box">
 				<image :src="logoUrl"></image>
-				<view class="title">{{$t(`get_auth`)}}</view>
-				<view class="txt">{{$t(`get_wechat_auth`)}}</view>
+				<view class="title">{{$t(`获取授权`)}}</view>
+				<view class="txt">{{$t(`获取微信的手机号授权`)}}</view>
 			</view>
-			<button class="sub_btn" open-type="getPhoneNumber" @getphonenumber="getphonenumber">{{$t(`get_wechat_num`)}}</button>
+			<button class="sub_btn" open-type="getPhoneNumber" @getphonenumber="getphonenumber">{{$t(`获取微信手机号`)}}</button>
 		</view>
 	</view>
 </template>
@@ -51,7 +51,7 @@
 			// #ifdef MP
 			// 小程序获取手机号码
 			getphonenumber(e){
-				uni.showLoading({ title: this.$t(`Loading`) });
+				uni.showLoading({ title: this.$t(`加载中`) });
 				Routine.getCode()
 					.then(code => {
 						this.getUserPhoneNumber(e.detail.encryptedData, e.detail.iv, code);

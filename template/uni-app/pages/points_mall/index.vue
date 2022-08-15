@@ -21,8 +21,8 @@
 		</view>
 		<view class="body">
 			<view class="body-title">
-				<text class="title">{{$t(`everyone_change`)}}</text>
-				<text class="jump-trip" @click="jumpMore">{{$t(`see_more`)}}
+				<text class="title">{{$t(`大家都在换`)}}</text>
+				<text class="jump-trip" @click="jumpMore">{{$t(`查看更多`)}}
 					<text class="iconfont icon-xiangyou"></text></text>
 			</view>
 			<view class="product-list" v-if="goodList.length">
@@ -31,19 +31,19 @@
 					<view class="info">
 						<view class="title line1">{{ item.title }}</view>
 						<view class="price-box">
-							{{ item.price }}{{$t(`point`)}}
+							{{ item.price }} {{$t(`积分`)}}
 						</view>
-						<view class="sales">{{item.sales}}{{$t(`exchange`)}}</view>
+						<view class="sales">{{item.sales}}{{$t(`人兑换`)}}</view>
 					</view>
 				</view>
 			</view>
 			<view v-else class="no-goods">
 				<image :src="imgHost + '/statics/images/no-thing.png'" mode=""></image>
-				<view class="fontimg">{{$t(`no_product_see`)}}</view>
+				<view class="fontimg">{{$t(`暂无商品，去看点别的吧`)}}</view>
 			</view>
 			<view class="footer">
 				<view class="body-title">
-					<text class="title">{{$t(`earn_points`)}}</text>
+					<text class="title">{{$t(`轻松赚积分`)}}</text>
 					<text></text>
 				</view>
 				<view class="footer-list">
@@ -51,16 +51,16 @@
 						<image class="icon-sty" src="./static/go-shoping.png" mode=""></image>
 						<view class="list-left-right">
 							<view class="title">
-								{{$t(`buy_goods`)}}
+								{{$t(`购买商品`)}}
 							</view>
 							<view class="trip">
-								{{$t(`get_bonus_points`)}}
+								{{$t(`购买商品可获得积分奖励`)}}
 							</view>
 						</view>
 					</view>
 					<navigator url="/pages/index/index" open-type="switchTab" class="right-box">
 						<text class="go-jump">
-							{{$t(`to_finish`)}}
+							{{$t(`去完成`)}}
 						</text>
 					</navigator>
 				</view>
@@ -69,16 +69,16 @@
 						<image class="icon-sty" src="./static/everyday.png" mode=""></image>
 						<view class="list-left-right">
 							<view class="title">
-								{{$t(`daily_check_in`)}}
+								{{$t(`每日签到活动`)}}
 							</view>
 							<view class="trip">
-								{{$t(`sign_in_points`)}}
+								{{$t(`每日签到可获得积分奖励`)}}
 							</view>
 						</view>
 					</view>
 					<navigator url="/pages/users/user_sgin/index" class="right-box">
 						<text class="go-jump">
-							{{$t(`to_finish`)}}
+							{{$t(`去完成`)}}
 						</text>
 					</navigator>
 				</view>
@@ -87,16 +87,16 @@
 						<image class="icon-sty" src="./static/luck-draw.png" mode=""></image>
 						<view class="list-left-right">
 							<view class="title">
-								{{$t(`jiu_lottery`)}}
+								{{$t(`九宫格抽奖活动`)}}
 							</view>
 							<view class="trip">
-								{{$t(`lucky_points`)}}
+								{{$t(`幸运抽奖可获得积分奖励`)}}
 							</view>
 						</view>
 					</view>
 					<navigator url="/pages/goods/lottery/grids/index?type=1" class="right-box">
 						<text class="go-jump">
-							{{$t(`to_finish`)}}
+							{{$t(`去完成`)}}
 						</text>
 					</navigator>
 				</view>
@@ -133,20 +133,20 @@
 				imgUrls: [],
 				goodList: [],
 				modelList: [{
-						title: this.$t(`my_scores`),
+						title: this.$t(`我的积分`),
 						imgUrl: './static/my-point.png',
 						url: "/pages/users/user_integral/index"
 					},
 					{
-						title: this.$t(`daily_check`),
+						title: this.$t(`每日签到`),
 						imgUrl: './static/sign-in.png',
 						url: '/pages/users/user_sgin/index'
 					}, {
-						title: this.$t(`points_draw`),
+						title: this.$t(`积分抽奖`),
 						imgUrl: './static/points-lottery.png',
 						url: '/pages/goods/lottery/grids/index?type=1'
 					}, {
-						title: this.$t(`exchange_record`),
+						title: this.$t(`兑换记录`),
 						imgUrl: './static/exchange.png',
 						url: "/pages/points_mall/exchange_record"
 					},

@@ -77,7 +77,6 @@
 		<view class='noCommodity' v-if="articleList.length == 0 && (page != 1 || active== 0)">
 			<view class='emptyBox'>
 				<image :src="imgHost + '/statics/images/empty-box.png'"></image>
-				<view class="tips">{{$t(`no_news_info`)}}</view>
 			</view>
 		</view>
 		<!-- #ifndef MP -->
@@ -201,6 +200,11 @@
 						this.coutList = item.children || []
 						this.$set(this, 'articleList', []);
 						this.getCidArticle(this.activeCou);
+					}else{
+						this.page = 1;
+						this.status = false;
+						this.$set(this, 'articleList', []);
+						this.getCidArticle(item.id,true);
 					}
 
 				}
@@ -214,6 +218,7 @@
 		border-top-width: 0;
 		padding-bottom: 30rpx;
 		.emptyBox{
+			margin-top: 50rpx;
 			text-align: center;
 			.tips{
 				color: #aaa;
@@ -381,7 +386,7 @@
 		border-top: 1px solid #F2F2F2;
 
 		.coutry {
-			background-color: #F5F5F5;
+			// background-color: #F5F5F5;
 			border-radius: 26rpx;
 			padding: 4rpx 20rpx;
 			color: #666666;
@@ -390,7 +395,9 @@
 		}
 
 		.coutry.on {
-			background-color: rgba(220, 217, 236, 1);
+			// background-color: rgba(220, 217, 236, 1);
+			border-style: solid;
+			border-width: 2rpx;
 			color: #E93323;
 		}
 	}

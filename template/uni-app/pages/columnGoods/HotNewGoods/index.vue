@@ -22,8 +22,7 @@
 		</div>
 		<view class="wrapper">
 			<GoodList :bastList="goodsList" :is-sort="false"></GoodList>
-			<view class="txt-bar" v-if="goodsList.length > 0 && !isScroll">{{$t(`bottom_line`)}}</view>
-			<emptyPage v-if="goodsList.length == 0 && !isScroll" :title="$t(`no_data`)"></emptyPage>
+			<emptyPage v-if="goodsList.length == 0 && !isScroll" :title="$t(`暂无数据`)"></emptyPage>
 		</view>
 		<!-- #ifndef MP -->
 		<home></home>
@@ -60,8 +59,8 @@
 				name: '',
 				icon: '',
 				type: 0,
-				typeName: ['', this.$t(`recommended`), this.$t(`popular_list`), this.$t(`first_new_products`),
-					this.$t(`promotional_item`)
+				typeName: ['', this.$t(`精品推荐`), this.$t(`热门榜单`), this.$t(`首发新品`),
+					this.$t(`促销单品`)
 				],
 				autoplay: true,
 				circular: true,

@@ -2,15 +2,15 @@
 	<view>
 		<view class="Popup" v-if="isShowAuth">
 			<image :src="logoUrl"></image>
-			<view class="title">{{$t(`auth_reminder`)}}</view>
-			<view class="tip">{{$t(`auth_tip`)}}</view>
+			<view class="title">授权提醒</view>
+			<view class="tip">请授权头像等信息，以便为您提供更好的服务</view>
 			<view class="bottom flex">
-				<view class="item" @click="close">{{$t(`look_around`)}}</view>
+				<view class="item" @click="close">随便逛逛</view>
 				<!-- #ifdef APP-PLUS -->
-				<button class="item grant" @click="setUserInfo">{{$t(`to_auth`)}}</button>
+				<button class="item grant" @click="setUserInfo">去授权</button>
 				<!-- #endif -->
 				<!-- #ifdef MP -->
-				<button class="item grant" type="primary" open-type="getPhoneNumber" lang="zh_CN" @getphonenumber="setUserInfo">{{$t(`to_auth`)}}</button>
+				<button class="item grant" type="primary" open-type="getPhoneNumber" lang="zh_CN" @getphonenumber="setUserInfo">去授权</button>
 				<!-- #endif -->
 			</view>
 		</view>
@@ -63,22 +63,22 @@ export default {
 				success(res) {
 					Cache.set(STATE_R_KEY, res.code, 10800);
 					let spread = app.globalData.spid ? app.globalData.spid : '';
-					silenceAuth({ code: res.code, spread: spread, spid: app.globalData.code })
-						.then(res => {
-							if (res.data.key !== undefined && res.data.key) {
-								that.authKey = res.data.key;
-							} else {
-								app.globalData.code = 0;
-								let time = res.data.expires_time - Cache.time();
-								// store.commit('UPDATE_USERINFO', res.data.userInfo);
-								store.commit('LOGIN', { token: res.data.token, time: time });
-								// store.commit('SETUID', res.data.userInfo.uid);
-								// Cache.set(EXPIRES_TIME,res.data.expires_time,time);
-								// Cache.set(USER_INFO,res.data.userInfo,time);
-							}
-						})
-						.catch(res => {
-						});
+					// silenceAuth({ code: res.code, spread: spread, spid: app.globalData.code })
+					// 	.then(res => {
+					// 		if (res.data.key !== undefined && res.data.key) {
+					// 			that.authKey = res.data.key;
+					// 		} else {
+					// 			app.globalData.code = 0;
+					// 			let time = res.data.expires_time - Cache.time();
+					// 			// store.commit('UPDATE_USERINFO', res.data.userInfo);
+					// 			store.commit('LOGIN', { token: res.data.token, time: time });
+					// 			// store.commit('SETUID', res.data.userInfo.uid);
+					// 			// Cache.set(EXPIRES_TIME,res.data.expires_time,time);
+					// 			// Cache.set(USER_INFO,res.data.userInfo,time);
+					// 		}
+					// 	})
+					// 	.catch(res => {
+					// 	});
 				}
 			});
 		} else {

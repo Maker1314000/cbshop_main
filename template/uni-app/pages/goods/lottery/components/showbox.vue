@@ -4,21 +4,21 @@
 			<view class="table-title">
 				<image src="../../static/head-l-point.png" mode=""></image>
 				<view class="text" v-if="showMsg.type === 'user'">
-					{{$t(`win_record`)}}
+					{{$t(`中奖记录`)}}
 				</view>
 				<view class="text" v-else-if="showMsg.type === 'me'">
-					{{$t(`my_prize`)}}
+					{{$t(`我的奖品`)}}
 				</view>
 				<view class="text" v-else-if="showMsg.type === 'html'">
-					{{$t(`activity_rule`)}}
+					{{$t(`活动规则`)}}
 				</view>
 				<image src="../../static/head-r-point.png" mode=""></image>
 			</view>
 			<view class="table" v-if="['me','user'].includes(showMsg.type)">
 				<view class="table-head">
-					<view class="nickname">{{showMsg.type === 'user' ? $t(`name`) : $t(`serial_number`)}}</view>
-					<view class="table-name">{{$t(`prize_name`)}}</view>
-					<view class="table-name time">{{$t(`winning_time`)}}</view>
+					<view class="nickname">{{showMsg.type === 'user' ? $t(`昵称`) : $t(`序号`)}}</view>
+					<view class="table-name">{{$t(`奖品名称`)}}</view>
+					<view class="table-name time">{{$t(`获奖时间`)}}</view>
 				</view>
 				<view class="table-d">
 					<view class="table-body" v-for="(item,index) in showMsg.data" :key="index">

@@ -11,7 +11,7 @@
 				</view>
 			</view>
 			<view class="orderGoods">
-				<view class='total'>{{$t(`total_of`)}}{{cartInfo.total_num}}{{$t(`item`)}}</view>
+				<view class='total'>{{$t(`共`)}}{{cartInfo.total_num}}{{$t(`件商品`)}}</view>
 				<view class='goodWrapper'>
 					<view class='item acea-row row-between-wrapper' @click="jumpCon(cartInfo.product_id)">
 						<view class='pictrue'>
@@ -25,7 +25,7 @@
 							<view class='attr line1' v-if="cartInfo.attrInfo">{{cartInfo.attrInfo.suk}}
 							</view>
 							<view class='money font-num'>
-								{{cartInfo.price}}{{$t(`point`)}}
+								{{cartInfo.price}}{{$t(`积分`)}}
 							</view>
 						</view>
 					</view>
@@ -33,70 +33,70 @@
 			</view>
 			<view class='wrapper'>
 				<view class='item acea-row row-between'>
-					<view>{{$t(`order_number`)}}：</view>
+					<view>{{$t(`订单编号`)}}：</view>
 					<view class='conter acea-row row-middle row-right'>{{cartInfo.order_id}}
 						<!-- #ifndef H5 -->
-						<text class='copy' @tap='copy'>{{$t(`copy`)}}</text>
+						<text class='copy' @tap='copy'>{{$t(`复制`)}}</text>
 						<!-- #endif -->
 						<!-- #ifdef H5 -->
-						<text class='copy copy-data' :data-clipboard-text="cartInfo.order_id">{{$t(`copy`)}}</text>
+						<text class='copy copy-data' :data-clipboard-text="cartInfo.order_id">{{$t(`复制`)}}</text>
 						<!-- #endif -->
 					</view>
 				</view>
 				<view class='item acea-row row-between'>
-					<view>{{$t(`order_status`)}}：</view>
+					<view>{{$t(`订单状态`)}}：</view>
 					<view class='conter'>{{cartInfo.status_name}}</view>
 				</view>
 				<view class='item acea-row row-between'>
-					<view>{{$t(`order_time`)}}：</view>
+					<view>{{$t(`下单时间`)}}：</view>
 					<view class='conter'>{{cartInfo.add_time}}</view>
 				</view>
 				<view class='item acea-row row-between'>
-					<view>{{$t(`pay_points`)}}：</view>
+					<view>{{$t(`支付积分`)}}：</view>
 					<view class='conter'>{{cartInfo.total_price}}</view>
 				</view>
 				<view class='item acea-row row-between' v-if="cartInfo.remark">
-					<view>{{$t(`remark`)}}：</view>
+					<view>{{$t(`备注`)}}：</view>
 					<view class='conter'>{{cartInfo.remark}}</view>
 				</view>
 				<view class='item acea-row row-between' v-if="cartInfo.delivery_type === 'express'">
-					<view>{{$t(`tracking_number`)}}：</view>
+					<view>{{$t(`快递单号`)}}：</view>
 					<view class='conter'>{{cartInfo.delivery_id}}</view>
 				</view>
 				<view class='item acea-row row-between' v-if="cartInfo.delivery_type === 'express'">
-					<view>{{$t(`courier_company`)}}：</view>
+					<view>{{$t(`快递公司`)}}：</view>
 					<view class='conter'>{{cartInfo.delivery_name}}</view>
 				</view>
 				<view class='item acea-row row-between' v-if="cartInfo.delivery_type === 'send'">
-					<view>{{$t(`delivery_man_phone`)}}：</view>
+					<view>{{$t(`送货人电话`)}}：</view>
 					<view class='conter'>{{cartInfo.delivery_id}}</view>
 				</view>
 				<view class='item acea-row row-between' v-if="cartInfo.delivery_type === 'send'">
-					<view>{{$t(`shipper_name`)}}：</view>
+					<view>{{$t(`配送人姓名`)}}：</view>
 					<view class='conter'>{{cartInfo.delivery_name}}</view>
 				</view>
 				<view class='item acea-row row-between' v-if="cartInfo.delivery_type === 'fictitious'">
-					<view>{{$t(`virtual_shipment`)}}：</view>
-					<view class='conter'>{{$t(`shipped`)}}</view>
+					<view>{{$t(`虚拟发货`)}}：</view>
+					<view class='conter'>{{$t(`已发货，请注意查收`)}}</view>
 				</view>
 				<view class='item acea-row row-between' v-if="cartInfo.fictitious_content">
-					<view>c：</view>
+					<view>{{$t(`虚拟备注`)}}：</view>
 					<view class='conter'>{{cartInfo.fictitious_content}}</view>
 				</view>
 				<view class='item acea-row row-between' v-if="cartInfo.delivery_type === 'send'">
-					<view>{{$t(`shipping_code`)}}：</view>
+					<view>{{$t(`配送核销码`)}}：</view>
 					<view class='conter'>{{cartInfo.verify_code}}</view>
 				</view>
 			</view>
 
 			<view style='height:120rpx;'></view>
 			<view class='footer acea-row row-right row-middle'>
-				<view class='bnt bg-color' v-if="cartInfo.status==3" @tap='delOrder'>{{$t(`delete_order`)}}</view>
+				<view class='bnt bg-color' v-if="cartInfo.status==3" @tap='delOrder'>{{$t(`删除订单`)}}</view>
 				<navigator class='bnt cancel' hover-class='none'
 					v-if="cartInfo.delivery_id && cartInfo.delivery_type === 'express'"
-					:url="'/pages/points_mall/logistics_details?order_id='+ cartInfo.order_id">{{$t(`view_log`)}}
+					:url="'/pages/points_mall/logistics_details?order_id='+ cartInfo.order_id">{{$t(`查看物流`)}}
 				</navigator>
-				<view class='bnt bg-color' v-if="cartInfo.status==2" @tap='confirmOrder'>{{$t(`confirm_goods`)}}</view>
+				<view class='bnt bg-color' v-if="cartInfo.status==2" @tap='confirmOrder'>{{$t(`确认收货`)}}</view>
 			</view>
 		</view>
 		<!-- #ifndef MP -->
@@ -153,26 +153,26 @@
 				status: {}, //订单底部按钮状态
 				isClose: false,
 				payMode: [{
-						name: this.$t(`wechat_pay`),
+						name: this.$t(`微信支付`),
 						icon: "icon-weixinzhifu",
 						value: 'weixin',
-						title: this.$t(`wechat_quick_pay`),
+						title: this.$t(`使用微信快捷支付`),
 						payStatus: true,
 					},
 					// #ifdef H5 || APP-PLUS
 					{
-						name: this.$t(`pay_alipay`),
+						name: this.$t(`支付宝支付`),
 						icon: 'icon-zhifubao',
 						value: 'alipay',
-						title: this.$t(`online_alipay`),
+						title: this.$t(`使用线上支付宝支付`),
 						payStatus: true
 					},
 					// #endif
 					{
-						name: this.$t(`balance_payment`),
+						name: this.$t(`余额支付`),
 						icon: "icon-yuezhifu",
 						value: 'yue',
-						title: this.$t(`available_balance`),
+						title: this.$t(`当前可用余额：`),
 						number: 0,
 						payStatus: true
 					},
@@ -208,7 +208,7 @@
 				const clipboard = new ClipboardJS(".copy-data");
 				clipboard.on("success", () => {
 					this.$util.Tips({
-						title: this.$t(`copy_success`)
+						title: this.$t(`复制成功`)
 					});
 				});
 			});
@@ -224,7 +224,7 @@
 			openSubcribe: function(e) {
 				let page = e;
 				uni.showLoading({
-					title: this.$t(`Loading`),
+					title: this.$t(`正在加载`),
 				})
 				openOrderRefundSubscribe().then(res => {
 					uni.hideLoading();
@@ -259,7 +259,7 @@
 			 */
 			showMaoLocation: function() {
 				if (!this.system_store.latitude || !this.system_store.longitude) return this.$util.Tips({
-					title: this.$t(`not_view_map`)
+					title: this.$t(`缺少经纬度信息无法查看地图！`)
 				});
 				uni.openLocation({
 					latitude: parseFloat(this.system_store.latitude),
@@ -336,7 +336,7 @@
 			getOrderInfo: function() {
 				let that = this;
 				uni.showLoading({
-					title: this.$t(`Loading`)
+					title: this.$t(`正在加载中`)
 				});
 				integralOrderDetails(this.order_id).then(res => {
 					uni.hideLoading();
@@ -407,15 +407,15 @@
 			confirmOrder: function() {
 				let that = this;
 				uni.showModal({
-					title: this.$t(`confirm_goods`),
-					content: this.$t(`protect_rights`),
+					title: this.$t(`确认收货`),
+					content: this.$t(`为保障权益，请收到货确认无误后，再确认收货`),
 					success: function(res) {
 						if (res.confirm) {
 							orderTake({
 								order_id: that.order_id
 							}).then(res => {
 								return that.$util.Tips({
-									title: this.$t(`success_operation`),
+									title: this.$t(`操作成功`),
 									icon: 'success'
 								}, function() {
 									that.getOrderInfo();
@@ -439,7 +439,7 @@
 					order_id: that.order_id
 				}).then(res => {
 					return that.$util.Tips({
-						title: this.$t(`success_deleted`),
+						title: that.$t(`删除成功`),
 						icon: 'success'
 					}, {
 						tab: 5,

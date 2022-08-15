@@ -6,7 +6,7 @@
 					<view class='name line1'>{{titleInfo[0].val}}</view>
 					<view class='line1 txt-btn'>{{titleInfo[1].val}}</view>
 				</view>
-				<navigator class='more' open-type="switchTab" :url="titleInfo[2].val">{{$t(`more`)}}<text
+				<navigator class='more' open-type="switchTab" :url="titleInfo[2].val">{{$t(`更多`)}}<text
 						class='iconfont icon-jiantou'></text></navigator>
 			</view>
 			<view class='scroll-product'>
@@ -29,7 +29,7 @@
 					<view class='name line1'>{{titleInfo[0].val}}</view>
 					<view class='line1 txt-btn'>{{titleInfo[1].val}}</view>
 				</view>
-				<navigator class='more' open-type="switchTab" :url="titleInfo[2].val">{{$t(`more`)}}<text
+				<navigator class='more' open-type="switchTab" :url="titleInfo[2].val">{{$t(`更多`)}}<text
 						class='iconfont icon-jiantou'></text></navigator>
 			</view>
 			<view class='scroll-product'>
@@ -52,11 +52,11 @@
 					<view class='name line1'>{{titleInfo[0].val}}</view>
 					<view class='line1 txt-btn'>{{titleInfo[1].val}}</view>
 				</view>
-				<navigator class='more' open-type="switchTab" :url="titleInfo[2].val">{{$t(`more`)}}<text
+				<navigator class='more' open-type="switchTab" :url="titleInfo[2].val">{{$t(`更多`)}}<text
 						class='iconfont icon-jiantou'></text></navigator>
 			</view>
 			<view class='scroll-product'>
-				<view class="empty-img">{{$t(`quick_select`)}}</view>
+				<view class="empty-img">{{$t(`快速选择，暂无数据`)}}</view>
 			</view>
 		</view>
 	</view>
@@ -104,7 +104,7 @@
 		mounted() {},
 		data() {
 			return {
-				fastInfo: this.$t(`categories_choose`),
+				fastInfo: this.$t(`上百种商品分类任您选择`),
 				fastList: [],
 				name: this.$options.name,
 				isShow: true,

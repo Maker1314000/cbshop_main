@@ -5,21 +5,21 @@
 				<image class="image" :src="userInfo.avatar"></image>
 				<view class="text">
 					<view class="name">{{userInfo.nickname}}</view>
-					<view v-if="userInfo.is_ever_level">{{$t(`svip_permanent`)}}</view>
-					<view v-else-if="userInfo.is_money_level">{{$t(`svip_num`)}} {{userInfo.overdue_time | dateFormat}} {{$t(`maturity`)}}</view>
-					<view v-else>{{$t(`you_and`)}} {{userInfo.shop_name}} {{$t(`mall`)}} {{userInfo.register_days}} {{$t(`day`)}}</view>
+					<view v-if="userInfo.is_ever_level">{{$t(`永久SVIP会员`)}}</view>
+					<view v-else-if="userInfo.is_money_level">{{$t(`SVIP会员`)}} {{userInfo.overdue_time | dateFormat}} {{$t(`到期`)}}</view>
+					<view v-else>{{$t(`您与`)}} {{userInfo.shop_name}} {{$t(`商城的第`)}} {{userInfo.register_days}} {{$t(`天.`)}}</view>
 				</view>
 			</view>
 			<view class="acea-row row-between-wrapper info">
-				<view v-if="userInfo.is_money_level">{{$t(`save_for_you`)}} {{$t(`money`)}}<text class="num">{{userInfo.economize_money}}</text>
+				<view v-if="userInfo.is_money_level">{{$t(`已累积为您节省`)}} {{$t(`￥`)}}<text class="num">{{userInfo.economize_money}}</text>
 				</view>
-				<view v-else>{{$t(`enjoy_vip`)}}</view>
-				<view class="btn" @click="scrollToCard">{{userInfo.is_money_level ? $t(`renewal_vip`) : $t(`join_vip`)}}</view>
+				<view v-else>{{$t(`开通即享会员权益`)}}</view>
+				<view class="btn" @click="scrollToCard">{{userInfo.is_money_level ? $t(`续费会员`) : $t(`开通会员`)}}</view>
 			</view>
 		</view>
 		<view class="right-section">
 			<view class="section-hd acea-row row-center-wrapper">
-				<view class="title acea-row row-center row-bottom"><text class="iconfont icon-huiyuan2"></text>{{$t(`svip`)}}
+				<view class="title acea-row row-center row-bottom"><text class="iconfont icon-huiyuan2"></text>{{$t(`SVIP会员尊享权`)}}
 				</view>
 			</view>
 			<view class="section-bd acea-row row-between-wrapper">
@@ -34,56 +34,56 @@
 		</view>
 		<view class="type-section" id="card">
 			<view class="title">
-				<view class="bold">{{userInfo.is_money_level ? $t(`renewal_vip`) : $t(`join_vip`)}}</view>
-				<view>{{$t(`valid_until`)}}<text class="time">{{memberEndTime}}</text></view>
+				<view class="bold">{{userInfo.is_money_level ? $t(`续费会员`) : $t(`开通会员`)}}</view>
+				<view>{{$t(`有效期至`)}}<text class="time">{{memberEndTime}}</text></view>
 			</view>
 			<scroll-view class="scroll" scroll-x="true">
 				<view v-for="item in memberType" :key="item.type" class="item" :class="{on: item.mc_id === mc_id}"
 					@click="checkType(item)">
 					<view>{{item.title}}</view>
-					<view class="new">{{$t(`money`)}}<text class="num">{{item.pre_price | moneyFormat}}</text></view>
-					<view v-if="item.type === 'free'" class="info">{{$t(`try_out`)}}{{item.vip_day}}{{$t(`day`)}}</view>
-					<view v-else class="old">{{$t(`money`)}}{{item.price | moneyFormat}}</view>
+					<view class="new">{{$t(`￥`)}}<text class="num">{{item.pre_price | moneyFormat}}</text></view>
+					<view v-if="item.type === 'free'" class="info">{{$t(`试用`)}}{{item.vip_day}}{{$t(`天.`)}}</view>
+					<view v-else class="old">{{$t(`￥`)}}{{item.price | moneyFormat}}</view>
 				</view>
 			</scroll-view>
 			<view v-if="memberExplain" class="agree">
-				<navigator class="link" url="/pages/annex/vip_clause/index" hover-class="none">{{$t(`buy_agree`)}}《<text
-						class="mark">{{$t(`vip_agreement`)}}</text>》</navigator>
+				<navigator class="link" url="/pages/annex/vip_clause/index" hover-class="none">{{$t(`购买即视为同意`)}}《<text
+						class="mark">{{$t(`会员用户协议`)}}</text>》</navigator>
 			</view>
-			<view class="buy" @click="pay">{{$t(`pay_now`)}}</view>
+			<view class="buy" @click="pay">{{$t(`立即支付`)}}</view>
 			<view class="cash">
-				<text @click="drawMemberCard">{{$t(`click_card`)}}</text>
+				<text @click="drawMemberCard">{{$t(`点击兑换卡密`)}}</text>
 			</view>
 		</view>
 		<view v-if="memberCoupons.length" class="coupon-section">
 			<view class="section-hd acea-row row-between-wrapper">
-				<view class="title">{{$t(`vip_coupon`)}}</view>
-				<navigator class="link" url="/pages/annex/vip_coupon/index">{{$t(`see_more`)}}<text
+				<view class="title">{{$t(`会员优惠券`)}}</view>
+				<navigator class="link" url="/pages/annex/vip_coupon/index">{{$t(`查看更多`)}}<text
 						class="iconfont icon-xiangyou"></text></navigator>
 			</view>
 			<scroll-view class="section-bd" scroll-x="true">
 				<view v-for="item in memberCoupons" :key="item.id" class="item acea-row row-center-wrapper"
-					:class="{gray: item.is_fail || item.status === $t(`used`)}">
-					<view class="money">{{$t(`money`)}}<text class="num">{{item.coupon_price | moneyFormat}}</text></view>
+					:class="{gray: item.is_fail || item.status === $t(`已使用`)}">
+					<view class="money">{{$t(`￥`)}}<text class="num">{{item.coupon_price | moneyFormat}}</text></view>
 					<view class="text">
 						<view class="name">{{item.coupon_title}}</view>
-						<view v-if="item.use_min_price === '0.00'" class="mark">{{$t(`no_spend`)}}</view>
-						<view v-else class="mark">{{$t(`full`)}}{{item.use_min_price | moneyFormat}}{{$t(`available`)}}</view>
+						<view v-if="item.use_min_price === '0.00'" class="mark">{{$t(`无门槛券`)}}</view>
+						<view v-else class="mark">{{$t(`满`)}}{{item.use_min_price | moneyFormat}}{{$t(`元可用`)}}</view>
 					</view>
 					<!-- <view class="btn">{{item.status}}</view> -->
 				</view>
 			</scroll-view>
 		</view>
 		<view v-if="goodsList.length" class="goods-section">
-			<view class="section-hd">{{$t(`svip_recommend`)}}</view>
+			<view class="section-hd">{{$t(`SVIP商品推荐`)}}</view>
 			<view class="section-bd acea-row">
 				<view v-for="item in goodsList" :key="item.id" class="item" @click="goDetail(item.id)">
 					<image class="image" :src="item.image"></image>
 					<view class="name">{{item.store_name}}</view>
-					<view class="svip-price">{{$t(`money`)}}{{item.vip_price}}
+					<view class="svip-price">{{$t(`￥`)}}{{item.vip_price}}
 						<image src="../../../static/images/vip.png"></image>
 					</view>
-					<view class="shop-price">{{$t(`mall_price`)}}：{{$t(`money`)}}{{item.price}}</view>
+					<view class="shop-price">{{$t(`商城价`)}}：{{$t(`￥`)}}{{item.price}}</view>
 				</view>
 			</view>
 		</view>
@@ -92,15 +92,15 @@
 			<view class="cont">
 				<view class="title">
 					<view class="line"></view>
-					<view class="name">{{$t(`activate_vip`)}}</view>
+					<view class="name">{{$t(`激活会员卡`)}}</view>
 					<view class="line"></view>
 				</view>
 				<form class="form" @submit="checkForm">
-					<input v-model="account" class="input" name="account" type="text" :placeholder="$t(`enter_card_num`)"
+					<input v-model="account" class="input" name="account" type="text" :placeholder="$t(`请输入卡号`)"
 						placeholder-style="color:#C49D89" />
-					<input v-model="password" class="input" name="password" type="text" :placeholder="$t(`enter_card_psw`)"
+					<input v-model="password" class="input" name="password" type="text" :placeholder="$t(`请输入卡密`)"
 						placeholder-style="color:#C49D89" password />
-					<button class="button" form-type="submit">{{$t(`confirm_activate`)}}</button>
+					<button class="button" form-type="submit">{{$t(`确认激活`)}}</button>
 				</form>
 			</view>
 			<button class="iconfont icon-guanbi2" @click="closePopup"></button>
@@ -165,19 +165,19 @@
 				goodsList: [],
 				pay_order_id: '',
 				payMode: [{
-						name: this.$t(`wechat_pay`),
+						name: this.$t(`微信支付`),
 						icon: 'icon-weixinzhifu',
 						value: 'weixin',
-						title: this.$t(`wechat_quick_pay`),
+						title: this.$t(`微信支付`),
 						payStatus: true
 					}
 					// #ifdef H5 ||APP-PLUS
 					,
 					{
-						name: this.$t(`pay_alipay`) ,
+						name: this.$t(`支付宝支付`) ,
 						icon: 'icon-zhifubao',
 						value: 'alipay',
-						title: this.$t(`pay_alipay`) ,
+						title: this.$t(`支付宝支付`) ,
 						payStatus: true
 					},
 					// #endif
@@ -244,7 +244,7 @@
 			// 付费会员数据
 			memberCard() {
 				uni.showLoading({
-					title: this.$t(`Loading`)
+					title: this.$t(`正在加载中`)
 				});
 				memberCard().then(res => {
 					uni.hideLoading();
@@ -286,7 +286,7 @@
 					return;
 				}
 				uni.showLoading({
-					title: this.$t(`Loading`)
+					title: this.$t(`正在加载中`)
 				});
 				groomList(5, {
 					page: this.page,
@@ -361,13 +361,13 @@
 				}
 				if (!this.account) {
 					return uni.showToast({
-						title: this.$t(`enter_card_num`),
+						title: this.$t(`请输入卡号`),
 						icon: 'none'
 					});
 				}
 				if (!this.password) {
 					return uni.showToast({
-						title: this.$t(`enter_card_psw`),
+						title: this.$t(`请输入卡密`),
 						icon: 'none'
 					});
 				}
@@ -382,7 +382,7 @@
 				data.from = 'routine';
 				// #endif
 				uni.showLoading({
-					title: this.$t(`active`)
+					title: this.$t(`正在加载中`)
 				});
 				// #ifdef MP
 				memberCardDraw(data).then(res => {
@@ -404,7 +404,7 @@
 			// 立即购买
 			createMemberCard(type) {
 				uni.showLoading({
-					title: this.$t(`Loading`)
+					title: this.$t(`正在加载中`)
 				});
 				let query = {
 					pay_type: type,
@@ -438,7 +438,7 @@
 							this.groomList();
 							uni.hideLoading();
 							uni.showToast({
-								title: this.$t(`0_trial`),
+								title: this.$t(`成功开启0元试用`),
 							});
 						}
 					}).catch(err => {
@@ -458,7 +458,7 @@
 						this.groomList();
 						uni.hideLoading();
 						uni.showToast({
-							title: this.$t(`0_trial`),
+							title: this.$t(`成功开启0元试用`),
 						});
 					}
 				}).catch(err => {
@@ -511,7 +511,7 @@
 							paySign: jsConfig.paySign,
 							success: function(res) {
 								that.$util.Tips({
-									title: this.$t(`pay_success`),
+									title: that.$t(`支付成功`),
 									icon: 'success'
 								}, {
 									tab: 5,
@@ -520,7 +520,7 @@
 							},
 							fail: function() {
 								uni.showToast({
-									title: this.$t(`cancel_payment`),
+									title: that.$t(`取消支付`),
 									icon: 'none'
 								});
 							},
@@ -532,7 +532,7 @@
 						// #ifdef H5
 						this.$wechat.pay(result.jsConfig).then(res => {
 							this.$util.Tips({
-								title: this.$t(`pay_success`),
+								title: this.$t(`支付成功`),
 								icon: 'success'
 							}, {
 								tab: 5,
@@ -541,7 +541,7 @@
 						}).catch(err => {
 							if (err.errMsg == 'chooseWXPay:cancel') {
 								uni.showToast({
-									title: this.$t(`cancel_payment`),
+									title: this.$t(`取消支付`),
 									icon: 'none'
 								});
 							}
@@ -554,7 +554,7 @@
 							success: (e) => {
 
 								uni.showToast({
-									title: this.$t(`payment_failed`)
+									title: this.$t(`支付成功`)
 								})
 								setTimeout(res => {
 									uni.navigateBack()
@@ -562,7 +562,7 @@
 							},
 							fail: (e) => {
 								uni.showToast({
-									title: this.$t(`payment_failed`),
+									title: this.$t(`支付失败`),
 									icon: 'none',
 									duration: 2000
 								})
@@ -607,7 +607,7 @@
 							orderInfo: jsConfig,
 							success: (e) => {
 								uni.showToast({
-									title: this.$t(`pay_success`)
+									title: this.$t(`支付成功`)
 								})
 								setTimeout(res => {
 									uni.navigateBack()
@@ -616,7 +616,7 @@
 							},
 							fail: (e) => {
 								uni.showModal({
-									content: this.$t(`payment_failed`),
+									content: this.$t(`支付失败`),
 									showCancel: false,
 									success: function(res) {
 										if (res.confirm) {
@@ -656,13 +656,13 @@
 					};
 				if (!formData.account) {
 					return uni.showToast({
-						title: this.$t(`enter_card_num`),
+						title: this.$t(`请输入卡号`),
 						icon: 'none'
 					});
 				}
 				if (!formData.password) {
 					return uni.showToast({
-						title: this.$t(`enter_card_psw`),
+						title: this.$t(`请输入卡密`),
 						icon: 'none'
 					});
 				}

@@ -7,7 +7,7 @@
 			</navigator>
 			<navigator url="/pages/goods/goods_search/index" class="search acea-row row-middle" hover-class="none">
 				<text class="iconfont icon-sousuo5"></text>
-				{{$t(`search_product`)}}
+				{{$t(`搜索商品名称`)}}
 			</navigator>
 		</view>
 		<view class="conter">
@@ -15,7 +15,7 @@
 				<scroll-view scroll-y="true" scroll-with-animation='true' style="height: calc(100% - 100rpx)">
 					<view class='item acea-row row-center-wrapper' :class='index==navActive?"on":""'
 						v-for="(item,index) in categoryList" :key="index" @click="tapNav(index,item)">
-						<text>{{item.cate_name}}</text>
+						<text>{{$t(item.cate_name)}}</text>
 					</view>
 				</scroll-view>
 			</view>
@@ -26,7 +26,7 @@
 							scroll-with-animation :scroll-left="tabLeft" show-scrollbar="true">
 							<view class="longItem" :style='"width:"+isWidth+"px"' :class="index===tabClick?'click':''"
 								v-for="(item,index) in categoryErList" :key="index" @click="longClick(index)">
-								{{item.cate_name}}
+								{{$t(item.cate_name)}}
 							</view>
 						</scroll-view>
 					</view>
@@ -43,7 +43,7 @@
 							<view class="acea-row row-middle">
 								<view class="item line1" :class="index===tabClick?'click':''"
 									v-for="(item,index) in categoryErList" :key="index" @click="longClick(index)">
-									{{item.cate_name}}
+									{{$t(item.cate_name)}}
 								</view>
 							</view>
 						</view>
@@ -67,8 +67,8 @@
 				<view class="iconfont icon-gouwuche-yangshi1"></view>
 			</view>
 			<view class="acea-row row-middle">
-				<view class="money">{{$t(`money`)}}<text class="num">{{totalPrice}}</text></view>
-				<view class="bnt" :class="cartCount?'':'on'" @click="subOrder">{{$t(`to_settle`)}}</view>
+				<view class="money">{{$t(`￥`)}}<text class="num">{{totalPrice}}</text></view>
+				<view class="bnt" :class="cartCount?'':'on'" @click="subOrder">{{$t(`去付款`)}}</view>
 			</view>
 		</view>
 		<cartList :cartData="cartData" @closeList="closeList" @ChangeCartNumDan="ChangeCartList"
@@ -127,7 +127,7 @@
 				tempArr: [],
 				loading: false,
 				loadend: false,
-				loadTitle: this.$t(`loading_more`),
+				loadTitle: this.$t(`加载更多`),
 				page: 1,
 				limit: 10,
 				cid: 0, //一级分类
@@ -224,7 +224,7 @@
 					that.cartData.iScart = false;
 				} else {
 					return that.$util.Tips({
-						title: this.$t(`select_product`)
+						title: this.$t(`请选择产品`)
 					});
 				}
 			},
@@ -433,11 +433,11 @@
 					that.$set(that, 'tempArr', that.tempArr);
 					that.loading = false;
 					that.loadend = loadend;
-					that.loadTitle = loadend ? this.$t(`bottom_line`) : this.$t(`loading_more`);
+					that.loadTitle = loadend ? that.$t(`没有更多内容啦~`) : that.$t(`加载更多`);
 					that.page = that.page + 1;
 				}).catch(err => {
 					that.loading = false,
-						that.loadTitle = this.$t(`loading_more`)
+						that.loadTitle = that.$t(`加载更多`);
 				});
 			},
 
@@ -488,7 +488,7 @@
 							this.$set(this.cartData, 'cartList', this.cartData.cartList);
 						}
 						return this.$util.Tips({
-							title: this.$t(`no_more_product`)
+							title: this.$t(`该产品没有更多库存了`)
 						});
 					} else {
 						if (!isDuo) {
@@ -548,7 +548,7 @@
 						productSelect === undefined
 					)
 						return that.$util.Tips({
-							title: this.$t(`inventory_shortage`)
+							title: that.$t(`该产品没有更多库存了`)
 						});
 				}
 				let q = {
@@ -562,7 +562,7 @@
 						if (duo) {
 							that.attr.cartAttr = false;
 							that.$util.Tips({
-								title: this.$t(`added_successfully`)
+								title: that.$t(`添加成功`)
 							});
 							// that.page = 1;
 							// that.loadend = false;
@@ -618,7 +618,7 @@
 						return
 					}
 					uni.showLoading({
-						title: this.$t(`Loading`)
+						title: this.$t(`正在加载中`)
 					});
 
 					this.storeName = item.store_name;
@@ -669,7 +669,7 @@
 					data.forEach(item => {
 						item.children.unshift({
 							'id': 0,
-							'cate_name': this.$t(`all`)
+							'cate_name': that.$t(`全部`)
 						})
 					})
 					that.categoryTitle = data[0].cate_name;

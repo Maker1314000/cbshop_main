@@ -4,17 +4,17 @@
 			<view class='addAddress'>
 				<view class='list'>
 					<view class='item acea-row row-between-wrapper'>
-						<view class='name'>{{$t(`full_name`)}}</view>
-						<input type='text' :placeholder='$t(`type_name`)' name='real_name' :value="userAddress.real_name"
+						<view class='name'>{{$t(`姓名`)}}</view>
+						<input type='text' :placeholder='$t(`请输入姓名`)' name='real_name' :value="userAddress.real_name"
 							placeholder-class='placeholder'></input>
 					</view>
 					<view class='item acea-row row-between-wrapper'>
-						<view class='name'>{{$t(`contact_no`)}}</view>
-						<input type='number' :placeholder='$t(`enter_contact_number`)' name="phone" :value='userAddress.phone'
+						<view class='name'>{{$t(`联系电话`)}}</view>
+						<input type='number' :placeholder='$t(`请输入联系电话`)' name="phone" :value='userAddress.phone'
 							placeholder-class='placeholder' pattern="\d*"></input>
 					</view>
 					<view class='item acea-row row-between-wrapper'>
-						<view class='name'>{{$t(`your_area`)}}</view>
+						<view class='name'>{{$t(`所在地区`)}}</view>
 						<view class="address">
 							<picker mode="multiSelector" @change="bindRegionChange"
 								@columnchange="bindMultiPickerColumnChange" :value="valueRegion" :range="multiArray">
@@ -26,23 +26,23 @@
 						</view>
 					</view>
 					<view class='item acea-row row-between-wrapper'>
-						<view class='name'>{{$t(`address`)}}</view>
-						<input type='text' :placeholder='$t(`fill_specific_add`)' name='detail' placeholder-class='placeholder'
+						<view class='name'>{{$t(`详细地址`)}}</view>
+						<input type='text' :placeholder='$t(`请填写具体地址`)' name='detail' placeholder-class='placeholder'
 							:value='userAddress.detail'></input>
 					</view>
 				</view>
 				<view class='default acea-row row-middle' @click='ChangeIsDefault'>
 					<checkbox-group>
-						<checkbox :checked="userAddress.is_default ? true : false" />{{$t(`set_default`)}}
+						<checkbox :checked="userAddress.is_default ? true : false" />{{$t(`设置为默认地址`)}}
 					</checkbox-group>
 				</view>
 
-				<button class='keepBnt bg-color' form-type="submit">{{$t(`save_now`)}}</button>
+				<button class='keepBnt bg-color' form-type="submit">{{$t(`立即保存`)}}</button>
 				<!-- #ifdef MP -->
-				<view class="wechatAddress" v-if="!id" @click="getWxAddress">{{$t(`import_wechat_address`)}}</view>
+				<view class="wechatAddress" v-if="!id" @click="getWxAddress">{{$t(`导入微信地址`)}}</view>
 				<!-- #endif -->
 				<!-- #ifdef H5 -->
-				<view class="wechatAddress" v-if="this.$wechat.isWeixin() && !id" @click="getAddress">{{$t(`import_wechat_address`)}}</view>
+				<view class="wechatAddress" v-if="this.$wechat.isWeixin() && !id" @click="getAddress">{{$t(`导入微信地址`)}}</view>
 				<!-- #endif -->
 			</view>
 		</form>
@@ -85,7 +85,7 @@
 		mixins: [colors],
 		data() {
 			return {
-				regionDval: [this.$t(`Zhejiang`), this.$t(`Hangzhou`), this.$t(`Binjiang`)],
+				regionDval: [this.$t(`浙江省`), this.$t(`杭州市`), this.$t(`滨江区`)],
 				cartId: '', //购物车id
 				pinkId: 0, //拼团id
 				couponId: 0, //优惠券id
@@ -93,7 +93,7 @@
 				userAddress: {
 					is_default: false
 				}, //地址详情
-				region: [this.$t(`Province`), this.$t(`city`), this.$t(`Area`)],
+				region: [this.$t(`省`), this.$t(`市`), this.$t(`区`)],
 				valueRegion: [0, 0, 0],
 				isAuto: false, //没有授权的不会自动授权
 				isShowAuth: false, //是否隐藏授权
@@ -101,7 +101,7 @@
 				multiArray: [],
 				multiIndex: [0, 0, 0],
 				cityId: 0,
-				defaultRegion: [this.$t(`Guangdong`), this.$t(`Guangzhou`), this.$t(`Panyu`)],
+				defaultRegion: [this.$t(`广东省`), this.$t(`广州市`), this.$t(`番禺区`)],
 				defaultRegionCode: '110101',
 				news: '',
 				noCoupon: 0
@@ -127,7 +127,7 @@
 				this.noCoupon = options.noCoupon || 0;
 				this.news = options.new || '';
 				uni.setNavigationBarTitle({
-					title: options.id ? this.$t(`change_address`) : this.$t(`add_address`)
+					title: options.id ? this.$t(`修改地址`) : this.$t(`添加地址`)
 				})
 				this.getUserAddress();
 				this.getCityList();
@@ -329,7 +329,7 @@
 										}
 									}, 1000);
 									return that.$util.Tips({
-										title: this.$t(`add_address`),
+										title: this.$t(`添加成功`),
 										icon: 'success'
 									});
 								}).catch(err => {
@@ -341,15 +341,15 @@
 							fail: function(res) {
 								if (res.errMsg == 'chooseAddress:cancel') return that.$util
 									.Tips({
-										title: this.$t(`cancel_selection`)
+										title: this.$t(`取消选择`)
 									});
 							},
 						})
 					},
 					fail: function(res) {
 						uni.showModal({
-							title: this.$t(`deny_wechat`),
-							content: this.$t(`enter_permission`),
+							title: this.$t(`您已拒绝导入微信地址权限`),
+							content: this.$t(`是否进入权限管理，调整授权？`),
 							success(res) {
 								if (res.confirm) {
 									uni.openSetting({
@@ -357,7 +357,7 @@
 									});
 								} else if (res.cancel) {
 									return that.$util.Tips({
-										title: this.$t(`cancelled`)
+										title: that.$t(`已取消！`)
 									});
 								}
 							}
@@ -410,14 +410,14 @@
 							}, 1000);
 							// close();
 							that.$util.Tips({
-								title: this.$t(`add_success`),
+								title: that.$t(`添加成功`),
 								icon: 'success'
 							});
 						})
 						.catch(err => {
 							// close();
 							return that.$util.Tips({
-								title: err || this.$t(`add_failed`)
+								title: err || that.$t(`添加失败`)
 							});
 						});
 				}).catch(err => {});
@@ -430,19 +430,19 @@
 				let that = this,
 					value = e.detail.value;
 				if (!value.real_name.trim()) return that.$util.Tips({
-					title: this.$t(`fill_receiver_name`)
+					title: that.$t(`请填写收货人姓名`)
 				});
 				if (!value.phone) return that.$util.Tips({
-					title: this.$t(`fill_phone`)
+					title: that.$t(`请填写联系电话`)
 				});
 				if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(value.phone)) return that.$util.Tips({
-					title: this.$t(`input_correct_phone`)
+					title: that.$t(`请输入正确的手机号码`)
 				});
-				if (that.region[0] == this.$t(`Province`)) return that.$util.Tips({
-					title: this.$t(`select_region`)
+				if (that.region[0] == that.$t(`省`)) return that.$util.Tips({
+					title: that.$t(`请选择所在地区`)
 				});
 				if (!value.detail.trim()) return that.$util.Tips({
-					title: this.$t(`fill_address`)
+					title: that.$t(`请填写详细地址`)
 				});
 				value.id = that.id;
 				let regionArray = that.region;
@@ -455,18 +455,18 @@
 				value.is_default = that.userAddress.is_default ? 1 : 0;
 
 				uni.showLoading({
-					title: this.$t(`saving`),
+					title: that.$t(`保存中`),
 					mask: true
 				})
 				editAddress(value).then(res => {
 					if (that.id)
 						that.$util.Tips({
-							title: this.$t(`success_modify`),
+							title: that.$t(`修改成功`),
 							icon: 'success'
 						});
 					else
 						that.$util.Tips({
-							title: this.$t(`added_successfully`),
+							title: that.$t(`添加成功`),
 							icon: 'success'
 						});
 					setTimeout(function() {

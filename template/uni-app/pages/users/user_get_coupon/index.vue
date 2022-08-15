@@ -10,27 +10,27 @@
 			<view class='item acea-row row-center-wrapper' v-for="(item,index) in couponsList" :key="index" :class="{svip: item.receive_type === 4}">
 				<view class="moneyCon acea-row row-center-wrapper">
 					<view class='money' :class='item.is_use ? "moneyGray" : "" '>
-						<view>{{$t(`money`)}}<text class='num'>{{item.coupon_price}}</text></view>
-						<view class="pic-num" v-if="item.use_min_price > 0">{{$t(`full`)}} {{item.use_min_price}} {{$t(`available`)}}</view>
-						<view class="pic-num" v-else>{{$t(`no_spend`)}}</view>
+						<view>{{$t(`￥`)}}<text class='num'>{{item.coupon_price}}</text></view>
+						<view class="pic-num" v-if="item.use_min_price > 0">{{$t(`满`)}} {{item.use_min_price}} {{$t(`元可用`)}}</view>
+						<view class="pic-num" v-else>{{$t(`无门槛券`)}}</view>
 					</view>
 				</view>
 				<view class="text">
 					<view class="condition">
 						<view class="name line2">
-							<view class="line-title" :class="item.is_use == true || item.is_use == 2 ? 'bg-color-huic' : ''" v-if="item.type === 0">{{$t(`universal_coupon`)}}</view>
-							<view class="line-title" :class="item.is_use == true || item.is_use == 2 ? 'bg-color-huic' : ''" v-else-if="item.type === 1">{{$t(`category_coupons`)}}</view>
-							<view class="line-title" :class="item.is_use == true || item.is_use == 2 ? 'bg-color-huic' : ''" v-else>{{$t(`commodity_voucher`)}}</view>
+							<view class="line-title" :class="item.is_use == true || item.is_use == 2 ? 'bg-color-huic' : ''" v-if="item.type === 0">{{$t(`通用劵`)}}</view>
+							<view class="line-title" :class="item.is_use == true || item.is_use == 2 ? 'bg-color-huic' : ''" v-else-if="item.type === 1">{{$t(`品类券`)}}</view>
+							<view class="line-title" :class="item.is_use == true || item.is_use == 2 ? 'bg-color-huic' : ''" v-else>{{$t(`商品券`)}}</view>
 							<image v-if="item.receive_type === 4" class="pic" src="/static/images/fvip.png"></image>
 							{{ item.title }}
 						</view>
 					</view>
 					<view class="data acea-row row-between-wrapper">
-						<view v-if="item.coupon_time">{{$t(`after_receiving`)}} {{item.coupon_time}} {{$t(`days_available`)}}</view>
+						<view v-if="item.coupon_time">{{$t(`领取后`)}} {{item.coupon_time}} {{$t(`天内可用`)}}</view>
 						<view v-else>{{ item.start_use_time ? item.start_use_time + '-' : '' }}{{ item.end_use_time }}</view>
-						<view class="bnt gray" v-if="item.is_use == true">{{$t(`received`)}}</view>
-						<view class="bnt gray" v-else-if="item.is_use == 2">{{$t(`finished`)}}</view>
-						<view class="bnt bg-color" v-else @click="getCoupon(item.id, index)">{{$t(`get_it_now`)}}</view>
+						<view class="bnt gray" v-if="item.is_use == true">{{$t(`已领取`)}}</view>
+						<view class="bnt gray" v-else-if="item.is_use == 2">{{$t(`已领完`)}}</view>
+						<view class="bnt bg-color" v-else @click="getCoupon(item.id, index)">{{$t(`立即领取`)}}</view>
 					</view>
 				</view>
 			</view>
@@ -83,7 +83,7 @@
 				couponsList: [],
 				loading: false,
 				loadend: false,
-				loadTitle: this.$t(`loading_more`), //提示语
+				loadTitle: this.$t(`加载更多`), //提示语
 				page: 1,
 				limit: 20,
 				isAuto: false, //没有授权的不会自动授权
@@ -91,17 +91,17 @@
 				type: 0,
 				navList: [{
 						type: 0,
-						name: this.$t(`universal_coupon`),
+						name: this.$t(`通用券`),
 						count: 0
 					},
 					{
 						type: 1,
-						name: this.$t(`category_coupons`),
+						name: this.$t(`品类券`),
 						count: 0
 					},
 					{
 						type: 2,
-						name: this.$t(`commodity_voucher`),
+						name: this.$t(`商品券`),
 						count: 0
 					},
 				],
@@ -150,7 +150,7 @@
 					list[index].is_use = true;
 					that.$set(that, 'couponsList', list);
 					that.$util.Tips({
-						title: this.$t(`receive_success`)
+						title: that.$t(`领取成功`)
 					});
 				}).catch(error => {
 					return that.$util.Tips({
@@ -166,7 +166,7 @@
 				if (this.loadend) return false;
 				if (this.loading) return false;
 				that.loading = true;
-				that.loadTitle = this.$t(`loading_more`);
+				that.loadTitle = that.$t(`加载更多`);
 				getCoupons({
 					type: that.type,
 					page: that.page,
@@ -184,11 +184,11 @@
 					that.$set(that, 'couponsList', couponsList);
 					that.loadend = loadend;
 					that.loading = false;
-					that.loadTitle = loadend ? this.$t(`bottom_line`) : this.$t(`loading_more`);
+					that.loadTitle = loadend ? that.$t(`我也是有底线的`) : that.$t(`加载更多`);
 					that.page = that.page + 1;
 				}).catch(err => {
 					that.loading = false;
-					that.loadTitle = this.$t(`loading_more`);
+					that.loadTitle = that.$t(`加载更多`);
 				});
 			},
 			setType: function(type) {

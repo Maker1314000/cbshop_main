@@ -13,6 +13,7 @@ import {
 import {
 	getProductCode
 } from "@/api/store.js";
+import i18n from '../utils/lang.js';
 let sysHeight = uni.getSystemInfoSync().statusBarHeight + 'px';
 export const sharePoster = {
 	data() {
@@ -74,14 +75,14 @@ export const sharePoster = {
 			arr2 = [that.posterbackgd, that.storeImage, that.PromotionCode];
 			if (that.isDown)
 				return that.$util.Tips({
-					title: "正在下载海报,请稍后再试",
+					title: i18n.t(`正在下载海报,请稍后再试`),
 				});
 			// #endif
 			// #ifdef H5 || APP-PLUS
 			arr2 = [that.posterbackgd, that.storeImageBase64, that.PromotionCode];
 			if (!that.storeImageBase64)
 				return that.$util.Tips({
-					title: "正在下载海报,请稍后再试",
+					title: i18n.t(`正在下载海报,请稍后再试`),
 				});
 			// #endif
 			uni.getImageInfo({
@@ -94,7 +95,7 @@ export const sharePoster = {
 					// #endif
 					// #ifdef MP
 					return that.$util.Tips({
-						title: "正在下载海报,请稍后再试",
+						title: i18n.t(`正在下载海报,请稍后再试`),
 					});
 					// #endif
 				},
@@ -105,7 +106,7 @@ export const sharePoster = {
 							arr2[2] = msgPromotionCode;
 							if (arr2[2] == "")
 								return that.$util.Tips({
-									title: "海报二维码生成失败！",
+									title: i18n.t(`海报二维码生成失败`),
 								});
 							that.$util.PosterCanvas(
 								arr2,

@@ -3,7 +3,7 @@
 		<view class="top-tabs" :style="colorStyle">
 			<view class="tabs" :class="{btborder:type === index}" v-for="(item,index) in tabsList" :key="index"
 				@tap="changeTabs(index)">
-				{{item.name}}
+				{{$t(item.name)}}
 			</view>
 		</view>
 		<view v-if="list.length && type ===1" class="list">
@@ -13,16 +13,16 @@
 				</view>
 				<view class="text-wrap">
 					<view class="name-wrap">
-						<view class="name">{{ item.nickname }}</view>
+						<view class="name">{{ $t(item.nickname) }}</view>
 						<view>{{ item._update_time }}</view>
 					</view>
 					<view class="info-wrap">
 						<view v-if="item.message_type === 1" class="info" v-html="item.message"></view>
 						<view v-if="item.message_type === 2" class="info" v-html="item.message"></view>
-						<view v-if="item.message_type === 3" class="info">[{{$t(`picture`)}}]</view>
-						<view v-if="item.message_type === 4" class="info">[{{$t(`voice`)}}]</view>
-						<view v-if="item.message_type === 5" class="info">[{{$t(`commodity`)}}]</view>
-						<view v-if="item.message_type === 6" class="info">[{{$t(`order`)}}]</view>
+						<view v-if="item.message_type === 3" class="info">{{$t(`[图片]`)}}</view>
+						<view v-if="item.message_type === 4" class="info">{{$t(`[语音]`)}}</view>
+						<view v-if="item.message_type === 5" class="info">{{$t(`[商品]`)}}</view>
+						<view v-if="item.message_type === 6" class="info">{{$t(`[订单]`)}}</view>
 						<view class="num" v-if="item.mssage_num">{{ item.mssage_num }}</view>
 					</view>
 				</view>
@@ -37,7 +37,7 @@
 				</view>
 				<view class="text-wrap">
 					<view class="name-wrap">
-						<view class="name">{{ item.title || '--' }}</view>
+						<view class="name">{{ $t(item.title) || '--' }}</view>
 						<view>{{ item.add_time }}</view>
 					</view>
 					<view class="info-wrap">
@@ -50,7 +50,7 @@
 			<view class="image-wrap">
 				<image class="image" :src="imgHost + '/statics/images/noMessage.png'"></image>
 			</view>
-			<view>{{$t(`no_news_records`)}}</view>
+			<view>{{$t(`亲、暂无消息记录哟！`)}}</view>
 		</view>
 		<!-- #ifndef MP -->
 		<home></home>
@@ -82,10 +82,10 @@
 				finished: false,
 				tabsList: [{
 					key: 0,
-					name: this.$t(`station_news`)
+					name: '站内消息'
 				}, {
 					key: 1,
-					name: this.$t(`service_message`)
+					name: '客服消息'
 				}],
 				startData: {
 					clientX: 0,
@@ -165,7 +165,7 @@
 				}
 				this.loading = true;
 				uni.showLoading({
-					title: this.$t(`Loading`)
+					title: this.$t(`加载中`)
 				});
 				messageSystem({
 						page: this.page,
@@ -196,7 +196,7 @@
 				}
 				this.loading = true;
 				uni.showLoading({
-					title: this.$t(`Loading`)
+					title: '加载中'
 				});
 				serviceRecord({
 						page: this.page,

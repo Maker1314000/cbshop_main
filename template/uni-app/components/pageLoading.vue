@@ -1,6 +1,6 @@
 <template>
 	<view class="load" v-if="status">
-		{{$t(`Loading`)}}
+		{{$t(`正在加载中`)}}
 	</view>
 </template>
 

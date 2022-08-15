@@ -6,55 +6,55 @@
 				v-if="order_pay_info.paid || order_pay_info.pay_type == 'offline'"></view>
 			<view class='iconfont icons icon-iconfontguanbi' v-else></view>
 			<!-- 失败时：订单支付失败 -->
-			<view class='status' v-if="order_pay_info.pay_type != 'offline'">{{order_pay_info.paid ? $t(`order_success`):$t(`order_fail`)}}
+			<view class='status' v-if="order_pay_info.pay_type != 'offline'">{{order_pay_info.paid ? $t(`订单支付成功`):$t(`订单支付失败`)}}
 			</view>
-			<view class='status' v-else>{{$t(`order_created`)}}</view>
+			<view class='status' v-else>{{$t(`订单创建成功`)}}</view>
 			<view class='wrapper'>
 				<view class='item acea-row row-between-wrapper'>
-					<view>{{$t(`order_number`)}}</view>
+					<view>{{$t(`订单号`)}}</view>
 					<view class='itemCom'>{{orderId}}</view>
 				</view>
 				<view class='item acea-row row-between-wrapper'>
-					<view>{{$t(`order_time`)}}</view>
+					<view>{{$t(`下单时间`)}}</view>
 					<view class='itemCom'>{{order_pay_info._add_time}}</view>
 				</view>
 				<view class='item acea-row row-between-wrapper'>
-					<view>{{$t(`payment_method`)}}</view>
-					<view class='itemCom'>{{order_pay_info._status._payType || $t(`not_paid`)}}</view>
+					<view>{{$t(`支付方式`)}}</view>
+					<view class='itemCom'>{{$t(order_pay_info._status._payType) || $t(`暂未支付`)}}</view>
 				</view>
 				<view class='item acea-row row-between-wrapper'>
-					<view>{{$t(`payment_amount`)}}</view>
+					<view>{{$t(`支付金额`)}}</view>
 					<view class='itemCom'>{{order_pay_info.pay_price}}</view>
 				</view>
 				<!--失败时加上这个  -->
 				<view class='item acea-row row-between-wrapper'
 					v-if="order_pay_info.paid==0 && order_pay_info.pay_type != 'offline'">
-					<view>{{$t(`reason_failure`)}}</view>
-					<view class='itemCom'>{{status==2 ? $t(`cancel_payment`):msg}}</view>
+					<view>{{$t(`失败原因`)}}</view>
+					<view class='itemCom'>{{status==2 ? $t(`取消支付`):msg}}</view>
 				</view>
 			</view>
 			<!--失败时： 重新购买 -->
 			<view @tap="goOrderDetails" v-if="status==0">
-				<button formType="submit" class='returnBnt bg-color' hover-class='none'>{{$t(`check_order`)}}</button>
+				<button formType="submit" class='returnBnt bg-color' hover-class='none'>{{$t(`查看订单`)}}</button>
 			</view>
 			<view @tap="goOrderDetails" v-if="order_pay_info.paid==0 && status==1">
-				<button class='returnBnt bg-color' hover-class='none'>{{$t(`repurchase`)}}</button>
+				<button class='returnBnt bg-color' hover-class='none'>{{$t(`重新购买`)}}</button>
 			</view>
 			<view @tap="goOrderDetails" v-if="order_pay_info.paid==0 && status==2">
-				<button class='returnBnt bg-color' hover-class='none'>{{$t(`pay_again`)}}</button>
+				<button class='returnBnt bg-color' hover-class='none'>{{$t(`重新支付`)}}</button>
 			</view>
 			<button @click="goPink(order_pay_info.pink_id)" class='returnBnt cart-color' formType="submit"
 				hover-class='none'
-				v-if="order_pay_info.pink_id && order_pay_info.paid!=0 && status!=2 && status!=1">{{$t(`friends_join_group`)}}</button>
+				v-if="order_pay_info.pink_id && order_pay_info.paid!=0 && status!=2 && status!=1">{{$t(`邀请好友参团`)}}</button>
 			<button @click="goIndex" class='returnBnt cart-color' formType="submit" hover-class='none'
-				v-else>{{$t(`back_to_home`)}}</button>
+				v-else>{{$t(`返回首页`)}}</button>
 			<!-- #ifdef H5 -->
 			<button v-if="!$wechat.isWeixin() && !order_pay_info.paid" @click.stop="getOrderPayInfo" class='returnBnt cart-color' formType="submit" hover-class='none'>{{$t(`refresh_status`)}}</button>
 			<!-- #endif -->
 			<view class="coupons" v-if='couponList.length'>
 				<view class="title acea-row row-center-wrapper">
 					<view class="line"></view>
-					<view class="name">{{$t(`give_coupons`)}}</view>
+					<view class="name">{{$t(`赠送优惠券`)}}</view>
 					<view class="line"></view>
 				</view>
 				<view class="list">
@@ -63,19 +63,19 @@
 						<view class="moneyCon acea-row row-between-wrapper">
 							<view class="price acea-row row-center-wrapper">
 								<view>
-									{{$t(`money`)}}<text>{{item.coupon_price}}</text>
+									{{$t(`￥`)}}<text>{{item.coupon_price}}</text>
 								</view>
 							</view>
 						</view>
 						<view class="text">
 							<view class="name line1">{{item.coupon_title}}</view>
-							<view class="priceMin">{{$t(`full`)}}{{item.use_min_price}}{{$t(`meta_available`)}}</view>
-							<view class="time">{{$t(`validity_period`)}}:{{ item.add_time ? item.add_time + "-" : ""}}{{ item.end_time }}
+							<view class="priceMin">{{$t(`满`)}}{{item.use_min_price}}{{$t(`元可用`)}}</view>
+							<view class="time">{{$t(`有效期`)}}:{{ item.add_time ? item.add_time + "-" : ""}}{{ item.end_time }}
 							</view>
 						</view>
 					</view>
 					<view class="open acea-row row-center-wrapper" @click="openTap" v-if="couponList.length>2">
-						{{couponsHidden?$t(`expand_more`):$t(`close_expand`)}}<text class="iconfont"
+						{{couponsHidden?$t(`更多`):$t(`关闭`)}}<text class="iconfont"
 							:class='couponsHidden==true?"icon-xiangxia":"icon-xiangshang"'></text>
 					</view>
 				</view>
@@ -146,7 +146,7 @@
 		onLoad: function(options) {
 			this.options = options
 			if (!options.order_id) return this.$util.Tips({
-				title: this.$t(`not_view_order`)
+				title: this.$t(`缺少参数无法查看订单支付状态`)
 			}, {
 				tab: 3,
 				url: 1
@@ -193,13 +193,13 @@
 			getOrderPayInfo: function() {
 				let that = this;
 				uni.showLoading({
-					title: this.$t(`Loading`)
+					title: that.$t(`正在加载中`)
 				});
 				getOrderDetail(that.orderId).then(res => {
 					uni.hideLoading();
 					that.$set(that, 'order_pay_info', res.data);
 					uni.setNavigationBarTitle({
-						title: res.data.paid ? this.$t(`pay_success`) : this.$t(`unpaid`)
+						title: res.data.paid ? that.$t(`支付成功`) : that.$t(`未支付`)
 					});
 					this.loading = true
 					this.getOrderCoupon()
@@ -236,7 +236,7 @@
 				let that = this;
 				// #ifdef MP
 				uni.showLoading({
-					title: this.$t(`Loading`),
+					title: that.$t(`正在加载中`),
 				})
 				openOrderSubscribe().then(res => {
 					uni.hideLoading();

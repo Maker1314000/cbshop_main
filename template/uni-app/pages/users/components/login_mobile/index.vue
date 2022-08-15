@@ -3,13 +3,13 @@
 		<view class="mobile-bg" @click="close"></view>
 		<view class="mobile-mask animated" :class="{slideInUp:isUp}">
 			<view class="input-item">
-				<input type="text" v-model="account" :placeholder="$t(`input_phone`)" maxlength="11" />
+				<input type="text" v-model="account" :placeholder="$t(`输入手机号`)" maxlength="11" />
 			</view>
 			<view class="input-item">
-				<input type="text" v-model="codeNum" :placeholder="$t(`enter_code`)" maxlength="6" />
+				<input type="text" v-model="codeNum" :placeholder="$t(`输入验证码`)" maxlength="6" />
 				<button class="code" :disabled="disabled" @click="code">{{text}}</button>
 			</view>
-			<view class="sub_btn" @click="loginBtn">{{$t(`log_in`)}}</view>
+			<view class="sub_btn" @click="loginBtn">{{$t(`立即登录`)}}</view>
 		</view>
 	</view>
 </template>
@@ -57,10 +57,10 @@
 			async code() {
 				let that = this;
 				if (!that.account) return that.$util.Tips({
-					title: that.$t(`input_phone`)
+					title: that.$t(`请填写手机号码`)
 				});
 				if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(that.account)) return that.$util.Tips({
-					title: that.$t(`input_correct_phone`)
+					title: that.$t(`请输入正确的手机号码`)
 				});
 				await registerVerify({
 					phone: that.account,
@@ -95,19 +95,19 @@
 				let that = this
 				// #ifdef MP
 				if (!that.account) return that.$util.Tips({
-					title: that.$t(`input_phone`)
+					title: that.$t(`请填写手机号码`)
 				});
 				if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(that.account)) return that.$util.Tips({
-					title: that.$t(`input_correct_phone`)
+					title: that.$t(`请输入正确的手机号码`)
 				});
 				if (!that.codeNum) return that.$util.Tips({
-					title: that.$t(`enter_code`)
+					title: that.$t(`请填写验证码`)
 				});
 				if (!/^[\w\d]+$/i.test(that.codeNum)) return that.$util.Tips({
-					title: that.$t(`fill_correct_code`)
+					title: that.$t(`请输入正确的验证码`)
 				});
 				uni.showLoading({
-					title: that.$t(`logging_in`)
+					title: that.$t(`正在登录中`)
 				});
 				Routine.getCode()
 					.then(code => {
@@ -119,19 +119,19 @@
 				// #endif
 				// #ifdef H5
 				if (!that.account) return that.$util.Tips({
-					title: that.$t(`input_phone`)
+					title: that.$t(`请填写手机号码`)
 				});
 				if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(that.account)) return that.$util.Tips({
-					title: that.$t(`input_correct_phone`)
+					title: that.$t(`请输入正确的手机号码`)
 				});
 				if (!that.codeNum) return that.$util.Tips({
-					title: that.$t(`enter_code`)
+					title: that.$t(`请填写验证码`)
 				});
 				if (!/^[\w\d]+$/i.test(that.codeNum)) return that.$util.Tips({
-					title: that.$t(`enter_correct_code`)
+					title: that.$t(`请输入正确的验证码`)
 				});
 				uni.showLoading({
-					title: that.$t(`logging_in`)
+					title: that.$t(`正在登录中`)
 				});
 				if (this.authKey) {
 					phoneWxSilenceAuth({
@@ -154,10 +154,10 @@
 						})
 					})
 				} else {
-					bindingPhone({
+					loginMobile({
 						phone: this.account,
 						captcha: this.codeNum,
-						key: this.$Cache.get('snsapiKey')
+						spread: app.globalData.spid,
 					}).then(res => {
 						let time = res.data.expires_time - this.$Cache.time();
 						this.$store.commit('LOGIN', {
@@ -211,7 +211,7 @@
 					that.$store.commit("UPDATE_USERINFO", res.data);
 					// #ifdef MP
 					that.$util.Tips({
-						title: this.$t(`login_successful`),
+						title: that.$t(`登录成功`),
 						icon: 'success'
 					}, {
 						tab: 3

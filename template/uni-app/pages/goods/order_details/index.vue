@@ -17,20 +17,20 @@
 						<text class="name">{{orderInfo._status.refund_name}}</text>
 						<text>{{orderInfo._status.refund_phone}}</text>
 						<!-- #ifndef H5 -->
-						<text class="copy-refund-msg" @click="copyAddress()">{{$t(`copy`)}}</text>
+						<text class="copy-refund-msg" @click="copyAddress()">{{$t(`复制`)}}</text>
 						<!-- #endif -->
 						<!-- #ifdef H5 -->
 						<text class="copy-refund-msg"
-							:data-clipboard-text="orderInfo._status.refund_name + orderInfo._status.refund_phone + orderInfo._status.refund_address">{{$t(`copy`)}}</text>
+							:data-clipboard-text="orderInfo._status.refund_name + orderInfo._status.refund_phone + orderInfo._status.refund_address">{{$t(`复制`)}}</text>
 						<!-- #endif -->
 					</view>
 					<view class="refund-address">
 						{{orderInfo._status.refund_address}}
 					</view>
-					<view class="refund-tip"><text class="iconfont icon-zhuyi-copy"></text>{{$t(`return_item`)}}</view>
+					<view class="refund-tip"><text class="iconfont icon-zhuyi-copy"></text>{{$t(`请按以上退货信息将商品退回`)}}</view>
 				</view>
 				<view v-else>
-					<view class="refund-tip1 "><text class="iconfont icon-zhuyi-copy"></text>{{$t(`contact_administrator`)}}</view>
+					<view class="refund-tip1 "><text class="iconfont icon-zhuyi-copy"></text>{{$t(`请联系管理员获取退货地址`)}}</view>
 				</view>
 			</view>
 			<view class='line' v-if="[4,5].includes(orderInfo.refund_type)">
@@ -39,13 +39,13 @@
 			<view v-if="isGoodsReturn==false">
 				<view class='nav'>
 					<view class='navCon acea-row row-between-wrapper'>
-						<view :class="status.type == 0 || status.type == -9 ? 'on':''">{{$t(`to_pay`)}}</view>
+						<view :class="status.type == 0 || status.type == -9 ? 'on':''">{{$t(`待付款`)}}</view>
 						<view :class="status.type == 1 || status.type == 5 ? 'on':''">
-							{{orderInfo.shipping_type==1 ? $t(`to_ship`):$t(`written_off`)}}
+							{{orderInfo.shipping_type==1 ? $t(`待发货`):$t(`待核销`)}}
 						</view>
-						<view :class="status.type == 2 ? 'on':''" v-if="orderInfo.shipping_type == 1">{{$t(`to_receive`)}}</view>
-						<view :class="status.type == 3 ? 'on':''">{{$t(`to_rate`)}}</view>
-						<view :class="status.type == 4 ? 'on':''">{{$t(`completed`)}}</view>
+						<view :class="status.type == 2 ? 'on':''" v-if="orderInfo.shipping_type == 1">{{$t(`待收货`)}}</view>
+						<view :class="status.type == 3 ? 'on':''">{{$t(`待评价`)}}</view>
+						<view :class="status.type == 4 ? 'on':''">{{$t(`已完成`)}}</view>
 					</view>
 					<view class='progress acea-row row-between-wrapper'>
 						<view class='iconfont'
@@ -76,7 +76,7 @@
 
 				<!-- <view class="writeOff" v-if="orderInfo.shipping_type == 2 && orderInfo.paid"> -->
 				<view class="writeOff" v-if="orderInfo.verify_code && orderInfo.paid == 1">
-					<view class="title">{{$t(`Write_off`)}}</view>
+					<view class="title">{{$t(`核销信息`)}}</view>
 					<view class="grayBg">
 						<view class="written" v-if="orderInfo.status == 2">
 							<image src="../static/written.png"></image>
@@ -95,17 +95,17 @@
 					<view class="rules">
 						<view class="item" v-if="orderInfo.shipping_type == 2">
 							<view class="rulesTitle acea-row row-middle">
-								<text class="iconfont icon-shijian"></text>{{$t(`business_hours`)}}
+								<text class="iconfont icon-shijian"></text>{{$t(`营业时间`)}}
 							</view>
 							<view class="info">
-								{{$t(`daily`)}}：<text class="time">{{orderInfo.system_store.day_time}}</text>
+								{{$t(`每日`)}}：<text class="time">{{orderInfo.system_store.day_time}}</text>
 							</view>
 						</view>
 						<view class="item">
 							<view class="rulesTitle acea-row row-middle">
-								<text class="iconfont icon-shuoming1"></text>{{$t(`instructions_use`)}}
+								<text class="iconfont icon-shuoming1"></text>{{$t(`使用说明`)}}
 							</view>
-							<view class="info">{{orderInfo.shipping_type == 2?$t(`qrcode`):$t(`write_off`)}}
+							<view class="info">{{orderInfo.shipping_type == 2?$t(`可将二维码出示给店员扫描或提供数字核销码`):$t(`可将二维码出示给配送员进行核销`)}}
 							</view>
 						</view>
 					</view>
@@ -113,7 +113,7 @@
 				<view class="map acea-row row-between-wrapper" v-if="orderInfo.shipping_type == 2">
 					<view>{{$t(`pick_information`)}}</view>
 					<view class="place cart-color acea-row row-center-wrapper" @tap="showMaoLocation">
-						<text class="iconfont icon-weizhi"></text>{{$t(`View_location`)}}
+						<text class="iconfont icon-weizhi"></text>{{$t(`查看位置`)}}
 					</view>
 				</view>
 
@@ -140,9 +140,9 @@
 				<view class="refund" v-if="orderInfo.refund_type == 3">
 					<view class="title">
 						<image src="../static/shuoming.png" mode=""></image>
-						{{$t(`refuse_refund`)}}
+						{{$t(`拒绝退款`)}}
 					</view>
-					<view class="con">{{$t(`denial_reason`)}}：{{orderInfo.refuse_reason}}</view>
+					<view class="con">{{$t(`拒绝原因`)}}：{{orderInfo.refuse_reason}}</view>
 				</view>
 			</view>
 			<orderGoods v-for="(item,index) in split" :key="item.id" :evaluate='item._status._type == 3 ? 3 : 0'
@@ -157,54 +157,54 @@
 			</orderGoods>
 			<!-- #ifdef H5 || APP-PLUS -->
 			<div class="goodCall" @click="goGoodCall">
-				<span class="iconfont icon-kefu"></span><span>{{$t(`contact_customer`)}}</span>
+				<span class="iconfont icon-kefu"></span><span>{{$t(`联系客服`)}}</span>
 			</div>
 			<!-- #endif -->
 			<!-- #ifdef MP -->
 			<div class="goodCall" @click="goGoodCall" v-if='routineContact == 0'>
 				<button hover-class='none'>
-					<span class="iconfont icon-kefu"></span><span>{{$t(`contact_customer`)}}</span>
+					<span class="iconfont icon-kefu"></span><span>{{$t(`联系客服`)}}</span>
 				</button>
 			</div>
 			<div class="goodCall" v-else>
 				<button hover-class='none' open-type='contact'>
-					<span class="iconfont icon-kefu"></span><span>{{$t(`contact_customer`)}}</span>
+					<span class="iconfont icon-kefu"></span><span>{{$t(`联系客服`)}}</span>
 				</button>
 			</div>
 			<!-- #endif -->
 			<view class='wrapper'>
 				<view class='item acea-row row-between'>
-					<view>{{$t(`order_number`)}}：</view>
+					<view>{{$t(`订单号`)}}：</view>
 					<view class='conter acea-row row-middle row-right'>
 						<text>{{orderInfo.order_id}}</text>
 						<!-- #ifndef H5 -->
-						<text class='copy' @tap='copy'>{{$t(`copy`)}}</text>
+						<text class='copy' @tap='copy'>{{$t(`复制`)}}</text>
 						<!-- #endif -->
 						<!-- #ifdef H5 -->
-						<text class='copy copy-data' :data-clipboard-text="orderInfo.order_id">{{$t(`copy`)}}</text>
+						<text class='copy copy-data' :data-clipboard-text="orderInfo.order_id">{{$t(`复制`)}}</text>
 						<!-- #endif -->
 					</view>
 				</view>
 				<view class='item acea-row row-between'>
-					<view>{{$t(`order_time`)}}：</view>
+					<view>{{$t(`下单时间`)}}：</view>
 					<view class='conter'>{{(orderInfo.add_time_y || '') +' '+(orderInfo.add_time_h || 0)}}</view>
 				</view>
 				<view class='item acea-row row-between'>
-					<view>{{$t(`payment_status`)}}：</view>
-					<view class='conter' v-if="orderInfo.paid">{{$t(`paid`)}}</view>
-					<view class='conter' v-else>{{$t(`unpaid`)}}</view>
+					<view>{{$t(`支付状态`)}}：</view>
+					<view class='conter' v-if="orderInfo.paid">{{$t(`已支付`)}}</view>
+					<view class='conter' v-else>{{$t(`未支付`)}}</view>
 				</view>
 				<view class='item acea-row row-between'>
-					<view>{{$t(`payment_method`)}}：</view>
-					<view class='conter'>{{orderInfo._status._payType}}</view>
+					<view>{{$t(`支付方式`)}}：</view>
+					<view class='conter'>{{$t(orderInfo._status._payType)}}</view>
 				</view>
 				<view class='item acea-row row-between' v-if="orderInfo.mark">
-					<view v-if="orderInfo.pid">{{$t(`buyer_note`)}}：</view>
-					<view v-else>{{$t(`Buyer_message`)}}：</view>
+					<view v-if="orderInfo.pid">{{$t(`买家备注`)}}：</view>
+					<view v-else>{{$t(`买家留言`)}}：</view>
 					<view class='conter'>{{orderInfo.mark}}</view>
 				</view>
 				<view class='item acea-row row-between' v-if="orderInfo.remark">
-					<view>{{$t(`merchant_notes`)}}：</view>
+					<view>{{$t(`商家备注`)}}：</view>
 					<view class='conter'>{{orderInfo.remark}}</view>
 				</view>
 			</view>
@@ -223,87 +223,83 @@
 			<!-- 退款订单详情 -->
 			<view class='wrapper' v-if="isGoodsReturn && orderInfo.cartInfo[0].productInfo.virtual_type != 3">
 				<view class='item acea-row row-between'>
-					<view>{{$t(`receiver`)}}：</view>
+					<view>{{$t(`收货人`)}}：</view>
 					<view class='conter'>{{orderInfo.real_name}}</view>
 				</view>
 				<view class='item acea-row row-between'>
-					<view>{{$t(`contact_no`)}}：</view>
+					<view>{{$t(`联系电话`)}}：</view>
 					<view class='conter'>{{orderInfo.user_phone}}</view>
 				</view>
 				<view class='item acea-row row-between'>
-					<view>{{$t(`shipping_address`)}}：</view>
+					<view>{{$t(`收货地址`)}}：</view>
 					<view class='conter'>{{orderInfo.user_address}}</view>
 				</view>
 			</view>
 			<view v-if="orderInfo.status!=0">
 				<view class='wrapper' v-if='orderInfo.delivery_type=="express"'>
 					<view class='item acea-row row-between'>
-						<view>{{$t(`delivery_method`)}}：</view>
-						<view class='conter'>{{$t(`ship`)}}</view>
+						<view>{{$t(`配送方式`)}}：</view>
+						<view class='conter'>{{$t(`发货`)}}</view>
 					</view>
 					<view class='item acea-row row-between'>
-						<view>{{$t(`courier_company`)}}：</view>
+						<view>{{$t(`快递公司`)}}：</view>
 						<view class='conter'>{{orderInfo.delivery_name || ''}}</view>
 					</view>
 					<view class='item acea-row row-between'>
-						<view>{{$t(`tracking_number`)}}：</view>
+						<view>{{$t(`快递单号`)}}：</view>
 						<view class='conter'>{{orderInfo.delivery_id || ''}}</view>
 					</view>
 				</view>
 				<view class='wrapper' v-else-if='orderInfo.delivery_type=="send"'>
 					<view class='item acea-row row-between'>
-						<view>{{$t(`delivery_method`)}}：</view>
-						<view class='conter'>{{$t(`deliver_goods`)}}</view>
+						<view>{{$t(`配送方式`)}}：</view>
+						<view class='conter'>{{$t(`送货`)}}</view>
 					</view>
 					<view class='item acea-row row-between'>
-						<view>{{$t(`shipper_name`)}}：</view>
+						<view>{{$t(`配送人姓名`)}}：</view>
 						<view class='conter'>{{orderInfo.delivery_name || ''}}</view>
 					</view>
 					<view class='item acea-row row-between'>
-						<view>{{$t(`contact_no`)}}：</view>
+						<view>{{$t(`送货人电话`)}}：</view>
 						<view class='conter acea-row row-middle row-right'>{{orderInfo.delivery_id || ''}}<text
-								class='copy' @tap='goTel'>{{$t(`dial`)}}</text></view>
+								class='copy' @tap='goTel'>{{$t(`拨打`)}}</text></view>
 					</view>
 				</view>
 				<view class='wrapper' v-else-if='orderInfo.delivery_type=="fictitious"'>
 					<view class='item acea-row row-between'>
-						<view>{{$t(`virtual_shipment`)}}：</view>
-						<view class='conter'>{{$t(`pay_attention`)}}</view>
+						<view>{{$t(`虚拟发货`)}}：</view>
+						<view class='conter'>{{$t(`已发货，请注意查收`)}}</view>
 					</view>
 					<view class='item acea-row row-between' v-if="orderInfo.fictitious_content">
-						<view>{{$t(`virtual_notes`)}}：</view>
+						<view>{{$t(`虚拟备注`)}}：</view>
 						<view class='conter'>{{orderInfo.fictitious_content}}</view>
 					</view>
 				</view>
 			</view>
 			<view class='wrapper'>
 				<view class='item acea-row row-between'>
-					<view>{{$t(`total_price`)}}：</view>
+					<view>{{$t(`商品总价`)}}：</view>
 					<view class='conter'>
-						{{$t(`money`)}}{{(parseFloat(orderInfo.total_price)+parseFloat(orderInfo.vip_true_price)).toFixed(2)}}</view>
+						{{$t(`￥`)}}{{(parseFloat(orderInfo.total_price)+parseFloat(orderInfo.vip_true_price)).toFixed(2)}}</view>
 				</view>
 				<view class='item acea-row row-between' v-if="orderInfo.pay_postage > 0">
-					<view>{{$t(`shipping_fee`)}}：</view>
-					<view class='conter'>{{$t(`money`)}}{{parseFloat(orderInfo.pay_postage).toFixed(2)}}</view>
+					<view>{{$t(`配送运费`)}}：</view>
+					<view class='conter'>{{$t(`￥`)}}{{parseFloat(orderInfo.pay_postage).toFixed(2)}}</view>
 				</view>
 				<view v-if="orderInfo.vip_true_price > 0" class='item acea-row row-between'>
-					<view>{{$t(`product_discount`)}}：</view>
-					<view class='conter'>-{{$t(`money`)}}{{parseFloat(orderInfo.vip_true_price).toFixed(2)}}</view>
+					<view>{{$t(`会员商品优惠`)}}：</view>
+					<view class='conter'>-{{$t(`￥`)}}{{parseFloat(orderInfo.vip_true_price).toFixed(2)}}</view>
 				</view>
-				<!-- <view v-if="orderInfo.vip_true_price" class='item acea-row row-between'>
-					<view>会员运费优惠：</view>
-					<view class='conter'>-￥{{parseFloat(orderInfo.vip_true_price).toFixed(2)}}</view>
-				</view> -->
 				<view class='item acea-row row-between' v-if='orderInfo.coupon_price > 0'>
-					<view>{{$t(`coupon_deduction`)}}：</view>
-					<view class='conter'>-{{$t(`money`)}}{{parseFloat(orderInfo.coupon_price).toFixed(2)}}</view>
+					<view>{{$t(`优惠券抵扣`)}}：</view>
+					<view class='conter'>-{{$t(`￥`)}}{{parseFloat(orderInfo.coupon_price).toFixed(2)}}</view>
 				</view>
 				<view class='item acea-row row-between' v-if="orderInfo.use_integral > 0">
-					<view>{{$t(`points_deduction`)}}：</view>
-					<view class='conter'>-{{$t(`money`)}}{{parseFloat(orderInfo.deduction_price).toFixed(2)}}</view>
+					<view>{{$t(`积分抵扣`)}}：</view>
+					<view class='conter'>-{{$t(`￥`)}}{{parseFloat(orderInfo.deduction_price).toFixed(2)}}</view>
 				</view>
-				<view class='actualPay acea-row row-right' v-if="!orderInfo.help_info.help_status">{{$t(`real_payment`)}}：<text
-						class='money font-color'>{{$t(`money`)}}{{parseFloat(orderInfo.pay_price).toFixed(2)}}</text></view>
+				<view class='actualPay acea-row row-right' v-if="!orderInfo.help_info.help_status">{{$t(`实付款`)}}：<text
+						class='money font-color'>{{$t(`￥`)}}{{parseFloat(orderInfo.pay_price).toFixed(2)}}</text></view>
 				<view class='actualPay acea-row row-right' v-else>
 					<view class="pay-people">
 						<image :src="orderInfo.help_info.pay_avatar" mode=""></image>
@@ -311,7 +307,7 @@
 							{{orderInfo.help_info.pay_nickname}}
 						</view>
 					</view>
-					{{$t(`total_payment`)}}：<text class='money font-color'>{{$t(`money`)}}{{parseFloat(orderInfo.pay_price).toFixed(2)}}</text>
+					{{$t(`总代付`)}}：<text class='money font-color'>{{$t(`￥`)}}{{parseFloat(orderInfo.pay_price).toFixed(2)}}</text>
 				</view>
 			</view>
 			<view style='height:120rpx;'></view>
@@ -319,37 +315,37 @@
 				v-if="isGoodsReturn==false || status.type == 9  || orderInfo.refund_type || orderInfo.is_apply_refund">
 
 				<view class="more" v-if="(invoice_func || invoiceData) && orderInfo.paid && !orderInfo.refund_status"
-					@click="more">{{$t(`more`)}}<span class='iconfont icon-xiangshang'></span></view>
+					@click="more">{{$t(`更多`)}}<span class='iconfont icon-xiangshang'></span></view>
 				<view class="more-box" v-if="moreBtn">
-					<view class="more-btn" v-if="invoice_func && !invoiceData" @click="invoiceApply">{{$t(`apply_invoice`)}}</view>
-					<view class="more-btn" v-if="invoiceData" @click="aleartStatusChange">{{$t(`view_invoice`)}}</view>
+					<view class="more-btn" v-if="invoice_func && !invoiceData" @click="invoiceApply">{{$t(`申请开票`)}}</view>
+					<view class="more-btn" v-if="invoiceData" @click="aleartStatusChange">{{$t(`查看发票`)}}</view>
 				</view>
 
-				<view class="qs-btn" v-if="status.type == 0 || status.type == -9" @click.stop="cancelOrder">{{$t(`cancel_order`)}}</view>
-				<view class='bnt bg-color' v-if="status.type==0" @tap='pay_open(orderInfo.order_id)'>{{$t(`Immediate_payment`)}}</view>
+				<view class="qs-btn" v-if="status.type == 0 || status.type == -9" @click.stop="cancelOrder">{{$t(`取消订单`)}}</view>
+				<view class='bnt bg-color' v-if="status.type==0" @tap='pay_open(orderInfo.order_id)'>{{$t(`立即付款`)}}</view>
 				<view
 					@click="openSubcribe(`/pages/users/${cartInfo.length > 1 ? 'goods_return_list' : 'goods_return'}/index?orderId=`+orderInfo.order_id+ '&id=' + orderInfo.id)"
 					class='bnt cancel'
 					v-else-if="orderInfo.is_apply_refund && orderInfo.refund_status == 0 && cartInfo.length>1 && !orderInfo.virtual_type">
-					{{cartInfo.length>1?$t(`bulk_refund`):$t(`request_refund`)}}
+					{{cartInfo.length>1?$t(`批量退款`):$t(`申请退款`)}}
 				</view>
 				<navigator class='bnt cancel'
 					v-if="orderInfo.delivery_type == 'express' && status.class_status==3 && status.type==2 && !split.length"
-					hover-class='none' :url="'/pages/goods/goods_logistics/index?orderId='+ orderInfo.order_id">{{$t(`view_log`)}}
+					hover-class='none' :url="'/pages/goods/goods_logistics/index?orderId='+ orderInfo.order_id">{{$t(`查看物流`)}}
 				</navigator>
-				<view class='bnt bg-color' v-if="orderInfo.type==3" @tap='goJoinPink'>{{$t(`view_group`)}}</view>
-				<view class='bnt bg-color' v-if="status.class_status==3 && !split.length" @click='confirmOrder()'>{{$t(`confirm_goods`)}}
+				<view class='bnt bg-color' v-if="orderInfo.type==3" @tap='goJoinPink'>{{$t(`查看拼团`)}}</view>
+				<view class='bnt bg-color' v-if="status.class_status==3 && !split.length" @click='confirmOrder()'>{{$t(`确认收货`)}}
 				</view>
-				<view class='bnt cancel' v-if="status.type==4 &&  !split.length ||status.type==-2" @tap='delOrder'>{{$t(`delete_order`)}}
+				<view class='bnt cancel' v-if="status.type==4 &&  !split.length ||status.type==-2" @tap='delOrder'>{{$t(`删除订单`)}}
 				</view>
-				<view class='bnt bg-color' v-if="status.class_status==5" @tap='goOrderConfirm'>{{$t(`buy_again`)}}
+				<view class='bnt bg-color' v-if="status.class_status==5" @tap='goOrderConfirm'>{{$t(`再次购买`)}}
 				</view>
 				<view class='bnt bg-color refundBnt'
-					v-if="[1,2,4].includes(orderInfo.refund_type) && !orderInfo.is_cancel" @tap='cancelRefundOrder'>{{$t(`cancel_application`)}}
+					v-if="[1,2,4].includes(orderInfo.refund_type) && !orderInfo.is_cancel" @tap='cancelRefundOrder'>{{$t(`取消申请`)}}
 				</view>
-				<view class='bnt bg-color refundBnt' v-if="orderInfo.refund_type== 4" @tap='refundInput'>{{$t(`fill_info`)}}</view>
+				<view class='bnt bg-color refundBnt' v-if="orderInfo.refund_type== 4" @tap='refundInput'>{{$t(`填写退货信息`)}}</view>
 				<navigator class='bnt cancel refundBnt' v-if="orderInfo.refund_type == 5" hover-class='none'
-					:url="'/pages/goods/goods_logistics/index?orderId='+ orderInfo.order_id + '&type=refund'">{{$t(`viewr_return_log`)}}
+					:url="'/pages/goods/goods_logistics/index?orderId='+ orderInfo.order_id + '&type=refund'">{{$t(`查看退货物流`)}}
 				</navigator>
 			</view>
 		</view>
@@ -481,33 +477,33 @@
 				refund_close: false,
 				isClose: false,
 				payMode: [{
-						name: this.$t(`wechat_pay`),
+						name: this.$t(`微信支付`),
 						icon: "icon-weixinzhifu",
 						value: 'weixin',
-						title: this.$t(`wechat_quick_pay`),
+						title: this.$t(`使用微信快捷支付`),
 						payStatus: true,
 					},
 					// #ifdef H5 || APP-PLUS
 					{
-						name: this.$t(`pay_alipay`),
+						name: this.$t(`支付宝支付`),
 						icon: 'icon-zhifubao',
 						value: 'alipay',
-						title: this.$t(`online_alipay`),
+						title: this.$t(`使用支付宝支付`),
 						payStatus: true
 					},
 					// #endif
 					{
-						name: this.$t(`balance_payment`),
+						name: this.$t(`余额支付`),
 						icon: "icon-yuezhifu",
 						value: 'yue',
-						title: this.$t(`available_balance`),
+						title: this.$t(`可用余额`),
 						number: 0,
 						payStatus: true
 					}, {
-						"name": this.$t(`friend_pays`),
+						"name": this.$t(`好友代付`),
 						"icon": "icon-haoyoudaizhifu",
 						value: 'friend',
-						title: this.$t(`friends_to_pay`),
+						title: this.$t(`找微信好友支付`),
 						payStatus: 1,
 					}
 				],
@@ -561,13 +557,13 @@
 				const clipboard = new ClipboardJS(".copy-data");
 				clipboard.on("success", () => {
 					this.$util.Tips({
-						title: this.$t(`copy_success`)
+						title: this.$t(`复制成功`)
 					});
 				});
 				const address = new ClipboardJS(".copy-refund-msg");
 				address.on("success", () => {
 					this.$util.Tips({
-						title: this.$t(`copy_success`)
+						title: this.$t(`复制成功`)
 					});
 				});
 			});
@@ -581,13 +577,13 @@
 			cancelRefundOrder(orderId) {
 				let that = this;
 				uni.showModal({
-					title: this.$t(`cancel_application`),
-					content: this.$t(`abandon_application`),
+					title: that.$t(`取消申请`),
+					content: that.$t(`您确认放弃此次申请吗`),
 					success: (res) => {
 						if (res.confirm) {
 							cancelRefundOrder(that.order_id).then(res => {
 								return that.$util.Tips({
-									title: this.$t(`success_operation`),
+									title: that.$t(`操作成功`),
 									icon: 'success'
 								}, {
 									tab: 4,
@@ -643,7 +639,6 @@
 				getCustomer(`/pages/extension/customer_list/chat?orderId=${this.order_id}&isReturen=${this.isReturen}`)
 			},
 			openSubcribe(e) {
-				console.log('11111')
 				let page = e;
 				console.log(page)
 				// #ifndef MP
@@ -653,7 +648,7 @@
 				// #endif
 				// #ifdef MP
 				uni.showLoading({
-					title: this.$t(`Loading`),
+					title: this.$t(`正在加载中`),
 				})
 				openOrderRefundSubscribe().then(res => {
 					uni.hideLoading();
@@ -749,7 +744,7 @@
 			 */
 			showMaoLocation: function() {
 				if (!this.system_store.latitude || !this.system_store.longitude) return this.$util.Tips({
-					title: this.$t(`not_view_map`)
+					title: this.$t(`缺少经纬度信息无法查看地图`)
 				});
 				uni.openLocation({
 					latitude: parseFloat(this.system_store.latitude),
@@ -787,7 +782,7 @@
 				this.pay_order_id = '';
 				uni.navigateTo({
 					url: '/pages/goods/order_pay_status/index?order_id=' + this.orderInfo.order_id + '&msg=' +
-						this.$t(`pay_success`) +
+						this.$t(`支付成功`) +
 						'&type=3' + '&totalPrice=' + this.totalPrice
 				})
 				this.getOrderInfo();
@@ -835,7 +830,7 @@
 			getOrderInfo: function() {
 				let that = this;
 				uni.showLoading({
-					title: this.$t(`Loading`)
+					title: this.$t(`正在加载中`)
 				});
 				let obj = '';
 				if (that.isReturen) {
@@ -846,7 +841,7 @@
 				obj.then(res => {
 					if (res.data.pid && res.data.pid == -1) {
 						that.$util.Tips({
-							title: this.$t(`order_info_not_exist`)
+							title: this.$t(`订单信息不存在`)
 						}, '/pages/goods/order_list/index');
 					}
 					let _type = res.data._status._type;
@@ -911,7 +906,7 @@
 			// 不开发票
 			invCancel() {
 				this.invChecked = '';
-				this.invTitle = this.$t(`no_invoice`);
+				this.invTitle = this.$t(`不开发票`);
 				this.invShow = false;
 			},
 			// 选择发票
@@ -923,7 +918,7 @@
 				}
 				makeUpinvoice(data).then(res => {
 					uni.showToast({
-						title: this.$t(`request_success`),
+						title: this.$t(`申请成功`),
 						icon: 'success'
 					});
 					this.invShow = false;
@@ -954,7 +949,7 @@
 			},
 			getInvoiceList() {
 				uni.showLoading({
-					title: this.$t(`Loading`)
+					title: this.$t(`正在加载中`)
 				})
 				invoiceList().then(res => {
 					uni.hideLoading();
@@ -965,9 +960,9 @@
 					const result = this.invList.find(item => item.id == this.invChecked);
 					if (result) {
 						let name = '';
-						name += result.header_type === 1 ? this.$t(`personal`) : this.$t(`enterprise`);
-						name += result.type === 1 ? this.$t(`ordinary`) : this.$t(`dedicated`);
-						name += this.$t(`bill`);
+						name += result.header_type === 1 ? this.$t(`个人`) : this.$t(`企业`);
+						name += result.type === 1 ? this.$t(`普通`) : this.$t(`专用`);
+						name += this.$t(`发票`);
 						this.invTitle = name;
 					}
 				}).catch(err => {
@@ -1000,7 +995,7 @@
 						.refund_address,
 					success() {
 						uni.Tips({
-							title: this.$t(`copy_success`),
+							title: this.$t(`复制成功`),
 							icon: 'success'
 						})
 					}
@@ -1081,13 +1076,13 @@
 			confirmOrder(orderId) {
 				let that = this;
 				uni.showModal({
-					title: that.$t(`confirm_goods`),
-					content: that.$t(`protect_rights`),
+					title: that.$t(`确认收货`),
+					content: that.$t(`为保障权益，请收到货确认无误后，再确认收货`),
 					success: function(res) {
 						if (res.confirm) {
 							orderTake(orderId ? orderId : that.order_id).then(res => {
 								return that.$util.Tips({
-									title: that.$t(`success_operation`),
+									title: that.$t(`操作成功`),
 									icon: 'success'
 								}, function() {
 									that.getOrderInfo();
@@ -1108,14 +1103,14 @@
 			delOrder() {
 				let that = this;
 				uni.showModal({
-					title: this.$t(`delete_order`),
-					content: this.$t(`confirm_delete_order`),
+					title: this.$t(`删除订单`),
+					content: this.$t(`确定删除该订单`),
 					success: (res) => {
 						if (res.confirm) {
 							(that.isReturen ? refundOrderDel : orderDel)(that.order_id).then(res => {
 								if (that.status.type == -2) {
 									return that.$util.Tips({
-										title: this.$t(`success_deleted`),
+										title: that.$t(`删除成功`),
 										icon: 'success'
 									}, {
 										tab: 5,
@@ -1123,7 +1118,7 @@
 									});
 								} else {
 									return that.$util.Tips({
-										title: this.$t(`success_deleted`),
+										title: that.$t(`删除成功`),
 										icon: 'success'
 									}, {
 										tab: 5,
@@ -1138,7 +1133,7 @@
 							});
 						} else if (res.cancel) {
 							return that.$util.Tips({
-								title: this.$t(`cancelled`)
+								title: that.$t(`已取消`)
 							});
 						}
 					}
@@ -1148,8 +1143,8 @@
 			cancelOrder() {
 				let self = this
 				uni.showModal({
-					title: this.$t(`hint`),
-					content: this.$t(`confirm_cancel_order`),
+					title: this.$t(`提示`),
+					content: this.$t(`确认取消该订单`),
 					success: function(res) {
 						if (res.confirm) {
 							orderCancel(self.orderInfo.order_id)
@@ -1171,7 +1166,6 @@
 									self.getOrderInfo();
 								});
 						} else if (res.cancel) {
-							console.log(this.$t(`user_clicks_cancel`));
 						}
 					}
 				});

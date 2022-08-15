@@ -2,9 +2,9 @@
 	<view>
 		<view class="result">
 			<view class="image-wrap"><image class="image" src="../static/offline-result.png"></image></view>
-			<view class="text">{{$t(`pay_success`)}}</view>
+			<view class="text">{{$t(`支付成功`)}}</view>
 		</view>
-		<navigator class="link"  url="/pages/index/index" open-type="switchTab">{{$t(`enter_mall`)}}</navigator>
+		<navigator class="link"  url="/pages/index/index" open-type="switchTab">{{$t(`进入商城`)}}</navigator>
 	</view>
 </template>
 

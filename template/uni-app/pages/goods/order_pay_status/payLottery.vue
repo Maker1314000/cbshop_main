@@ -5,28 +5,26 @@
 				<text class="iconfont icon-gou"></text>
 				<view class="pay-status-r">
 					<text class="pay-status-text">
-						{{$t(`pay_success`)}}
+						{{$t(`支付成功`)}}
 					</text>
 					<text>
-						{{$t(`payment_amount`)}}：{{$t(`money`)}}{{totalPrice}}
+						{{$t(`支付金额`)}}：{{$t(`￥`)}}{{totalPrice}}
 					</text>
 				</view>
 			</view>
 			<view class="jump">
 				<view class="jump-det" @click="orderDetails">
-					{{$t(`check_order`)}}
+					{{$t(`查看订单`)}}
 				</view>
 				<view class="jump-index" @click="goIndex">
-					{{$t(`back_to_home`)}}
+					{{$t(`返回首页`)}}
 				</view>
 			</view>
 		</view>
 		<view class="grids-top" v-show="lotteryShow">
 			<image src="../static/pay-lottery-l.png" mode=""></image>
 			<view class="grids-title">
-				<view>{{$t(`congratulations`)}}，</view>
-				<view class="grids-frequency">{{$t(`get`)}}{{lottery_num}}{{$t(`time`)}}</view>
-				<view>{{$t(`lottery_chance`)}}</view>
+				<view>{{$t(`恭喜您`)}}，{{$t(`获得`)}} {{lottery_num}} {{$t(`机会`)}}</view>
 			</view>
 			<image src="../static/pay-lottery-r.png" mode=""></image>
 		</view>
@@ -187,7 +185,7 @@
 			goOrderDetails: function(e) {
 				// #ifdef MP
 				uni.showLoading({
-					title: this.$t(`Loading`),
+					title: this.$t(`正在加载中`),
 				})
 				openOrderSubscribe().then(res => {
 					uni.hideLoading();
@@ -228,7 +226,7 @@
 				addData.address = data.address.province + data.address.city + data.address.district + data.detail
 				receiveLottery(addData).then(res => {
 					this.$util.Tips({
-						title: this.$t(`receive_success`)
+						title: this.$t(`领取成功`)
 					});
 					this.addressModel = false
 				}).catch(err => {

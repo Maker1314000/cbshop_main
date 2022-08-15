@@ -9,12 +9,12 @@
 						</view>
 						<view class="line1">
 							<text class='default font-num'
-								v-if="addressInfo.is_default">[{{$t(`default`)}}]</text>{{addressInfo.province}}{{addressInfo.city}}{{addressInfo.district}}{{addressInfo.detail}}
+								v-if="addressInfo.is_default">{{$t(`[默认]`)}}</text>{{addressInfo.province}}{{addressInfo.city}}{{addressInfo.district}}{{addressInfo.detail}}
 						</view>
 						<!-- <view class='setaddress'>设置收货地址</view> -->
 					</view>
 					<view class='addressCon' v-else>
-						<view class='setaddress'>{{$t(`set_address`)}}</view>
+						<view class='setaddress'>{{$t(`设置收货地址`)}}</view>
 					</view>
 					<view class='iconfont icon-jiantou'></view>
 				</view>
@@ -23,7 +23,7 @@
 				</view>
 			</view>
 			<view class="orderGoods">
-				<view class='total'>{{$t(`total_of`)}}{{resData.num}}{{$t(`item`)}}</view>
+				<view class='total'>{{$t(`共`)}}{{resData.num}}{{$t(`件商品`)}}</view>
 				<view class='goodWrapper'>
 					<view class='item acea-row row-between-wrapper' @click="jumpCon(cartInfo.product_id)">
 						<view class='pictrue'>
@@ -37,7 +37,7 @@
 							<view class='attr line1' v-if="cartInfo.suk">{{cartInfo.suk}}
 							</view>
 							<view class='money font-color'>
-								{{cartInfo.price}}{{$t(`point`)}}
+								{{cartInfo.price}} {{$t(`积分`)}}
 							</view>
 						</view>
 					</view>
@@ -45,33 +45,33 @@
 			</view>
 			<view class='wrapper'>
 				<view class='item acea-row row-between-wrapper'>
-					<view>{{$t(`points_available`)}}</view>
+					<view>{{$t(`可用积分`)}}</view>
 					<view class='discount'>{{resData.integral}}
 					</view>
 				</view>
 				<view class='item acea-row row-between-wrapper'>
-					<view>{{$t(`courier_fees`)}}</view>
-					<view class='discount'>{{$t(`free_shipping`)}}
+					<view>{{$t(`快递费用`)}}</view>
+					<view class='discount'>{{$t(`免运费`)}}
 					</view>
 				</view>
 				<view class='item' v-if="textareaStatus">
-					<view>{{$t(`remarks`)}}</view>
+					<view>{{$t(`备注信息`)}}</view>
 					<view class="placeholder-textarea">
 						<textarea ref='getFocus' v-if="coupon.coupon===false" :focus="textFocus" @input='bindHideKeyboard' value=""
 							name="mark">
 						</textarea>
 						<view class="placeholder" @click="clickTextArea" v-show="!mark">
-							{{$t(`fill_remarks`)}}
+							{{$t(`请添加备注（150字以内）`)}}
 						</view>
 					</view>
 				</view>
 			</view>
 			<view style='height:120rpx;'></view>
 			<view class='footer acea-row row-between-wrapper'>
-				<view>{{$t(`total`)}}：
-					<text class='font-color'>{{resData.total_price || 0}}{{$t(`point`)}}</text>
+				<view>{{$t(`合计`)}}：
+					<text class='font-color'>{{resData.total_price || 0}}{{$t(`积分`)}}</text>
 				</view>
-				<view class='settlement' style='z-index:100' @tap="goPay">{{$t(`redeem_now`)}}</view>
+				<view class='settlement' style='z-index:100' @tap="goPay">{{$t(`立即兑换`)}}</view>
 			</view>
 		</view>
 		<view class="alipaysubmit" v-html="formContent"></view>
@@ -134,31 +134,31 @@
 				textareaStatus: true,
 				//支付方式
 				cartArr: [{
-						"name": this.$t(`wechat_pay`),
+						"name": this.$t(`微信支付`),
 						"icon": "icon-weixin2",
 						value: 'weixin',
-						title: this.$t(`wechat_quick_pay`),
+						title: this.$t(`使用微信快捷支付`),
 						payStatus: 1,
 					},
 					{
-						"name": this.$t(`pay_alipay`),
+						"name": this.$t(`支付宝支付`),
 						"icon": "icon-zhifubao",
 						value: 'alipay',
-						title: this.$t(`online_alipay`),
+						title: this.$t(`使用线上支付宝支付`),
 						payStatus: 1,
 					},
 					{
-						"name": this.$t(`balance_payment`),
+						"name": this.$t(`余额支付`),
 						"icon": "icon-yuezhifu",
 						value: 'yue',
-						title: this.$t(`available_balance`),
+						title: this.$t(`可用余额:`),
 						payStatus: 1,
 					},
 					{
-						"name": this.$t(`offline_payments`),
+						"name": this.$t(`线下支付`),
 						"icon": "icon-yuezhifu1",
 						value: 'offline',
-						title: this.$t(`offline_pay`),
+						title: this.$t(`选择线下付款方式`),
 						payStatus: 2,
 					}
 				],
@@ -169,7 +169,7 @@
 				coupon: {
 					coupon: false,
 					list: [],
-					statusTile: this.$t(`use_immediate`)
+					statusTile: this.$t(`立即使用`)
 				}, //优惠券组件
 				address: {
 					address: false
@@ -214,7 +214,7 @@
 				from: '',
 				news: 1,
 
-				invTitle: this.$t(`no_invoice`),
+				invTitle: this.$t(`不开发票`),
 				special_invoice: false,
 				invoice_func: false,
 				header_type: '',
@@ -236,7 +236,7 @@
 			this.from = 'routine'
 			// #endif
 			if (!options.unique) return this.$util.Tips({
-				title: this.$t(`select_item`)
+				title: this.$t(`请选择要购买的商品`)
 			}, {
 				tab: 3,
 				url: 1
@@ -251,7 +251,7 @@
 			this.news = !options.new || options.new === '0' ? 0 : 1;
 			this.invChecked = options.invoice_id || '';
 			this.header_type = options.header_type || '1';
-			this.couponTitle = options.couponTitle || this.$t(`please_choose`)
+			this.couponTitle = options.couponTitle || this.$t(`请选择`)
 			// #ifndef APP-PLUS
 			this.textareaStatus = true;
 			// #endif
@@ -281,7 +281,7 @@
 		methods: {
 			getInvoiceList() {
 				uni.showLoading({
-					title: this.$t(`Loading`)
+					title: this.$t(`正在加载…`)
 				})
 				invoiceList().then(res => {
 					uni.hideLoading();
@@ -292,9 +292,9 @@
 					const result = this.invList.find(item => item.id == this.invChecked);
 					if (result) {
 						let name = '';
-						name += result.header_type === 1 ? this.$t(`personal`) : this.$t(`enterprise`);
-						name += result.type === 1 ? this.$t(`ordinary`) : this.$t(`dedicated`);
-						name += this.$t(`bill`);
+						name += result.header_type === 1 ? this.$t(`个人`) : this.$t(`企业`);
+						name += result.type === 1 ? this.$t(`普通`) : this.$t(`专用`);
+						name += this.$t(`发票`);
 						this.invTitle = name;
 					}
 				}).catch(err => {
@@ -321,12 +321,12 @@
 				let that = this
 				if (!that.addressId) {
 					return that.$util.Tips({
-						title: this.$t(`select_address`)
+						title: that.$t(`请选择收货地址`)
 					});
 				}
 				if (parseFloat(that.resData.integral) < parseFloat(that.cartInfo.price))
 					return that.$util.Tips({
-						title: this.$t(`not_enough_points`)
+						title: that.$t(`可用积分不足！`)
 					});
 				let data = {
 					addressId: that.addressId,

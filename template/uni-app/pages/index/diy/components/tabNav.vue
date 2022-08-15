@@ -12,7 +12,7 @@
 					<view :url="'/pages/goods/goods_list/index?cid='+item.id+'&title='+item.cate_name" class="longItem"
 						:style='"width:"+isWidth+"px"' :data-index="index" :class="index===tabClick?'click':''"
 						v-for="(item,index) in tabTitle" :key="index" :id="'id'+index" @click="longClick(item,index)">
-						{{item.cate_name}}
+						{{$t(item.cate_name)}}
 					</view>
 					<view class="underlineBox" :style='"transform:translateX("+isLeft+"px);width:"+isWidth+"px"'>
 						<view class="underline"></view>
@@ -80,7 +80,7 @@
 				getCategoryList().then(res => {
 					res.data.unshift({
 						"id": -99,
-						'cate_name': this.$t(`home`)
+						'cate_name': that.$t(`首页`)
 					})
 					that.tabTitle = res.data;
 					setTimeout((e) => {

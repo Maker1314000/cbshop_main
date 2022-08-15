@@ -5,7 +5,7 @@
 				<view class="item" v-for="(item, index) in bargain" :key="index">
 					<view class="exchange_record-time">
 						<view class="">
-							{{$t(`exchange_time`)}}：{{item.add_time}}
+							{{$t(`兑换时间`)}}：{{item.add_time}}
 						</view>
 						<view class="status">
 							{{item.status_name}}
@@ -25,10 +25,10 @@
 						<view class="acea-row row-middle row-right">
 							<view class="bnt cancel" v-if="item.status === 2 && item.delivery_type === 'express'"
 								@click="getLogistics(item.order_id)">
-								{{$t(`view_log`)}}
+								{{$t(`查看物流`)}}
 							</view>
 							<view class="bnt bg-color-red" @click="goDetail(item.order_id)">
-								{{$t(`check_details`)}}
+								{{$t(`查看详情`)}}
 							</view>
 							<!-- <view class="bnt bg-color-red" v-else @click="goList">重开一个</view> -->
 						</view>
@@ -38,7 +38,7 @@
 			</view>
 		</block>
 		<block v-if="bargain.length == 0">
-			<emptyPage :title="$t(`no_record_yet`)"></emptyPage>
+			<emptyPage :title="$t(`暂无兑换记录～`)"></emptyPage>
 		</block>
 		<!-- #ifndef MP -->
 		<home></home>

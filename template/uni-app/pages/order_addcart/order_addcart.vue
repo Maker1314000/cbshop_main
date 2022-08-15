@@ -2,14 +2,14 @@
 	<view :style="colorStyle">
 		<view class='shoppingCart copy-data' v-if="canShow">
 			<view class='labelNav acea-row row-around row-middle'>
-				<view class='item'><text class='iconfont icon-xuanzhong'></text>{{$t(`genuine_guarantee`)}}</view>
-				<view class='item'><text class='iconfont icon-xuanzhong'></text>{{$t(`carefully_selected`)}}</view>
-				<view class='item'><text class='iconfont icon-xuanzhong'></text>{{$t(`noworries_after_sale`)}}</view>
+				<view class='item'><text class='iconfont icon-xuanzhong'></text>{{$t(`100%正品保证`)}}</view>
+				<view class='item'><text class='iconfont icon-xuanzhong'></text>{{$t(`所有商品精挑细选`)}}</view>
+				<view class='item'><text class='iconfont icon-xuanzhong'></text>{{$t(`售后无忧`)}}</view>
 			</view>
 			<view class='nav acea-row row-between-wrapper'>
-				<view>{{$t(`number_of_purchases`)}} <text class='num font-num'>{{cartCount}}</text></view>
+				<view>{{$t(`购物数量`)}} <text class='num font-num'>{{cartCount}}</text></view>
 				<view v-if="cartList.valid.length > 0 || cartList.invalid.length > 0"
-					class='administrate acea-row row-center-wrapper' @click='manage'>{{ footerswitch ? $t(`manage`) : $t(`cancel`)}}
+					class='administrate acea-row row-center-wrapper' @click='manage'>{{ footerswitch ? $t(`管理`) : $t(`取消`)}}
 				</view>
 			</view>
 			<view v-if="(cartList.valid.length > 0 || cartList.invalid.length > 0) && canShow ">
@@ -38,12 +38,12 @@
 											{{item.productInfo.store_name}}
 										</view>
 										<view class='infor line1' v-if="item.productInfo.attrInfo">
-											{{$t(`attributes`)}}：{{item.productInfo.attrInfo.suk}}</view>
-										<view class='money' v-if="item.attrStatus">{{$t(`money`)}}{{item.truePrice}}</view>
+											{{$t(`属性`)}}：{{item.productInfo.attrInfo.suk}}</view>
+										<view class='money' v-if="item.attrStatus">{{$t(`￥`)}}{{item.truePrice}}</view>
 										<view class="reElection acea-row row-between-wrapper" v-else>
-											<view class="title">{{$t(`re_select_product_specification`)}}</view>
+											<view class="title">{{$t(`请重新选择商品规格`)}}</view>
 											<view class="reBnt cart-color acea-row row-center-wrapper"
-												@click.stop="reElection(item)">{{$t(`re_election`)}}</view>
+												@click.stop="reElection(item)">{{$t(`重选`)}}</view>
 										</view>
 									</view>
 									<view class='carnum acea-row row-center-wrapper' v-if="item.attrStatus">
@@ -65,13 +65,13 @@
 				<view class='invalidGoods' v-if="cartList.invalid.length > 0">
 					<view class='goodsNav acea-row row-between-wrapper'>
 						<view @click='goodsOpen'><text class='iconfont'
-								:class='goodsHidden==true?"icon-xiangxia":"icon-xiangshang"'></text>{{$t(`expired_goods`)}}</view>
-						<view class='del' @click='unsetCart'><text class='iconfont icon-shanchu1'></text>{{$t(`empty`)}}</view>
+								:class='goodsHidden==true?"icon-xiangxia":"icon-xiangshang"'></text>{{$t(`失效商品`)}}</view>
+						<view class='del' @click='unsetCart'><text class='iconfont icon-shanchu1'></text>{{$t(`清空`)}}</view>
 					</view>
 					<view class='goodsList' :hidden='goodsHidden'>
 						<block v-for="(item,index) in cartList.invalid" :key='index'>
 							<view class='item acea-row row-between-wrapper'>
-								<view class='invalid'>{{$t(`invalid`)}}</view>
+								<view class='invalid'>{{$t(`失效`)}}</view>
 								<view class='pictrue'>
 									<image v-if="item.productInfo.attrInfo" :src='item.productInfo.attrInfo.image'>
 									</image>
@@ -80,10 +80,10 @@
 								<view class='text acea-row row-column-between'>
 									<view class='line1 name'>{{item.productInfo.store_name}}</view>
 									<view class='infor line1' v-if="item.productInfo.attrInfo">
-										{{$t(`attributes`)}}：{{item.productInfo.attrInfo.suk}}</view>
+										{{$t(`属性`)}}：{{item.productInfo.attrInfo.suk}}</view>
 									<view class='acea-row row-between-wrapper'>
 										<!-- <view>￥{{item.truePrice}}</view> -->
-										<view class='end'>{{$t(`has_expired`)}}</view>
+										<view class='end'>{{$t(`该商品已失效`)}}</view>
 									</view>
 								</view>
 							</view>
@@ -101,7 +101,7 @@
 			<view class='noCart' v-if="cartList.valid.length == 0 && cartList.invalid.length == 0 && canShow">
 				<view class='emptyBox'>
 					<image :src="imgHost + '/statics/images/no-thing.png'"></image>
-					<view class="tips">{{$t(`no_product_see`)}}</view>
+					<view class="tips">{{$t(`全选`)}}</view>
 				</view>
 				<recommend :hostProduct='hostProduct'></recommend>
 			</view>
@@ -111,21 +111,21 @@
 				<view>
 					<checkbox-group @change="checkboxAllChange">
 						<checkbox value="all" :checked="!!isAllSelect" />
-						<text class='checkAll'>{{$t(`select_all`)}}({{selectValue.length}})</text>
+						<text class='checkAll'>{{$t(`全选`)}}({{selectValue.length}})</text>
 					</checkbox-group>
 				</view>
 				<view class='money acea-row row-middle' v-if="footerswitch==true">
-					<text class='font-color'>{{$t(`money`)}}{{selectCountPrice}}</text>
+					<text class='font-color'>{{$t(`￥`)}}{{selectCountPrice}}</text>
 					<form @submit="subOrder">
-						<button class='placeOrder bg-color' formType="submit">{{$t(`order_now`)}}</button>
+						<button class='placeOrder bg-color' formType="submit">{{$t(`立即下单`)}}</button>
 					</form>
 				</view>
 				<view class='button acea-row row-middle' v-else>
 					<form @submit="subCollect">
-						<button class='bnt cart-color' formType="submit">{{$t(`collect`)}}</button>
+						<button class='bnt cart-color' formType="submit">{{$t(`收藏`)}}</button>
 					</form>
 					<form @submit="subDel">
-						<button class='bnt' formType="submit">{{$t(`delete`)}}</button>
+						<button class='bnt' formType="submit">{{$t(`删除`)}}</button>
 					</form>
 				</view>
 			</view>
@@ -231,12 +231,12 @@
 				hotLimit: 10,
 				loading: false,
 				loadend: false,
-				loadTitle: this.$t(`bottom_line`), //提示语
+				loadTitle: this.$t(`我也是有底线的`), //提示语
 				page: 1,
 				limit: 20,
 				loadingInvalid: false,
 				loadendInvalid: false,
-				loadTitleInvalid: this.$t(`loading_more`), //提示语
+				loadTitleInvalid: this.$t(`加载更多`), //提示语
 				pageInvalid: 1,
 				limitInvalid: 20,
 				attr: {
@@ -247,7 +247,7 @@
 				productValue: [], //系统属性
 				storeInfo: {},
 				attrValue: '', //已选属性
-				attrTxt: this.$t(`please_choose`), //属性页面提示
+				attrTxt: this.$t(`请选择`), //属性页面提示
 				cartId: 0,
 				product_id: 0,
 				sysHeight: sysHeight,
@@ -331,7 +331,7 @@
 					productSelect === undefined
 				)
 					return that.$util.Tips({
-						title: this.$t(`inventory_shortage`)
+						title: that.$t(`产品库存不足，请选择其它`)
 					});
 
 				let q = {
@@ -345,7 +345,7 @@
 					.then(function(res) {
 						that.attr.cartAttr = false;
 						that.$util.Tips({
-							title: this.$t(`added_successfully`),
+							title: that.$t(`添加购物车成功`),
 							success: () => {
 								that.loadend = false;
 								that.page = 1;
@@ -373,7 +373,7 @@
 			 */
 			getGoodsDetails: function(item) {
 				uni.showLoading({
-					title: this.$t(`Loading`),
+					title: this.$t(`加载中`),
 					mask: true
 				});
 				let that = this;
@@ -404,7 +404,7 @@
 					this.$set(this.attr.productSelect, "unique", productSelect.unique);
 					this.$set(this.attr.productSelect, "cart_num", 1);
 					this.$set(this, "attrValue", res);
-					this.$set(this, "attrTxt", "已选择");
+					this.$set(this, "attrTxt", this.$t(`已选择`));
 				} else {
 					this.$set(this.attr.productSelect, "image", this.storeInfo.image);
 					this.$set(this.attr.productSelect, "price", this.storeInfo.price);
@@ -412,7 +412,7 @@
 					this.$set(this.attr.productSelect, "unique", "");
 					this.$set(this.attr.productSelect, "cart_num", 0);
 					this.$set(this, "attrValue", "");
-					this.$set(this, "attrTxt", "请选择");
+					this.$set(this, "attrTxt", this.$t(`请选择`));
 				}
 			},
 			/**
@@ -445,7 +445,7 @@
 					this.$set(this.attr.productSelect, "unique", productSelect.unique);
 					this.$set(this.attr.productSelect, "cart_num", 1);
 					this.$set(this, "attrValue", value.sort().join(","));
-					this.$set(this, "attrTxt", this.$t(`chosen`));
+					this.$set(this, "attrTxt", this.$t(`已选择`));
 				} else if (!productSelect && productAttr.length) {
 					this.$set(
 						this.attr.productSelect,
@@ -458,7 +458,7 @@
 					this.$set(this.attr.productSelect, "unique", "");
 					this.$set(this.attr.productSelect, "cart_num", 0);
 					this.$set(this, "attrValue", "");
-					this.$set(this, "attrTxt", this.$t(`please_choose`));
+					this.$set(this, "attrTxt", this.$t(`请选择`));
 				} else if (!productSelect && !productAttr.length) {
 					this.$set(
 						this.attr.productSelect,
@@ -475,7 +475,7 @@
 					);
 					this.$set(this.attr.productSelect, "cart_num", 1);
 					this.$set(this, "attrValue", "");
-					this.$set(this, "attrTxt", this.$t(`please_choose`));
+					this.$set(this, "attrTxt", this.$t(`请选择`));
 				}
 			},
 			attrVal(val) {
@@ -531,7 +531,7 @@
 					});
 				else
 					return that.$util.Tips({
-						title: this.$t(`select_product`)
+						title: that.$t(`请选择产品`)
 					});
 			},
 			getSelectValueProductId: function() {
@@ -565,7 +565,7 @@
 					});
 				} else {
 					return that.$util.Tips({
-						title: this.$t(`select_product`)
+						title: that.$t(`请选择产品`)
 					});
 				}
 			},
@@ -579,7 +579,7 @@
 					});
 				} else {
 					return that.$util.Tips({
-						title: this.$t(`select_product`)
+						title: that.$t(`请选择产品`)
 					});
 				}
 			},
@@ -797,7 +797,7 @@
 			},
 			async getCartList() {
 				uni.showLoading({
-					title: this.$t(`Loading`),
+					title: this.$t(`加载中`),
 					mask: true
 				});
 				let that = this;
@@ -879,12 +879,12 @@
 					let invalidList = that.$util.SplitArray(invalid, that.cartList.invalid);
 					that.$set(that.cartList, 'invalid', invalidList);
 					that.loadendInvalid = loadendInvalid;
-					that.loadTitleInvalid = loadendInvalid ? this.$t(`bottom_line`) : this.$t(`loading_more`);
+					that.loadTitleInvalid = loadendInvalid ? that.$t(`我也是有底线的`) : that.$t(`加载更多`);
 					that.pageInvalid = that.pageInvalid + 1;
 					that.loadingInvalid = false;
 				}).catch(res => {
 					that.loadingInvalid = false;
-					that.loadTitleInvalid = this.$t(`loading_more`);
+					that.loadTitleInvalid = that.$t(`加载更多`);
 				})
 
 			},
@@ -956,7 +956,7 @@
 				}
 				cartDel(ids).then(res => {
 					that.$util.Tips({
-						title: this.$t(`clear_success`)
+						title: that.$t(`清除成功`)
 					});
 					that.$set(that.cartList, 'invalid', []);
 					that.getCartNum();

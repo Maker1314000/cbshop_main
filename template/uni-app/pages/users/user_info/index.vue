@@ -33,21 +33,21 @@
 				</view> -->
 				<view class='list'>
 					<view class='item acea-row row-between-wrapper'>
-						<view>{{$t(`avatar`)}}</view>
+						<view>{{$t(`头像`)}}</view>
 						<view class="avatar-box" @click.stop='uploadpic'>
 							<image :src="userInfo.avatar"></image>
 						</view>
 					</view>
 					<view class='item acea-row row-between-wrapper'>
-						<view>{{$t(`name`)}}</view>
+						<view>{{$t(`昵称`)}}</view>
 						<view class='input'><input type='text' name='nickname' :value='userInfo.nickname'></input>
 						</view>
 					</view>
 					<view class='item acea-row row-between-wrapper'>
-						<view>{{$t(`cellphone_number`)}}</view>
+						<view>{{$t(`手机号码`)}}</view>
 						<navigator url="/pages/users/user_phone/index" hover-class="none" class="input"
 							v-if="!userInfo.phone">
-							{{$t(`click_mobile`)}}<text class="iconfont icon-xiangyou"></text>
+							{{$t(`点击绑定手机号`)}}<text class="iconfont icon-xiangyou"></text>
 						</navigator>
 						<view class='input acea-row row-between-wrapper' v-else>
 							<input type='text' disabled='true' name='phone' :value='userInfo.phone' class='id'></input>
@@ -55,7 +55,7 @@
 						</view>
 					</view>
 					<view class='item acea-row row-between-wrapper'>
-						<view>{{$t(`id`)}}</view>
+						<view>{{$t(`ID号`)}}</view>
 						<view class='input acea-row row-between-wrapper'>
 							<input type='text' :value='userInfo.uid' disabled='true' class='id'></input>
 							<text class='iconfont icon-suozi'></text>
@@ -63,48 +63,48 @@
 					</view>
 					<!-- #ifdef MP -->
 					<view class='item acea-row row-between-wrapper'>
-						<view>{{$t(`per_set`)}}</view>
+						<view>{{$t(`权限设置`)}}</view>
 						<view class="input" @click="Setting">
-							{{$t(`click_manage`)}}<text class="iconfont icon-xiangyou"></text>
+							{{$t(`点击管理`)}}<text class="iconfont icon-xiangyou"></text>
 						</view>
 					</view>
 					<!-- #endif -->
 					<!-- #ifdef H5 -->
 					<view class="item acea-row row-between-wrapper" v-if="userInfo.phone && !this.$wechat.isWeixin()">
-						<view>{{$t(`psw`)}}</view>
+						<view>{{$t(`密码`)}}</view>
 						<navigator url="/pages/users/user_pwd_edit/index" hover-class="none" class="input">
-							{{$t(`click_psw`)}}<text class="iconfont icon-xiangyou"></text>
+							{{$t(`点击修改密码`)}}<text class="iconfont icon-xiangyou"></text>
 						</navigator>
 					</view>
 					<!-- #endif -->
 					<view class="item acea-row row-between-wrapper" v-if="userInfo.phone">
-						<view>{{$t(`change_num`)}}</view>
+						<view>{{$t(`更换手机号码`)}}</view>
 						<navigator url="/pages/users/user_phone/index?type=1" hover-class="none" class="input">
-							{{$t(`click_change_num`)}}<text class="iconfont icon-xiangyou"></text>
+							{{$t(`点击更换手机号码`)}}<text class="iconfont icon-xiangyou"></text>
 						</navigator>
 					</view>
 					<!-- #ifdef APP-PLUS -->
 					<view class="item acea-row row-between-wrapper" v-if="userInfo.phone">
-						<view>{{$t(`psw`)}}</view>
+						<view>{{$t(`密码`)}}</view>
 						<navigator url="/pages/users/user_pwd_edit/index" hover-class="none" class="input">
-							{{$t(`click_psw`)}}<text class="iconfont icon-xiangyou"></text>
+							{{$t(`点击修改密码`)}}<text class="iconfont icon-xiangyou"></text>
 						</navigator>
 					</view>
 					<view class="item acea-row row-between-wrapper" @click="initData">
-						<view>{{$t(`cache_size`)}}</view>
+						<view>{{$t(`缓存大小`)}}</view>
 						<view class="input">
 							{{fileSizeString}}<text class="iconfont icon-xiangyou"></text>
 						</view>
 					</view>
 					<view class="item acea-row row-between-wrapper" @click="updateApp">
-						<view>{{$t(`current_version`)}}</view>
+						<view>{{$t(`当前版本`)}}</view>
 						<view class="input">
 							{{version}}<text class="iconfont icon-xiangyou"></text>
 						</view>
 					</view>
 					<!-- #endif -->
 					<view class="item acea-row row-between-wrapper">
-						<view>{{$t(`switch_language`)}}</view>
+						<view>{{$t(`语言切换`)}}</view>
 						<view class="uni-list-cell-db">
 							<picker @change="bindPickerChange" :value="setIndex" :range="array">
 								<view class="uni-input input">{{array[setIndex]}}<text class="iconfont icon-xiangyou"></text></view>
@@ -112,29 +112,29 @@
 						</view>
 					</view>
 					<view class="item acea-row row-between-wrapper">
-						<view>{{$t(`address_management`)}}</view>
+						<view>{{$t(`地址管理`)}}</view>
 						<navigator url="/pages/users/user_address_list/index" hover-class="none" class="input">
-							{{$t(`click_to_go`)}}<text class="iconfont icon-xiangyou"></text>
+							{{$t(`点击前往`)}}<text class="iconfont icon-xiangyou"></text>
 						</navigator>
 					</view>
 					<view class="item acea-row row-between-wrapper" v-if="userInfo.invioce_func">
-						<view>{{$t(`invoice_management`)}}</view>
+						<view>{{$t(`发票管理`)}}</view>
 						<navigator url="/pages/users/user_invoice_list/index" hover-class="none" class="input">
-							{{$t(`click_to_go`)}}<text class="iconfont icon-xiangyou"></text>
+							{{$t(`点击前往`)}}<text class="iconfont icon-xiangyou"></text>
 						</navigator>
 					</view>
 					<view class="item acea-row row-between-wrapper">
-						<view>{{$t(`account_cancellation`)}}</view>
+						<view>{{$t(`账号注销`)}}</view>
 						<navigator url="/pages/users/user_cancellation/index" hover-class="none" class="input">
-							{{$t(`not_restore`)}}<text class="iconfont icon-xiangyou"></text>
+							{{$t(`注销后无法恢复`)}}<text class="iconfont icon-xiangyou"></text>
 						</navigator>
 					</view>
 
 				</view>
 
-				<button class='modifyBnt bg-color' formType="submit">{{$t(`save_changes`)}}</button>
+				<button class='modifyBnt bg-color' formType="submit">{{$t(`保存修改`)}}</button>
 				<!-- #ifdef H5 || APP-PLUS || MP -->
-				<view class="logOut cartcolor acea-row row-center-wrapper" @click="outLogin">{{$t(`sign_out`)}}</view>
+				<view class="logOut cartcolor acea-row row-center-wrapper" @click="outLogin">{{$t(`退出登录`)}}</view>
 				<!-- #endif -->
 				<!-- #ifdef APP-PLUS -->
 				<app-update ref="appUpdate" :force="true" :tabbar="false" :getVer='true' @isNew="isNew"></app-update>
@@ -194,8 +194,8 @@
 				canvasStatus: false,
 				fileSizeString: '',
 				version: '',
-				array: ['中文','English'],
-				setIndex: this.$i18n.locale == 'zh_cn'? 0 : 1,
+				array: ['中文','English','日本語','Français','ไทย','Italiano','Монгол','한국인','Tiếng Việt','中文(繁体)'],
+				setIndex: 0,
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -220,6 +220,7 @@
 					this.version = inf.version;
 				});
 				// #endif 
+				this.setLang();
 			} else {
 				toLogin();
 			}
@@ -227,20 +228,64 @@
 		methods: {
 			isNew() {
 				this.$util.Tips({
-					title: this.$t(`latest_version`)
+					title: this.$t(`当前为最新版本`)
 				});
 			},
+			setLang() {
+				if(this.$i18n.locale == 'zh_cn') {
+					this.setIndex = 0;
+				}else if(this.$i18n.locale == 'en_us') {
+					this.setIndex = 1;
+				}else if(this.$i18n.locale == 'ja_jp') {
+					this.setIndex = 2;
+				}else if(this.$i18n.locale == 'fr_fr') {
+					this.setIndex = 3;
+				}else if(this.$i18n.locale == 'th_th') {
+					this.setIndex = 4;
+				}else if(this.$i18n.locale == 'it_it') {
+					this.setIndex = 5;
+				}else if(this.$i18n.locale == 'mn_mn') {
+					this.setIndex = 6;
+				}else if(this.$i18n.locale == 'ko_kr') {
+					this.setIndex = 7;
+				}else if(this.$i18n.locale == 'vi_vn') {
+					this.setIndex = 8;
+				}else if(this.$i18n.locale == 'zh_tw') {
+					this.setIndex = 9;
+				}
+			},
 			bindPickerChange(e) {
-				console.log('picker发送选择改变，携带值为', e.detail.value)
 				this.setIndex = e.detail.value
 				if(this.setIndex == 0) {
 					this.$i18n.locale = 'zh_cn';
 					uni.setStorageSync('locale', 'zh_cn');
-					this.array = [this.$t(`Chinese`),this.$t(`English`)]
 				}else if(this.setIndex == 1) {
 					this.$i18n.locale = 'en_us';
 					uni.setStorageSync('locale', 'en_us');
-					this.array = [this.$t(`Chinese`),this.$t(`English`)]
+				}else if(this.setIndex == 2) {
+					this.$i18n.locale = 'ja_jp';
+					uni.setStorageSync('locale', 'ja_jp');
+				}else if(this.setIndex == 3) {
+					this.$i18n.locale = 'fr_fr';
+					uni.setStorageSync('locale', 'fr_fr');
+				}else if(this.setIndex == 4) {
+					this.$i18n.locale = 'th_th';
+					uni.setStorageSync('locale', 'th_th');
+				}else if(this.setIndex == 5) {
+					this.$i18n.locale = 'it_it';
+					uni.setStorageSync('locale', 'it_it');
+				}else if(this.setIndex == 6) {
+					this.$i18n.locale = 'mn_mn';
+					uni.setStorageSync('locale', 'mn_mn');
+				}else if(this.setIndex == 7) {
+					this.$i18n.locale = 'ko_kr';
+					uni.setStorageSync('locale', 'ko_kr');
+				}else if(this.setIndex == 8) {
+					this.$i18n.locale = 'vi_vn';
+					uni.setStorageSync('locale', 'vi_vn');
+				}else if(this.setIndex == 9) {
+					this.$i18n.locale = 'zh_tw';
+					uni.setStorageSync('locale', 'zh_tw');
 				}
 			},
 
@@ -267,15 +312,15 @@
 
 			initData() {
 				uni.showModal({
-					title: this.$t(`clear_cache`),
-					content: this.$t(`sure_clear_cache`),
+					title: this.$t(`清除缓存`),
+					content: this.$t(`确定清楚本地缓存数据吗`),
 					success: (res) => {
 						if (res.confirm) {
 							this.clearCache()
 							this.formatSize()
 						} else if (res.cancel) {
 							return that.$util.Tips({
-								title: this.$t(`cancelled`)
+								title: that.$t(`取消`)
 							});
 						}
 					}
@@ -295,7 +340,7 @@
 							if (entry.isDirectory) {
 								entry.removeRecursively(function(entry) { //递归删除其下的所有文件及子目录  
 									uni.showToast({
-										title: this.$t(`cache_clean_completed`),
+										title: that.$t(`缓存清理完成`),
 										duration: 2000
 									});
 									that.formatSize(); // 重新计算缓存  
@@ -306,13 +351,12 @@
 								entry.remove();
 							}
 						}, function(e) {
-							console.log(this.$t(`failed_read_path`))
 						});
 					}
 				} else { // ios暂时未找到清理缓存的方法，以下是官方提供的方法，但是无效，会报错  
 					plus.cache.clear(function() {
 						uni.showToast({
-							title: this.$t(`cache_clean_completed`),
+							title: that.$t(`缓存清理完成`),
 							duration: 2000
 						});
 						that.formatSize();
@@ -343,11 +387,11 @@
 				that.userIndex = index;
 				if (that.switchUserInfo.length <= 1) return true;
 				if (userInfo === undefined) return that.$util.Tips({
-					title: this.$t(`account_not_exist`)
+					title: that.$t(`切换的账号不存在`)
 				});
 				if (userInfo.user_type === 'h5') {
 					uni.showLoading({
-						title: this.$t(`switching`)
+						title: that.$t(`正在切换中`)
 					});
 					switchH5Login().then(res => {
 						uni.hideLoading();
@@ -366,7 +410,7 @@
 				} else {
 					that.$store.commit("LOGOUT");
 					uni.showLoading({
-						title: this.$t(`switching`)
+						title: that.$t(`正在切换中`)
 					});
 					toLogin();
 				}
@@ -379,8 +423,8 @@
 				let that = this;
 				if (that.loginType == 'h5') {
 					uni.showModal({
-						title: this.$t(`hint`),
-						content: this.$t(`confirm_log_out`),
+						title: that.$t(`提示`),
+						content: that.$t(`确认退出登录`),
 						success: function(res) {
 							if (res.confirm) {
 								getLogout()
@@ -393,7 +437,6 @@
 									})
 									.catch(err => {});
 							} else if (res.cancel) {
-								console.log(this.$t(`user_clicks_cancel`));
 							}
 						}
 					});
@@ -453,7 +496,7 @@
 					value = e.detail.value,
 					userInfo = that.switchUserInfo[that.userIndex];
 				if (!value.nickname) return that.$util.Tips({
-					title: this.$t(`username_not_empty`)
+					title: that.$t(`请输入姓名`)
 				});
 				value.avatar = this.userInfo.avatar;
 				userEdit(value).then(res => {
@@ -466,7 +509,7 @@
 					});
 				}).catch(msg => {
 					return that.$util.Tips({
-						title: msg || this.$t(`failed_to_save`)
+						title: msg || that.$t(`保存失败`)
 					}, {
 						tab: 3,
 						url: 1

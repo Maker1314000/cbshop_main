@@ -1,34 +1,34 @@
 <template>
 	<form class="form" @submit="checkForm">
 		<view class="input-section">
-			<view class="section-hd">{{$t(`payment_amount`)}}</view>
+			<view class="section-hd">{{$t(`支付金额`)}}</view>
 			<view class="section-bd">
 				<view class="input-group">
-					{{$t(`money`)}}
+					{{$t(`￥`)}}
 					<input v-model.number="money" class="input" name="money" type="digit" @input="inputChange" placeholder="0.00" />
 				</view>
-				<view v-if="payPrice" class="discount">{{$t(`vip_discount`)}}：{{$t(`money`)}}{{ payPrice }}</view>
+				<view v-if="payPrice" class="discount">{{$t(`会员优惠价`)}}：{{$t(`￥`)}}{{ payPrice }}</view>
 			</view>
 		</view>
 		<view class="radio-section">
-			<view class="section-hd">{{$t(`payment_method`)}}</view>
+			<view class="section-hd">{{$t(`支付方式`)}}</view>
 			<radio-group class="section-bd" name="method">
 				<label class="item" v-if="yuePay">
 					<text class="iconfont icon-yue"></text>
 					<text class="name">
-						{{$t(`balance_payment`)}}
-						<text class="money">{{$t(`available_balance`)}}:{{ now_money || 0 }}{{$t(`money`)}}</text>
+						{{$t(`余额支付`)}}
+						<text class="money">{{$t(`可用余额`)}}:{{$t(`￥`)}}{{ now_money || 0 }}</text>
 					</text>
 					<radio value="yue" :checked="payType === 'yue'" />
 				</label>
 				<label v-if="wxpay" class="item">
 					<text class="iconfont icon-weixinzhifu"></text>
-					<text class="name">{{$t(`wechat_pay`)}}</text>
+					<text class="name">{{$t(`微信支付`)}}</text>
 					<radio value="weixin" :checked="payType === 'weixin'" />
 				</label>
 			</radio-group>
 		</view>
-		<button class="button" form-type="submit">{{$t(`confirm`)}}</button>
+		<button class="button" form-type="submit">{{$t(`确认`)}}</button>
 		<view class="alipay" v-html="alipayHtml"></view>
 	</form>
 </template>
@@ -123,8 +123,8 @@
 						this.site_name = site_name;
 						if (!offline_pay_status) {
 							uni.showModal({
-								title: this.$t(`paym_reminder`),
-								content: this.$t(`offline_pay_closed`),
+								title: this.$t(`支付提醒`),
+								content: this.$t(`线下支付已关闭，请点击确认按钮返回主页`),
 								showCancel: false,
 								success() {
 									uni.switchTab({
@@ -155,7 +155,7 @@
 					this.combData(method);
 				} else {
 					uni.showToast({
-						title: this.$t(`enter_payment`),
+						title: this.$t(`请输入支付金额`),
 						icon: 'none'
 					});
 				}
@@ -198,7 +198,7 @@
 				}
 				this.paying = true;
 				uni.showLoading({
-					title: this.$t(`confirming`)
+					title: this.$t(`正在确认`)
 				});
 				offlineCreate(data)
 					.then(res => {
@@ -257,7 +257,7 @@
 							paySign: jsConfig.paySign,
 							success: function(res) {
 								that.$util.Tips({
-									title: this.$t(`pay_success`),
+									title: that.$t(`支付成功`),
 									icon: 'success'
 								}, {
 									tab: 5,
@@ -266,7 +266,7 @@
 							},
 							fail: function() {
 								uni.showToast({
-									title: this.$t(`cancel_payment`),
+									title: that.$t(`取消支付`),
 									icon: 'none',
 									success: function() {
 										that.paying = false;
@@ -285,7 +285,7 @@
 							.then(res => {
 								this.paying = false;
 								this.$util.Tips({
-									title: this.$t(`pay_success`),
+									title: this.$t(`支付成功`),
 									icon: 'success'
 								}, {
 									tab: 5,
@@ -296,7 +296,7 @@
 								this.paying = false;
 								if (err.errMsg == 'chooseWXPay:cancel') {
 									uni.showToast({
-										title: '取消支付',
+										title: this.$t(`取消支付`),
 										icon: 'none'
 									});
 								}

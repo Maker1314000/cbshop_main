@@ -3,19 +3,19 @@
 		<view class='evaluate-list'>
 			<view class='generalComment acea-row row-between-wrapper'>
 				<view class='acea-row row-middle'>
-					<view class='evaluate'>{{$t(`score`)}}</view>
+					<view class='evaluate'>{{$t(`评分`)}}</view>
 					<view class='start' :class="'star'+replyData.reply_star"></view>
 				</view>
-				<view><text class='font-num'>{{replyData.reply_chance}}%</text>{{$t(`praise_rate`)}}</view>
+				<view>{{$t(`好评率`)}}<text class='font-num'>{{replyData.reply_chance}}%</text></view>
 			</view>
 			<view class='nav acea-row row-middle'>
-				<view class='item' :class='type==0 ? "bg-color":""' @click='changeType(0)'>{{$t(`all`)}}({{replyData.sum_count}})
+				<view class='item' :class='type==0 ? "bg-color":""' @click='changeType(0)'>{{$t(`全部`)}}({{replyData.sum_count}})
 				</view>
-				<view class='item' :class='type==1 ? "bg-color":""' @click='changeType(1)'>{{$t(`praise`)}}({{replyData.good_count}})
+				<view class='item' :class='type==1 ? "bg-color":""' @click='changeType(1)'>{{$t(`好评`)}}({{replyData.good_count}})
 				</view>
-				<view class='item' :class='type==2 ? "bg-color":""' @click='changeType(2)'>{{$t(`average`)}}({{replyData.in_count}})
+				<view class='item' :class='type==2 ? "bg-color":""' @click='changeType(2)'>{{$t(`中评`)}}({{replyData.in_count}})
 				</view>
-				<view class='item' :class='type==3 ? "bg-color":""' @click='changeType(3)'>{{$t(`bad_review`)}}({{replyData.poor_count}})
+				<view class='item' :class='type==3 ? "bg-color":""' @click='changeType(3)'>{{$t(`差评`)}}({{replyData.poor_count}})
 				</view>
 			</view>
 			<userEvaluation :reply="reply"></userEvaluation>
@@ -25,7 +25,6 @@
 			<view class='noCommodity' v-if="reply.length==0">
 				<view class='emptyBox'>
 					<image :src="imgHost + '/statics/images/noMessage.png'"></image>
-					<view class="tips">{{$t(`no_reviews`)}}</view>
 				</view>
 			</view>
 		</view>
@@ -61,7 +60,7 @@
 				type: 0,
 				loading: false,
 				loadend: false,
-				loadTitle: this.$t(`loading_more`),
+				loadTitle: this.$t(`加载更多`),
 				page: 1,
 				limit: 20
 			};
@@ -72,7 +71,7 @@
 		onLoad: function(options) {
 			let that = this;
 			if (!options.product_id) return that.$util.Tips({
-				title: this.$t(`missing_par`)
+				title: that.$t(`缺少参数`)
 			}, {
 				tab: 3,
 				url: 1
@@ -118,11 +117,11 @@
 					that.$set(that, 'reply', that.reply);
 					that.loading = false;
 					that.loadend = loadend;
-					that.loadTitle = loadend ? this.$t(`bottom_line`) : this.$t(`loading_more`);
+					that.loadTitle = loadend ? that.$t(`没有更多内容啦~`) : that.$t(`加载更多`);
 					that.page = that.page + 1;
 				}).catch(err => {
 					that.loading = false,
-						that.loadTitle = this.$t(`loading_more`)
+						that.loadTitle = that.$t(`加载更多`)
 				});
 			},
 			/*

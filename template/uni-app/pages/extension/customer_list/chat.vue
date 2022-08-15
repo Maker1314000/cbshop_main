@@ -19,35 +19,35 @@
 					<view class="broadcast_details_tit" v-text="productInfo.store_name"></view>
 					<view class="acea-row row-between">
 						<view class="broadcast_details_pic">
-							{{$t(`money`)}}{{ productInfo.price }}
+							{{$t(`￥`)}}{{ productInfo.price }}
 							<text class="broadcast_details_pic_num"
-								v-if="productInfo.ot_price">{{$t(`money`)}}{{ productInfo.ot_price }}</text>
+								v-if="productInfo.ot_price">{{$t(`￥`)}}{{ productInfo.ot_price }}</text>
 						</view>
-						<view class="broadcast_details_btn" @click="sendProduct">{{$t(`send_customer`)}}</view>
+						<view class="broadcast_details_btn" @click="sendProduct">{{$t(`发送客服`)}}</view>
 					</view>
 				</view>
 			</view>
 			<!-- 订单信息 -->
 			<view class="broadcast_box" v-if="orderId && orderInfo.id">
 				<view class="broadcast-details_num broadcast_num">
-					<text>{{$t(`order_number`)}}：{{ orderInfo.order_id }}</text>
+					<text>{{$t(`订单号`)}}：{{ orderInfo.order_id }}</text>
 					<text>{{ orderInfo.add_time_y }} {{ orderInfo.add_time_h }}</text>
 				</view>
 				<view class="broadcast-details_box">
 					<view class="broadcast_details_img">
 						<image class="goods-img" :src="orderInfo.cartInfo[0].productInfo.image" />
 						<view class="broadcast_details_model">
-							{{ orderInfo.cartInfo ? orderInfo.cartInfo.length : 0 }}{{$t(`item`)}}
+							{{ orderInfo.cartInfo ? orderInfo.cartInfo.length : 0 }}{{$t(`件商品`)}}
 						</view>
 					</view>
 					<view class="broadcast_details_picBox">
 						<view class="broadcast_details_tit">{{ orderInfo.cartInfo[0].productInfo.store_name }}</view>
 						<view class="acea-row row-between">
 							<view class="broadcast_details_pic">
-								{{$t(`money`)}}{{ orderInfo.cartInfo[0].productInfo.price }}
-								<text class="broadcast_details_pic_num">{{$t(`money`)}}{{ orderInfo.cartInfo[0].costPrice }}</text>
+								{{$t(`￥`)}}{{ orderInfo.cartInfo[0].productInfo.price }}
+								<text class="broadcast_details_pic_num">{{$t(`￥`)}}{{ orderInfo.cartInfo[0].costPrice }}</text>
 							</view>
-							<view class="broadcast_details_btn" @click="sendOrder">{{$t(`send_customer`)}}</view>
+							<view class="broadcast_details_btn" @click="sendOrder">{{$t(`发送客服`)}}</view>
 						</view>
 					</view>
 				</view>
@@ -72,7 +72,7 @@
 								<image :src="item.productInfo.image" mode="widthFix"></image>
 								<view class="info">
 									<view class="price">
-										<text>{{$t(`money`)}}</text>
+										<text>{{$t(`￥`)}}</text>
 										{{ item.productInfo.price }}
 									</view>
 									<view class="name line2">{{ item.productInfo.store_name }}</view>
@@ -80,13 +80,13 @@
 							</view>
 							<!-- 订单 -->
 							<view class="order-box" v-if="item.msn_type == 6" @click="goOrder(item)">
-								<view class="title">{{$t(`order_id`)}}: {{ item.orderInfo.order_id }}</view>
+								<view class="title">{{$t(`订单号`)}}: {{ item.orderInfo.order_id }}</view>
 								<view class="info">
 									<image :src="item.orderInfo.cartInfo[0].productInfo.image"></image>
 									<view class="product-info">
 										<view class="name line2">{{ item.orderInfo.cartInfo[0].productInfo.store_name }}
 										</view>
-										<view class="price">{{$t(`money`)}}{{ item.orderInfo.cartInfo[0].productInfo.price }}</view>
+										<view class="price">{{$t(`￥`)}}{{ item.orderInfo.cartInfo[0].productInfo.price }}</view>
 									</view>
 								</view>
 							</view>
@@ -98,7 +98,7 @@
 		<view class="footer-box">
 			<view class="words" @click="uploadImg"><text class="iconfont icon-tupian"></text></view>
 			<view class="input-box">
-				<input type="text" :placeholder="$t(`fill_out`)" v-model="con" confirm-type="send" @confirm="sendText" />
+				<input type="text" :placeholder="$t(`请输入内容`)" v-model="con" confirm-type="send" @confirm="sendText" />
 				<text class="iconfont icon-fasong" @click="sendText" :class="{ isSend: isSend }"></text>
 			</view>
 			<view class="emoji" @click="isSwiper = !isSwiper"><span class="iconfont icon-biaoqing"></span></view>
@@ -219,7 +219,7 @@
 		},
 		onLoad(options) {
 			uni.showLoading({
-				title: this.$t(`service_connect`)
+				title: this.$t(`客服连接中`)
 			});
 			this.myUid = this.$store.state.app.uid;
 			this.toUid = options.to_uid
@@ -266,7 +266,6 @@
 				this.$socket.onStart(this.$store.state.app.token, form_type);
 			}
 			uni.$once('socketOpen', () => {
-				console.log(this.$t(`send_login`))
 				// 登录
 				this.$socket.send({
 					data: this.$store.state.app.token,
@@ -300,7 +299,6 @@
 			});
 			// 链接成功
 			uni.$once('success', () => {
-				console.log(this.$t(`connect_success`))
 				this.$socket.init();
 			});
 			// 消息接收
@@ -316,7 +314,7 @@
 			});
 			uni.$on('socket_error', () => {
 				this.$util.Tips({
-					title: this.$t(`connect_failed`)
+					title: this.$t(`连接失败`)
 				});
 			});
 			uni.$on('err_tip', (e) => {
@@ -327,8 +325,8 @@
 			uni.$on('online', data => {
 				if (data.online == 0) {
 					uni.showModal({
-						title: this.$t(`hint`),
-						content: this.$t(`service_offline`),
+						title: this.$t(`提示`),
+						content: this.$t(`客服已下线，是否需要反馈？`),
 						success: function(res) {
 							if (res.confirm) {
 								uni.redirectTo({
@@ -480,7 +478,7 @@
 			sendText() {
 				if (!this.isSend) {
 					return this.$util.Tips({
-						title: this.$t(`enter_content`)
+						title: this.$t(`请输入内容`)
 					});
 				}
 				this.sendMsg(this.con, 1);

@@ -182,7 +182,7 @@ export default {
 	PosterCanvas: function(arr2, store_name, price, ot_price, successFn) {
 		let that = this;
 		uni.showLoading({
-			title: i18n.t(`poster_generated`),
+			title: i18n.t(`海报生成中`),
 			mask: true
 		});
 		const ctx = uni.createCanvasContext('myCanvas');
@@ -235,14 +235,14 @@ export default {
 				ctx.setTextAlign('left')
 				ctx.setFontSize(72);
 				ctx.setFillStyle('#DA4F2A');
-				ctx.fillText(i18n.t(`money`) + price, 40, 820 + contentHh);
+				ctx.fillText(i18n.t(`￥`) + price, 40, 820 + contentHh);
 
 				ctx.setTextAlign('left')
 				ctx.setFontSize(36);
 				ctx.setFillStyle('#999');
 					
 				if(ot_price){
-					ctx.fillText(i18n.t(`money`) + ot_price, 50, 876 + contentHh);
+					ctx.fillText(i18n.t(`￥`) + ot_price, 50, 876 + contentHh);
 					var underline = function(ctx, text, x, y, size, color, thickness, offset) {
 						var width = ctx.measureText(text).width;
 						switch (ctx.textAlign) {
@@ -263,12 +263,12 @@ export default {
 						ctx.lineTo(x + width, y);
 						ctx.stroke();
 					}
-					underline(ctx, i18n.t(`money`) + ot_price, 55, 865, 36, '#999', 2, 0)
+					underline(ctx, i18n.t(`￥`) + ot_price, 55, 865, 36, '#999', 2, 0)
 				} 
 				ctx.setTextAlign('left')
 				ctx.setFontSize(28);
 				ctx.setFillStyle('#999');
-				ctx.fillText(i18n.t(`long_press_scan`), 490, 1030 + contentHh);
+				ctx.fillText(i18n.t(`长按或扫描查看`), 490, 1030 + contentHh);
 				ctx.draw(true, function() {
 					uni.canvasToTempFilePath({
 						canvasId: 'myCanvas',
@@ -285,7 +285,7 @@ export default {
 			fail: function(err) {
 				uni.hideLoading();
 				that.Tips({
-					title: i18n.t(`unable_get_image`)
+					title: i18n.t(`无法获取图片信息`)
 				});
 			}
 		})
@@ -390,7 +390,7 @@ export default {
 			fail: function(err) {
 				uni.hideLoading();
 				that.Tips({
-					title: i18n.t(`unable_get_image`)
+					title: i18n.t(`无法获取图片信息`)
 				});
 			}
 		})
@@ -444,7 +444,7 @@ export default {
 				} else {
 					ctx.setFontSize(10);
 				}
-				ctx.fillText(i18n.t(`invite_you_join`) + sitename, w * markx, h * marky);
+				ctx.fillText(i18n.t(`邀请您加入`) + sitename, w * markx, h * marky);
 				ctx.save();
 				ctx.draw(true, function() {
 					uni.canvasToTempFilePath({
@@ -460,7 +460,7 @@ export default {
 			fail: function(err) {
 				uni.hideLoading();
 				that.Tips({
-					title:  i18n.t(`unable_get_image`)
+					title:  i18n.t(`无法获取图片信息`)
 				});
 			}
 		})
@@ -492,7 +492,7 @@ export default {
 			success: function(res) {
 				//启动上传等待中...  
 				uni.showLoading({
-					title: i18n.t(`image_uploading`),
+					title: i18n.t(`图片上传中`),
 				});
 				uni.uploadFile({
 					url: HTTP_REQUEST_URL + '/api/' + uploadUrl,
@@ -529,7 +529,7 @@ export default {
 					fail: function(res) {
 						uni.hideLoading();
 						that.Tips({
-							title: i18n.t(`failed_upload_image`)
+							title: i18n.t(`上传图片失败`)
 						});
 					}
 				})
@@ -567,7 +567,7 @@ export default {
 					src: res.tempFilePaths[0],
 					success(ress) {
 						uni.showLoading({
-							title: i18n.t(`image_uploading`),
+							title: i18n.t(`图片上传中`),
 						});
 						if (res.tempFiles[0].size <= 2097152) {
 							uploadImg(ress.path)
@@ -652,7 +652,7 @@ export default {
 				fail: function(res) {
 					uni.hideLoading();
 					that.Tips({
-						title: i18n.t(`failed_upload_image`)
+						title: i18n.t(`上传图片失败`)
 					});
 				}
 			})
@@ -823,7 +823,7 @@ export default {
 					// #ifndef MP-BAIDU
 					if (err.errMsg.indexOf("auth deny") >= 0) {
 						uni.showToast({
-							title: i18n.t(`location_denied`)
+							title: i18n.t(`访问位置被拒绝`)
 						})
 					} else {
 						uni.showToast({
@@ -869,8 +869,8 @@ export default {
 				status = 1;
 			} else if (status === 2) {
 				uni.showModal({
-					content: i18n.t(`position_off`),
-					confirmText: i18n.t(`confirm`),
+					content: i18n.t(`系统定位已关闭`),
+					confirmText: i18n.t(`确定`),
 					showCancel: false,
 					success: function(res) {}
 				})
@@ -880,8 +880,8 @@ export default {
 				})
 			} else {
 				uni.showModal({
-					content: i18n.t(`need_location`),
-					confirmText: i18n.t(`set`),
+					content: i18n.t(`需要定位权限`),
+					confirmText: i18n.t(`确定`),
 					success: function(res) {
 						if (res.confirm) {
 							permision.gotoAppSetting();

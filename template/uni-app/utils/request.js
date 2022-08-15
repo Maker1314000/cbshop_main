@@ -35,7 +35,7 @@ function baseRequest(url, method, data, {
 		if (!store.state.app.token && !checkLogin()) {
 			toLogin();
 			return Promise.reject({
-				msg: i18n.t(`not_logged_in`)
+				msg: i18n.t(`未登录`)
 			});
 		}
 	}
@@ -58,24 +58,24 @@ function baseRequest(url, method, data, {
 					reject(res.data);
 				} else if (res.data.status == 100103) {
 					uni.showModal({
-						title: i18n.t(`hint`),
+						title: i18n.t(`提示`),
 						content: res.data.msg,
 						showCancel: false,
-						confirmText: i18n.t(`i_see`)
+						confirmText: i18n.t(`我知道了`)
 					});
 				} else
-					reject(res.data.msg || i18n.t(`system_error`));
+					reject(res.data.msg || i18n.t(`系统错误`));
 			},
 			fail: (msg) => {
 				let data = {
-					mag: i18n.t(`request_failed`),
+					mag: i18n.t(`请求失败`),
 					status: 1 //1没网
 				}
 				// #ifdef APP-PLUS
 				reject(data);
 				// #endif
 				// #ifndef APP-PLUS
-				reject(i18n.t(`request_failed`));
+				reject(i18n.t(`请求失败`));
 				// #endif
 			}
 		})

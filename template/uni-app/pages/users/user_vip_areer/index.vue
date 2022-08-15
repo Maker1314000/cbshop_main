@@ -16,7 +16,7 @@
 			</view>
 			<view v-if="!expList.length && !loading" class="empty">
 				<image class="image" :src="imgHost + '/statics/images/empty-box.png'"></image>
-				<view>{{$t(`no_experience_record`)}}</view>
+				<view>{{$t(`暂无经验记录`)}}</view>
 			</view>
 		</view>
 		<view class='loadingicon acea-row row-center-wrapper' v-if="expList.length">
@@ -38,7 +38,7 @@
 				imgHost:HTTP_REQUEST_URL,
 				loading: false,
 				loadend: false,
-				loadTitle: this.$t(`loading_more`), //提示语
+				loadTitle: this.$t(`加载更多`), //提示语
 				page: 1,
 				limit: 20,
 				expList: []
@@ -61,12 +61,12 @@
 					let expList = that.$util.SplitArray(list, that.expList);
 					that.$set(that, 'expList', expList);
 					that.loadend = loadend;
-					that.loadTitle = loadend ? this.$t(`bottom_line`) : this.$t(`loading_more`);
+					that.loadTitle = loadend ? that.$t(`我也是有底线的`) : that.$t(`加载更多`);
 					that.page = that.page + 1;
 					that.loading = false;
 				}).catch(err => {
 					that.loading = false;
-					that.loadTitle = this.$t(`loading_more`);
+					that.loadTitle = that.$t(`加载更多`);
 				});
 			}
 		},

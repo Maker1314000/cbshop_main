@@ -1,9 +1,9 @@
 <template>
 	<view class="order-details pos-order-details">
 		<view class="header acea-row row-middle">
-			<view class="state">{{ title }}</view>
+			<view class="state">{{ $t(title) }}</view>
 			<view class="data">
-				<view class="order-num">{{$t(`order`)}}：{{ orderInfo.order_id }}</view>
+				<view class="order-num">{{$t(`订单号`)}}：{{ orderInfo.order_id }}</view>
 				<view>
 					<span class="time">{{ orderInfo._add_time }}</span>
 				</view>
@@ -37,43 +37,43 @@
 					</view>
 				</view>
 				<view class="money">
-					<view class="x-money">{{$t(`money`)}}{{ item.productInfo.attrInfo.price }}</view>
+					<view class="x-money">{{$t(`￥`)}}{{ item.productInfo.attrInfo.price }}</view>
 					<view class="num">x{{ item.cart_num }}</view>
-					<view class="y-money">{{$t(`money`)}}{{ item.productInfo.attrInfo.ot_price }}</view>
+					<view class="y-money">{{$t(`￥`)}}{{ item.productInfo.attrInfo.ot_price }}</view>
 				</view>
 			</navigator>
 		</view>
 		<view class="public-total">
-			{{$t(`total_of`)}}{{ orderInfo.total_num }}{{$t(`items_payable`)}}
-			<span class="money">{{$t(`money`)}}{{ orderInfo.pay_price }}</span> ( {{$t(`postage`)}} {{$t(`money`)}}{{
+			{{$t(`共`)}}{{ orderInfo.total_num }}{{$t(`件商品`)}}
+			<span class="money">{{$t(`￥`)}}{{ orderInfo.pay_price }}</span> ( {{$t(`邮费`)}} {{$t(`￥`)}}{{
         orderInfo.pay_postage
       }}
 			)
 		</view>
 		<view class="wrapper">
 			<view class="item acea-row row-between">
-				<view>{{$t(`order_number`)}}：</view>
+				<view>{{$t(`订单号`)}}：</view>
 				<view class="conter acea-row row-middle row-right">
 					{{ orderInfo.order_id
           }}
 				</view>
 			</view>
 			<view class="item acea-row row-between">
-				<view>{{$t(`order_time`)}}：</view>
+				<view>{{$t(`下单时间`)}}：</view>
 				<view class="conter">{{ orderInfo._add_time }}</view>
 			</view>
 			<view class="item acea-row row-between">
-				<view>{{$t(`payment_status`)}}：</view>
+				<view>{{$t(`支付状态`)}}：</view>
 				<view class="conter">
-					{{ orderInfo.paid == 1 ? $t(`paid`) : $t(`unpaid`) }}
+					{{ orderInfo.paid == 1 ? $t(`已支付`) : $t(`未支付`) }}
 				</view>
 			</view>
 			<view class="item acea-row row-between">
-				<view>{{$t(`payment_method`)}}：</view>
+				<view>{{$t(`支付方式`)}}：</view>
 				<view class="conter">{{ payType }}</view>
 			</view>
 			<view class="item acea-row row-between">
-				<view>{{$t(`buyer_message`)}}：</view>
+				<view>{{$t(`买家留言`)}}：</view>
 				<view class="conter">{{ orderInfo.mark }}</view>
 			</view>
 		</view>
@@ -91,43 +91,43 @@
 		</view>
 		<view class="wrapper">
 			<view class="item acea-row row-between">
-				<view>{{$t(`payment_amount`)}}：</view>
-				<view class="conter">{{$t(`money`)}}{{ orderInfo.total_price }}</view>
+				<view>{{$t(`支付金额`)}}：</view>
+				<view class="conter">{{$t(`￥`)}}{{ orderInfo.total_price }}</view>
 			</view>
 			<view class='item acea-row row-between' v-if='orderInfo.coupon_id'>
-				<view>{{$t(`coupon_deduction`)}}：</view>
-				<view class='conter'>-{{$t(`money`)}}{{orderInfo.coupon_price}}</view>
+				<view>{{$t(`优惠券抵扣`)}}：</view>
+				<view class='conter'>-{{$t(`￥`)}}{{orderInfo.coupon_price}}</view>
 			</view>
 			<view class='item acea-row row-between' v-if="orderInfo.use_integral > 0">
-				<view>{{$t(`points_deduction`)}}：</view>
-				<view class='conter'>-{{$t(`money`)}}{{orderInfo.deduction_price}}</view>
+				<view>{{$t(`积分抵扣`)}}：</view>
+				<view class='conter'>-{{$t(`￥`)}}{{orderInfo.deduction_price}}</view>
 			</view>
 			<view class='item acea-row row-between' v-if="orderInfo.pay_postage > 0">
-				<view>{{$t(`freight`)}}：</view>
-				<view class='conter'>{{$t(`money`)}}{{orderInfo.pay_postage}}</view>
+				<view>{{$t(`运费`)}}：</view>
+				<view class='conter'>{{$t(`￥`)}}{{orderInfo.pay_postage}}</view>
 			</view>
 			<view class="actualPay acea-row row-right">
-				{{$t(`real_payment`)}}：<span class="money">{{$t(`money`)}}{{ orderInfo.pay_price }}</span>
+				{{$t(`real_payment`)}}：<span class="money">{{$t(`￥`)}}{{ orderInfo.pay_price }}</span>
 			</view>
 		</view>
 		<view class="wrapper" v-if="
         orderInfo.delivery_type != 'fictitious' && orderInfo._status._type === 2
       ">
 			<view class="item acea-row row-between">
-				<view>{{$t(`delivery_method`)}}：</view>
+				<view>{{$t(`配送方式`)}}：</view>
 				<view class="conter" v-if="orderInfo.delivery_type === 'express'">
-					{{$t(`express_delivery`)}}
+					{{$t(`快递`)}}
 				</view>
-				<view class="conter" v-if="orderInfo.delivery_type === 'send'">{{$t(`deliver_goods`)}}</view>
+				<view class="conter" v-if="orderInfo.delivery_type === 'send'">{{$t(`送货`)}}</view>
 			</view>
 			<view class="item acea-row row-between">
-				<view v-if="orderInfo.delivery_type === 'express'">{{$t(`courier_company`)}}：</view>
-				<view v-if="orderInfo.delivery_type === 'send'">{{$t(`delivery_man`)}}：</view>
+				<view v-if="orderInfo.delivery_type === 'express'">{{$t(`快递公司`)}}：</view>
+				<view v-if="orderInfo.delivery_type === 'send'">{{$t(`送货人`)}}：</view>
 				<view class="conter">{{ orderInfo.delivery_name }}</view>
 			</view>
 			<view class="item acea-row row-between">
-				<view v-if="orderInfo.delivery_type === 'express'">{{$t(`tracking_number`)}}：</view>
-				<view v-if="orderInfo.delivery_type === 'send'">{{$t(`delivery_man_phone`)}}：</view>
+				<view v-if="orderInfo.delivery_type === 'express'">{{$t(`快递单号`)}}：</view>
+				<view v-if="orderInfo.delivery_type === 'send'">{{$t(`送货人电话`)}}：</view>
 				<view class="conter">
 					{{ orderInfo.delivery_id}}
 				</view>

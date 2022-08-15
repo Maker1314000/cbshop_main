@@ -4,9 +4,9 @@
 			<view class='promoterHeader bg-color'>
 				<view class='headerCon acea-row row-between-wrapper'>
 					<view>
-						<view class='name'>{{name}}</view>
-						<view class='money' v-if="recordType == 4">{{$t(`money`)}}<text class='num'>{{extractCount}}</text></view>
-						<view class='money' v-else>{{$t(`money`)}}<text class='num'>{{recordCount}}</text></view>
+						<view class='name'>{{$t(name)}}</view>
+						<view class='money' v-if="recordType == 4">{{$t(`￥`)}}<text class='num'>{{extractCount}}</text></view>
+						<view class='money' v-else>{{$t(`￥`)}}<text class='num'>{{recordCount}}</text></view>
 					</view>
 					<view class='iconfont icon-jinbi1'></view>
 				</view>
@@ -20,10 +20,10 @@
 								<block v-for="(child,indexn) in item.child" :key="indexn">
 									<view class='itemn acea-row row-between-wrapper'>
 										<view>
-											<view class='name line1'>{{child.title}}</view>
+											<view class='name line1'>{{$t(child.title)}}</view>
 											<view>{{child.add_time}}</view>
 											<view class="fail-msg" v-if="child.fail_msg">
-												{{$t(`reason`)}}：{{child.fail_msg}}
+												{{$t(`原因`)}}：{{child.fail_msg}}
 											</view>
 										</view>
 										<view class='num font-color' v-if="child.pm == 1">+{{child.number}}</view>
@@ -39,7 +39,7 @@
 					<text class='loading iconfont icon-jiazai' :hidden='loading==false'></text>{{loadTitle}}
 				</view>
 				<view v-if="recordList.length < 1 && page > 1">
-					<emptyPage :title='$t(`no_data`)'></emptyPage>
+					<emptyPage :title='$t(`暂无数据~`)'></emptyPage>
 				</view>
 			</view>
 		</view>
@@ -83,7 +83,7 @@
 				limit: 15,
 				loading: false,
 				loadend: false,
-				loadTitle: this.$t(`loading_more`),
+				loadTitle: this.$t(`加载更多`),
 				recordList: [],
 				recordType: 0,
 				recordCount: 0,
@@ -103,23 +103,23 @@
 			let type = this.type;
 			if (type == 1) {
 				uni.setNavigationBarTitle({
-					title: this.$t(`withdrawals_record`)
+					title: "提现记录"
 				});
-				this.name = this.$t(`total_withdrawal`);
+				this.name = '提现总额';
 				this.recordType = 4;
 				this.getRecordList();
 				this.getRecordListCount();
 			} else if (type == 2) {
 				uni.setNavigationBarTitle({
-					title: this.$t(`commission_record`)
+					title: "佣金记录"
 				});
-				this.name = this.$t(`commission_details`);
+				this.name = '佣金明细';
 				this.recordType = 3;
 				this.getRecordList();
 				this.getRecordListCount();
 			} else {
 				uni.showToast({
-					title: this.$t(`parameter_error`),
+					title: '参数错误',
 					icon: 'none',
 					duration: 1000,
 					mask: true,
@@ -171,12 +171,12 @@
 					}
 					let loadend = res.data.list.length < that.limit;
 					that.loadend = loadend;
-					that.loadTitle = loadend ? that.$t(`no_more`) : that.$t(`loading_more`);
+					that.loadTitle = loadend ? that.$t(`我也是有底线的`) : that.$t(`加载更多`);
 					that.page += 1;
 					that.loading = false;
 				}).catch(err => {
 					that.loading = false;
-					that.loadTitle = that.$t(`loading_more`);
+					that.loadTitle = that.$t(`加载更多`);
 				})
 			},
 			getRecordListCount: function() {

@@ -5,7 +5,7 @@
 				<text class="iconfont icon-gou"></text>
 				<view class="pay-status-r">
 					<text class="pay-status-text">
-						{{$t(`evaluation_completed`)}}
+						{{$t(`评价完成`)}}
 					</text>
 					<text class="date">
 						{{new Date().toLocaleString()}}
@@ -14,15 +14,14 @@
 			</view>
 			<view class="jump">
 				<view class="jump-index" @click="goIndex">
-					{{$t(`back_to_home`)}}
+					{{$t(`返回首页`)}}
 				</view>
 			</view>
 		</view>
 		<view class="grids-top" v-show="lotteryShow">
 			<image src="../static/pay-lottery-l.png" mode=""></image>
 			<view class="grids-title">
-				<view>{{$t(`congratulations`)}}，{{$t(`get`)}} {{lottery_num}} {{$t(`time`)}}</view>
-				<!-- <view class="grids-frequency">{{$t(`get`)}} {{lottery_num}} {{$t(`time`)}} </view> -->
+				<view>{{$t(`恭喜您`)}}，{{$t(`获得`)}} {{lottery_num}} {{$t(`机会`)}}</view>
 			</view>
 			<image src="../static/pay-lottery-r.png" mode=""></image>
 		</view>
@@ -218,7 +217,7 @@
 				addData.address = data.address.province + data.address.city + data.address.district + data.detail
 				receiveLottery(addData).then(res => {
 					this.$util.Tips({
-						title: '领取成功'
+						title: this.$t(`领取成功`)
 					});
 					this.addressModel = false
 				}).catch(err => {

@@ -10,14 +10,14 @@
 					<view class='text acea-row row-between'>
 						<view class='name line2'>{{item.productInfo.store_name}}</view>
 						<view class='money'>
-							<view>{{$t(`money`)}}{{item.truePrice}}</view>
+							<view>{{$t(`￥`)}}{{item.truePrice}}</view>
 							<view class='num'>x{{item.cart_num}}</view>
 						</view>
 					</view>
 				</view>
 				<view class='list'>
 					<view class='item acea-row row-between-wrapper'>
-						<view>{{$t(`return_pieces`)}}</view>
+						<view>{{$t(`退货件数`)}}</view>
 						<view class='num' v-if="refundCartInfo.length !== 1 || refund_total_num == 1">
 							{{refund_total_num}}
 						</view>
@@ -28,16 +28,9 @@
 								<text class='iconfont icon-jiantou'></text>
 							</view>
 						</picker>
-						<!-- <input type="number" v-model="refund_num" @input="inputNumber" v-else /> -->
 					</view>
-					<!-- 		<view class='item acea-row row-between-wrapper'>
-						<view>退款金额</view>
-						<view class='num' v-if="refundCartInfo.length !== 1">￥{{refund_pay_price.toFixed(2)}}</view>
-						<view class='num' v-else>￥{{refund_Money.toFixed(2)}}
-						</view>
-					</view> -->
 					<view class='item acea-row row-between-wrapper' v-if="status && status._type !== 1">
-						<view>{{$t(`return_type`)}}</view>
+						<view>{{$t(`退款类型`)}}</view>
 						<picker class='num' @change="returnGoodsChange" :value="returnGoods" :range="returnGoodsData">
 							<view class="picker acea-row row-between-wrapper">
 								<view class='reason'>{{returnGoodsData[returnGoods]}}</view>
@@ -46,7 +39,7 @@
 						</picker>
 					</view>
 					<view class='item acea-row row-between-wrapper'>
-						<view>{{$t(`return_reason`)}}</view>
+						<view>{{$t(`退款原因`)}}</view>
 						<picker class='num' @change="bindPickerChange" :value="index" :range="RefundArray">
 							<view class="picker acea-row row-between-wrapper">
 								<view class='reason'>{{RefundArray[index]}}</view>
@@ -55,14 +48,14 @@
 						</picker>
 					</view>
 					<view class='item textarea acea-row row-between'>
-						<view>{{$t(`instruction_manual`)}}</view>
-						<textarea :placeholder='$t(`fill_remarks_100`)' class='num' name="refund_reason_wap_explain"
-							:placeholder-class='$t(`fill_remarks_100`)'></textarea>
+						<view>{{$t(`备注说明`)}}</view>
+						<textarea :placeholder='$t(`填写备注信息，100字以内`)' class='num' name="refund_reason_wap_explain"
+							:placeholder-class='$t(`填写备注信息，100字以内`)'></textarea>
 					</view>
 					<view class='item acea-row row-between upload'>
 						<view class='title acea-row row-between-wrapper'>
 							<view>{{$t(`upload_certificate`)}}</view>
-							<view class='tip'>{{$t(`3_upload`)}}</view>
+							<view class='tip'>{{$t(`上传图片`)}}</view>
 						</view>
 						<view class='upload acea-row row-middle'>
 							<view class='pictrue' v-for="(item,index) in refund_reason_wap_img" :key="index">
@@ -72,12 +65,12 @@
 							<view class='pictrue acea-row row-center-wrapper row-column' @tap='uploadpic'
 								v-if="refund_reason_wap_img.length < 3">
 								<text class='iconfont icon-icon25201'></text>
-								<view>{{$t(`upload`)}}</view>
+								<view>{{$t(`上传图片`)}}</view>
 							</view>
 						</view>
 					</view>
 				</view>
-				<button class='returnBnt bg-color' form-type="submit">{{$t(`request_refund`)}}</button>
+				<button class='returnBnt bg-color' form-type="submit">{{$t(`申请退款`)}}</button>
 			</view>
 		</form>
 	</view>
@@ -115,7 +108,7 @@
 				status: {},
 				RefundArray: [],
 				refundCartInfo: [],
-				returnGoodsData: [this.$t(`only_refund`), this.$t(`return_and_refund`)],
+				returnGoodsData: [this.$t(`仅退款`), this.$t(`退货并退款`)],
 				refund_total_num: 0,
 				index: 0,
 				returnGoods: 0,
@@ -211,7 +204,7 @@
 					value = e.detail.value;
 				//收集form表单
 				if (!value.refund_reason_wap_explain) return this.$util.Tips({
-					title: this.$t(`enter_remark`)
+					title: this.$t(`请输入备注`)
 				});
 				let cartInfo = this.refundCartInfo;
 				if (cartInfo.length === 1) {
@@ -229,7 +222,7 @@
 					cart_ids: this.cartIds
 				}).then(res => {
 					return this.$util.Tips({
-						title: this.$t(`request_success`),
+						title: this.$t(`申请成功`),
 						icon: 'success'
 					}, {
 						tab: 5,

@@ -45,7 +45,7 @@
 						<view class="share acea-row row-between row-bottom">
 							<view class="money font-color">
 								<image src="./static/my-point.png" mode=""></image>
-								<text class="num" v-text="storeInfo.price || 0"></text>{{$t(`point`)}}
+								<text class="num" v-text="storeInfo.price || 0"></text>{{$t(`积分`)}}
 							</view>
 							<view></view>
 						</view>
@@ -55,11 +55,11 @@
 							<view class="infor"> {{ storeInfo.title }}</view>
 						</view>
 						<view class="label acea-row row-middle">
-							<view class="stock">{{$t(`under_price`)}}：{{ storeInfo.product_price }}</view>
-							<view class="stock">{{$t(`limited`)}}:
+							<view class="stock">{{$t(`划线价`)}}：{{ storeInfo.product_price }}</view>
+							<view class="stock">{{$t(`限量`)}}:
 								{{ storeInfo.quota_show }}
 							</view>
-							<view class="stock">{{$t(`redeemed`)}}：{{ storeInfo.sales }} </view>
+							<view class="stock">{{$t(`已兑换`)}}：{{ storeInfo.sales }} </view>
 						</view>
 					</view>
 					<view class="attribute acea-row row-between-wrapper" @tap="selecAttr"
@@ -81,12 +81,12 @@
 								<image :src="item.image" v-for="(item, index) in skuArr.slice(0, 4)" :key="index"
 									class="attrImg"></image>
 							</view>
-							<view class="switchTxt">{{$t(`total_of`)}}{{ skuArr.length }}{{$t(`specification`)}}</view>
+							<view class="switchTxt">{{$t(`共`)}}{{ skuArr.length }}{{$t(`种规格可选`)}}</view>
 						</view>
 					</view>
 				</view>
 				<view class="product-intro" id="past2">
-					<view class="title">{{$t(`product_desc`)}}</view>
+					<view class="title">{{$t(`产品介绍`)}}</view>
 					<view class="conter">
 						<jyf-parser :html="storeInfo.description" ref="article" :tag-style="tagStyle"></jyf-parser>
 					</view>
@@ -95,16 +95,16 @@
 			<view class="footer acea-row row-between-wrapper">
 				<navigator hover-class="none" open-type="switchTab" class="item" url="/pages/index/index">
 					<view class="iconfont icon-shouye6"></view>
-					<view class="p_center">{{$t(`home`)}}</view>
+					<view class="p_center">{{$t(`首页`)}}</view>
 				</navigator>
 				<view class="bnt acea-row" v-if="
             attribute.productSelect.quota > 0 &&
             attribute.productSelect.product_stock > 0
           ">
-					<view class="buy bnts" @tap="goCat">{{$t(`redeem_now`)}}</view>
+					<view class="buy bnts" @tap="goCat">{{$t(`立即兑换`)}}</view>
 				</view>
 				<view class="bnt acea-row" v-else>
-					<view class="bnts no-goods">{{$t(`not_redeem`)}}</view>
+					<view class="bnts no-goods">{{$t(`无法兑换`)}}</view>
 				</view>
 			</view>
 		</view>
@@ -174,7 +174,7 @@
 				parameter: {
 					'navbar': '1',
 					'return': '1',
-					'title': this.$t(`purchase_details`),
+					'title': this.$t(`抢购详情页`),
 					'color': false
 				},
 				attribute: {
@@ -184,7 +184,7 @@
 				},
 				productValue: [],
 				isOpen: false,
-				attr: this.$t(`please_choose`),
+				attr: this.$t(`请选择`),
 				attrValue: '',
 				status: 1,
 				isAuto: false,
@@ -196,7 +196,7 @@
 				reply: [], //评论列表
 				replyChance: 0,
 				navH: "",
-				navList: [this.$t(`commodity`), this.$t(`detail`)],
+				navList: [this.$t(`商品`), this.$t(`详情`)],
 				opacity: 0,
 				scrollY: 0,
 				topArr: [],
@@ -290,7 +290,7 @@
 					this.id = value.id;
 				} else {
 					return this.$util.Tips({
-						title: this.$t(`missing_parameters`)
+						title: this.$t(`缺少参数无法查看商品`)
 					}, {
 						tab: 3,
 						url: 1
@@ -348,14 +348,14 @@
 					imageUrl: that.storeInfo.small_image,
 					success: function(res) {
 						uni.showToast({
-							title: this.$t(`success_share`),
+							title: title.$t(`分享成功`),
 							icon: 'success'
 						})
 						that.posters = false;
 					},
 					fail: function(err) {
 						uni.showToast({
-							title: this.$t(`failed_share`),
+							title: title.$t(`分享失败`),
 							icon: 'none',
 							duration: 2000
 						})
@@ -496,7 +496,7 @@
 					self.$set(self.attribute.productSelect, "unique", "");
 					self.$set(self.attribute.productSelect, "cart_num", 0);
 					self.$set(self, "attrValue", "");
-					self.$set(self, "attrTxt", this.$t(`please_choose`));
+					self.$set(self, "attrTxt", self.$t(`请选择`));
 				} else if (!productSelect && !productAttr.length) {
 					self.$set(
 						self.attribute.productSelect,
@@ -517,7 +517,7 @@
 					self.$set(self.attribute.productSelect, "quota", productSelect.quota);
 					self.$set(self.attribute.productSelect, "product_stock", productSelect.product_stock);
 					self.$set(self, "attrValue", "");
-					self.$set(self, "attrTxt", this.$t(`please_choose`));
+					self.$set(self, "attrTxt", self.$t(`请选择`));
 				}
 			},
 			selecAttr: function() {
@@ -589,7 +589,7 @@
 					this.$set(this.attribute.productSelect, "quota_show", productSelect.quota_show);
 					this.$set(this, "attrValue", res);
 
-					this.attrTxt = this.$t(`chosen`)
+					this.attrTxt = this.$t(`已选择`)
 				} else {
 					this.$set(this.attribute.productSelect, "image", this.storeInfo.image);
 					this.$set(this.attribute.productSelect, "price", this.storeInfo.price);
@@ -599,7 +599,7 @@
 					this.$set(this.attribute.productSelect, "quota", 0);
 					this.$set(this.attribute.productSelect, "quota_show", 0);
 					this.$set(this, "attrValue", "");
-					this.attrTxt = this.$t(`chosen`)
+					this.attrTxt = this.$t(`已选择`)
 
 				}
 			},
@@ -696,7 +696,7 @@
 					this.$set(this.attribute.productSelect, "stock", productSelect.stock);
 					this.$set(this.attribute.productSelect, "unique", productSelect.unique);
 					this.$set(this.attribute.productSelect, "vipPrice", productSelect.vipPrice);
-					this.$set(this, "attrTxt", this.$t(`chosen`));
+					this.$set(this, "attrTxt", this.$t(`已选择`));
 					this.$set(this, "attrValue", productSelect.suk);
 				}
 			},
@@ -717,11 +717,11 @@
 				//如果有属性,没有选择,提示用户选择
 				if (this.attribute.productAttr.length && productSelect === undefined && this.isOpen == true) return app
 					.$util.Tips({
-						title: this.$t(`select_property`)
+						title: this.$t(`请选择属性`)
 					});
 				if (this.cart_num <= 0) {
 					return app.$util.Tips({
-						title: this.$t(`select_quantity`)
+						title: this.$t(`请选择数量`)
 					});
 				}
 				this.isOpen = false

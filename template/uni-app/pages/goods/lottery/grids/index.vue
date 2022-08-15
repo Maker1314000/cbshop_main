@@ -7,9 +7,7 @@
 				<view class="grids-top">
 					<image src="../../static/font-left.png" mode=""></image>
 					<view class="grids-title">
-						<view>{{$t(`get`)}}</view>
-						<view class="grids-frequency">{{lottery_num}}次</view>
-						<view>{{$t(`lottery_chance`)}}</view>
+						<view>{{$t(`恭喜您`)}}，{{$t(`获得`)}} {{lottery_num}} {{$t(`time`)}}</view>
 					</view>
 					<image src="../../static/font-right.png" mode=""></image>
 				</view>
@@ -26,7 +24,7 @@
 			<!-- #ifdef H5 -->
 			<view class="invite-people" v-if="factor == 5" @click="H5ShareBox=true">
 				<view class="invite">
-					{{$t(`invite_friends`)}}
+					{{$t(`邀请好友`)}}
 				</view>
 			</view>
 			<!-- #endif -->
@@ -57,7 +55,7 @@
 		</view>
 		<view class="no-lottery" v-else-if="!lotteryShow && loading">
 			<image :src="imgHost + '/statics/images/no-thing.png'"></image>
-			<text>{{$t(`not_activity`)}}～</text>
+			<text>{{$t(`商家暂未上架活动哦`)}}～</text>
 		</view>
 		<!-- #ifndef MP -->
 		<home></home>
@@ -201,7 +199,7 @@
 			//#endif
 			getLotteryData(type) {
 				uni.showLoading({
-					title: '获取抽奖信息'
+					title: this.$t(`获取抽奖信息`)
 				});
 				getLotteryData(type).then(res => {
 					this.loading = true
@@ -246,7 +244,7 @@
 				addData.address = data.address.province + data.address.city + data.address.district + data.detail
 				receiveLottery(addData).then(res => {
 					this.$util.Tips({
-						title: '领取成功'
+						title: this.$t(`领取成功`)
 					});
 					this.addressModel = false
 				}).catch(err => {

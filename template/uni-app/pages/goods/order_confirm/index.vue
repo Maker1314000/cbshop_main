@@ -16,12 +16,12 @@
 						</view>
 						<view class="line1">
 							<text class='default font-num'
-								v-if="addressInfo.is_default">[{{$t(`default`)}}]</text>{{addressInfo.province}}{{addressInfo.city}}{{addressInfo.district}}{{addressInfo.detail}}
+								v-if="addressInfo.is_default">[{{$t(`默认`)}}]</text>{{addressInfo.province}}{{addressInfo.city}}{{addressInfo.district}}{{addressInfo.detail}}
 						</view>
 						<!-- <view class='setaddress'>设置收货地址</view> -->
 					</view>
 					<view class='addressCon' v-else>
-						<view class='setaddress'>{{$t(`set_address`)}}</view>
+						<view class='setaddress'>{{$t(`设置收货地址`)}}</view>
 					</view>
 					<view class='iconfont icon-jiantou'></view>
 				</view>
@@ -36,7 +36,7 @@
 						<view class='iconfont icon-jiantou'></view>
 					</block>
 					<block v-else>
-						<view>{{$t(`no_store_msg`)}}</view>
+						<view>{{$t(`暂无门店信息`)}}</view>
 					</block>
 				</view>
 				<view class='line'>
@@ -47,7 +47,7 @@
 			<view class='wrapper'>
 				<view class='item acea-row row-between-wrapper' @tap='couponTap'
 					v-if="!pinkId && !BargainId && !combinationId && !seckillId&& !noCoupon && !discountId && !advanceId">
-					<view>{{$t(`coupon`)}}</view>
+					<view>{{$t(`优惠券`)}}</view>
 					<view class='discount'>
 					{{couponTitle}}
 						<text class='iconfont icon-jiantou'></text>
@@ -55,9 +55,9 @@
 				</view>
 				<view class='item acea-row row-between-wrapper'
 					v-if="!pinkId && !BargainId && !combinationId && !seckillId && !advanceId">
-					<view>{{$t(`points_deduction`)}}</view>
+					<view>{{$t(`积分抵扣`)}}</view>
 					<view class='discount acea-row row-middle'>
-						<view> {{useIntegral ? $t(`remaining_points`):$t(`cur_points`)}}
+						<view> {{useIntegral ? $t(`剩余积分`):$t(`当前积分`)}} 
 							<text class='num font-color'>{{integral || 0}}</text>
 						</view>
 						<checkbox-group @change="ChangeIntegral">
@@ -66,72 +66,35 @@
 					</view>
 				</view>
 				<view v-if="invoice_func || special_invoice" class='item acea-row row-between-wrapper' @tap="goInvoice">
-					<view>{{$t(`invoice`)}}</view>
+					<view>{{$t(`开具发票`)}}</view>
 					<view class='discount'>
 						{{invTitle}}
 						<text class='iconfont icon-jiantou'></text>
 					</view>
 				</view>
-				<!-- <view class='item acea-row row-between-wrapper' v-if="priceGroup.vipPrice > 0 && userInfo.vip && !pinkId && !BargainId && !combinationId && !seckillId">
-					<view>会员优惠</view>
-					<view class='discount'>-￥{{priceGroup.vipPrice}}</view>
-				</view>
-				<view class='item acea-row row-between-wrapper' v-if='shippingType==0'>
-					<view>快递费用</view>
-					<view class='discount' v-if='priceGroup.storePostage > 0'>+￥{{priceGroup.storePostage}}</view>
-					<view class='discount' v-else>免运费</view>
-				</view> -->
 				<view v-if="shippingType == 1">
 					<view class="item acea-row row-between-wrapper">
-						<view>{{$t(`contact_name`)}}</view>
+						<view>{{$t(`用户姓名`)}}</view>
 						<view class="discount">
-							<input style="text-align: right;" v-model="contacts" type="text" :placeholder="$t(`fill_name`)"
+							<input style="text-align: right;" v-model="contacts" type="text" :placeholder="$t(`请输入姓名`)"
 								placeholder-class="placeholder"></input>
 						</view>
 					</view>
 					<view class="item acea-row row-between-wrapper">
-						<view>{{$t(`contact_no`)}}</view>
+						<view>{{$t(`联系电话`)}}</view>
 						<view class="discount">
-							<input style="text-align: right;" v-model="contactsTel" type="text" :placeholder="$t(`fill_phone`)"
+							<input style="text-align: right;" v-model="contactsTel" type="text" :placeholder="$t(`请输入手机号`)"
 								placeholder-class="placeholder"></input>
 						</view>
 					</view>
 				</view>
-				<!-- <view class='item acea-row row-between-wrapper' wx:else>
-		      <view>自提门店</view>
-		      <view class='discount'>{{system_store.name}}</view>
-		    </view> -->
 				<view class='item' v-if="textareaStatus">
-					<view>{{$t(`remarks`)}}</view>
-					<!-- <view class="placeholder-textarea"> -->
-					<textarea placeholder-class='placeholder' :placeholder="$t(`fill_remarks`)" v-if="!coupon.coupon"
+					<view>{{$t(`备注说明`)}}</view>
+					<textarea placeholder-class='placeholder' :placeholder="$t(`填写备注信息，100字以内`)" v-if="!coupon.coupon"
 						@input='bindHideKeyboard' :value="mark" :maxlength="150" name="mark">
 						</textarea>
-					<!-- 	<view class="placeholder" @click="clickTextArea" v-show="!mark">
-							请添加备注（150字以内）
-						</view> -->
-					<!-- </view> -->
 				</view>
 			</view>
-			<!-- <view class='wrapper'>
-				<view class='item'>
-					<view>支付方式</view>
-					<view class='list'>
-						<view class='payItem acea-row row-middle' :class='active==index ?"on":""' @tap='payItem(index)' v-for="(item,index) in cartArr"
-						 :key='index' v-if="item.payStatus==1">
-							<view class='name acea-row'>
-								<view class='iconfont animated' :class='(item.icon) + " " + (animated==true&&active==index ?"bounceIn":"")'></view>{{item.name}}
-							</view>
-							<view class='tip'>{{item.title}} <span v-if="item.value == 'yue'">{{item.number}}</span> </view>
-						</view>
-					</view>
-				</view>
-			</view> -->
-
-			<!-- <textarea placeholder-class='placeholder' placeholder="请添加备注（150字以内）" v-if="!coupon.coupon"
-				@input='bindHideKeyboard' :value="mark" :maxlength="150" name="mark">
-				</textarea> -->
-
 			<view class='wrapper' v-if="confirm.length">
 				<view class='item acea-row row-between-wrapper' v-for="(item,index) in confirm" :key="index">
 					<view>
@@ -141,15 +104,15 @@
 					</view>
 					<!-- text -->
 					<view v-if="item.label=='text'" class="confirm">
-						<input type="text" :placeholder="$t(`fill_out`)+' '+item.title" v-model="item.value" />
+						<input type="text" :placeholder="$t(`请填写`)+' '+item.title" v-model="item.value" />
 					</view>
 					<!-- number -->
 					<view v-if="item.label=='number'" class="confirm">
-						<input type="number" :placeholder="$t(`fill_out`)+item.title" v-model="item.value" />
+						<input type="number" :placeholder="$t(`请填写`)+item.title" v-model="item.value" />
 					</view>
 					<!-- email -->
 					<view v-if="item.label=='email'" class="confirm">
-						<input type="text" :placeholder="$t(`fill_out`)+item.title" v-model="item.value" />
+						<input type="text" :placeholder="$t(`请填写`)+item.title" v-model="item.value" />
 					</view>
 					<!-- data -->
 					<view v-if="item.label=='data'" class="uni-list">
@@ -167,7 +130,7 @@
 					<view v-if="item.label=='time'">
 						<view>
 							<view>
-								<picker mode="time" :value="item.value" start="09:01" end="21:01"
+								<picker mode="time" :value="item.value" start="00:00" end="23:59"
 									@change="bindTimeChange($event,index)">
 									<view v-if="item.value == ''" class="fontC">{{time+item.title}}<text
 											class='iconfont icon-jiantou'></text></view>
@@ -178,11 +141,11 @@
 					</view>
 					<!-- id -->
 					<view v-if="item.label=='id'" class="confirm">
-						<input type="idcard" :placeholder="$t(`fill_out`)+item.title" v-model="item.value" />
+						<input type="idcard" :placeholder="$t(`请填写`)+item.title" v-model="item.value" />
 					</view>
 					<!-- phone -->
 					<view v-if="item.label=='phone'" class="confirm">
-						<input type="tel" :placeholder="$t(`fill_out`)+item.title" v-model="item.value" />
+						<input type="tel" :placeholder="$t(`请填写`)+item.title" v-model="item.value" />
 					</view>
 					<!-- img -->
 					<view v-if="item.label=='img'" class="confirmImg">
@@ -194,7 +157,7 @@
 							<view class='pictrue acea-row row-center-wrapper row-column bor'
 								@click='uploadpic(index,item)' v-if="item.value.length < 8">
 								<text class='iconfont icon-icon25201'></text>
-								<view>{{$t(`upload`)}}</view>
+								<view>{{$t(`上传图片`)}}</view>
 							</view>
 						</view>
 					</view>
@@ -202,50 +165,42 @@
 			</view>
 			<view class='moneyList'>
 				<view class='item acea-row row-between-wrapper'>
-					<view>{{$t(`total_price`)}}：</view>
+					<view>{{$t(`商品总价`)}}：</view>
 					<view class='money'>
-						{{$t(`money`)}}{{(parseFloat(priceGroup.totalPrice)+parseFloat(priceGroup.vipPrice)).toFixed(2)}}</view>
+						{{$t(`￥`)}}{{(parseFloat(priceGroup.totalPrice)+parseFloat(priceGroup.vipPrice)).toFixed(2)}}</view>
 				</view>
 				<view class='item acea-row row-between-wrapper' v-if="priceGroup.storePostage > 0">
-					<view>{{$t(`shipping_fee`)}}：</view>
+					<view>{{$t(`配送运费`)}}：</view>
 					<view class='money'>
-						{{$t(`money`)}}{{(parseFloat(priceGroup.storePostage)+parseFloat(priceGroup.storePostageDiscount)).toFixed(2)}}
+						{{$t(`￥`)}}{{(parseFloat(priceGroup.storePostage)+parseFloat(priceGroup.storePostageDiscount)).toFixed(2)}}
 					</view>
 				</view>
 				<view class='item acea-row row-between-wrapper'
 					v-if="priceGroup.vipPrice > 0 && userInfo.vip && !pinkId && !BargainId && !combinationId && !seckillId && !discountId">
-					<view>{{$t(`vip_dis1`)}}：</view>
-					<view class='money'>-{{$t(`money`)}}{{parseFloat(priceGroup.vipPrice).toFixed(2)}}</view>
+					<view>{{$t(`会员商品优惠`)}}：</view>
+					<view class='money'>-{{$t(`￥`)}}{{parseFloat(priceGroup.vipPrice).toFixed(2)}}</view>
 				</view>
 				<view class='item acea-row row-between-wrapper' v-if="priceGroup.storePostageDiscount > 0">
-					<view>{{$t(`vip_dis2`)}}：</view>
-					<view class='money'>-{{$t(`money`)}}{{parseFloat(priceGroup.storePostageDiscount).toFixed(2)}}</view>
+					<view>{{$t(`会员运费优惠`)}}：</view>
+					<view class='money'>-{{$t(`￥`)}}{{parseFloat(priceGroup.storePostageDiscount).toFixed(2)}}</view>
 				</view>
 				<view class='item acea-row row-between-wrapper' v-if="coupon_price > 0">
-					<view>{{$t(`coupon_deduction`)}}：</view>
-					<view class='money'>-{{$t(`money`)}}{{parseFloat(coupon_price).toFixed(2)}}</view>
+					<view>{{$t(`优惠券抵扣`)}}：</view>
+					<view class='money'>-{{$t(`￥`)}}{{parseFloat(coupon_price).toFixed(2)}}</view>
 				</view>
 				<view class='item acea-row row-between-wrapper' v-if="integral_price > 0">
-					<view>{{$t(`points_deduction`)}}：</view>
-					<view class='money'>-{{$t(`money`)}}{{parseFloat(integral_price).toFixed(2)}}</view>
+					<view>{{$t(`积分抵扣`)}}：</view>
+					<view class='money'>-{{$t(`￥`)}}{{parseFloat(integral_price).toFixed(2)}}</view>
 				</view>
-				<!-- <view class='item acea-row row-between-wrapper' v-if="priceGroup.storePostage > 0">
-					<view>运费：</view>
-					<view class='money'>+￥{{priceGroup.storePostage}}</view>
-				</view>
-				<view class='item acea-row row-between-wrapper' v-if="priceGroup.storePostageDiscount > 0">
-					<view>会员运费抵扣：</view>
-					<view class='money'>-￥{{priceGroup.storePostageDiscount}}</view>
-				</view> -->
 			</view>
 			<view style='height:120rpx;'></view>
 			<view class='footer acea-row row-between-wrapper'>
-				<view>{{$t(`total`)}}:
-					<text class='font-color'>{{$t(`money`)}}{{totalPrice || 0}}</text>
+				<view>{{$t(`合计`)}}:
+					<text class='font-color'>{{$t(`￥`)}}{{totalPrice || 0}}</text>
 				</view>
 				<view class='settlement' style='z-index:100' @tap.stop="goPay"
-					v-if="(valid_count>0&&!discount_id) || (valid_count==cartInfo.length&&discount_id)">{{$t(`settle_now`)}}</view>
-				<view class='settlement bg-color-hui' style='z-index:100' v-else>{{$t(`settle_now`)}}</view>
+					v-if="(valid_count>0&&!discount_id) || (valid_count==cartInfo.length&&discount_id)">{{$t(`立即支付`)}}</view>
+				<view class='settlement bg-color-hui' style='z-index:100' v-else>{{$t(`立即支付`)}}</view>
 			</view>
 		</view>
 		<view class="alipaysubmit" v-html="formContent"></view>
@@ -326,8 +281,8 @@
 			})
 			return {
 				confirm: '', //自定义留言
-				date: this.$t(`please_choose`),
-				time: this.$t(`please_choose`),
+				date: this.$t(`请选择`),
+				time: this.$t(`请选择`),
 
 				canvasWidth: "",
 				canvasHeight: "",
@@ -338,37 +293,37 @@
 				textareaStatus: true,
 				//支付方式
 				cartArr: [{
-						"name": this.$t(`wechat_pay`),
+						"name": this.$t(`微信支付`),
 						"icon": "icon-weixin2",
 						value: 'weixin',
-						title: this.$t(`wechat_quick_pay`),
+						title: this.$t(`使用微信快捷支付`),
 						payStatus: 1,
 					},
 					{
-						"name": this.$t(`pay_alipay`),
+						"name": this.$t(`支付宝支付`),
 						"icon": "icon-zhifubao",
 						value: 'alipay',
-						title: this.$t(`online_alipay`),
+						title: this.$t(`使用支付宝支付`),
 						payStatus: 1,
 					},
 					{
-						"name": this.$t(`balance_payment`),
+						"name": this.$t(`余额支付`),
 						"icon": "icon-yuezhifu",
 						value: 'yue',
-						title: this.$t(`available_balance`),
+						title: this.$t(`可用余额`),
 						payStatus: 1,
 					},
 					{
-						"name": this.$t(`offline_payments`),
+						"name": this.$t(`线下支付`),
 						"icon": "icon-yuezhifu1",
 						value: 'offline',
-						title: this.$t(`offline_pay`),
+						title: this.$t(`使用线下付款`),
 						payStatus: 2,
 					}, {
-						"name": this.$t(`friend_pays`),
+						"name": this.$t(`好友代付`),
 						"icon": "icon-haoyoudaizhifu",
 						value: 'friend',
-						title: this.$t(`friends_to_pay`),
+						title: this.$t(`找微信好友支付`),
 						payStatus: 1,
 					}
 				],
@@ -380,7 +335,7 @@
 				coupon: {
 					coupon: false,
 					list: [],
-					statusTile: this.$t(`use_immediate`)
+					statusTile: this.$t(`立即使用`)
 				}, //优惠券组件
 				address: {
 					address: false
@@ -396,7 +351,7 @@
 				discountId: 0,
 				userInfo: {}, //用户信息
 				mark: '', //备注信息
-				couponTitle: this.$t(`please_choose`), //优惠券
+				couponTitle: this.$t(`请选择`), //优惠券
 				coupon_price: 0, //优惠券抵扣金额
 				useIntegral: false, //是否使用积分
 				integral_price: 0, //积分抵扣金额
@@ -431,7 +386,7 @@
 				news: 1,
 
 				// invTitle: '不开发票',
-				invTitle: this.$t(`no_invoice`),
+				invTitle: this.$t(`不开发票`),
 				special_invoice: false,
 				invoice_func: false,
 				header_type: '',
@@ -466,7 +421,7 @@
 			this.from = 'app'
 			// #endif
 			if (!options.cartId) return this.$util.Tips({
-				title: this.$t(`select_item`)
+				title: this.$t(`请选择要购买的商品`)
 			}, {
 				tab: 3,
 				url: 1
@@ -480,14 +435,14 @@
 			this.news = !options.new || options.new === '0' ? 0 : 1;
 			this.invChecked = options.invoice_id || '';
 			this.header_type = options.header_type || '1';
-			this.couponTitle = options.couponTitle || this.$t(`please_choose`)
+			this.couponTitle = options.couponTitle || this.$t(`请选择`)
 
 			switch (options.invoice_type) {
 				case '1':
-					this.invTitle = this.$t(`general_invoice`);
+					this.invTitle = this.$t(`电子普通发票`);
 					break;
 				case '2':
-					this.invTitle = this.$t(`special_invoice`);
+					this.invTitle = this.$t(`电子专用发票`);
 					break;
 			}
 			// #ifndef APP-PLUS
@@ -554,7 +509,7 @@
 			// 不开发票
 			invCancel() {
 				this.invChecked = '';
-				this.invTitle = this.$t(`no_invoice`)
+				this.invTitle = this.$t(`不开发票`)
 				this.invShow = false;
 			},
 			// 选择发票
@@ -563,9 +518,9 @@
 				this.invShow = false;
 				const result = this.invList.find(item => item.id === id);
 				let name = '';
-				name += result.header_type === 1 ? this.$t(`personal`) : this.$t(`enterprise`);
-				name += result.type === 1 ? this.$t(`ordinary`) : this.$t(`dedicated`);
-				name += this.$t(`bill`);
+				name += result.header_type === 1 ? this.$t(`个人`) : this.$t(`企业`);
+				name += result.type === 1 ? this.$t(`普通`) : this.$t(`专用`);
+				name += this.$t(`发票`);
 				this.invTitle = name;
 			},
 			// 关闭发票
@@ -575,7 +530,7 @@
 			},
 			getInvoiceList() {
 				uni.showLoading({
-					title: this.$t(`Loading`)
+					title: this.$t(`正在加载中`)
 				})
 				invoiceList().then(res => {
 					uni.hideLoading();
@@ -586,9 +541,9 @@
 					const result = this.invList.find(item => item.id == this.invChecked);
 					if (result) {
 						let name = '';
-						name += result.header_type === 1 ? this.$t(`personal`) : this.$t(`enterprise`);
-						name += result.type === 1 ? this.$t(`ordinary`) : this.$t(`dedicated`);
-						name += this.$t(`bill`);
+						name += result.header_type === 1 ? this.$t(`个人`) : this.$t(`企业`);
+						name += result.type === 1 ? this.$t(`普通`) : this.$t(`专用`);
+						name += this.$t(`发票`);
 						this.invTitle = name;
 					}
 				}).catch(err => {
@@ -757,7 +712,7 @@
 				// this.coupon.coupon = false
 				let index = e,
 					list = this.coupon.list,
-					couponTitle = this.$t(`please_choose`),
+					couponTitle = this.$t(`请选择`),
 					couponId = 0;
 				for (let i = 0, len = list.length; i < len; i++) {
 					if (i != index) {
@@ -771,7 +726,7 @@
 					list[index].is_use = 0;
 				} else {
 					//使用优惠券
-					list[index].use_title = this.$t(`do_not_use`);
+					list[index].use_title = this.$t(`不使用`);
 					list[index].is_use = 1;
 					couponTitle = list[index].coupon_title;
 					couponId = list[index].id;
@@ -812,7 +767,7 @@
 				let that = this;
 				// return;
 				uni.showLoading({
-					title: that.$t(`Loading`),
+					title: that.$t(`正在加载中`),
 					mask: true
 				});
 				orderConfirm(that.cartId, that.news, that.addressId, that.shippingType + 1).then(res => {
@@ -1028,14 +983,14 @@
 									if (that.BargainId || that.combinationId || that.pinkId || that
 										.seckillId || that.discountId)
 										return that.$util.Tips({
-											title: that.$t(`pay_success`),
+											title: that.$t(`支付成功`),
 											icon: 'success'
 										}, {
 											tab: 4,
 											url: goPages
 										});
 									return that.$util.Tips({
-										title: that.$t(`pay_success`),
+										title: that.$t(`支付成功`),
 										icon: 'success'
 									}, {
 										tab: 5,
@@ -1045,7 +1000,7 @@
 								fail: function(e) {
 									uni.hideLoading();
 									return that.$util.Tips({
-										title: that.$t(`cancel_payment`)
+										title: that.$t(`取消支付`)
 									}, {
 										tab: 5,
 										url: goPages + '&status=2'
@@ -1056,7 +1011,7 @@
 									//关闭当前页面跳转至订单状态
 									if (res.errMsg == 'requestPayment:cancel') return that.$util
 										.Tips({
-											title: that.$t(`cancel_payment`)
+											title: that.$t(`取消支付`)
 										}, {
 											tab: 5,
 											url: goPages + '&status=2'
@@ -1067,7 +1022,7 @@
 							// #ifdef H5
 							this.$wechat.pay(res.data.result.jsConfig).then(res => {
 								return that.$util.Tips({
-									title: that.$t(`pay_success`),
+									title: that.$t(`支付成功`),
 									icon: 'success'
 								}, {
 									tab: 5,
@@ -1076,12 +1031,12 @@
 							}).catch(res => {
 								if (!this.$wechat.isWeixin()) {
 									uni.redirectTo({
-										url: goPages + '&msg='+ that.$t(`payment_failed`) + '&status=2'
+										url: goPages + '&msg='+ that.$t(`支付失败`) + '&status=2'
 											// '&msg=支付失败&status=2'
 									})
 								}
 								if (res.errMsg == 'chooseWXPay:cancel') return that.$util.Tips({
-									title: that.$t(`cancel_payment`)
+									title: that.$t(`取消支付`)
 								}, {
 									tab: 5,
 									url: goPages + '&status=2'
@@ -1095,7 +1050,7 @@
 								success: (e) => {
 									let url = goPages;
 									uni.showToast({
-										title: that.$t(`pay_success`)
+										title: that.$t(`支付成功`)
 									})
 									setTimeout(res => {
 										uni.redirectTo({
@@ -1105,9 +1060,9 @@
 								},
 								fail: (e) => {
 									let url = '/pages/goods/order_pay_status/index?order_id=' + orderId +
-										'&msg=' + that.$t(`payment_failed`);
+										'&msg=' + that.$t(`支付失败`);
 									uni.showModal({
-										content: that.$t(`payment_failed`),
+										content: that.$t(`支付失败`),
 										showCancel: false,
 										success: function(res) {
 											if (res.confirm) {
@@ -1115,7 +1070,6 @@
 													url: url
 												})
 											} else if (res.cancel) {
-												console.log(that.$t(`user_clicks_cancel`));
 											}
 										}
 									})
@@ -1139,7 +1093,7 @@
 						case "WECHAT_H5_PAY":
 							uni.hideLoading();
 							that.$util.Tips({
-								title: that.$t(`order_created`)
+								title: that.$t(`订单创建成功`)
 							}, {
 								tab: 4,
 								url: goPages + '&status=0'
@@ -1174,10 +1128,10 @@
 								orderInfo: jsConfig,
 								success: (e) => {
 									uni.showToast({
-										title: that.$t(`pay_success`)
+										title: that.$t(`支付成功`)
 									})
 									let url = '/pages/goods/order_pay_status/index?order_id=' + orderId +
-										'&msg=' + that.$t(`pay_success`);
+										'&msg=' + that.$t(`支付成功`);
 									setTimeout(res => {
 										uni.redirectTo({
 											url: url
@@ -1187,9 +1141,9 @@
 								},
 								fail: (e) => {
 									let url = '/pages/goods/order_pay_status/index?order_id=' + orderId +
-										'&msg='+ that.$t(`payment_failed`);
+										'&msg='+ that.$t(`支付失败`);
 									uni.showModal({
-										content: that.$t(`payment_failed`),
+										content: that.$t(`支付失败`),
 										showCancel: false,
 										success: function(res) {
 											if (res.confirm) {
@@ -1197,7 +1151,6 @@
 													url: url
 												})
 											} else if (res.cancel) {
-												console.log(that.$t(`user_clicks_cancel`));
 											}
 										}
 									})
@@ -1224,29 +1177,29 @@
 					data = {};
 
 				if (!that.payType) return that.$util.Tips({
-					title: that.$t(`choose_payment_method`)
+					title: that.$t(`请选择支付方式`)
 				});
 				if (!that.addressId && !that.shippingType && !that.virtual_type) return that.$util.Tips({
-					title: that.$t(`select_address`)
+					title: that.$t(`请选择收货地址`)
 				});
 				if (that.shippingType == 1) {
 					if (that.contacts == "" || that.contactsTel == "") {
 						return that.$util.Tips({
-							title: that.$t(`fill_contact`)
+							title: that.$t(`请填写联系人或联系人电话`)
 						});
 					}
 					if (!/^1(3|4|5|7|8|9|6)\d{9}$/.test(that.contactsTel)) {
 						return that.$util.Tips({
-							title: that.$t(`input_correct_phone`)
+							title: that.$t(`请输入正确的手机号码`)
 						});
 					}
 					if (!that.contacts) {
 						return that.$util.Tips({
-							title: that.$t(`fill_your_name`)
+							title: that.$t(`请输入姓名`)
 						});
 					}
 					if (that.storeList.length == 0) return that.$util.Tips({
-						title: that.$t(`choose_another_method`)
+						title: that.$t(`暂无门店,请选择其他方式`)
 					});
 				}
 				for (var i = 0; i < that.confirm.length; i++) {
@@ -1256,7 +1209,7 @@
 							'id') {
 							if (!data.value.trim()) {
 								return uni.showToast({
-									title: that.$t(`enter_first`) + `${data.title}`,
+									title: that.$t(`请输入`) + `${data.title}`,
 									icon: 'none'
 								});
 							}
@@ -1264,7 +1217,7 @@
 						if (data.label === 'number') {
 							if (data.value <= 0) {
 								return uni.showToast({
-									title: that.$t(`enter_first`) + `${data.title}`,
+									title: that.$t(`请输入`) + `${data.title}`,
 									icon: 'none'
 								});
 							}
@@ -1272,7 +1225,7 @@
 						if (data.label === 'email') {
 							if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(data.value)) {
 								return uni.showToast({
-									title: that.$t(`input_correct`) + `${data.title}`,
+									title: that.$t(`请输入正确的`) + `${data.title}`,
 									icon: 'none'
 								});
 							}
@@ -1280,7 +1233,7 @@
 						if (data.label === 'phone') {
 							if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(data.value)) {
 								return uni.showToast({
-									title: that.$t(`input_correct`) + `${data.title}`,
+									title: that.$t(`请输入正确的`) + `${data.title}`,
 									icon: 'none'
 								});
 							}
@@ -1288,7 +1241,7 @@
 						if (data.label === 'img') {
 							if (!data.value.length) {
 								return uni.showToast({
-									title: that.$t(`upload_first`) + `${data.title}`,
+									title: that.$t(`请上传`) + `${data.title}`,
 									icon: 'none'
 								});
 							}
@@ -1327,10 +1280,10 @@
 				};
 				if (data.payType == 'yue' && parseFloat(that.userInfo.now_money) < parseFloat(that.totalPrice))
 					return that.$util.Tips({
-						title: that.$t(`insufficient_balance`)
+						title: that.$t(`余额不足`)
 					});
 				uni.showLoading({
-					title: that.$t(`Paying_for_order`)
+					title: that.$t(`订单支付中`)
 				});
 				// #ifdef MP
 				openPaySubscribe().then(() => {

@@ -302,15 +302,15 @@
 			// #endif
 			// #ifdef MP
 			// 小程序静默授权
-			if (!this.$store.getters.isLogin) {
-				Routine.getCode()
-					.then(code => {
-						this.silenceAuth(code);
-					})
-					.catch(res => {
-						uni.hideLoading();
-					});
-			}
+			// if (!this.$store.getters.isLogin) {
+			// 	Routine.getCode()
+			// 		.then(code => {
+			// 			this.silenceAuth(code);
+			// 		})
+			// 		.catch(res => {
+			// 			uni.hideLoading();
+			// 		});
+			// }
 			// #endif
 			// #ifdef H5
 			// 添加crmeb chat 统计
@@ -324,28 +324,28 @@
 		},
 		methods: {
 			// 小程序静默授权
-			silenceAuth(code) {
-				let that = this;
-				let spread = that.globalData.spid ? that.globalData.spid : '';
-				silenceAuth({
-						code: code,
-						spread_spid: spread,
-						spread_code: that.globalData.code
-					})
-					.then(res => {
-						if (res.data.token !== undefined && res.data.token) {
-							uni.hideLoading();
-							let time = res.data.expires_time - this.$Cache.time();
-							that.$store.commit('LOGIN', {
-								token: res.data.token,
-								time: time
-							});
-							that.$store.commit('SETUID', res.data.userInfo.uid);
-							that.$store.commit('UPDATE_USERINFO', res.data.userInfo);
-						}
-					})
-					.catch(res => {});
-			},
+			// silenceAuth(code) {
+			// 	let that = this;
+			// 	let spread = that.globalData.spid ? that.globalData.spid : '';
+			// 	silenceAuth({
+			// 			code: code,
+			// 			spread_spid: spread,
+			// 			spread_code: that.globalData.code
+			// 		})
+			// 		.then(res => {
+			// 			if (res.data.token !== undefined && res.data.token) {
+			// 				uni.hideLoading();
+			// 				let time = res.data.expires_time - this.$Cache.time();
+			// 				that.$store.commit('LOGIN', {
+			// 					token: res.data.token,
+			// 					time: time
+			// 				});
+			// 				that.$store.commit('SETUID', res.data.userInfo.uid);
+			// 				that.$store.commit('UPDATE_USERINFO', res.data.userInfo);
+			// 			}
+			// 		})
+			// 		.catch(res => {});
+			// },
 		},
 		onHide: function() {
 

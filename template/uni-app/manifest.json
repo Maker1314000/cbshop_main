@@ -84,13 +84,13 @@
                     },
                     "weixin" : {
                         "__platform__" : [ "ios", "android" ],
-                        "appid" : "wx277a269f3d736d67",
+                        "appid" : "",
                         "UniversalLinks" : "https://bzapp.crmeb.net/uni-universallinks/__UNI__A3F1ED4/"
                     }
                 },
                 "share" : {
                     "weixin" : {
-                        "appid" : "wx277a269f3d736d67",
+                        "appid" : "",
                         "UniversalLinks" : "https://bzapp.crmeb.net/uni-universallinks/__UNI__A3F1ED4/"
                     }
                 },
@@ -104,8 +104,8 @@
                 "oauth" : {
                     "apple" : {},
                     "weixin" : {
-                        "appid" : "wx277a269f3d736d67",
-                        "appsecret" : "bd08741a055c2ecac5826ff1c048464b",
+                        "appid" : "",
+                        "appsecret" : "",
                         "UniversalLinks" : "https://bzapp.crmeb.net/uni-universallinks/__UNI__A3F1ED4/"
                     }
                 },
