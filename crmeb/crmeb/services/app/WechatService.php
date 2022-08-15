@@ -12,6 +12,7 @@
 namespace crmeb\services\app;
 
 use app\services\message\wechat\MessageServices;
+use app\services\order\StoreOrderServices;
 use app\services\wechat\WechatMessageServices;
 use app\services\wechat\WechatReplyServices;
 use crmeb\exceptions\AdminException;
@@ -28,6 +29,8 @@ use EasyWeChat\Message\Voice;
 use EasyWeChat\Payment\Order;
 use EasyWeChat\Server\Guard;
 use Symfony\Component\HttpFoundation\Request;
+use think\facade\Event;
+use think\facade\Log;
 use think\Response;
 use crmeb\utils\Hook;
 use think\facade\Cache;
@@ -107,7 +110,7 @@ class WechatService
     }
 
     /**
-     * 监听行为
+     * 监听行为(微信)
      * @param Guard $server
      * @throws \EasyWeChat\Core\Exceptions\InvalidArgumentException
      */
@@ -141,6 +144,32 @@ class WechatService
                             break;
                         case 'view':
                             $response = $messageService->wechatEventView($message);
+                            break;
+                        case 'funds_order_pay':
+                            $prefix = substr($message['order_info']['trade_no'],0,2);
+                            //处理一下参数
+                            switch ($prefix){
+                                case 'cp':
+                                    $data['attach'] = 'Product';
+                                    break;
+                                case 'hy':
+                                    $data['attach'] = 'Member';
+                                    break;
+                                case 'cz':
+                                    $data['attach'] = 'UserRecharge';
+                                    break;
+                            }
+                            $data['out_trade_no'] = $message['order_info']['trade_no'];
+                            $data['transaction_id'] = $message['order_info']['transaction_id'];
+                            $data['opneid'] = $message['FromUserName'];
+                            if(Event::until('pay.notify', [$data]))
+                            {
+                                $response = 'success';
+                            }else
+                            {
+                                $response = 'faild';
+                            }
+                            Log::error(['data'=>$data,'res'=>$response,'message'=>$message]);
                             break;
                     }
                     break;
@@ -417,6 +446,42 @@ class WechatService
             }
         }
     }
+    /**
+     * 获得下单ID 新小程序支付
+     * @param $openid
+     * @param $out_trade_no
+     * @param $total_fee
+     * @param $attach
+     * @param $body
+     * @param string $detail
+     * @param string $trade_type
+     * @param array $options
+     * @return mixed
+     */
+    public static function newPaymentPrepare($openid, $out_trade_no, $total_fee, $attach, $body, $detail = '', $options = [])
+    {
+        $key = 'pay_' . $out_trade_no;
+        $result = Cache::get($key);
+        if ($result) {
+            return $result;
+        } else {
+            $order = self::paymentOrder($openid, $out_trade_no, $total_fee, $attach, $body, $detail, $options);
+            $result = self::application()->minipay->createorder($order);
+            if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS') {
+                Cache::set($key, $result, 7000);
+                return $result;
+            } else {
+                if ($result->return_code == 'FAIL') {
+                    exception('微信支付错误返回：' . $result->return_msg);
+                } else if (isset($result->err_code)) {
+                    exception('微信支付错误返回：' . $result->err_code_des);
+                } else {
+                    exception('没有获取微信支付的预支付ID，请重新发起支付!');
+                }
+                exit;
+            }
+        }
+    }
 
     /**
      * 获得jsSdk支付参数
@@ -433,6 +498,23 @@ class WechatService
     public static function jsPay($openid, $out_trade_no, $total_fee, $attach, $body, $detail = '', $trade_type = 'JSAPI', $options = [])
     {
         $paymentPrepare = self::paymentPrepare($openid, $out_trade_no, $total_fee, $attach, $body, $detail, $trade_type, $options);
+        return self::paymentService()->configForJSSDKPayment($paymentPrepare->prepay_id);
+    }
+    /**
+     * 获得jsSdk支付参数  新小程序支付
+     * @param $openid
+     * @param $out_trade_no
+     * @param $total_fee
+     * @param $attach
+     * @param $body
+     * @param string $detail
+     * @param string $trade_type
+     * @param array $options
+     * @return array|string
+     */
+    public static function newJsPay($openid, $out_trade_no, $total_fee, $attach, $body, $detail = '', $options = [])
+    {
+        $paymentPrepare = self::newPaymentPrepare($openid, $out_trade_no, $total_fee, $attach, $body, $detail, $options);
         return self::paymentService()->configForJSSDKPayment($paymentPrepare->prepay_id);
     }
 
@@ -499,6 +581,7 @@ class WechatService
             return self::paymentService()->refundByTransactionId($orderNo, $refundNo, $totalFee, $refundFee, $opUserId, $refundAccount, $refundReason);
         }
     }
+
 
     public static function payOrderRefund($orderNo, array $opt)
     {

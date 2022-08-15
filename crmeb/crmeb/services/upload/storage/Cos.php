@@ -568,6 +568,10 @@ class Cos extends BaseUpload
                 'label' => '上海'
             ],
             [
+                'value' => 'ap-guangzhou',
+                'label' => '广州'
+            ],
+            [
                 'value' => 'ap-nanjing',
                 'label' => '南京'
             ],

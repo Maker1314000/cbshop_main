@@ -182,12 +182,9 @@ abstract class BaseUpload extends BaseStorage
      */
     protected function getConfig()
     {
-        $config = Config::get($this->configFile . '.stores.' . $this->name, []);
-        if (empty($config)) {
-            $config['filesize'] = Config::get($this->configFile . '.filesize', []);
-            $config['fileExt'] = Config::get($this->configFile . '.fileExt', []);
-            $config['fileMime'] = Config::get($this->configFile . '.fileMime', []);
-        }
+        $config['filesize'] = Config::get($this->configFile . '.filesize', []);
+        $config['fileExt'] = Config::get($this->configFile . '.fileExt', []);
+        $config['fileMime'] = Config::get($this->configFile . '.fileMime', []);
         return $config;
     }
 

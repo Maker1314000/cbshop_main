@@ -18,6 +18,7 @@ use crmeb\exceptions\PayException;
 use crmeb\services\pay\PayInterface;
 use crmeb\services\app\MiniProgramService;
 use crmeb\services\app\WechatService;
+use crmeb\services\SystemConfigService;
 use EasyWeChat\Payment\API;
 use EasyWeChat\Payment\Order;
 use EasyWeChat\Support\Collection;
@@ -62,6 +63,11 @@ class WechatPay extends BasePay implements PayInterface
                     throw new PayException('缺少openid');
                 }
                 if (request()->isRoutine()) {
+                    // 获取配置  判断是否为新支付
+                    if($options['pay_new_weixin_open'])
+                    {
+                        return MiniProgramService::newJsPay($options['openid'], $orderId, $totalFee, $attach, $body, $detail,$options);
+                    }
                     return MiniProgramService::jsPay($options['openid'], $orderId, $totalFee, $attach, $body, $detail);
                 }
                 return WechatService::jsPay($options['openid'], $orderId, $totalFee, $attach, $body, $detail);
@@ -108,7 +114,12 @@ class WechatPay extends BasePay implements PayInterface
         if (isset($opt['wechat'])) {
             return WechatService::refund($outTradeNo, $refundNo, $totalFee, $refundFee, $opUserId, $refundReason, $type, $refundAccount);
         } else {
-            return MiniProgramService::refund($outTradeNo, $refundNo, $totalFee, $refundFee, $opUserId, $refundReason, $type, $refundAccount);
+            if($opt['pay_new_weixin_open'])
+            {
+                return MiniProgramService::miniRefund($outTradeNo, $totalFee, $refundFee, $opt);
+            }else{
+                return MiniProgramService::refund($outTradeNo, $refundNo, $totalFee, $refundFee, $opUserId, $refundReason, $type, $refundAccount);
+            }
         }
     }
 

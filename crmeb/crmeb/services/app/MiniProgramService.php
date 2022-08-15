@@ -11,6 +11,7 @@
 
 namespace crmeb\services\app;
 
+use app\services\order\StoreOrderCreateServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\SystemConfigService;
 use app\services\pay\PayNotifyServices;
@@ -91,7 +92,7 @@ class MiniProgramService
     public static function options()
     {
         $wechat = SystemConfigService::more(['wechat_app_appsecret', 'wechat_app_appid', 'site_url', 'routine_appId', 'routine_appsecret']);
-        $payment = SystemConfigService::more(['pay_weixin_mchid', 'pay_weixin_key', 'pay_weixin_client_cert', 'pay_weixin_client_key', 'pay_weixin_open']);
+        $payment = SystemConfigService::more(['pay_weixin_mchid', 'pay_weixin_key', 'pay_weixin_client_cert', 'pay_weixin_client_key', 'pay_weixin_open','pay_new_weixin_open','pay_new_weixin_mchid']);
         $config = [];
         if (request()->isApp()) {
             $appId = isset($wechat['wechat_app_appid']) ? trim($wechat['wechat_app_appid']) : '';
@@ -108,7 +109,7 @@ class MiniProgramService
         ];
         $config['payment'] = [
             'app_id' => $appId,
-            'merchant_id' => trim($payment['pay_weixin_mchid']),
+            'merchant_id' =>  empty($payment['pay_new_weixin_open']) ? trim($payment['pay_weixin_mchid']) : trim($payment['pay_new_weixin_mchid']),
             'key' => trim($payment['pay_weixin_key']),
             'cert_path' => public_path() . $payment['pay_weixin_client_cert'],
             'key_path' => public_path() . $payment['pay_weixin_client_key'],
@@ -343,6 +344,36 @@ class MiniProgramService
             }
         }
     }
+    /**
+     * 获得下单ID
+     * @param $openid
+     * @param $out_trade_no
+     * @param $total_fee
+     * @param $attach
+     * @param $body
+     * @param string $detail
+     * @param string $trade_type
+     * @param array $options
+     * @return mixed
+     */
+    public static function newPaymentPrepare($openid, $out_trade_no, $total_fee, $attach, $body, $detail = '', $options = [])
+    {
+        $key = 'pay_' . $out_trade_no;
+        $result = Cache::get($key);
+        if ($result) {
+            return $result;
+        } else {
+            $order = self::paymentOrder($openid, $out_trade_no, $total_fee, $attach, $body, $detail, $options);
+            $result = self::application()->minipay->createorder($order);
+            if ($result->errcode === 0) {
+                Cache::set($key, $result->payment_params, 7000);
+                return $result->payment_params;
+            } else {
+                exception('微信支付错误返回：'.'['.$result->errcode.']'. $result->errmsg);
+                exit;
+            }
+        }
+    }
 
 
     /**
@@ -360,6 +391,27 @@ class MiniProgramService
     public static function jsPay($openid, $out_trade_no, $total_fee, $attach, $body, $detail = '', $trade_type = 'JSAPI', $options = [])
     {
         return self::paymentService()->configForJSSDKPayment(self::paymentPrepare($openid, $out_trade_no, $total_fee, $attach, $body, $detail, $trade_type, $options));
+    }
+
+    /**
+     * 获得jsSdk支付参数
+     * @param $openid
+     * @param $out_trade_no
+     * @param $total_fee
+     * @param $attach
+     * @param $body
+     * @param string $detail
+     * @param string $trade_type
+     * @param array $options
+     * @return array|string
+     */
+    public static function newJsPay($openid, $out_trade_no, $total_fee, $attach, $body, $detail = '', $options = [])
+    {
+        $config = self::newPaymentPrepare($openid, $out_trade_no, $total_fee, $attach, $body, $detail, $options);
+        $config['timestamp'] = $config['timeStamp'];
+        unset($config['timeStamp']);
+        return $config;
+
     }
 
     /**
@@ -399,6 +451,32 @@ class MiniProgramService
         } else {
             return self::paymentService()->refundByTransactionId($orderNo, $refundNo, $totalFee, $refundFee, $opUserId, $refundAccount, $refundReason);
         }
+    }
+    /**
+     * 使用商户订单号退款
+     * @param $orderNo
+     * @param $refundNo
+     * @param $totalFee
+     * @param null $refundFee
+     * @param null $opUserId
+     * @param string $refundReason
+     * @param string $type
+     * @param string $refundAccount
+     */
+    public static function miniRefund($orderNo, $totalFee, $refundFee = null, $opt)
+    {
+        $totalFee = floatval($totalFee);
+        $refundFee = floatval($refundFee);
+
+        $order = [
+            'openid' => $opt['open_id'],
+            'trade_no'=>$opt['order_id'],
+            'transaction_id'=>$opt['trade_no'],
+            'refund_no'=>$opt['refund_no'],
+            'total_amount'=>$totalFee,
+            'refund_amount'=>$refundFee,
+        ];
+        return self::application()->minipay->refundorder($order);
     }
 
     /** 根据订单号退款
