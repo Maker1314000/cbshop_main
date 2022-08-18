@@ -1,7 +1,7 @@
 /.git
 /.idea
 *.log
-.DS_tore
+.DS_Store
 /crmeb/runtime/cache
 /crmeb/runtime/log
 /crmeb/runtime/session
