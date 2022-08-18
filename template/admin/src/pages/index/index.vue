@@ -75,8 +75,8 @@ export default {
     getAuth() {
       auth()
         .then((res) => {
-          this.force_reminder = res.data.force_reminder
           let data = res.data || {};
+          this.force_reminder = data.force_reminder
           if (data.auth_code && data.auth) {
             this.authCode = data.auth_code;
             this.auth = true;

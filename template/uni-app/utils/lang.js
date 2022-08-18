@@ -7,16 +7,13 @@ import it_it from '../lang/it_it.json'
 import ko_kr from '../lang/ko_kr.json'
 import mn_mn from '../lang/mn_mn.json'
 import vi_vn from '../lang/vi_vn.json'
-import zh_tw from '../lang/zh_tw.json'
+import zh_ft from '../lang/zh_ft.json'
 import Vue from 'vue'; 
 import VueI18n from 'vue-i18n'
 
 
 Vue.use(VueI18n)
-
-const i18n = new VueI18n({
-	locale: uni.getStorageSync('locale') ? uni.getStorageSync('locale') :'zh_cn',
-	messages: {
+let langJson = {
 		'en_us': en_us,
 		'zh_cn': zh_cn,
 		'fr_fr': fr_fr,
@@ -26,7 +23,11 @@ const i18n = new VueI18n({
 		'ko_kr': ko_kr,
 		'mn_mn': mn_mn,
 		'vi_vn': vi_vn,
-		'zh_tw': zh_tw,
+		'zh_ft': zh_ft,
 	}
+let lang = uni.getStorageSync('locale') != '' ? uni.getStorageSync('locale') : navigator.language.toLowerCase().replace('-','_');
+const i18n = new VueI18n({
+	locale: lang in langJson ? lang :'en_us',
+	messages: langJson
 })
 export default i18n 

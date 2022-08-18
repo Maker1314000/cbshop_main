@@ -108,8 +108,7 @@
 			<swiper class="swiper-wrapper" :autoplay="autoplay" :circular="circular" :interval="interval"
 				:duration="duration" v-if="emojiGroup.length > 0">
 				<block v-for="(emojiList, index) in emojiGroup" :key="index">
-					<swiper-item><i class="em" :class="emoji" :style="'background-image:url('+ httpUrl +')'"
-							v-for="emoji in emojiList" :key="emoji" @click="addEmoji(emoji)"></i></swiper-item>
+					<swiper-item><i class="em" :class="emoji" :style="'background-image:url('+ httpUrl +')'" v-for="emoji in emojiList" :key="emoji" @click="addEmoji(emoji)"></i></swiper-item>
 				</block>
 			</swiper>
 		</view>
@@ -400,7 +399,7 @@
 			},
 			// 聊天表情转换
 			replace_em(str) {
-				str = str.replace(/\[em-([a-z_]*)\]/g, "<span class='em em-$1' style='background-image:url(" + this
+				str = str.replace(/\[em-([\s\S]*)\]/g, "<span class='em em-$1' style='background-image:url(" + this
 					.httpUrl + ")'></span>");
 				return str;
 			},

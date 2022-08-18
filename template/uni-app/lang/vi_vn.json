@@ -46,8 +46,8 @@
 	"已退款": "Đã hoàn lại",
 	"已完成": "Đã hoàn thành",
 	"件退款中": "Hoàn trả mặt hàng",
-	"仅支持到店": "Chỉ tại cửa hàng",
-	"仅支持配送": "Chỉ vận chuyển",
+	"不支持配送": "Chỉ tại cửa hàng",
+	"不支持自提": "Chỉ vận chuyển",
 	"已评价": "Đã đánh giá",
 	"评价": "Xem lại",
 	"申请退款": "Hoàn lại tiền",
@@ -1141,5 +1141,7 @@
 	"系统定位已关闭": "Định vị hệ thống bị tắt",
 	"需要定位权限": "Yêu cầu quyền vị trí",
 	"订单核销": "viết tắt",
-	"当前可转入佣金为":"Hoa hồng có thể chuyển nhượng hiện tại là"
+	"当前可转入佣金为":"Hoa hồng có thể chuyển nhượng hiện tại là",
+	"浏览记录":"Lịch sử duyệt web",
+	"签到奖励":"Phần thưởng đăng ký"
 }

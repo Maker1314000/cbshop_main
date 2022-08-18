@@ -15,23 +15,8 @@
         </div>
         <!-- <Button class="grey" @click="toCrmeb()" v-if="status === 1">进入官网</Button> -->
         <div>
-          <Button @click="toCrmeb()" v-if="status === 1">进入官网</Button>
-          <Button
-            type="primary"
-            @click="payment('bz')"
-            v-else-if="status === -1 || status === -9"
-            >申请授权
-          </Button>
-          <Button
-            type="primary"
-            @click="payment('bz')"
-            v-else-if="status === 2"
-            >重新申请</Button
-          >
-          <Button class="grey" v-else-if="status === 0">审核中</Button>
-          <Button class="ml20" @click="payment('bz')" v-if="status !== 1"
-            >购买授权</Button
-          >
+          <Button type="primary" @click="toCrmeb()" v-if="status === 1">进入官网</Button>
+          <Button type="primary" @click="payment('bz')" v-if="status !== 1">购买授权</Button>
         </div>
       </div>
     </Card>

@@ -23,7 +23,7 @@
 			<view class='' :class="{op:!item.is_valid}" v-for="(item,index) in cartInfo" :key="index"
 				@click="jumpCon(item.product_id)">
 				<view class="item acea-row row-between-wrapper">
-					<view class='pictrue'>
+					<view class='pictrue' :class="{gray:!item.is_valid}">
 						<image :src='item.productInfo.attrInfo.image' v-if="item.productInfo.attrInfo"></image>
 						<image :src='item.productInfo.image' v-else></image>
 					</view>
@@ -35,16 +35,16 @@
 						<view class='attr line1' v-if="item.productInfo.attrInfo">{{item.productInfo.attrInfo.suk}}
 						</view>
 						<view class='money font-color pic' v-if="item.productInfo.attrInfo">
-							<text>
+							<text :class="{gray:!item.is_valid}">
 								{{$t(`￥`)}}{{item.productInfo.attrInfo.price}}
 							</text>
 							<view class="refund" v-if="item.refund_num && statusType !=-2">{{item.refund_num}}{{$t(`件退款中`)}}
 							</view>
-							<text class="valid" v-if="!item.is_valid && shipping_type === 0">{{$t(`仅支持到店`)}}</text>
-							<text class="valid" v-if="!item.productInfo.store_mention && shipping_type === 1">{{$t(`仅支持配送`)}}</text>
+							<text class="valid" v-if="!item.is_valid && shipping_type === 0">{{$t(`不支持配送`)}}</text>
+							<text class="valid" v-if="!item.productInfo.store_mention && shipping_type === 1">{{$t(`不支持自提`)}}</text>
 						</view>
 						<view class='money font-color pic' v-else>
-							<text>{{$t(`￥`)}}{{item.productInfo.price}}</text>
+							<text :class="{gray:!item.is_valid}">{{$t(`￥`)}}{{item.productInfo.price}}</text>
 							<text class="valid" v-if="!item.is_valid && shipping_type === 0">{{$t(`仅支持到店`)}}</text>
 							<text class="valid" v-if="!item.productInfo.store_mention && shipping_type === 1">{{$t(`仅支持配送`)}}</text>
 						</view>
@@ -320,6 +320,12 @@
 
 	.op {
 		opacity: 0.5;
+		
+	}
+	
+	.gray {
+		filter: grayscale(100%);
+		filter: gray;
 	}
 
 	.pic {

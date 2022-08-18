@@ -46,8 +46,8 @@
 	"已退款": "Refunded",
 	"已完成": "Completed",
 	"件退款中": "Items Refunding",
-	"仅支持到店": "In-store only",
-	"仅支持配送": "Shipping only",
+	"不支持配送": "In-store only",
+	"不支持自提": "Shipping only",
 	"已评价": "Evaluated",
 	"评价": "Review",
 	"申请退款": "Refund",
@@ -672,7 +672,7 @@
 	"100%正品保证": "100% genuine",
 	"所有商品精挑细选": "Be very choosy",
 	"售后无忧": "Worry free after Sold",
-	"管理": "Tube",
+	"管理": "Manage",
 	"购物数量": "Shopping quantity",
 	"请重新选择商品规格": "Please reselect the product specification",
 	"重选": "Reselection",
@@ -1141,5 +1141,7 @@
 	"系统定位已关闭": "System positioning is turned off",
 	"需要定位权限": "Location permission required",
 	"订单核销": "Write-off",
-	"当前可转入佣金为":"The current transferable commission is"
+	"当前可转入佣金为":"The current transferable commission is",
+	"浏览记录":"Browsing",
+	"签到奖励":"Check-in Reward"
 }

@@ -1129,9 +1129,9 @@
             <FormItem label="限购类型：" v-if="formValidate.is_limit">
               <RadioGroup v-model="formValidate.limit_type">
                 <Radio :label="1">单次限购</Radio>
-                <Radio :label="2">长期限购</Radio>
+                <Radio :label="2">永久限购</Radio>
               </RadioGroup>
-              <div class="titTip">单次限购是限制每次下单最多购买的数量，长期限购是限制一个用户总共可以购买的数量</div>
+              <div class="titTip">单次限购是限制每次下单最多购买的数量，永久限购是限制一个用户总共可以购买的数量</div>
             </FormItem>
           </Col>
           <Col span="24" v-if="formValidate.is_limit">

@@ -26,7 +26,7 @@
 					</view>
 					<view class='item acea-row row-between-wrapper'>
 						<view>{{$t(`快递单号`)}}</view>
-						<input type="text" placeholder-class='placeholder' v-model="refundInfo.refund_express" />
+						<input type="text" :placeholder="$t(`填写快递单号`)" placeholder-class='placeholder' v-model="refundInfo.refund_express" />
 					</view>
 					<view class='item acea-row row-between-wrapper'>
 						<view>{{$t(`联系电话`)}}</view>

@@ -48,16 +48,14 @@ service.interceptors.request.use(
 // response interceptor
 service.interceptors.response.use(
   (response) => {
-    console.log(response,'response');
-    let obj = {}
-    if (!!response.data){
-      if(typeof response.data == 'string'){
-         obj = JSON.parse(response.data)
-      }else{
-         obj = response.data
+    let obj = {};
+    if (!!response.data) {
+      if (typeof response.data == 'string') {
+        obj = JSON.parse(response.data);
+      } else {
+        obj = response.data;
       }
-     }
-     console.log('obj:',obj);
+    }
     let status = response.data ? obj.status : 0;
     // let status = response.data ? response.data.status : 0;
     const code = status;

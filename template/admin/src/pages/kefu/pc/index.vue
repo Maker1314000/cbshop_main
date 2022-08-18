@@ -459,7 +459,7 @@ export default {
     },
     // 聊天表情转换
     replace_em(str) {
-      str = str.replace(/\[em-([a-z_]*)\]/g, "<span class='em em-$1'/></span>");
+      str = str.replace(/\[em-([\s\S]*)\]/g, "<span class='em em-$1'/></span>");
       return str;
     },
     // 获取是否游客
@@ -859,6 +859,8 @@ textarea.ivu-input {
             padding: 15px 9px;
             box-shadow: 0px 0px 13px 1px rgba(0, 0, 0, 0.1);
             background: #fff;
+            overflow: auto;
+            height: 240px;
 
             .emoji-item {
               margin-right: 13px;
@@ -940,4 +942,8 @@ textarea.ivu-input {
     padding: 0;
   }
 }
+.emoji-box::-webkit-scrollbar {
+  width: 0;
+}
 </style>
+

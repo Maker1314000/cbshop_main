@@ -501,6 +501,19 @@
 					}
 				},
 				{
+				  "path": "visit_list/index",
+				  "style": {
+				    "navigationBarTitleText": "浏览记录",
+				    "app-plus": {
+				      // #ifdef APP-PLUS
+				      "titleNView": {
+				        "type": "default"
+				      }
+				      // #endif
+				    }
+				  }
+				},
+				{
 					"path": "user_goods_collection/index",
 					"style": {
 						"navigationBarTitleText": "收藏商品",
@@ -928,13 +941,7 @@
 						// #endif
 					}
 				}
-			],
-			"plugins": {
-				"live-player-plugin": {
-					"version": "1.3.2",
-					"provider": "wx2b03c6e691cd7370"
-				}
-			}
+			]
 		},
 		{
 			"root": "pages/goods_details",

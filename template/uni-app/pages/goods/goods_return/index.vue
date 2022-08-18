@@ -54,7 +54,7 @@
 					</view>
 					<view class='item acea-row row-between upload'>
 						<view class='title acea-row row-between-wrapper'>
-							<view>{{$t(`upload_certificate`)}}</view>
+							<view>{{$t(`上传图片`)}}</view>
 							<view class='tip'>{{$t(`上传图片`)}}</view>
 						</view>
 						<view class='upload acea-row row-middle'>

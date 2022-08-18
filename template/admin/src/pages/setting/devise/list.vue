@@ -37,7 +37,7 @@
                 <Row type="flex">
                   <Col v-bind="grid">
                     <div class="button acea-row row-middle">
-                      <Button type="primary" icon="md-add" @click="add">添加</Button>
+                      <Button type="primary" icon="md-add" @click="add">添加专题页</Button>
                     </div>
                   </Col>
                 </Row>
@@ -56,8 +56,9 @@
                   <div class="font-blue">首页</div>
                 </template>
                 <template slot-scope="{ row, index }" slot="type_name">
-                  <Tag color="primary" v-if="row.is_diy">{{ row.type_name }}</Tag>
-                  <Tag color="success" v-else>{{ row.type_name }}</Tag>
+                  <Tag color="primary" v-if="row.is_diy">{{ row.type_name }}{{row.id}}</Tag>
+                  <Tag color="warning" v-else>{{ row.type_name }}</Tag>
+                  <Tag color="success" v-if="row.status == 1">首页</Tag>
                 </template>
                 <template slot-scope="{ row, index }" slot="action">
                   <div style="display: inline-block" v-if="row.status || row.is_diy" @click="edit(row)">

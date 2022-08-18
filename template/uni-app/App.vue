@@ -354,7 +354,7 @@
 </script>
 
 <style>
-	@import url('@/plugin/emoji-awesome/css/google.min.css');
+	@import url('@/plugin/emoji-awesome/css/tuoluojiang.css');
 	@import url('@/plugin/animate/animate.min.css');
 	@import 'static/css/base.css';
 	@import 'static/iconfont/iconfont.css';

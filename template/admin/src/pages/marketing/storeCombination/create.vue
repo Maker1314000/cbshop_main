@@ -245,7 +245,17 @@
                 </FormItem>
               </Col>
               <Col span="24">
-                <FormItem label="团长返佣比例" prop="head_commission">
+                <FormItem label="单位：" prop="unit_name" label-for="unit_name">
+                  <Input
+                    placeholder="请输入单位"
+                    element-id="unit_name"
+                    v-model="formValidate.unit_name"
+                    class="perW20"
+                  />
+                </FormItem>
+              </Col>
+              <Col span="24">
+                <FormItem label="团长返佣比例：" prop="head_commission">
                   <div class="acea-row row-middle">
                     <InputNumber
                       :min="0"
@@ -257,19 +267,22 @@
                       class="perW20"
                     />
                     <div class="ml10 grey">
-                      拼团成功后，团长收货时会给团长返佣金，0-100整数，0为不返团长佣金，100为返回全部实际支付金额
+                      拼团成功后，如果团长是分销员，则在订单确认收货时会给团长返一定的佣金，佣金比例是实际支付金额的0-100%
                     </div>
                   </div>
                 </FormItem>
               </Col>
               <Col span="24">
-                <FormItem label="单位：" prop="unit_name" label-for="unit_name">
-                  <Input
-                    placeholder="请输入单位"
-                    element-id="unit_name"
-                    v-model="formValidate.unit_name"
-                    class="perW20"
-                  />
+                <FormItem label="拼团是否参与分销：" props="is_commission" label-for="is_commission">
+                  <div class="acea-row row-middle">
+                  <RadioGroup element-id="is_commission" v-model="formValidate.is_commission">
+                    <Radio :label="1" class="radio">开启</Radio>
+                    <Radio :label="0">关闭</Radio>
+                  </RadioGroup>
+                  <div class="ml10 grey">
+                      拼团商品是否参与商城分销返佣
+                  </div>
+                  </div>
                 </FormItem>
               </Col>
               <Col span="24">
@@ -281,14 +294,6 @@
                     v-model="formValidate.sort"
                     class="perW10"
                   />
-                </FormItem>
-              </Col>
-              <Col span="24">
-                <FormItem label="是否返佣：" props="is_commission" label-for="is_commission">
-                  <RadioGroup element-id="is_commission" v-model="formValidate.is_commission">
-                    <Radio :label="1" class="radio">开启</Radio>
-                    <Radio :label="0">关闭</Radio>
-                  </RadioGroup>
                 </FormItem>
               </Col>
               <Col span="24">

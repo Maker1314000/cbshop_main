@@ -256,7 +256,7 @@
 
 	// #ifdef APP-PLUS || H5
 	.newsList /deep/uni-swiper .uni-swiper-dots-horizontal {
-		bottom: 0;
+		bottom: 20px;
 	}
 
 	.newsList .swiper /deep/.uni-swiper-dot {

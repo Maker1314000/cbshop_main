@@ -111,7 +111,7 @@
 					</view>
 				</view>
 				<view class="map acea-row row-between-wrapper" v-if="orderInfo.shipping_type == 2">
-					<view>{{$t(`pick_information`)}}</view>
+					<view>{{$t(`地址信息`)}}</view>
 					<view class="place cart-color acea-row row-center-wrapper" @tap="showMaoLocation">
 						<text class="iconfont icon-weizhi"></text>{{$t(`查看位置`)}}
 					</view>

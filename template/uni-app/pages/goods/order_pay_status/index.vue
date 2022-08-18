@@ -48,9 +48,6 @@
 				v-if="order_pay_info.pink_id && order_pay_info.paid!=0 && status!=2 && status!=1">{{$t(`邀请好友参团`)}}</button>
 			<button @click="goIndex" class='returnBnt cart-color' formType="submit" hover-class='none'
 				v-else>{{$t(`返回首页`)}}</button>
-			<!-- #ifdef H5 -->
-			<button v-if="!$wechat.isWeixin() && !order_pay_info.paid" @click.stop="getOrderPayInfo" class='returnBnt cart-color' formType="submit" hover-class='none'>{{$t(`refresh_status`)}}</button>
-			<!-- #endif -->
 			<view class="coupons" v-if='couponList.length'>
 				<view class="title acea-row row-center-wrapper">
 					<view class="line"></view>

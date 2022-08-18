@@ -58,6 +58,7 @@ export default new Vuex.Store({
         kefu: state.kefu,
         integralOrder: state.integralOrder,
         mobildConfig: state.mobildConfig,
+        upgrade: state.upgrade,
       }),
       storage: window.localStorage,
     }).plugin,

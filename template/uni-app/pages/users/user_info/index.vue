@@ -106,8 +106,9 @@
 					<view class="item acea-row row-between-wrapper">
 						<view>{{$t(`语言切换`)}}</view>
 						<view class="uni-list-cell-db">
-							<picker @change="bindPickerChange" :value="setIndex" :range="array">
-								<view class="uni-input input">{{array[setIndex]}}<text class="iconfont icon-xiangyou"></text></view>
+							<picker @change="bindPickerChange" range-key="name" :value="setIndex" :range="array">
+								<view class="uni-input input">{{array[setIndex].name}}<text
+										class="iconfont icon-xiangyou"></text></view>
 							</picker>
 						</view>
 					</view>
@@ -194,7 +195,47 @@
 				canvasStatus: false,
 				fileSizeString: '',
 				version: '',
-				array: ['中文','English','日本語','Français','ไทย','Italiano','Монгол','한국인','Tiếng Việt','中文(繁体)'],
+				array: [{
+						name: '中文',
+						value: 'zh_cn'
+					},
+					{
+						name: 'English',
+						value: 'en_us'
+					},
+					{
+						name: '日本語',
+						value: 'ja_jp'
+					},
+					{
+						name: 'Français',
+						value: 'fr_fr'
+					},
+					{
+						name: 'ไทย',
+						value: 'th_th'
+					},
+					{
+						name: 'Italiano',
+						value: 'it_it'
+					},
+					{
+						name: 'Монгол',
+						value: 'mn_mn'
+					},
+					{
+						name: '한국인',
+						value: 'ko_kr'
+					},
+					{
+						name: 'Tiếng Việt',
+						value: 'vi_vn'
+					},
+					{
+						name: '中文(繁体)',
+						value: 'zh_ft'
+					},
+				],
 				setIndex: 0,
 			};
 		},
@@ -232,61 +273,16 @@
 				});
 			},
 			setLang() {
-				if(this.$i18n.locale == 'zh_cn') {
-					this.setIndex = 0;
-				}else if(this.$i18n.locale == 'en_us') {
-					this.setIndex = 1;
-				}else if(this.$i18n.locale == 'ja_jp') {
-					this.setIndex = 2;
-				}else if(this.$i18n.locale == 'fr_fr') {
-					this.setIndex = 3;
-				}else if(this.$i18n.locale == 'th_th') {
-					this.setIndex = 4;
-				}else if(this.$i18n.locale == 'it_it') {
-					this.setIndex = 5;
-				}else if(this.$i18n.locale == 'mn_mn') {
-					this.setIndex = 6;
-				}else if(this.$i18n.locale == 'ko_kr') {
-					this.setIndex = 7;
-				}else if(this.$i18n.locale == 'vi_vn') {
-					this.setIndex = 8;
-				}else if(this.$i18n.locale == 'zh_tw') {
-					this.setIndex = 9;
-				}
+				this.array.map((item, i) => {
+					if (this.$i18n.locale == item.value) {
+						this.setIndex = i
+					}
+				})
 			},
-			bindPickerChange(e) {
+			bindPickerChange(e, item) {
 				this.setIndex = e.detail.value
-				if(this.setIndex == 0) {
-					this.$i18n.locale = 'zh_cn';
-					uni.setStorageSync('locale', 'zh_cn');
-				}else if(this.setIndex == 1) {
-					this.$i18n.locale = 'en_us';
-					uni.setStorageSync('locale', 'en_us');
-				}else if(this.setIndex == 2) {
-					this.$i18n.locale = 'ja_jp';
-					uni.setStorageSync('locale', 'ja_jp');
-				}else if(this.setIndex == 3) {
-					this.$i18n.locale = 'fr_fr';
-					uni.setStorageSync('locale', 'fr_fr');
-				}else if(this.setIndex == 4) {
-					this.$i18n.locale = 'th_th';
-					uni.setStorageSync('locale', 'th_th');
-				}else if(this.setIndex == 5) {
-					this.$i18n.locale = 'it_it';
-					uni.setStorageSync('locale', 'it_it');
-				}else if(this.setIndex == 6) {
-					this.$i18n.locale = 'mn_mn';
-					uni.setStorageSync('locale', 'mn_mn');
-				}else if(this.setIndex == 7) {
-					this.$i18n.locale = 'ko_kr';
-					uni.setStorageSync('locale', 'ko_kr');
-				}else if(this.setIndex == 8) {
-					this.$i18n.locale = 'vi_vn';
-					uni.setStorageSync('locale', 'vi_vn');
-				}else if(this.setIndex == 9) {
-					this.$i18n.locale = 'zh_tw';
-					uni.setStorageSync('locale', 'zh_tw');
-				}
+				this.$i18n.locale = this.array[this.setIndex].value;
+				uni.setStorageSync('locale', this.array[this.setIndex].value);
 			},
 
 			updateApp() {
@@ -350,8 +346,7 @@
 							} else {
 								entry.remove();
 							}
-						}, function(e) {
-						});
+						}, function(e) {});
 					}
 				} else { // ios暂时未找到清理缓存的方法，以下是官方提供的方法，但是无效，会报错  
 					plus.cache.clear(function() {
@@ -436,8 +431,7 @@
 										})
 									})
 									.catch(err => {});
-							} else if (res.cancel) {
-							}
+							} else if (res.cancel) {}
 						}
 					});
 				}

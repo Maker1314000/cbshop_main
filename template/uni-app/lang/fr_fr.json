@@ -46,8 +46,8 @@
 	"已退款": "Remboursé",
 	"已完成": "Terminé",
 	"件退款中": "Remboursement d'articles",
-	"仅支持到店": "En magasin uniquement",
-	"仅支持配送": "Livraison uniquement",
+	"不支持配送": "En magasin uniquement",
+	"不支持自提": "Livraison uniquement",
 	"已评价": "Évalué",
 	"评价": "Réviser",
 	"申请退款": "Remboursement",
@@ -1141,5 +1141,7 @@
 	"系统定位已关闭": "Le positionnement du système est désactivé",
 	"需要定位权限": "Autorisation de localisation requise",
 	"订单核销": "Écrire",
-	"当前可转入佣金为":"La commission transférable actuelle est"
+	"当前可转入佣金为":"La commission transférable actuelle est",
+	"浏览记录":"Historique de navigation",
+	"签到奖励":"Récompense d'enregistrement"
 }

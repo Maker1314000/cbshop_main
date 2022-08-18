@@ -13,7 +13,7 @@
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <Row type="flex" :gutter="24">
+        <!-- <Row type="flex" :gutter="24">
           <Col v-bind="grid">
             <FormItem label="状态：" label-for="status1">
               <Select v-model="status" placeholder="请选择" @on-change="userSearchs" clearable>
@@ -34,8 +34,8 @@
               />
             </FormItem>
           </Col>
-        </Row>
-        <Row type="flex">
+        </Row> -->
+        <Row type="flex" v-if="total == 0">
           <Col v-bind="grid">
             <Button v-auth="['setting-system_admin-add']" type="primary" @click="add" icon="md-add">添加账号</Button>
           </Col>
@@ -142,11 +142,6 @@ export default {
       status: '',
       list: [],
       columns1: [
-        {
-          title: 'ID',
-          key: 'id',
-          minWidth: 120,
-        },
         {
           title: '账号',
           key: 'appid',

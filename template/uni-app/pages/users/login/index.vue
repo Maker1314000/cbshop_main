@@ -784,7 +784,6 @@
 		color: #999999;
 		font-size: 24rpx;
 		text-align: center;
-		position: fixed;
 		bottom: 20rpx;
 	}
 	.trembling {
