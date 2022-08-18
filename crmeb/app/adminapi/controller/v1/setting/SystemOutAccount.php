@@ -85,7 +85,7 @@ class SystemOutAccount extends AuthController
             [['title', 's'], ''],
         ]);
         $this->validate($data, StoreOutAccountValidate::class, 'save');
-        if ($this->services->getOne(['appid' => $data['appid']])) return $this->fail('账号重复');
+        if ($this->services->getOne(['appid' => $data['appid']])) return app('json')->fail('账号重复');
         if (!$data['appsecret']) {
             unset($data['appsecret']);
         } else {

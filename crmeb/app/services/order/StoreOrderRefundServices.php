@@ -193,7 +193,7 @@ class StoreOrderRefundServices extends BaseServices
                         if ($refundOrder['is_channel'] == 1) {
                             $refundData['trade_no'] = $refundOrder['trade_no'];
                             $refundData['pay_new_weixin_open'] = sys_config('pay_new_weixin_open');
-                            /** @var StoreOrderCreateServices $storeOrderCreateServices  */
+                            /** @var StoreOrderCreateServices $storeOrderCreateServices */
                             $storeOrderCreateServices = app()->make(StoreOrderCreateServices::class);
                             $refundData['refund_no'] = $refundData['refund_no'];
                             //小程序退款
@@ -1199,6 +1199,7 @@ class StoreOrderRefundServices extends BaseServices
                 'help_status' => 1
             ];
         }
+        $orderData['pay_postage'] = $pay_postage;
         return $orderData;
     }
 

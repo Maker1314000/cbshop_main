@@ -108,12 +108,11 @@ class SystemStoreStaff extends AuthController
             ['verify_status', 1],
             ['status', 1],
         ]);
-
         if (!$id) {
             if ($data['image'] == '') {
                 return app('json')->fail(400250);
             }
-            if ($this->services->count(['uid' => $data['uid']])) {
+            if ($this->services->count(['uid' => $data['image']['uid']])) {
                 return app('json')->fail(400126);
             }
             $data['uid'] = $data['image']['uid'];

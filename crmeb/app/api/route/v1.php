@@ -261,6 +261,10 @@ Route::group(function () {
 
     Route::get('user_cancel', 'v1.user.UserController/SetUserCancel')->name('SetUserCancel');//用户注销
 
+    /** 用户浏览记录 */
+    Route::get('user/visit_list', 'v1.user.UserController/visitList')->name('visitList');//商品浏览列表
+    Route::delete('user/visit', 'v1.user.UserController/visitDelete')->name('visitDelete');//商品浏览记录删除
+
 
 })->middleware(\app\http\middleware\AllowOriginMiddleware::class)->middleware(\app\api\middleware\StationOpenMiddleware::class)->middleware(\app\api\middleware\AuthTokenMiddleware::class, true);
 //未授权接口

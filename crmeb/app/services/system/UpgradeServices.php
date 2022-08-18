@@ -30,13 +30,13 @@ use app\dao\system\upgrade\UpgradeLogDao;
  */
 class UpgradeServices extends BaseServices
 {
-    const LOGIN_URL = 'http://clientapi.evoxwht.cn/api/login';
-    const UPGRADE_URL = 'http://clientapi.evoxwht.cn/api/upgrade/list';
-    const UPGRADE_CURRENT_URL = 'http://clientapi.evoxwht.cn/api/upgrade/current_list';
-    const AGREEMENT_URL = 'http://clientapi.evoxwht.cn/api/upgrade/agreement';
-    const PACKAGE_DOWNLOAD_URL = 'http://clientapi.evoxwht.cn/api/upgrade/download';
-    const UPGRADE_STATUS_URL = 'http://clientapi.evoxwht.cn/api/upgrade/status';
-    const UPGRADE_LOG_URL = 'http://clientapi.evoxwht.cn/api/upgrade/log';
+    const LOGIN_URL = 'http:/upgrade.crmeb.net/api/login';
+    const UPGRADE_URL = 'http://upgrade.crmeb.net/api/upgrade/list';
+    const UPGRADE_CURRENT_URL = 'http://upgrade.crmeb.net/api/upgrade/current_list';
+    const AGREEMENT_URL = 'http://upgrade.crmeb.net/api/upgrade/agreement';
+    const PACKAGE_DOWNLOAD_URL = 'http://upgrade.crmeb.net/api/upgrade/download';
+    const UPGRADE_STATUS_URL = 'http://upgrade.crmeb.net/api/upgrade/status';
+    const UPGRADE_LOG_URL = 'http://upgrade.crmeb.net/api/upgrade/log';
 
     /**
      * @var array $requestData

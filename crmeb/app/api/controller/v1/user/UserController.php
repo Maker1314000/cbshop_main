@@ -11,6 +11,7 @@
 namespace app\api\controller\v1\user;
 
 use app\Request;
+use app\services\product\product\StoreProductLogServices;
 use app\services\user\UserCancelServices;
 use app\services\user\UserServices;
 use app\services\wechat\WechatUserServices;
@@ -198,5 +199,57 @@ class UserController
         $userCancelServices = app()->make(UserCancelServices::class);
         $userCancelServices->SetUserCancel($request->uid());
         return app('json')->success(410135);
+    }
+
+    /**
+     * 商品浏览记录
+     * @param Request $request
+     * @param StoreProductLogServices $services
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function visitList(Request $request, StoreProductLogServices $services)
+    {
+        $where['uid'] = (int)$request->uid();
+        $where['type'] = 'visit';
+        $result = $services->getList($where, 'product_id', 'id,product_id,max(add_time) as add_time');
+        $time_data = [];
+        if ($result['list']) {
+            foreach ($result['list'] as $key => &$item) {
+                $add_time = strtotime($item['add_time']);
+                if (date('Y') == date('Y', $add_time)) {//今年
+                    $item['time_key'] = date('m-d', $add_time);
+                } else {
+                    $item['time_key'] = date('Y-m-d', $add_time);
+                }
+            }
+            $time_data = array_merge(array_unique(array_column($result['list'], 'time_key')));
+        }
+        $result['time'] = $time_data;
+        return app('json')->success($result);
+    }
+
+    /**
+     * 商品浏览记录删除
+     * @param Request $request
+     * @param StoreProductLogServices $services
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function visitDelete(Request $request, StoreProductLogServices $services)
+    {
+        $uid = (int)$request->uid();
+        [$ids] = $request->postMore([
+            ['ids', []],
+        ], true);
+        if ($ids) {
+            $where = ['uid' => $uid, 'product_id' => $ids];
+            $services->delete($where);
+        }
+        return app('json')->success('删除成功');
     }
 }

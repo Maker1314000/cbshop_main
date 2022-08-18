@@ -203,6 +203,11 @@ class StoreCombination extends AuthController
         return app('json')->success($data);
     }
 
+    /**
+     * 活动参与人
+     * @param $id
+     * @return mixed
+     */
     public function combinationStatisticsList($id)
     {
         /** @var StorePinkServices $storePinkServices */
@@ -212,7 +217,7 @@ class StoreCombination extends AuthController
     }
 
     /**
-     * 砍价订单
+     * 拼团订单
      * @param $id
      * @return mixed
      */

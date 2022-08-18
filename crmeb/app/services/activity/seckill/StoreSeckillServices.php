@@ -866,7 +866,8 @@ class StoreSeckillServices extends BaseServices
         $pay_count = $orderServices->getDistinctCount([['seckill_id', '=', $id], ['paid', '=', 1]], 'uid', false);
         $order_count = $orderServices->getDistinctCount([['seckill_id', '=', $id]], 'uid', false);
         $all_price = $orderServices->sum([['seckill_id', '=', $id], ['refund_type', 'in', [0, 3]]], 'pay_price');
-        $pay_rate = $order_count > 0 ? bcmul(bcdiv((string)$pay_count, (string)$order_count, 2), '100', 2) : 0;
+        $seckillInfo = $this->dao->get($id);
+        $pay_rate = $seckillInfo['quota'] . '/' . $seckillInfo['quota_show'];
         return compact('pay_count', 'order_count', 'all_price', 'pay_rate');
     }
 

@@ -144,4 +144,26 @@ class StoreProductLogServices extends BaseServices
         }
         return $list;
     }
+
+    /**
+     * 浏览商品列表
+     * @param array $where
+     * @param string $group
+     * @param string $field
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function getList(array $where, string $group = '', string $field = '*')
+    {
+        [$page, $limit] = $this->getPageValue();
+        $list = $this->dao->getList($where, $field, $page, $limit, $group);
+        if ($group) {
+            $count = $this->dao->getDistinctCount($where, $group, true);
+        } else {
+            $count = $this->dao->count($where);
+        }
+        return compact('list', 'count');
+    }
 }

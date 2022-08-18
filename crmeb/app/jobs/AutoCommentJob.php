@@ -42,7 +42,7 @@ class AutoCommentJob extends BaseJobs
                 'reply_type' => 'product',
                 'nickname' => $userInfos[$item['uid']]['nickname'],
                 'avatar' => $userInfos[$item['uid']]['avatar'],
-                'comment' => '此用户未做评价',
+                'comment' => sys_config('comment_content',''),
                 'product_score' => 5,
                 'service_score' => 5,
                 'add_time' => time(),
