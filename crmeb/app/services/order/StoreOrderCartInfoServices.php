@@ -187,15 +187,17 @@ class StoreOrderCartInfoServices extends BaseServices
     /**
      * 保存购物车info
      * @param $oid
+     * @param $uid
      * @param array $cartInfo
      * @return int
      */
-    public function setCartInfo($oid, array $cartInfo)
+    public function setCartInfo($oid, $uid, array $cartInfo)
     {
         $group = [];
         foreach ($cartInfo as $cart) {
             $group[] = [
                 'oid' => $oid,
+                'uid' => $uid,
                 'cart_id' => $cart['id'],
                 'product_id' => $cart['productInfo']['id'],
                 'cart_info' => json_encode($cart),

@@ -1102,6 +1102,7 @@ class StoreOrderRefundServices extends BaseServices
         //核算优惠金额
         $vipTruePrice = 0;
         $total_price = 0;
+        $pay_postage = '0';
         foreach ($orderData['cartInfo'] ?? [] as $key => &$cart) {
             if (!isset($cart['sum_true_price'])) $cart['sum_true_price'] = bcmul((string)$cart['truePrice'], (string)$cart['cart_num'], 2);
             $cart['vip_sum_truePrice'] = bcmul($cart['vip_truePrice'], $cart['cart_num'] ? $cart['cart_num'] : 1, 2);
@@ -1111,8 +1112,8 @@ class StoreOrderRefundServices extends BaseServices
                 if (!$cart['surplus_num']) unset($orderData['cartInfo'][$key]);
             }
             $total_price = bcadd($total_price, $cart['sum_true_price'], 2);
+            $pay_postage = bcadd($cart['postage_price'], $pay_postage, 2);
         }
-
         $orderData['use_integral'] = $this->getOrderSumPrice($orderData['cartInfo'], 'use_integral', false);
         $orderData['integral_price'] = $this->getOrderSumPrice($orderData['cartInfo'], 'integral_price', false);
         $orderData['coupon_price'] = $this->getOrderSumPrice($orderData['cartInfo'], 'coupon_price', false);

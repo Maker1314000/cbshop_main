@@ -256,7 +256,7 @@ class StoreOrderCreateServices extends BaseServices
             //扣库存
             $this->decGoodsStock($cartInfo, $combinationId, $seckillId, $bargainId, $advanceId);
             //保存购物车商品信息
-            $cartServices->setCartInfo($order['id'], $cartInfo);
+            $cartServices->setCartInfo($order['id'], $uid, $cartInfo);
             return $order;
         });
 

@@ -126,7 +126,7 @@
 					<view class="" v-if="goodList.length == 0 && loaded">
 						<view class="emptyBox">
 							<image :src="imgHost + '/statics/images/no-thing.png'"></image>
-							<view class="tips">{{$t(`no_product_see`)}}</view>
+							<view class="tips">{{$t(`暂无数据`)}}</view>
 						</view>
 						<recommend :hostProduct="hostProduct"></recommend>
 					</view>
@@ -150,12 +150,12 @@
 							@click="goRouter(item)">
 							<block v-if="item.link == activeRouter">
 								<image :src="item.imgList[0]"></image>
-								<view class="txt" :style="{color:newData.activeTxtColor.color[0].item}">{{item.name}}
+								<view class="txt" :style="{color:newData.activeTxtColor.color[0].item}">{{$t(item.name)}}
 								</view>
 							</block>
 							<block v-else>
 								<image :src="item.imgList[1]"></image>
-								<view class="txt" :style="{color:newData.txtColor.color[0].item}">{{item.name}}</view>
+								<view class="txt" :style="{color:newData.txtColor.color[0].item}">{{$t(item.name)}}</view>
 							</block>
 							<div class="count-num"
 								v-if="item.link === '/pages/order_addcart/order_addcart' && countNum > 0">

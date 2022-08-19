@@ -48,7 +48,6 @@ class fileVerification
         $this->getFileSignature($appPath);
         $this->path = $crmebPath;
         $this->getFileSignature($crmebPath);
-        \think\facade\Log::error(['fileValue' => $this->fileValue]);
         return md5($this->fileValue);
     }
 

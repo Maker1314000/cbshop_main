@@ -1912,7 +1912,7 @@ CREATE TABLE IF NOT EXISTS `eb_page_link` (
   `sort` smallint(5) NOT NULL DEFAULT '0' COMMENT '排序',
   `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COMMENT='页面链接';
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COMMENT='页面链接';
 
 --
 -- 转存表中的数据 `eb_page_link`
@@ -1967,7 +1967,8 @@ INSERT INTO `eb_page_link` (`id`, `cate_id`, `type`, `name`, `url`, `param`, `ex
 (48, 5, 3, '佣金记录', '/pages/users/user_spread_money/index?type=2', ' ', '/pages/users/user_spread_money/index?type=2', 1, 0, 1626837579),
 (49, 5, 3, '提现记录', '/pages/users/user_spread_money/index?type=1', ' ', '/pages/users/user_spread_money/index?type=1', 1, 0, 1626837579),
 (50, 6, 6, '预售列表', '/pages/activity/presell/index', ' ', '/pages/activity/presell/index', 1, 0, 1626837579),
-(51, 5, 1, '直播列表', '/pages/columnGoods/live_list/index', ' ', '/pages/columnGoods/live_list/index', 1, 0, 1626837579);
+(51, 5, 1, '直播列表', '/pages/columnGoods/live_list/index', ' ', '/pages/columnGoods/live_list/index', 1, 0, 1626837579),
+(52, 5, 3, '浏览记录', '/pages/users/visit_list/index', ' ', '/pages/users/visit_list/index', 1, 0, 1626837579);
 
 -- --------------------------------------------------------
 
@@ -7675,9 +7676,10 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (406, 'out_push_refund_cancel_url', 'text', 'input', 104, '', 1, '', 0, 0, '\"\"', '售后单取消推送接口', '用户取消退货申请将会推送售后单至第三方', 0, 1),
 (407, 'out_push_refund_url', 'text', 'input', 104, '', 1, '', 0, 0, '\"\"', '售后单推送接口', '用户申请退款将会推送售后单至第三方', 0, 1),
 (408, 'out_push_order_url', 'text', 'input', 104, '', 1, '', 0, 0, '\"\"', '订单推送接口', '订单创建后将会推送至第三方', 0, 1),
-(409, 'pay_new_weixin_open', 'radio', 'input', 4, '0=>关闭\n1=>打开', 1, '', 0, 0, '0', '是否开启新微信支付', '小程序开发后台有支付管理的请打开此开关', 0, 1),
-(410, 'pay_new_weixin_mchid', 'text', 'input', 4, '', 1, '', 100, 0, '\"\"', '商户号', '商户号', 0, 1),
-(411, 'system_comment_time', 'text', 'number', 27, '', 1, '', 100, 0, '\"0\"', '自动评价时间', '自动评价时间（天），0为不开启自动评价', 0, 1);
+(409, 'pay_new_weixin_open', 'radio', 'input', 4, '0=>关闭\n1=>打开', 1, '', 0, 0, '0', '小程序支付管理', '小程序开发后台有支付管理的请打开此开关', 0, 1),
+(410, 'pay_new_weixin_mchid', 'text', 'input', 4, '', 1, '', 0, 0, '\"\"', '小程序支付商户号', '小程序开通支付管理生成的商户号', 0, 1),
+(411, 'system_comment_time', 'text', 'number', 27, '', 1, '', 100, 0, '\"0\"', '自动评价时间', '自动评价时间（天），0为不开启自动评价', 0, 1),
+(412, 'comment_content', 'text', 'input', 27, '', 1, '', 100, 0, '\"\\u6b64\\u7528\\u6237\\u672a\\u505a\\u8bc4\\u4ef7\"', '自动评价文字', '自动评价显示的评价文字', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -7921,8 +7923,8 @@ INSERT INTO `eb_system_group_data` (`id`, `gid`, `value`, `add_time`, `sort`, `s
 (1007, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u6211\\u7684\\u7b49\\u7ea7\"},\"pic\":{\"type\":\"upload\",\"value\":\"\\/statics\\/system_images\\/menu_level.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/users\\/user_vip\\/index\"}}', 1642244995, 4, 1),
 (1008, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u5ba2\\u670d\\u63a5\\u5f85\"},\"pic\":{\"type\":\"upload\",\"value\":\"\\/statics\\/system_images\\/menu_kefu.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/kefu\\/mobile_list\"}}', 1642244995, 3, 1),
 (1009, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u8ba2\\u5355\\u6838\\u9500\"},\"pic\":{\"type\":\"upload\",\"value\":\"\\/statics\\/system_images\\/menu_cancellation.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/admin\\/order_cancellation\\/index\"}}', 1642244995, 2, 1),
-(1010, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u7edf\\u8ba1\\u7ba1\\u7406\"},\"pic\":{\"type\":\"upload\",\"value\":\"\\/statics\\/system_images\\/menu_admin_order.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/admin\\/order\\/index\"}}', 1642244995, 1, 1);
-
+(1010, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u7edf\\u8ba1\\u7ba1\\u7406\"},\"pic\":{\"type\":\"upload\",\"value\":\"\\/statics\\/system_images\\/menu_admin_order.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/admin\\/order\\/index\"}}', 1642244995, 1, 1),
+(1011, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u6d4f\\u89c8\\u8bb0\\u5f55\"},\"pic\":{\"type\":\"upload\",\"value\":\"\\/statics\\/system_images\\/menu_log.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/users\\/visit_list\\/index\"}}', 1660724480, 4, 1);
 -- --------------------------------------------------------
 
 --
@@ -8797,7 +8799,7 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (1063, 1056, '', '商城支付配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_config/pay/2/23', '12/1056', 1, '', 0, 'setting-other-pay', 0),
 (1064, 12, '', '对外接口', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_out_config', '12', 1, '', 0, 'setting-other-out', 0),
 (1065, 1064, '', '基础配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/other_config/out/2/102', '12/1064', 1, '', 0, 'setting-other-config-out', 0),
-(1066, 1064, '', '对外账号列表', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/system_out_account/index', '12/1064', 1, '', 0, 'setting-system-out-account-index', 0);
+(1066, 1064, '', '账号管理', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/system_out_account/index', '12/1064', 1, '', 0, 'setting-system-out-account-index', 0);
 
 -- --------------------------------------------------------
 

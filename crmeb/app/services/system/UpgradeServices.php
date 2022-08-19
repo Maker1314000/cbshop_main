@@ -133,7 +133,7 @@ class UpgradeServices extends BaseServices
             Log::error(['msg' => $authData['msg'] ?? '', 'error' => $authData['data'] ?? []]);
             throw new AdminException($authData['msg'] ?? '授权失败');
         }
-        CacheService::set('upgrade_auth_token', $authData['data']['access_token'], $authData['data']['exp_time'] - 1);
+        CacheService::set('upgrade_auth_token', $authData['data']['access_token'], 7200);
     }
 
     /**
