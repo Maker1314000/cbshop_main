@@ -10,6 +10,7 @@ module.exports = {
 	//H5接口是浏览器地址，非单独部署不用修改
 	HTTP_REQUEST_URL: window.location.protocol + "//" + window.location.host,
 	// #endif 
+	HTTP_REQUEST_URL: "http://crmeb.test",
 
 	// 以下配置在不做二开的前提下,不需要做任何的修改
 	HEADER: {

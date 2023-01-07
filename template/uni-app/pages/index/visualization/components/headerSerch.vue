@@ -3,7 +3,7 @@
 	<view v-if="isShow" class="header">
 		<view class="serch-wrapper row-middle">
 			<view class="logo">
-				<image class="skeleton-rect" :src="logoConfig" mode="heightFix"></image>
+				<!-- <image class="skeleton-rect" :src="logoConfig" mode="heightFix"></image> -->
 				<view class="swiger">{{titleInfo.length ? $t(titleInfo[0].val) : ''}}</view>
 
 			</view>
